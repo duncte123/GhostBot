@@ -1,0 +1,31 @@
+plugins {
+    id'java'
+    id'application'
+    id'com.github.johnrengelman.shadow' version '2.0.2'
+}
+
+mainClassName = 'me.duncte123.ghostBot.GhostBot'
+
+group 'me.duncte123'
+version '0.0.1'
+
+sourceCompatibility = 1.8
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    //JDA
+    compile group: 'net.dv8tion', name: 'JDA', version: '3.4.0_320'
+    //LavaPlayer
+    compile group: 'com.sedmelluq', name: 'lavaplayer', version: '1.2.45'
+    //JSON Extension
+    compile group: 'com.afollestad', name: 'ason', version: '1.4.16'
+    // Logback core
+    compile group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
+    // Logback classic
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+}
+
+compileJava.options.encoding = 'UTF-8'
