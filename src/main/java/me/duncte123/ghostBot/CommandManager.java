@@ -1,10 +1,13 @@
 package me.duncte123.ghostBot;
 
+import me.duncte123.ghostBot.commands.dannyPhantom.FruitloopCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.GoingGhostCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.WailCommand;
+import me.duncte123.ghostBot.commands.main.HelpCommand;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
+import org.apache.commons.collections4.set.UnmodifiableSet;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,6 +23,13 @@ public class CommandManager {
     public CommandManager() {
         this.addCommand(new GoingGhostCommand());
         this.addCommand(new WailCommand());
+        this.addCommand(new FruitloopCommand());
+
+        this.addCommand(new HelpCommand());
+    }
+
+    public Set<Command> getCommands() {
+        return UnmodifiableSet.unmodifiableSet(commands);
     }
 
     public Command getCommand(String name) {

@@ -6,6 +6,8 @@ import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.events.ReadyEvent;
+import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
+import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceMoveEvent;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
@@ -39,6 +41,29 @@ public class BotListener extends ListenerAdapter {
         }
 
         SpoopyUtils.commandManager.handleCommand(event);
+    }
+
+    @Override
+    public void onGuildJoin(GuildJoinEvent event) {
+        //if 80 of a guild is bots, we'll leave it
+        double[] botToUserRatio = SpoopyUtils.getBotRatio(event.getGuild());
+        if (botToUserRatio[1] > 80) {
+            SpoopyUtils.getPublicChannel(event.getGuild()).sendMessage(String.format("Hey %s, %s%s of this server are bots (%s is the total btw). I'm outta here.",
+                    event.getGuild().getOwner().getAsMention(),
+                    botToUserRatio[1],
+                    "%",
+                    event.getGuild().getMemberCache().size())).queue(
+                    message -> message.getGuild().leave().queue()
+            );
+            logger.info("Joining guild: " + event.getGuild().getName() + ", and leaving it after. BOT ALERT");
+            return;
+        }
+        logger.info("Joining guild: " + event.getGuild().toString());
+    }
+
+    @Override
+    public void onGuildLeave(GuildLeaveEvent event) {
+        logger.info("Leaving guild: " + event.getGuild().toString());
     }
 
     @Override

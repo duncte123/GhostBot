@@ -5,16 +5,11 @@ import me.duncte123.ghostBot.objects.Show;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
-public class WailCommand implements Command {
-
-    private final String audioPath = SpoopyUtils.audio.BASE_AUDIO_DIR + "wail/";
+public class FruitloopCommand implements Command {
+    private final String audioPath = SpoopyUtils.audio.BASE_AUDIO_DIR + "fruitloop/";
     private final String[] audioFiles = {
-            "ghost wail 1.mp3",
-            "ghost wail 2.mp3",
-            "ghost wail 3.mp3",
-            "ghost wail 4.mp3",
-            "ghost wail 5.mp3",
-            "ghost wail 6.mp3"
+            "fruitloop 1.mp3",
+            "fruitloop 2.mp3"
     };
 
     @Override
@@ -28,7 +23,7 @@ public class WailCommand implements Command {
 
     @Override
     public String getName() {
-        return "wail";
+        return "fruitloop";
     }
 
     @Override
@@ -38,11 +33,6 @@ public class WailCommand implements Command {
 
     @Override
     public String getHelp() {
-        return "Gives you a nice ghostly wail";
-    }
-
-    @Override
-    public String[] getAliases() {
-        return new String[] {"ghostlywail"};
+        return "You're one crazed up fruitloop";
     }
 }

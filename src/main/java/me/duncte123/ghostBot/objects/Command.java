@@ -5,21 +5,30 @@ import me.duncte123.ghostBot.utils.EmbedUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.MessageEmbed;
-import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.PermissionException;
 
 public interface Command {
     void execute(String invoke, String[] args, GuildMessageReceivedEvent event);
     String getName();
-    Show getShow();
+    default Show getShow() {
+        return Show.NONE;
+    }
     default String[] getAliases() {
         return new String[0];
     }
     String getHelp();
+
+    default void sendSuccess(Message message) {
+        if (message.getChannelType() == ChannelType.TEXT) {
+            TextChannel channel = message.getTextChannel();
+            if (!channel.getGuild().getSelfMember().hasPermission(channel, Permission.MESSAGE_ADD_REACTION)) {
+                return;
+            }
+        }
+        message.addReaction("✅").queue();
+    }
 
     default void sendEmbed(GuildMessageReceivedEvent event, MessageEmbed embed) {
         sendEmbed(event.getChannel(), embed);

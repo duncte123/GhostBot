@@ -1,6 +1,7 @@
 package me.duncte123.ghostBot;
 
 import me.duncte123.ghostBot.utils.SpoopyUtils;
+import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.Game;
@@ -22,7 +23,7 @@ public class GhostBot {
         try {
             new JDABuilder(AccountType.BOT)
                     .setAudioEnabled(true)
-                    .setGame(Game.playing("Going Ghost"))
+                    .setGame(Game.playing(Variables.PREFIX + "help | Going Ghost"))
                     .setToken(token)
                     .addEventListener(new BotListener())
                     .buildAsync();

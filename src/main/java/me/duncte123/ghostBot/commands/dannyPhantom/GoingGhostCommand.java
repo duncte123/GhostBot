@@ -1,9 +1,7 @@
 package me.duncte123.ghostBot.commands.dannyPhantom;
 
-import me.duncte123.ghostBot.audio.GuildMusicManager;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.objects.Show;
-import me.duncte123.ghostBot.utils.EmbedUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
@@ -19,11 +17,11 @@ public class GoingGhostCommand implements Command {
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
         if(preAudioChecks(event)) {
+            sendSuccess(event.getMessage());
             String selectedTrack = audioFiles[SpoopyUtils.random.nextInt(audioFiles.length)];
             if (SpoopyUtils.random.nextInt(100) <= 5) {
                 selectedTrack = "its going ghost.mp3";
             }
-            sendEmbed(event, EmbedUtils.embedMessage(selectedTrack));
             SpoopyUtils.audio.loadAndPlay(getMusicManager(event.getGuild()), event.getChannel(), audioPath + selectedTrack, false);
         }
     }

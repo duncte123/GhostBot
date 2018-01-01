@@ -100,9 +100,6 @@ public class TrackScheduler extends AudioEventAdapter {
             } else {
                 nextTrack();
             }
-        } else if (queue.isEmpty()) {
-            SpoopyUtils.service.schedule(()-> SpoopyUtils.audio.getMusicManagers().entrySet().stream().filter(entry -> entry.getValue().equals(guildMusicManager))
-                    .findFirst().ifPresent(entry -> SpoopyUtils.audio.getMusicManagers().remove(entry.getKey())), 5, TimeUnit.SECONDS);
         }
     }
 
