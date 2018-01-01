@@ -13,7 +13,7 @@ public class AboutCommand implements Command {
 
                 "**Useful information:**\n" +
                 "Invite link: [https://discordapp.com/oauth2/authorize?client_id=397297702150602752&scope=bot&permissions=8](https://discordapp.com/oauth2/authorize?client_id=397297702150602752&scope=bot&permissions=8)\n" +
-                "Prefix: " + Variables.PREFIX + "\n" +
+                "Prefix: `" + Variables.PREFIX + "`\n" +
                 "Support server: [https://discord.gg/NKM9Xtk](https://discord.gg/NKM9Xtk)\n" +
                 "Amount of servers that I'm in: " + event.getJDA().getGuildCache().size()
         ));

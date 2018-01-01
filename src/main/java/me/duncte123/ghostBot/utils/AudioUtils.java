@@ -26,7 +26,7 @@ public class AudioUtils {
 
     private final String embedTitle = "AirPlayer";
 
-    public final String BASE_AUDIO_DIR = "audioFiles/";
+    public final String BASE_AUDIO_DIR = "./audioFiles/";
 
     private final AudioPlayerManager playerManager;
 
