@@ -1,16 +1,21 @@
 package me.duncte123.ghostBot.objects;
 
+import me.duncte123.ghostBot.audio.GuildMusicManager;
 import me.duncte123.ghostBot.utils.EmbedUtils;
+import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.Permission;
+import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.core.exceptions.PermissionException;
 
 public interface Command {
     void execute(String invoke, String[] args, GuildMessageReceivedEvent event);
     String getName();
+    Show getShow();
     default String[] getAliases() {
         return new String[0];
     }
@@ -52,5 +57,30 @@ public interface Command {
         //Only send a message if we can talk
         if(channel.canTalk())
             channel.sendMessage(msg).queue();
+    }
+
+    default GuildMusicManager getMusicManager(Guild guild) {
+        return SpoopyUtils.audio.getMusicManager(guild);
+    }
+
+    default boolean preAudioChecks(GuildMessageReceivedEvent event) {
+        if(!event.getMember().getVoiceState().inVoiceChannel()) {
+            sendEmbed(event, EmbedUtils.embedMessage("Please join a voice channel first"));
+            return false;
+        }
+
+        try {
+            event.getGuild().getAudioManager().openAudioConnection(event.getMember().getVoiceState().getChannel());
+        }
+        catch (PermissionException e) {
+            if (e.getPermission() == Permission.VOICE_CONNECT) {
+                sendMsg(event, EmbedUtils.embedMessage(String.format("I don't have permission to join `%s`", event.getMember().getVoiceState().getChannel().getName())));
+            } else {
+                sendMsg(event, EmbedUtils.embedMessage(String.format("Error while joining channel `%s`: %s"
+                        , event.getMember().getVoiceState().getChannel().getName(), e.getMessage())));
+            }
+            return false;
+        }
+        return true;
     }
 }

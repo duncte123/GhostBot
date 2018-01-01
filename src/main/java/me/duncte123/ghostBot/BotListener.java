@@ -1,8 +1,13 @@
 package me.duncte123.ghostBot;
 
+import me.duncte123.ghostBot.audio.GuildMusicManager;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import me.duncte123.ghostBot.variables.Variables;
+import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.events.ReadyEvent;
+import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
+import net.dv8tion.jda.core.events.guild.voice.GuildVoiceMoveEvent;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import org.slf4j.Logger;
@@ -29,9 +34,61 @@ public class BotListener extends ListenerAdapter {
                     success -> event.getJDA().shutdown(),
                     failure -> event.getJDA().shutdown()
             );
+            System.exit(0);
             return;
         }
 
         SpoopyUtils.commandManager.handleCommand(event);
+    }
+
+    @Override
+    public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
+        if(event.getGuild().getAudioManager().isConnected()) {
+            if (!event.getVoiceState().getMember().getUser().getId().equals(event.getJDA().getSelfUser().getId())) {
+                if (!event.getChannelLeft().getId().equals(event.getGuild().getAudioManager().getConnectedChannel().getId())) {
+                    return;
+                }
+                channelCheckThing(event.getGuild(), event.getChannelLeft());
+            }
+        }
+    }
+
+    @Override
+    public void onGuildVoiceMove(GuildVoiceMoveEvent event) {
+        if(event.getGuild().getAudioManager().isConnected()) {
+            if (!event.getVoiceState().getMember().getUser().getId().equals(event.getJDA().getSelfUser().getId())) {
+                if (event.getChannelLeft() != null) {
+                    if (!event.getChannelLeft().getId().equals(event.getGuild().getAudioManager().getConnectedChannel().getId())) {
+                        return;
+                    }
+                    channelCheckThing(event.getGuild(), event.getChannelLeft());
+
+                }
+
+                if (event.getChannelJoined() != null) {
+                    if (event.getGuild().getAudioManager().getConnectedChannel() != null &&
+                            !event.getChannelJoined().getId().equals(event.getGuild().getAudioManager().getConnectedChannel().getId())) {
+                        return;
+                        //System.out.println("Self (this might be buggy)");
+                    }
+                    channelCheckThing(event.getGuild(), event.getChannelJoined());
+                }
+            }
+        }
+    }
+
+    private void channelCheckThing(Guild g, VoiceChannel vc) {
+
+        if (vc.getMembers().stream().filter(m -> !m.getUser().isBot()).count() < 1) {
+            GuildMusicManager manager = SpoopyUtils.audio.getMusicManager(g);
+            manager.player.stopTrack();
+            manager.player.setPaused(false);
+            manager.scheduler.queue.clear();
+
+            if (g.getAudioManager().isConnected()) {
+                g.getAudioManager().closeAudioConnection();
+                g.getAudioManager().setSendingHandler(null);
+            }
+        }
     }
 }

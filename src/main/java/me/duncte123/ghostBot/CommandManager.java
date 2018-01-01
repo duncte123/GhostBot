@@ -1,6 +1,7 @@
 package me.duncte123.ghostBot;
 
-import me.duncte123.ghostBot.commands.GoingGhostCommand;
+import me.duncte123.ghostBot.commands.dannyPhantom.GoingGhostCommand;
+import me.duncte123.ghostBot.commands.dannyPhantom.WailCommand;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
@@ -18,6 +19,7 @@ public class CommandManager {
 
     public CommandManager() {
         this.addCommand(new GoingGhostCommand());
+        this.addCommand(new WailCommand());
     }
 
     public Command getCommand(String name) {

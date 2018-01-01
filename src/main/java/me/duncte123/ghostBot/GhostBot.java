@@ -1,5 +1,6 @@
 package me.duncte123.ghostBot;
 
+import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.Game;
@@ -16,12 +17,13 @@ public class GhostBot {
     public static void main(String[] args) throws Exception{
 
         logger.info("Booting GhostBot");
+        String token = SpoopyUtils.config.getString("discord.token");
 
         try {
             new JDABuilder(AccountType.BOT)
                     .setAudioEnabled(true)
                     .setGame(Game.playing("Going Ghost"))
-                    .setToken("MjE1MDExOTkyMjc1MTI0MjI1.DPHwAg.LQuz8_Qb09uz0jHEk5bteR00ww0")
+                    .setToken(token)
                     .addEventListener(new BotListener())
                     .buildAsync();
         }

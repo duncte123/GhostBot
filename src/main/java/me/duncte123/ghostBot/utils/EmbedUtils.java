@@ -1,10 +1,34 @@
 package me.duncte123.ghostBot.utils;
 
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 
+import java.awt.*;
+import java.time.Instant;
+
 public class EmbedUtils {
+
+
+    public static MessageEmbed embedField(String title, String message) {
+        return defaultEmbed().addField(title, message, false).build();
+    }
+
+    public static MessageEmbed embedMessage(String message) {
+        return defaultEmbed().setDescription(message).build();
+    }
+
+    public static MessageEmbed embedImage(String imageURL) {
+        return defaultEmbed().setImage(imageURL).build();
+    }
+
+    public static EmbedBuilder defaultEmbed() {
+        return new EmbedBuilder()
+                .setColor(Color.decode("#6ffe32"))
+                .setFooter("GhostBot", null)
+                .setTimestamp(Instant.now());
+    }
 
     public static Message embedToMessage(MessageEmbed embed) {
         MessageBuilder msg = new MessageBuilder();
