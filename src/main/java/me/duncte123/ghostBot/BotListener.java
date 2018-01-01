@@ -45,9 +45,9 @@ public class BotListener extends ListenerAdapter {
 
     @Override
     public void onGuildJoin(GuildJoinEvent event) {
-        //if 80 of a guild is bots, we'll leave it
+        //if 70 of a guild is bots, we'll leave it
         double[] botToUserRatio = SpoopyUtils.getBotRatio(event.getGuild());
-        if (botToUserRatio[1] > 80) {
+        if (botToUserRatio[1] > 70) {
             SpoopyUtils.getPublicChannel(event.getGuild()).sendMessage(String.format("Hey %s, %s%s of this server are bots (%s is the total btw). I'm outta here.",
                     event.getGuild().getOwner().getAsMention(),
                     botToUserRatio[1],
