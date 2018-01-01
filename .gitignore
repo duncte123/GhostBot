@@ -134,3 +134,4 @@ skybot-updater/updater\.json
 *.db
 
 config_old\.json
+rawAudio/*
