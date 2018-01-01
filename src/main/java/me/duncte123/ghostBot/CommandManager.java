@@ -3,6 +3,7 @@ package me.duncte123.ghostBot;
 import me.duncte123.ghostBot.commands.dannyPhantom.FruitloopCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.GoingGhostCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.WailCommand;
+import me.duncte123.ghostBot.commands.main.AboutCommand;
 import me.duncte123.ghostBot.commands.main.HelpCommand;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.variables.Variables;
@@ -26,6 +27,7 @@ public class CommandManager {
         this.addCommand(new FruitloopCommand());
 
         this.addCommand(new HelpCommand());
+        this.addCommand(new AboutCommand());
     }
 
     public Set<Command> getCommands() {

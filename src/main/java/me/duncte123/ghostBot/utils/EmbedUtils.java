@@ -26,7 +26,7 @@ public class EmbedUtils {
     public static EmbedBuilder defaultEmbed() {
         return new EmbedBuilder()
                 .setColor(Color.decode("#6ffe32"))
-                .setFooter("GhostBot", null)
+                .setFooter("GhostBot", "https://cdn.discordapp.com/emojis/394148311835344896.png")
                 .setTimestamp(Instant.now());
     }
 
