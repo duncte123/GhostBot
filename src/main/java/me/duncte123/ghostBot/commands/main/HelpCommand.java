@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class HelpCommand implements Command {
@@ -21,7 +22,7 @@ public class HelpCommand implements Command {
         if (args.length > 0) {
             String toSearch = StringUtils.join(args, " ");
             if(toSearch.startsWith(Variables.PREFIX))
-                toSearch = toSearch.replaceFirst(Variables.PREFIX, "");
+                toSearch = toSearch.replaceFirst(Pattern.quote(Variables.PREFIX), "");
 
             for (Command cmd : SpoopyUtils.commandManager.getCommands()) {
                 if (cmd.getName().equals(toSearch)) {
@@ -49,7 +50,8 @@ public class HelpCommand implements Command {
                 .stream().filter(c->c.getShow().equals(Show.NONE)).map(Command::getName).collect(Collectors.toList());
 
         MessageEmbed helpEmbed = EmbedUtils.defaultEmbed()
-                .addField("Danny Phantom commands",
+                .setDescription("Use `" + Variables.PREFIX + "help [command}` for more info about a command")
+                .addField("Audio commands",
                         "`" + Variables.PREFIX + StringUtils.join(dannyPhantomCommands, "`\n`" + Variables.PREFIX ) + "`", false)
                 .addField("Other commands", "`" + Variables.PREFIX + StringUtils.join(otherCommands, "`\n`" + Variables.PREFIX ) + "`", false)
                 .build();

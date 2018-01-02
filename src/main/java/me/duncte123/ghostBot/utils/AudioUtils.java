@@ -21,10 +21,9 @@ import java.util.logging.Level;
 
 public class AudioUtils {
 
-
     private static final int DEFAULT_VOLUME = 35; //(0-150, where 100 is the default max volume)
 
-    private final String embedTitle = "AirPlayer";
+    private final String embedTitle = "Spoopy-Luma-Player";
 
     public final String BASE_AUDIO_DIR = "./audioFiles/";
 
@@ -54,7 +53,7 @@ public class AudioUtils {
         }
     }
 
-    public void loadAndPlay(GuildMusicManager mng, final MessageChannel channel, final String trackUrlRaw, final boolean addPlayList) {
+    public void loadAndPlay(GuildMusicManager mng, final TextChannel channel, final String trackUrlRaw, final boolean addPlayList) {
         final String trackUrl;
 
         //Strip <>'s that prevent discord from embedding link resources
@@ -139,14 +138,13 @@ public class AudioUtils {
         return mng;
     }
 
-    private void sendEmbed(MessageEmbed embed, MessageChannel channel) {
-        TextChannel tc = (TextChannel) channel;
+    private void sendEmbed(MessageEmbed embed, TextChannel tc) {
         if (tc.canTalk()) {
             if (!tc.getGuild().getSelfMember().hasPermission(tc, Permission.MESSAGE_EMBED_LINKS)) {
-                channel.sendMessage(EmbedUtils.embedToMessage(embed)).queue();
+                tc.sendMessage(EmbedUtils.embedToMessage(embed)).queue();
                 return;
             }
-            channel.sendMessage(embed).queue();
+            tc.sendMessage(embed).queue();
         }
     }
 

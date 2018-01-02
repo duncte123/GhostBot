@@ -15,9 +15,10 @@ public class FruitloopCommand implements Command {
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
         if(preAudioChecks(event)) {
-            sendSuccess(event.getMessage());
+            String selectedTrack = audioFiles[SpoopyUtils.random.nextInt(audioFiles.length)];
+            sendMsg(event, "Selected track: _" + selectedTrack + "_");
             SpoopyUtils.audio.loadAndPlay(getMusicManager(event.getGuild()), event.getChannel(),
-                    audioPath + audioFiles[SpoopyUtils.random.nextInt(audioFiles.length)], false);
+                    audioPath + selectedTrack, false);
         }
     }
 

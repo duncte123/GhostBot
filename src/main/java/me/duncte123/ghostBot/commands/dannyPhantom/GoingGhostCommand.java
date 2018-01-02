@@ -17,11 +17,11 @@ public class GoingGhostCommand implements Command {
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
         if(preAudioChecks(event)) {
-            sendSuccess(event.getMessage());
             String selectedTrack = audioFiles[SpoopyUtils.random.nextInt(audioFiles.length)];
             if (SpoopyUtils.random.nextInt(100) <= 5) {
                 selectedTrack = "its going ghost.mp3";
             }
+            sendMsg(event, "Selected track: _" + selectedTrack + "_");
             SpoopyUtils.audio.loadAndPlay(getMusicManager(event.getGuild()), event.getChannel(), audioPath + selectedTrack, false);
         }
     }
@@ -38,6 +38,6 @@ public class GoingGhostCommand implements Command {
 
     @Override
     public String getHelp() {
-        return "Screams _\"going ghost\"_ in the voice channel that you are in";
+        return "Screams _\"going ghost\"_ in the voice channel that you are in (has a 5% chance of becoming ghostly)";
     }
 }
