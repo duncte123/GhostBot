@@ -1,16 +1,14 @@
 package me.duncte123.ghostBot.commands.main;
 
 import me.duncte123.ghostBot.objects.Command;
-import me.duncte123.ghostBot.objects.Show;
+import me.duncte123.ghostBot.objects.Category;
 import me.duncte123.ghostBot.utils.EmbedUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import me.duncte123.ghostBot.variables.Variables;
-import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -45,9 +43,9 @@ public class HelpCommand implements Command {
         }
 
         List<String> dannyPhantomCommands = SpoopyUtils.commandManager.getCommands()
-                .stream().filter(c->c.getShow().equals(Show.DANNY_PHANTOM)).map(Command::getName).collect(Collectors.toList());
+                .stream().filter(c->c.getCategory().equals(Category.AUDIO)).map(Command::getName).collect(Collectors.toList());
         List<String> otherCommands = SpoopyUtils.commandManager.getCommands()
-                .stream().filter(c->c.getShow().equals(Show.NONE)).map(Command::getName).collect(Collectors.toList());
+                .stream().filter(c->c.getCategory().equals(Category.NONE)).map(Command::getName).collect(Collectors.toList());
 
         MessageEmbed helpEmbed = EmbedUtils.defaultEmbed()
                 .setDescription("Use `" + Variables.PREFIX + "help [command}` for more info about a command")

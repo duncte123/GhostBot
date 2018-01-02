@@ -1,7 +1,7 @@
 package me.duncte123.ghostBot.commands.dannyPhantom;
 
 import me.duncte123.ghostBot.objects.Command;
-import me.duncte123.ghostBot.objects.Show;
+import me.duncte123.ghostBot.objects.Category;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
@@ -32,8 +32,8 @@ public class GoingGhostCommand implements Command {
     }
 
     @Override
-    public Show getShow() {
-        return Show.DANNY_PHANTOM;
+    public Category getCategory() {
+        return Category.AUDIO;
     }
 
     @Override

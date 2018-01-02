@@ -12,8 +12,8 @@ import net.dv8tion.jda.core.exceptions.PermissionException;
 public interface Command {
     void execute(String invoke, String[] args, GuildMessageReceivedEvent event);
     String getName();
-    default Show getShow() {
-        return Show.NONE;
+    default Category getCategory() {
+        return Category.NONE;
     }
     default String[] getAliases() {
         return new String[0];
