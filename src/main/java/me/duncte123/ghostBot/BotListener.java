@@ -1,6 +1,7 @@
 package me.duncte123.ghostBot;
 
 import me.duncte123.ghostBot.audio.GuildMusicManager;
+import me.duncte123.ghostBot.utils.PostStats;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.entities.Guild;
@@ -18,10 +19,12 @@ import org.slf4j.LoggerFactory;
 public class BotListener extends ListenerAdapter {
 
     private final Logger logger = LoggerFactory.getLogger(BotListener.class);
+    private final String dblToken = SpoopyUtils.config.getString("api.dbl", "");
 
     @Override
     public void onReady(ReadyEvent event) {
         logger.info("Logged in as " + String.format("%#s", event.getJDA().getSelfUser()));
+        PostStats.toDiscordBots(event.getJDA(), dblToken);
     }
 
     @Override
@@ -59,11 +62,13 @@ public class BotListener extends ListenerAdapter {
             return;
         }
         logger.info("Joining guild: " + event.getGuild().toString());
+        PostStats.toDiscordBots(event.getJDA(), dblToken);
     }
 
     @Override
     public void onGuildLeave(GuildLeaveEvent event) {
         logger.info("Leaving guild: " + event.getGuild().toString());
+        PostStats.toDiscordBots(event.getJDA(), dblToken);
     }
 
     @Override
