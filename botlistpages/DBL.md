@@ -46,7 +46,10 @@ Current Command list:
 ```yaml
 gb.goingghost: Screams "going ghost" in the voice channel that you are in (has a 5% chance of becoming ghostly)
 gb.wail: Gives you a nice ghostly wail
-gb.fuitloop: You're one crazed up fruitloop
+gb.fuitloop: You're one crazed up fruitloop 
+
+gb.image: Gives you a random Danny Phantom related image from google
+
 gb.help: Your avarage help command
 gb.about: Gives some information about the bot
 ```
