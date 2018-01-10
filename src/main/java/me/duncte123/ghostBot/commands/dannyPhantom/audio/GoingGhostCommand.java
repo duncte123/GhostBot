@@ -1,4 +1,4 @@
-package me.duncte123.ghostBot.commands.dannyPhantom;
+package me.duncte123.ghostBot.commands.dannyPhantom.audio;
 
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.objects.Category;

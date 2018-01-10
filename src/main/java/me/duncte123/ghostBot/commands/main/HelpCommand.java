@@ -44,6 +44,8 @@ public class HelpCommand implements Command {
 
         List<String> dannyPhantomCommands = SpoopyUtils.commandManager.getCommands()
                 .stream().filter(c->c.getCategory().equals(Category.AUDIO)).map(Command::getName).collect(Collectors.toList());
+        List<String> imageCommands = SpoopyUtils.commandManager.getCommands()
+                .stream().filter(c->c.getCategory().equals(Category.IMAGE)).map(Command::getName).collect(Collectors.toList());
         List<String> otherCommands = SpoopyUtils.commandManager.getCommands()
                 .stream().filter(c->c.getCategory().equals(Category.NONE)).map(Command::getName).collect(Collectors.toList());
 
@@ -51,6 +53,8 @@ public class HelpCommand implements Command {
                 .setDescription("Use `" + Variables.PREFIX + "help [command}` for more info about a command")
                 .addField("Audio commands",
                         "`" + Variables.PREFIX + StringUtils.join(dannyPhantomCommands, "`\n`" + Variables.PREFIX ) + "`", false)
+                .addField("Imae commands",
+                        "`" + Variables.PREFIX + StringUtils.join(imageCommands, "`\n`" + Variables.PREFIX ) + "`", false)
                 .addField("Other commands", "`" + Variables.PREFIX + StringUtils.join(otherCommands, "`\n`" + Variables.PREFIX ) + "`", false)
                 .build();
 
