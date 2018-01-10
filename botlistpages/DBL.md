@@ -1,20 +1,22 @@
-<script>
-  //Might add this later
-  //document.querySelectorAll(".logo>img")[0].src="https://cdn.discordapp.com/emojis/394148311835344896.png";
-
-  var btns = document.querySelectorAll(".btn");
-  for(var btn in btns) {
-  	btns[btn].className += " grow smooth";
-  }
-  //document.getElementById("upvotecounterprofile").className += " grow smooth";
-  var thing =  document.querySelectorAll(".bot-img>img")[0];
-  thing.addEventListener("click", function() {
-  	window.open('https://discord.gg/NKM9Xtk', '_blank');
-  });
-</script>
 <style>
+  body {
+  	background: url("https://ghostbot.duncte123.me/img/dp__ghost_zone_background_by_mistyphantom.png") no-repeat !important;
+   	background-size:cover !important;
+  }
+  .bot-name, #createdby, .bot-description {
+  	color: white !important;
+  }
+  .color-medium-blue {
+  	color:#8695ce;
+  }
+   .color-medium-blue:hover {
+  	color:#8695ce;
+  }
+  #botprofiletitle {
+  	color: black !important;
+  }
   span.servers {
-  	background: #6ffe32;
+  	background: #4BB020;
   }
   #menu {
   	background-color: #4BB020 !important;
