@@ -6,6 +6,8 @@ import me.duncte123.ghostBot.objects.Category;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.utils.EmbedUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
+import net.dv8tion.jda.core.MessageBuilder;
+import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -18,12 +20,15 @@ public class ImageCommand implements Command {
             "?q=%s&cx=012048784535646064391:v-fxkttbw54&hl=en&searchType=image&key=" + SpoopyUtils.config.getString("api.google");
     private final String[] keywords = {
             "Danny Phantom",
+            "Pitch Pearl",
+            "Pitch Pearl",
             "Danny Fenton",
             "Samantha Manson",
+            "Sam Manson",
             "Tucker Foley",
             "Jack Fenton",
             "Maddy Fenton",
-            "Jazmine Fenton",
+            "Jazz Fenton",
             "Vlad Plasmius",
             /*"Danny Fenton (Danny Phantom)",
             "Sam Manson (Danny Phantom)",
@@ -36,12 +41,27 @@ public class ImageCommand implements Command {
             "Danny Fenton"
     };
 
+    private final String[] pornKeywords = {
+            "",
+            "",
+            "",
+            "porn",
+            "yaoi",
+            "naked",
+            "",
+            "",
+    };
+
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
-        String keyword = keywords[SpoopyUtils.random.nextInt(keywords.length)].replaceAll(" ", "+");
+        String keyword = keywords[SpoopyUtils.random.nextInt(keywords.length)];
+        if(event.getChannel().isNSFW()) {
+            String selected = pornKeywords[SpoopyUtils.random.nextInt(pornKeywords.length)];
+            keyword += !"".equals(selected) ? " " + selected : "";
+        }
         try {
             Request request = new Request.Builder()
-                    .url(String.format(url, keyword))
+                    .url(String.format(url, keyword.replaceAll(" ", "+")))
                     .header("User-Agent", "GhostBot")
                     .addHeader("Accept", "application/json; q=0.5")
                     .get()
@@ -54,11 +74,17 @@ public class ImageCommand implements Command {
                 return;
             }
             Ason randomItem = arr.getJsonObject(SpoopyUtils.random.nextInt(arr.size()));
-            sendEmbed(event,
+            sendMsg(event, new MessageBuilder()
+                    .append("Keyword: ")
+                    .append(keyword)
+                    .setEmbed( EmbedUtils.defaultEmbed()
+                            .setTitle(randomItem.getString("title"), randomItem.getString("image.contextLink"))
+                            .setImage(randomItem.getString("link")).build()).build());
+            /*sendEmbed(event,
                     EmbedUtils.defaultEmbed()
                             .setTitle(randomItem.getString("title"), randomItem.getString("image.contextLink"))
                             .setImage(randomItem.getString("link")).build()
-            );
+            );*/
         }
         catch (IOException | NullPointerException e) {
             e.printStackTrace();
