@@ -17,7 +17,7 @@ repositories {
 
 dependencies {
     //JDA
-    compile group: 'net.dv8tion', name: 'JDA', version: '3.4.0_320'
+    compile group: 'net.dv8tion', name: 'JDA', version: '3.5.0_329'
     //LavaPlayer
     compile group: 'com.sedmelluq', name: 'lavaplayer', version: '1.2.45'
     //JSON Extension

@@ -8,7 +8,7 @@ import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 public class AboutCommand implements Command {
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
-        sendEmbed(event, EmbedUtils.embedMessage("Hey there I'm GhostBot, I'm here for all your <:DPEmblem:394141093601607680> Danny Phantom needs.\n" +
+        sendEmbed(event, EmbedUtils.embedMessage("Hey there I'm GhostBot, I'm here for all your <:DPEmblemInvertStroke:402746292788264960> Danny Phantom needs.\n" +
                 "I'm being developed by duncte123 (duncte123#1245) and if you have any ideas of what to add to me you can contact him or join [this server](https://discord.gg/NKM9Xtk)\n\n" +
 
                 "**Useful information:**\n" +
