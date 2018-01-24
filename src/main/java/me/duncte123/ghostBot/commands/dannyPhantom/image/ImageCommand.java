@@ -74,11 +74,12 @@ public class ImageCommand implements Command {
 
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
-        String keyword = keywords[SpoopyUtils.random.nextInt(keywords.length)];
+        /*String keyword = keywords[SpoopyUtils.random.nextInt(keywords.length)];
         if(event.getChannel().isNSFW()) {
             String selected = pornKeywords[SpoopyUtils.random.nextInt(pornKeywords.length)];
             keyword += !"".equals(selected) ? " " + selected : "";
-        }
+        }*/
+        String keyword = "Danny Phantom";
         try {
             Request request = new Request.Builder()
                     .url(String.format(url, keyword.replaceAll(" ", "+")))
