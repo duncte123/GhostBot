@@ -6,6 +6,7 @@ import me.duncte123.ghostBot.commands.dannyPhantom.audio.WailCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.image.ImageCommand;
 import me.duncte123.ghostBot.commands.main.AboutCommand;
 import me.duncte123.ghostBot.commands.main.HelpCommand;
+import me.duncte123.ghostBot.commands.main.ReloadAudioCommand;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
@@ -31,6 +32,7 @@ public class CommandManager {
 
         this.addCommand(new HelpCommand());
         this.addCommand(new AboutCommand());
+        this.addCommand(new ReloadAudioCommand());
     }
 
     public Set<Command> getCommands() {

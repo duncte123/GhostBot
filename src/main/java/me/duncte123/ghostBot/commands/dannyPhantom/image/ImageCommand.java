@@ -7,14 +7,13 @@ import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.utils.EmbedUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.MessageBuilder;
-import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import okhttp3.Request;
 import okhttp3.Response;
 
 import java.io.IOException;
 
-public class ImageCommand implements Command {
+public class ImageCommand extends Command {
 
     private final String url = "https://www.googleapis.com/customsearch/v1" +
             "?q=%s&cx=012048784535646064391:v-fxkttbw54&hl=en&searchType=image&key=" + SpoopyUtils.config.getString("api.google");

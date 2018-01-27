@@ -7,7 +7,7 @@ plugins {
 mainClassName = 'me.duncte123.ghostBot.GhostBot'
 
 group 'me.duncte123'
-version '0.0.1'
+version "0.0.${getVersionBuild()}"
 
 sourceCompatibility = 1.8
 
@@ -17,7 +17,7 @@ repositories {
 
 dependencies {
     //JDA
-    compile group: 'net.dv8tion', name: 'JDA', version: '3.5.0_329'
+    compile group: 'net.dv8tion', name: 'JDA', version: '3.5.0_330'
     //LavaPlayer
     compile group: 'com.sedmelluq', name: 'lavaplayer', version: '1.2.45'
     //JSON Extension
@@ -33,3 +33,22 @@ dependencies {
 }
 
 compileJava.options.encoding = 'UTF-8'
+
+def getVersionBuild() {
+    def versionPropsFile = file('version.properties')
+    def versionBuild
+
+    if (versionPropsFile.canRead()) {
+        Properties versionProps = new Properties()
+        versionProps.load(new FileInputStream(versionPropsFile))
+        versionBuild = Integer.valueOf(versionProps['VERSION_BUILD'].toString()) + 1
+        versionProps['VERSION_BUILD'] = versionBuild.toString()
+        PrintWriter writer = new PrintWriter("version.properties", "UTF-8")
+        writer.println("VERSION_BUILD=$versionBuild")
+        writer.close()
+    } else {
+        throw new FileNotFoundException("Could not read version.properties!")
+    }
+
+    return versionBuild
+}

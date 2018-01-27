@@ -1,13 +1,13 @@
 package me.duncte123.ghostBot.commands.dannyPhantom.audio;
 
-import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.objects.Category;
+import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
-public class WailCommand implements Command {
+public class WailCommand extends Command {
 
-    private final String audioPath = SpoopyUtils.audio.BASE_AUDIO_DIR + "wail/";
+   /* private final String audioPath = SpoopyUtils.audio.BASE_AUDIO_DIR + "wail/";
     private final String[] audioFiles = {
             "ghost wail 1.mp3",
             "ghost wail 2.mp3",
@@ -15,7 +15,12 @@ public class WailCommand implements Command {
             "ghost wail 4.mp3",
             "ghost wail 5.mp3",
             "ghost wail 6.mp3"
-    };
+    };*/
+
+    public WailCommand() {
+        this.audioPath = SpoopyUtils.audio.BASE_AUDIO_DIR + "wail/";
+        reloadAudioFiles();
+    }
 
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {

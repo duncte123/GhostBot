@@ -9,18 +9,44 @@ import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.PermissionException;
 
-public interface Command {
-    void execute(String invoke, String[] args, GuildMessageReceivedEvent event);
-    String getName();
-    default Category getCategory() {
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class Command {
+    public abstract void execute(String invoke, String[] args, GuildMessageReceivedEvent event);
+    public abstract String getName();
+    public Category getCategory() {
         return Category.NONE;
     }
-    default String[] getAliases() {
+    public String[] getAliases() {
         return new String[0];
     }
-    String getHelp();
+    public abstract String getHelp();
 
-    default void sendSuccess(Message message) {
+    protected String audioPath = "";
+    protected String[] audioFiles = {};
+    public void reloadAudioFiles() {
+        if(!getCategory().equals(Category.AUDIO)) return;
+
+        System.out.println(getName() + ": " + audioPath);
+        File folder = new File(audioPath);
+        File[] listOfFiles = folder.listFiles();
+        List<String> filesFound = new ArrayList<>();
+
+        if(listOfFiles == null || listOfFiles.length == 0) return;
+
+        for (File file : listOfFiles) {
+            if (file.isFile()) {
+                System.out.println(getName() + ": " + audioPath + file.getName());
+                filesFound.add(file.getName());
+            }
+        }
+
+        audioFiles = filesFound.toArray(new String[0]);
+    }
+
+    protected void sendSuccess(Message message) {
         if (message.getChannelType() == ChannelType.TEXT) {
             TextChannel channel = message.getTextChannel();
             if (!channel.getGuild().getSelfMember().hasPermission(channel, Permission.MESSAGE_ADD_REACTION)) {
@@ -30,11 +56,11 @@ public interface Command {
         message.addReaction("✅").queue();
     }
 
-    default void sendEmbed(GuildMessageReceivedEvent event, MessageEmbed embed) {
+    protected void sendEmbed(GuildMessageReceivedEvent event, MessageEmbed embed) {
         sendEmbed(event.getChannel(), embed);
     }
 
-    default void sendEmbed(TextChannel channel, MessageEmbed embed) {
+    protected void sendEmbed(TextChannel channel, MessageEmbed embed) {
         if (!channel.getGuild().getSelfMember().hasPermission(channel, Permission.MESSAGE_EMBED_LINKS)) {
             sendMsg(channel, EmbedUtils.embedToMessage(embed));
             return;
@@ -42,37 +68,37 @@ public interface Command {
         sendMsg(channel, embed);
     }
 
-    default void sendMsg(GuildMessageReceivedEvent event, String msg) {
+    protected void sendMsg(GuildMessageReceivedEvent event, String msg) {
         sendMsg(event.getChannel(), (new MessageBuilder()).append(msg).build());
     }
 
-    default void sendMsg(TextChannel channel, String msg) {
+    protected void sendMsg(TextChannel channel, String msg) {
         sendMsg(channel, (new MessageBuilder()).append(msg).build());
     }
 
-    default void sendMsg(GuildMessageReceivedEvent event, MessageEmbed msg) {
+    protected void sendMsg(GuildMessageReceivedEvent event, MessageEmbed msg) {
         sendMsg(event.getChannel(), (new MessageBuilder()).setEmbed(msg).build());
     }
 
-    default void sendMsg(TextChannel channel, MessageEmbed msg) {
+    protected void sendMsg(TextChannel channel, MessageEmbed msg) {
         sendMsg(channel, (new MessageBuilder()).setEmbed(msg).build());
     }
 
-    default void sendMsg(GuildMessageReceivedEvent event, Message msg) {
+    protected void sendMsg(GuildMessageReceivedEvent event, Message msg) {
         sendMsg(event.getChannel(), msg);
     }
 
-    default void sendMsg(TextChannel channel, Message msg) {
+    protected void sendMsg(TextChannel channel, Message msg) {
         //Only send a message if we can talk
         if(channel.canTalk())
             channel.sendMessage(msg).queue();
     }
 
-    default GuildMusicManager getMusicManager(Guild guild) {
+    protected GuildMusicManager getMusicManager(Guild guild) {
         return SpoopyUtils.audio.getMusicManager(guild);
     }
 
-    default boolean preAudioChecks(GuildMessageReceivedEvent event) {
+    protected boolean preAudioChecks(GuildMessageReceivedEvent event) {
         if(!event.getMember().getVoiceState().inVoiceChannel()) {
             sendEmbed(event, EmbedUtils.embedMessage("Please join a voice channel first"));
             return false;

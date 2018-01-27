@@ -5,7 +5,7 @@ import me.duncte123.ghostBot.utils.EmbedUtils;
 import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
-public class AboutCommand implements Command {
+public class AboutCommand extends Command {
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
         sendEmbed(event, EmbedUtils.embedMessage("Hey there I'm GhostBot, I'm here for all your <:DPEmblemInvertStroke:402746292788264960> Danny Phantom needs.\n" +

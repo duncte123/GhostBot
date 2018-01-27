@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class HelpCommand implements Command {
+public class HelpCommand extends Command {
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
 
