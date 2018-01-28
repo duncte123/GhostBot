@@ -21,6 +21,7 @@ public class ReloadAudioCommand extends Command {
         //noinspection ConstantConditions
         if(true) return;
 
+
     /////////////////////////////////// Meme Code //////////////////////////////////////////
 
         CommandManager commandManager = SpoopyUtils.commandManager;
@@ -30,6 +31,7 @@ public class ReloadAudioCommand extends Command {
                 cmd.reloadAudioFiles();
         }
 
+        System.out.println("this should never run");
     }
 
     @Override
