@@ -29,10 +29,10 @@ public class BotListener extends ListenerAdapter {
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-        if(event.getAuthor().isBot() || event.getAuthor().isFake()) return;
-        if(!event.getMessage().getContentRaw().startsWith(Variables.PREFIX)) return;
+        if (event.getAuthor().isBot() || event.getAuthor().isFake()) return;
+        if (!event.getMessage().getContentRaw().startsWith(Variables.PREFIX)) return;
 
-        if(event.getMessage().getContentRaw().equals(Variables.PREFIX + "shutdown") && event.getAuthor().getId().equals(Variables.OWNER_ID)) {
+        if (event.getMessage().getContentRaw().equals(Variables.PREFIX + "shutdown") && event.getAuthor().getId().equals(Variables.OWNER_ID)) {
             logger.info("Shutting down!!");
             event.getMessage().addReaction("✅").queue(
                     //Shutdown on both success and failure
@@ -73,7 +73,7 @@ public class BotListener extends ListenerAdapter {
 
     @Override
     public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
-        if(event.getGuild().getAudioManager().isConnected()) {
+        if (event.getGuild().getAudioManager().isConnected()) {
             if (!event.getVoiceState().getMember().getUser().getId().equals(event.getJDA().getSelfUser().getId())) {
                 if (!event.getChannelLeft().getId().equals(event.getGuild().getAudioManager().getConnectedChannel().getId())) {
                     return;
@@ -85,7 +85,7 @@ public class BotListener extends ListenerAdapter {
 
     @Override
     public void onGuildVoiceMove(GuildVoiceMoveEvent event) {
-        if(event.getGuild().getAudioManager().isConnected()) {
+        if (event.getGuild().getAudioManager().isConnected()) {
             if (!event.getVoiceState().getMember().getUser().getId().equals(event.getJDA().getSelfUser().getId())) {
                 if (event.getChannelLeft() != null) {
                     if (!event.getChannelLeft().getId().equals(event.getGuild().getAudioManager().getConnectedChannel().getId())) {

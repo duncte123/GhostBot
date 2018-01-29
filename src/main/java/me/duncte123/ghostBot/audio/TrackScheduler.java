@@ -39,14 +39,11 @@ public class TrackScheduler extends AudioEventAdapter {
      * Hey look at that, it's our player
      */
     final AudioPlayer player;
-
+    final GuildMusicManager guildMusicManager;
     /**
      * This is the last playing track
      */
     AudioTrack lastTrack;
-
-    final GuildMusicManager guildMusicManager;
-
     /**
      * Are we repeating the track
      */

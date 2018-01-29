@@ -14,27 +14,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Command {
+    protected String audioPath = "";
+    protected String[] audioFiles = {};
+
     public abstract void execute(String invoke, String[] args, GuildMessageReceivedEvent event);
+
     public abstract String getName();
+
     public Category getCategory() {
         return Category.NONE;
     }
+
     public String[] getAliases() {
         return new String[0];
     }
+
     public abstract String getHelp();
 
-    protected String audioPath = "";
-    protected String[] audioFiles = {};
     public void reloadAudioFiles() {
-        if(!getCategory().equals(Category.AUDIO)) return;
+        if (!getCategory().equals(Category.AUDIO)) return;
 
         System.out.println(getName() + ": " + audioPath);
         File folder = new File(audioPath);
         File[] listOfFiles = folder.listFiles();
         List<String> filesFound = new ArrayList<>();
 
-        if(listOfFiles == null || listOfFiles.length == 0) return;
+        if (listOfFiles == null || listOfFiles.length == 0) return;
 
         for (File file : listOfFiles) {
             if (file.isFile()) {
@@ -90,7 +95,7 @@ public abstract class Command {
 
     protected void sendMsg(TextChannel channel, Message msg) {
         //Only send a message if we can talk
-        if(channel.canTalk())
+        if (channel.canTalk())
             channel.sendMessage(msg).queue();
     }
 
@@ -99,15 +104,14 @@ public abstract class Command {
     }
 
     protected boolean preAudioChecks(GuildMessageReceivedEvent event) {
-        if(!event.getMember().getVoiceState().inVoiceChannel()) {
+        if (!event.getMember().getVoiceState().inVoiceChannel()) {
             sendEmbed(event, EmbedUtils.embedMessage("Please join a voice channel first"));
             return false;
         }
 
         try {
             event.getGuild().getAudioManager().openAudioConnection(event.getMember().getVoiceState().getChannel());
-        }
-        catch (PermissionException e) {
+        } catch (PermissionException e) {
             if (e.getPermission() == Permission.VOICE_CONNECT) {
                 sendMsg(event, EmbedUtils.embedMessage(String.format("I don't have permission to join `%s`", event.getMember().getVoiceState().getChannel().getName())));
             } else {

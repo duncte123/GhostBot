@@ -21,11 +21,8 @@ import java.util.logging.Level;
 public class AudioUtils {
 
     private static final int DEFAULT_VOLUME = 35; //(0-150, where 100 is the default max volume)
-
-    private final String embedTitle = "Spoopy-Luma-Player";
-
     public final String BASE_AUDIO_DIR = "./audioFiles/";
-
+    private final String embedTitle = "Spoopy-Luma-Player";
     private final AudioPlayerManager playerManager;
 
     private final Map<String, GuildMusicManager> musicManagers;

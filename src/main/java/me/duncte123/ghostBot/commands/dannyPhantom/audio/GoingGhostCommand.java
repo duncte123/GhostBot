@@ -21,7 +21,7 @@ public class GoingGhostCommand extends Command {
 
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
-        if(preAudioChecks(event)) {
+        if (preAudioChecks(event)) {
             String selectedTrack = audioFiles[SpoopyUtils.random.nextInt(audioFiles.length)];
             int p = SpoopyUtils.random.nextInt(100);
             System.out.println(p);

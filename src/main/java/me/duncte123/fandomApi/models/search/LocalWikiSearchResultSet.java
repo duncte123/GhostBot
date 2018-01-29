@@ -1,8 +1,10 @@
 package me.duncte123.fandomApi.models.search;
 
+import me.duncte123.fandomApi.models.FandomResult;
+
 import java.util.List;
 
-public class LocalWikiSearchResultSet {
+public class LocalWikiSearchResultSet implements FandomResult {
     private final int batches;
     private final List<LocalWikiSearchResult> items;
     private final int total;
@@ -31,6 +33,10 @@ public class LocalWikiSearchResultSet {
 
     public int getTotal() {
         return total;
+    }
+
+    public int getNextBatch() {
+        return Integer.valueOf(currentBatch) + 1;
     }
 
     public List<LocalWikiSearchResult> getItems() {

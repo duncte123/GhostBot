@@ -1,6 +1,8 @@
 package me.duncte123.ghostBot.commands.dannyPhantom.wiki;
 
 import me.duncte123.fandomApi.FandomApi;
+import me.duncte123.fandomApi.models.FandomException;
+import me.duncte123.fandomApi.models.FandomResult;
 import me.duncte123.fandomApi.models.search.LocalWikiSearchResult;
 import me.duncte123.fandomApi.models.search.LocalWikiSearchResultSet;
 import me.duncte123.ghostBot.objects.Category;
@@ -16,17 +18,23 @@ public class WikiCommand extends Command {
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
         //
-        if(args.length == 0) {
+        if (args.length == 0) {
             sendMsg(event, "Insufficient arguments, Correct usage: `" + Variables.PREFIX + getName() + " <search term>`");
             return;
         }
         String searchQuery = StringUtils.join(args, " ");
-        LocalWikiSearchResultSet wikiSearchResultSet = SpoopyUtils.FANDOM_API.searchEndpoints.list(searchQuery);
+        FandomResult result = SpoopyUtils.FANDOM_API.searchEndpoints.list(searchQuery);
 
-        if(wikiSearchResultSet == null) {
-            sendMsg(event, "No results found on <" + FandomApi.getWikiUrl() + ">");
+        if (result instanceof FandomException) {
+            //noinspection RedundantCast
+            sendMsg(event, "Error: " + ((FandomException) result).toString());
+            return;
+        } else if (result == null) {
+            sendMsg(event, "Something went wrong while looking up data.");
             return;
         }
+
+        LocalWikiSearchResultSet wikiSearchResultSet = (LocalWikiSearchResultSet) result;
 
         EmbedBuilder eb = EmbedUtils.defaultEmbed()
                 .setTitle("Query: " + searchQuery, FandomApi.getWikiUrl() + "/wiki/Special:Search?query=" + searchQuery)
@@ -34,16 +42,16 @@ public class WikiCommand extends Command {
                 .setDescription("Total results: " + wikiSearchResultSet.getTotal() + "\n" +
                         "Current Listed: " + wikiSearchResultSet.getItems().size() + "\n\n");
 
-        for(LocalWikiSearchResult localWikiSearchResult : wikiSearchResultSet.getItems()) {
+        for (LocalWikiSearchResult localWikiSearchResult : wikiSearchResultSet.getItems()) {
             eb.appendDescription("[")
-            .appendDescription(localWikiSearchResult.getTitle())
-            .appendDescription(" - ")
-            .appendDescription(StringUtils.abbreviate(localWikiSearchResult.getSnippet()
-                    .replaceAll("<span class=\"searchmatch\">", "**")
-                    .replaceAll("</span>","**"), 50))
-            .appendDescription("](")
-            .appendDescription(localWikiSearchResult.getUrl())
-            .appendDescription(")\n");
+                    .appendDescription(localWikiSearchResult.getTitle())
+                    .appendDescription(" - ")
+                    .appendDescription(StringUtils.abbreviate(localWikiSearchResult.getSnippet()
+                            .replaceAll("<span class=\"searchmatch\">", "**")
+                            .replaceAll("</span>", "**"), 50))
+                    .appendDescription("](")
+                    .appendDescription(localWikiSearchResult.getUrl())
+                    .appendDescription(")\n");
         }
         sendEmbed(event, eb.build());
     }
@@ -55,20 +63,21 @@ public class WikiCommand extends Command {
 
     @Override
     public Category getCategory() {
-        return Category.TEXT;
+        return Category.WIKI;
     }
 
     @Override
     public String[] getAliases() {
-        return new String[] {
+        return new String[]{
                 "wikia",
+                "wikisearch",
                 "dannyphantomwiki"
         };
     }
 
     @Override
     public String getHelp() {
-        return "Search the danny phantom wiki\n" +
+        return "Search the Danny Phantom wiki\n" +
                 "Usage `" + Variables.PREFIX + getName() + " <search term>`\n" +
                 "Example: `" + Variables.PREFIX + getName() + " Danny`";
     }

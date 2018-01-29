@@ -16,14 +16,14 @@ public class PostStats {
         Response r = null;
         try {
             r = WebUtils.executeRequest(new Request.Builder()
-                    .url("https://discordbots.org/api/bots/"+jda.getSelfUser().getId()+"/stats")
+                    .url("https://discordbots.org/api/bots/" + jda.getSelfUser().getId() + "/stats")
                     .post(RequestBody.create(MediaType.parse("application/json"),
                             new JSONObject().put("server_count", jda.getGuilds().size()).toString()))
                     .addHeader("User-Agent", "DiscordBot " + jda.getSelfUser().getName())
                     .addHeader("Authorization", apiKey)
                     .build());
         } finally {
-            if(r != null)
+            if (r != null)
                 r.close();
         }
 

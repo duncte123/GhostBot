@@ -80,7 +80,7 @@ public class ImageCommand extends Command {
         try {
             Ason data = WebUtils.getAson(String.format(url, keyword.replaceAll(" ", "+")));
             AsonArray<Ason> arr = data.getJsonArray("items");
-            if(arr.size() == 0) {
+            if (arr.size() == 0) {
                 execute(invoke, args, event);
                 return;
             }
@@ -88,7 +88,7 @@ public class ImageCommand extends Command {
             sendMsg(event, new MessageBuilder()
                     .append("Keyword: ")
                     .append(keyword)
-                    .setEmbed( EmbedUtils.defaultEmbed()
+                    .setEmbed(EmbedUtils.defaultEmbed()
                             .setTitle(randomItem.getString("title"), randomItem.getString("image.contextLink"))
                             .setImage(randomItem.getString("link")).build()).build());
             /*sendEmbed(event,
@@ -96,8 +96,7 @@ public class ImageCommand extends Command {
                             .setTitle(randomItem.getString("title"), randomItem.getString("image.contextLink"))
                             .setImage(randomItem.getString("link")).build()
             );*/
-        }
-        catch (IOException | NullPointerException e) {
+        } catch (IOException | NullPointerException e) {
             e.printStackTrace();
             sendMsg(event, "Something went wrong while looking up the image");
         }
@@ -115,6 +114,6 @@ public class ImageCommand extends Command {
 
     @Override
     public String getHelp() {
-        return "Gives you a random Danny Phantom <:DPEmblem:394141093601607680> related image from google";
+        return "Gives you a random Danny Phantom <:DPEmblemInvertStroke:402746292788264960> related image from google";
     }
 }

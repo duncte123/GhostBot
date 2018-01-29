@@ -70,6 +70,7 @@ public class WebUtils {
 
     /**
      * Reads the contents of a url into an InputStream
+     *
      * @param url the url to read
      * @return the InputStream of the url
      * @throws IOException when things break
@@ -167,7 +168,8 @@ public class WebUtils {
 
     /**
      * This allows for JSON post requests to a website
-     * @param url the website to post the json to
+     *
+     * @param url  the website to post the json to
      * @param data the JSON data to post
      * @return The {@link Response} from the webserver
      */
@@ -183,9 +185,10 @@ public class WebUtils {
 
     /**
      * This translates a string into a different language
+     *
      * @param sourceLang the source language (example: "nl")
      * @param targetLang the target language (example: "en")
-     * @param input the user inpur (example: "Dit is een test")
+     * @param input      the user inpur (example: "Dit is een test")
      * @return the output of the api
      * THe examples above will output the following <code>["This is a test","Dit is een test",null,null,1]</code>
      */
@@ -194,8 +197,7 @@ public class WebUtils {
             return getJSONArray(
                     "https://translate.googleapis.com/translate_a/single?client=gtx&sl=" + sourceLang + "&tl=" + targetLang + "&dt=t&q=" + input
             ).getJSONArray(0).getJSONArray(0);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             return new JSONArray()
                     .put(input)
                     .put("null")
@@ -207,6 +209,7 @@ public class WebUtils {
 
     /**
      * Executes a web request
+     *
      * @param request the {@link Request Request} to execute
      * @return the {@link Response Response} from the web server
      */

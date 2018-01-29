@@ -15,7 +15,7 @@ public class GhostBot {
     private static final Logger logger = LoggerFactory.getLogger(GhostBot.class);
 
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
         logger.info("Booting GhostBot");
         String token = SpoopyUtils.config.getString("discord.token");
 
@@ -26,8 +26,7 @@ public class GhostBot {
                     .setToken(token)
                     .addEventListener(new BotListener())
                     .buildAsync();
-        }
-        catch (LoginException e) {
+        } catch (LoginException e) {
             e.printStackTrace();
             System.exit(-1);
         }

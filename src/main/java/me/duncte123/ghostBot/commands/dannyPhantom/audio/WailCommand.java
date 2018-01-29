@@ -24,7 +24,7 @@ public class WailCommand extends Command {
 
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
-        if(preAudioChecks(event)) {
+        if (preAudioChecks(event)) {
             String selectedTrack = audioFiles[SpoopyUtils.random.nextInt(audioFiles.length)];
             sendMsg(event, "Selected track: _" + selectedTrack + "_");
             SpoopyUtils.audio.loadAndPlay(getMusicManager(event.getGuild()), event.getChannel(),
@@ -49,6 +49,6 @@ public class WailCommand extends Command {
 
     @Override
     public String[] getAliases() {
-        return new String[] {"ghostlywail"};
+        return new String[]{"ghostlywail"};
     }
 }

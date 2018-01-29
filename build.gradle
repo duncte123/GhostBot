@@ -1,7 +1,7 @@
 plugins {
-    id'java'
-    id'application'
-    id'com.github.johnrengelman.shadow' version '2.0.2'
+    id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '2.0.2'
 }
 
 mainClassName = 'me.duncte123.ghostBot.GhostBot'

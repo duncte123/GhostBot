@@ -2,6 +2,8 @@ package me.duncte123.fandomApi.endpoints.search;
 
 import com.afollestad.ason.Ason;
 import com.afollestad.ason.AsonArray;
+import me.duncte123.fandomApi.models.FandomException;
+import me.duncte123.fandomApi.models.FandomResult;
 import me.duncte123.fandomApi.models.search.LocalWikiSearchResult;
 import me.duncte123.fandomApi.models.search.LocalWikiSearchResultSet;
 import me.duncte123.ghostBot.utils.WebUtils;
@@ -20,6 +22,10 @@ public class List extends SearchEndpoint {
 
     public List(String query) {
         this(query, "articles", "newest", 10, 10, 1, "0,14");
+    }
+
+    public List(String query, int batch) {
+        this(query, "articles", "newest", 10, 10, batch, "0,14");
     }
 
     public List(String query, String type, String rank) {
@@ -64,9 +70,10 @@ public class List extends SearchEndpoint {
         return type;
     }
 
-    public LocalWikiSearchResultSet execute() {
+    @Override
+    public FandomResult execute() {
         try {
-            Ason ason = WebUtils.getAson(getEndpoint() +  String.format(
+            Ason ason = WebUtils.getAson(getEndpoint() + String.format(
                     "?query=%s&type=%s&rank=%s&limit=%s&minArticleQuality=%s&batch=%s&namespaces=%s",
                     query,
                     type,
@@ -76,12 +83,18 @@ public class List extends SearchEndpoint {
                     batch,
                     namespaces
             ));
-            if(ason.has("exception")) {
-                return null;
+            if (ason.has("exception")) {
+                return new FandomException(
+                        ason.getString("exception.type"),
+                        ason.getString("exception.message"),
+                        ason.getInt("exception.code"),
+                        ason.getString("exception.details"),
+                        ason.getString("trace_id")
+                );
             }
             java.util.List<LocalWikiSearchResult> results = new ArrayList<>();
             AsonArray<Ason> items = ason.getJsonArray("items");
-            for(Ason item : items) {
+            for (Ason item : items) {
                 results.add(new LocalWikiSearchResult(
                         item.getInt("quality"),
                         item.getString("url"),
@@ -99,8 +112,7 @@ public class List extends SearchEndpoint {
                     ason.getInt("next")
             );
 
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;

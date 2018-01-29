@@ -19,7 +19,7 @@ public class HelpCommand extends Command {
 
         if (args.length > 0) {
             String toSearch = StringUtils.join(args, " ");
-            if(toSearch.startsWith(Variables.PREFIX))
+            if (toSearch.startsWith(Variables.PREFIX))
                 toSearch = toSearch.replaceFirst(Pattern.quote(Variables.PREFIX), "");
 
             for (Command cmd : SpoopyUtils.commandManager.getCommands()) {
@@ -43,25 +43,25 @@ public class HelpCommand extends Command {
         }
 
         List<String> dannyPhantomCommands = SpoopyUtils.commandManager.getCommands()
-                .stream().filter(c->c.getCategory().equals(Category.AUDIO)).map(Command::getName).collect(Collectors.toList());
+                .stream().filter(c -> c.getCategory().equals(Category.AUDIO)).map(Command::getName).collect(Collectors.toList());
         List<String> imageCommands = SpoopyUtils.commandManager.getCommands()
-                .stream().filter(c->c.getCategory().equals(Category.IMAGE)).map(Command::getName).collect(Collectors.toList());
+                .stream().filter(c -> c.getCategory().equals(Category.IMAGE)).map(Command::getName).collect(Collectors.toList());
         List<String> otherCommands = SpoopyUtils.commandManager.getCommands()
-                .stream().filter(c->c.getCategory().equals(Category.NONE)).map(Command::getName).collect(Collectors.toList());
+                .stream().filter(c -> c.getCategory().equals(Category.NONE)).map(Command::getName).collect(Collectors.toList());
 
         MessageEmbed helpEmbed = EmbedUtils.defaultEmbed()
                 .setDescription("Use `" + Variables.PREFIX + "help [command}` for more info about a command")
                 .addField("Audio commands",
-                        "`" + Variables.PREFIX + StringUtils.join(dannyPhantomCommands, "`\n`" + Variables.PREFIX ) + "`", false)
+                        "`" + Variables.PREFIX + StringUtils.join(dannyPhantomCommands, "`\n`" + Variables.PREFIX) + "`", false)
                 .addField("Imae commands",
-                        "`" + Variables.PREFIX + StringUtils.join(imageCommands, "`\n`" + Variables.PREFIX ) + "`", false)
-                .addField("Other commands", "`" + Variables.PREFIX + StringUtils.join(otherCommands, "`\n`" + Variables.PREFIX ) + "`", false)
+                        "`" + Variables.PREFIX + StringUtils.join(imageCommands, "`\n`" + Variables.PREFIX) + "`", false)
+                .addField("Other commands", "`" + Variables.PREFIX + StringUtils.join(otherCommands, "`\n`" + Variables.PREFIX) + "`", false)
                 .build();
 
         event.getAuthor().openPrivateChannel().queue(pc -> pc.sendMessage(helpEmbed).queue(
-                    msg -> sendMsg(event, event.getAuthor().getAsMention() + ", check your dms"),
-                    error -> sendEmbed(event, helpEmbed)
-            ),
+                msg -> sendMsg(event, event.getAuthor().getAsMention() + ", check your dms"),
+                error -> sendEmbed(event, helpEmbed)
+                ),
                 error -> sendEmbed(event, helpEmbed)
         );
     }
@@ -78,6 +78,6 @@ public class HelpCommand extends Command {
 
     @Override
     public String[] getAliases() {
-        return new String[] {"commands"};
+        return new String[]{"commands"};
     }
 }

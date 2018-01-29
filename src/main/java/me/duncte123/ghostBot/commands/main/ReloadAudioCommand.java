@@ -12,22 +12,22 @@ import java.util.Set;
 public class ReloadAudioCommand extends Command {
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
-        if(!event.getAuthor().getId().equals(Variables.OWNER_ID)) return;
+        if (!event.getAuthor().getId().equals(Variables.OWNER_ID)) return;
 
         SpoopyUtils.commandManager.getCommands().forEach(Command::reloadAudioFiles);
 
         sendSuccess(event.getMessage());
 
         //noinspection ConstantConditions
-        if(true) return;
+        if (true) return;
 
 
-    /////////////////////////////////// Meme Code //////////////////////////////////////////
+        /////////////////////////////////// Meme Code //////////////////////////////////////////
 
         CommandManager commandManager = SpoopyUtils.commandManager;
         Set<Command> commands = commandManager.getCommands();
-        for(Command cmd : commands) {
-            if(cmd.getCategory().equals(Category.AUDIO))
+        for (Command cmd : commands) {
+            if (cmd.getCategory().equals(Category.AUDIO))
                 cmd.reloadAudioFiles();
         }
 
