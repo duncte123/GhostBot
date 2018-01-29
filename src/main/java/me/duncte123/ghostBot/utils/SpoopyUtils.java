@@ -1,22 +1,19 @@
 package me.duncte123.ghostBot.utils;
 
+import me.duncte123.fandomApi.FandomApi;
 import me.duncte123.ghostBot.CommandManager;
 import me.duncte123.ghostBot.config.Config;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.utils.cache.MemberCacheView;
-import okhttp3.OkHttpClient;
-import org.slf4j.event.Level;
 
 import java.util.Random;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 public class SpoopyUtils {
     public static final AudioUtils audio = new AudioUtils();
     public static final Config config = new ConfigUtils().loadConfig();
     public static final Random random = new Random();
-    public static final OkHttpClient client = new OkHttpClient();
+    public static final FandomApi FANDOM_API = new FandomApi("http://dannyphantom.wikia.com");
 
     public static final CommandManager commandManager = new CommandManager();
 

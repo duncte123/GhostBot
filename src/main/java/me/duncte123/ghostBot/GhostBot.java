@@ -16,7 +16,6 @@ public class GhostBot {
 
 
     public static void main(String[] args) throws Exception{
-
         logger.info("Booting GhostBot");
         String token = SpoopyUtils.config.getString("discord.token");
 

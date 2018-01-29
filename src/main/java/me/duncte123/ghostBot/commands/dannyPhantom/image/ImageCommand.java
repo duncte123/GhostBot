@@ -6,10 +6,9 @@ import me.duncte123.ghostBot.objects.Category;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.utils.EmbedUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
+import me.duncte123.ghostBot.utils.WebUtils;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
-import okhttp3.Request;
-import okhttp3.Response;
 
 import java.io.IOException;
 
@@ -79,14 +78,7 @@ public class ImageCommand extends Command {
             keyword += !"".equals(selected) ? " " + selected : "";
         }*/
         try {
-            Request request = new Request.Builder()
-                    .url(String.format(url, keyword.replaceAll(" ", "+")))
-                    .header("User-Agent", "GhostBot")
-                    .addHeader("Accept", "application/json; q=0.5")
-                    .get()
-                    .build();
-            Response response = SpoopyUtils.client.newCall(request).execute();
-            Ason data = new Ason(response.body().string());
+            Ason data = WebUtils.getAson(String.format(url, keyword.replaceAll(" ", "+")));
             AsonArray<Ason> arr = data.getJsonArray("items");
             if(arr.size() == 0) {
                 execute(invoke, args, event);
