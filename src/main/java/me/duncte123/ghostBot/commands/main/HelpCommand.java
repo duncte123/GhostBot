@@ -46,6 +46,8 @@ public class HelpCommand extends Command {
                 .stream().filter(c -> c.getCategory().equals(Category.AUDIO)).map(Command::getName).collect(Collectors.toList());
         List<String> imageCommands = SpoopyUtils.commandManager.getCommands()
                 .stream().filter(c -> c.getCategory().equals(Category.IMAGE)).map(Command::getName).collect(Collectors.toList());
+        List<String> wikiCommands = SpoopyUtils.commandManager.getCommands()
+                .stream().filter(c -> c.getCategory().equals(Category.WIKI)).map(Command::getName).collect(Collectors.toList());
         List<String> otherCommands = SpoopyUtils.commandManager.getCommands()
                 .stream().filter(c -> c.getCategory().equals(Category.NONE)).map(Command::getName).collect(Collectors.toList());
 
@@ -53,8 +55,10 @@ public class HelpCommand extends Command {
                 .setDescription("Use `" + Variables.PREFIX + "help [command}` for more info about a command")
                 .addField("Audio commands",
                         "`" + Variables.PREFIX + StringUtils.join(dannyPhantomCommands, "`\n`" + Variables.PREFIX) + "`", false)
-                .addField("Imae commands",
+                .addField("Image commands",
                         "`" + Variables.PREFIX + StringUtils.join(imageCommands, "`\n`" + Variables.PREFIX) + "`", false)
+                .addField("Wiki commands",
+                        "`" + Variables.PREFIX + StringUtils.join(wikiCommands, "`\n`" + Variables.PREFIX) + "`", false)
                 .addField("Other commands", "`" + Variables.PREFIX + StringUtils.join(otherCommands, "`\n`" + Variables.PREFIX) + "`", false)
                 .build();
 
