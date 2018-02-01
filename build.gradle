@@ -24,8 +24,8 @@ plugins {
 
 mainClassName = 'me.duncte123.ghostBot.GhostBot'
 
-group 'me.duncte123.ghostbot'
-version "0.0.${getVersionBuild()}"
+group = 'me.duncte123.ghostbot'
+version = "0.0.${getVersionBuild()}"
 
 sourceCompatibility = 1.8
 
