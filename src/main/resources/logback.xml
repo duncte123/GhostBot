@@ -22,8 +22,7 @@
         <!-- encoders are  by default assigned the type
              ch.qos.logback.classic.encoder.PatternLayoutEncoder -->
         <encoder>
-            <pattern>%d{dd-MM-yyyy HH:mm:ss} %boldCyan(%-32.-32thread) %boldGreen(%-20.-20logger{0})
-                %highlight(%-6level) %msg%n
+            <pattern>%d{dd-MM-yyyy HH:mm:ss} %boldCyan(%-32.-32thread) %boldGreen(%-20.-20logger{0}) %highlight(%-6level) %msg%n
             </pattern>
         </encoder>
     </appender>
