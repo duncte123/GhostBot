@@ -15,13 +15,20 @@
   #botprofiletitle {
   	color: black !important;
   }
+#menu {
+    background-color: transparent !important;
+    /* box-shadow: 0 0 8px rgba(65, 68, 99, .8); */
+}
+.lib a {
+    color: ghostwhite !important;
+}
   span.servers {
   	background: #4BB020;
   }
-  #menu {
+  /*#menu {
   	background-color: #4BB020 !important;
   	box-shadow: 0 0 8px rgba(65, 68, 99, .8);
-  }
+  } */
   .grow,
   .grow-less,
   .grow-more,
@@ -51,6 +58,9 @@ gb.wail: Gives you a nice ghostly wail
 gb.fuitloop: You're one crazed up fruitloop 
 
 gb.image: Gives you a random Danny Phantom related image from google
+
+gb.wiki: Search the Danny Phantom wiki
+gb.wikiuser: Search wikia for users.
 
 gb.help: Your avarage help command
 gb.about: Gives some information about the bot
