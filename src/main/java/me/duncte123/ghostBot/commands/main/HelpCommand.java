@@ -70,7 +70,7 @@ public class HelpCommand extends Command {
                 .stream().filter(c -> c.getCategory().equals(Category.NONE)).map(Command::getName).collect(Collectors.toList());
 
         MessageEmbed helpEmbed = EmbedUtils.defaultEmbed()
-                .setDescription("Use `" + Variables.PREFIX + "help [command}` for more info about a command")
+                .setDescription("Use `" + Variables.PREFIX + "help [command]` for more info about a command")
                 .addField("Audio commands",
                         "`" + Variables.PREFIX + StringUtils.join(dannyPhantomCommands, "`\n`" + Variables.PREFIX) + "`", false)
                 .addField("Image commands",
