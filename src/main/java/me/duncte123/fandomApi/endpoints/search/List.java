@@ -93,7 +93,7 @@ public class List extends SearchEndpoint {
         try {
             Ason ason = WebUtils.getAson(getEndpoint() + String.format(
                     "?query=%s&type=%s&rank=%s&limit=%s&minArticleQuality=%s&batch=%s&namespaces=%s",
-                    query.replaceAll(" ", "+"),
+                    query.replaceAll(" ", "%20"),
                     type,
                     rank,
                     limit,

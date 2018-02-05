@@ -55,8 +55,8 @@ public class WikiCommand extends Command {
         LocalWikiSearchResultSet wikiSearchResultSet = (LocalWikiSearchResultSet) result;
 
         EmbedBuilder eb = EmbedUtils.defaultEmbed()
-                .setTitle("Query: " + searchQuery, FandomApi.getWikiUrl() + "/wiki/Special:Search?query=" + searchQuery)
-                .setAuthor("Requester: " + String.format("%#s", event.getAuthor()), null, event.getAuthor().getEffectiveAvatarUrl())
+                .setTitle("Query: " + searchQuery, FandomApi.getWikiUrl() + "/wiki/Special:Search?query=" + searchQuery.replaceAll(" ", "%20"))
+                .setAuthor("Requester: " + String.format("%#s", event.getAuthor()), "https://ghostbot.duncte123.me/", event.getAuthor().getEffectiveAvatarUrl())
                 .setDescription("Total results: " + wikiSearchResultSet.getTotal() + "\n" +
                         "Current Listed: " + wikiSearchResultSet.getItems().size() + "\n\n");
 
