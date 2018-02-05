@@ -40,7 +40,7 @@ public class WikiCommand extends Command {
             sendMsg(event, "Insufficient arguments, Correct usage: `" + Variables.PREFIX + getName() + " <search term>`");
             return;
         }
-        String searchQuery = StringUtils.join(args, "%20");
+        String searchQuery = StringUtils.join(args, " ");
         FandomResult result = SpoopyUtils.FANDOM_API.searchEndpoints.list(searchQuery);
 
         if (result instanceof FandomException) {
