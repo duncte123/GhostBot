@@ -18,6 +18,7 @@
 
 package me.duncte123.ghostBot.objects;
 
+import fredboat.audio.player.LavalinkManager;
 import me.duncte123.ghostBot.audio.GuildMusicManager;
 import me.duncte123.ghostBot.utils.EmbedUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
@@ -81,7 +82,7 @@ public abstract class Command {
         }
 
         try {
-            event.getGuild().getAudioManager().openAudioConnection(event.getMember().getVoiceState().getChannel());
+            LavalinkManager.ins.openConnection(event.getMember().getVoiceState().getChannel());
         } catch (PermissionException e) {
             if (e.getPermission() == Permission.VOICE_CONNECT) {
                 sendMsg(event, EmbedUtils.embedMessage(String.format("I don't have permission to join `%s`", event.getMember().getVoiceState().getChannel().getName())));

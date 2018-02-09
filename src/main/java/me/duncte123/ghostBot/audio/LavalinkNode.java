@@ -20,7 +20,7 @@ package me.duncte123.ghostBot.audio;
 
 import com.afollestad.ason.Ason;
 
-public class LavalinkNode extends Ason {
+public class LavalinkNode {
 
     private final String wsUrl;
     private final String pass;

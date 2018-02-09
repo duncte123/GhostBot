@@ -58,9 +58,9 @@ public class BotListener extends ListenerAdapter {
                     success -> event.getJDA().shutdown(),
                     failure -> event.getJDA().shutdown()
             );
-            LavalinkManager.ins.getLavalink().shutdown();
             try {
-                Thread.sleep(2 * 1000);
+                //noinspection PointlessArithmeticExpression
+                Thread.sleep(1 * 1000);
                 System.exit(0);
             }
             catch (InterruptedException ignored) {}
@@ -97,9 +97,9 @@ public class BotListener extends ListenerAdapter {
 
     @Override
     public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
-        if (event.getGuild().getAudioManager().isConnected()) {
+        if (LavalinkManager.ins.isConnected(event.getGuild())) {
             if (!event.getVoiceState().getMember().getUser().getId().equals(event.getJDA().getSelfUser().getId())) {
-                if (!event.getChannelLeft().getId().equals(event.getGuild().getAudioManager().getConnectedChannel().getId())) {
+                if (!event.getChannelLeft().getId().equals( LavalinkManager.ins.getConnectedChannel(event.getGuild()).getId() )) {
                     return;
                 }
                 channelCheckThing(event.getGuild(), event.getChannelLeft());
@@ -109,10 +109,10 @@ public class BotListener extends ListenerAdapter {
 
     @Override
     public void onGuildVoiceMove(GuildVoiceMoveEvent event) {
-        if (event.getGuild().getAudioManager().isConnected()) {
+        if (LavalinkManager.ins.isConnected(event.getGuild())) {
             if (!event.getVoiceState().getMember().getUser().getId().equals(event.getJDA().getSelfUser().getId())) {
                 if (event.getChannelLeft() != null) {
-                    if (!event.getChannelLeft().getId().equals(event.getGuild().getAudioManager().getConnectedChannel().getId())) {
+                    if (!event.getChannelLeft().getId().equals( LavalinkManager.ins.getConnectedChannel(event.getGuild()).getId() )) {
                         return;
                     }
                     channelCheckThing(event.getGuild(), event.getChannelLeft());
@@ -121,7 +121,7 @@ public class BotListener extends ListenerAdapter {
 
                 if (event.getChannelJoined() != null) {
                     if (event.getGuild().getAudioManager().getConnectedChannel() != null &&
-                            !event.getChannelJoined().getId().equals(event.getGuild().getAudioManager().getConnectedChannel().getId())) {
+                            !event.getChannelJoined().getId().equals( LavalinkManager.ins.getConnectedChannel(event.getGuild()).getId() )) {
                         return;
                         //System.out.println("Self (this might be buggy)");
                     }
@@ -132,7 +132,6 @@ public class BotListener extends ListenerAdapter {
     }
 
     private void channelCheckThing(Guild g, VoiceChannel vc) {
-
         if (vc.getMembers().stream().filter(m -> !m.getUser().isBot()).count() < 1) {
             GuildMusicManager manager = SpoopyUtils.audio.getMusicManager(g);
             manager.player.stopTrack();
