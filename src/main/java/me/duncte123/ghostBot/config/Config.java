@@ -24,15 +24,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.Collections;
+import java.util.List;
 
 public class Config {
 
     protected final Ason config;
     private final Config parent;
+    //private final Ason ason;
 
     protected Config(Config parent, Ason config) {
         this.parent = parent;
         this.config = config;
+        //this.ason = new Ason(this.config);
     }
 
     /**
@@ -146,61 +150,63 @@ public class Config {
     }
 
     /**
+     * This method gets the array from the key and converts it into a list for better handling
+     *
+     * @param key the key of the array
+     * @return the array as {@link List}
+     */
+    public <T> List<T> getArray(String key) {
+        return getArray(key, null);
+    }
+
+    /**
+     * This method gets the array from the key and converts it into a list for better handling
+     *
+     * @param key the key of the array
+     * @param defaultValue The default value that the array needs to have
+     * @return the array as {@link List}
+     */
+    @SuppressWarnings("unchecked")
+    public <T> List<T> getArray(String key, List defaultValue) {
+        if (!hasKey(key)) {
+            List toPut = Collections.emptyList();
+            if(defaultValue != null) {
+                toPut = defaultValue;
+            }
+            put(key, new JSONArray(toPut));
+            return toPut;
+        } else {
+            return (List<T>) config.getJsonArray(key).toList();
+        }
+    }
+
+
+    /**
+     * Gets anything
+     *
+     * @param key the key of the object
+     * @return the found object
+     */
+    public Object get(String key) {
+        if (!hasKey(key)) {
+            return null;
+        } else {
+            return config.get(key);
+        }
+    }
+
+    /**
      * This will attempt to put a value is the config
      *
      * @param key   the key to add the value under
      * @param value the value that we need to add, in the form of json
      */
-    public void put(String key, Object value) {
+    public void put(String key, Object... value) {
         config.put(key, value);
-        final String finalKey = key.substring(key.lastIndexOf(".") + 1);
-        key = replaceLast(key, finalKey, "");
-        if (key.endsWith("."))
-            key = replaceLast(key, ".", "");
-        final String[] path = key.split("\\.");
-        JSONObject current = this.config.toStockJson();
-
-        try {
-            for (String element : path) {
-                if (element.trim().isEmpty())
-                    continue;
-                if (element.endsWith("]") && element.contains("[")) {
-                    final int i = element.lastIndexOf("[");
-                    int index;
-                    try {
-                        index = Integer.parseInt(element.substring(i).replace("[", "").replace("]", ""));
-                    } catch (final Exception e) {
-                        index = -1;
-                    }
-                    element = element.substring(0, i);
-
-                    if (!current.has(element))
-                        current.put(element, new JSONArray());
-                    final JSONArray array = current.getJSONArray(element);
-                    if (index == -1) {
-                        final JSONObject object = new JSONObject();
-                        array.put(object);
-                        current = object;
-                    } else {
-                        if (index == array.length())
-                            array.put(new JSONObject());
-                        current = array.getJSONObject(index);
-                    }
-
-                } else {
-                    if (!current.has(element))
-                        current.put(element, new JSONObject());
-                    current = current.getJSONObject(element);
-                }
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-            throw e;
-        }
-        current.put(finalKey, value);
         try {
             this.save();
-        } catch (Exception e1) {
+        }
+        catch (Exception e1) {
             e1.printStackTrace();
         }
     }

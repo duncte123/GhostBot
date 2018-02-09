@@ -18,15 +18,16 @@
 
 package me.duncte123.ghostBot.audio;
 
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
+import fredboat.audio.player.LavalinkManager;
+import lavalink.client.player.IPlayer;
+import net.dv8tion.jda.core.entities.Guild;
 
 public class GuildMusicManager {
 
     /**
      * This is our player
      */
-    public final AudioPlayer player;
+    public final IPlayer player;
 
     /**
      * This is the scheduler
@@ -34,18 +35,18 @@ public class GuildMusicManager {
     public final TrackScheduler scheduler;
 
     /**
-     * This is what actually sends the me.duncte123.ghostBot.audio
+     * This is what actually sends the audio
      */
-    public final AudioPlayerSenderHandler sendHandler;
+    private final AudioPlayerSenderHandler sendHandler;
 
     /**
      * Constructor
      *
-     * @param manager The {@link AudioPlayerManager AudioPlayerManager} for the corresponding guild
+     * @param g The guild that we wannt the manager for
      */
-    public GuildMusicManager(AudioPlayerManager manager) {
-        player = manager.createPlayer();
-        scheduler = new TrackScheduler(player, this);
+    public GuildMusicManager(Guild g) {
+        player = LavalinkManager.ins.createPlayer(g.getId());
+        scheduler = new TrackScheduler(player);
         sendHandler = new AudioPlayerSenderHandler(player);
         player.addListener(scheduler);
     }
@@ -53,7 +54,7 @@ public class GuildMusicManager {
     /**
      * This will get our sendings handler
      *
-     * @return The {@link AudioPlayerSenderHandler thing} that sends our me.duncte123.ghostBot.audio
+     * @return The {@link AudioPlayerSenderHandler thing} that sends our audio
      */
     public AudioPlayerSenderHandler getSendHandler() {
         return sendHandler;

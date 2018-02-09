@@ -23,6 +23,8 @@ import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
+import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
+
 public class GoingGhostCommand extends Command {
     /*private final String audioPath = SpoopyUtils.audio.BASE_AUDIO_DIR + "goingghost/";
     private final String[] audioFiles = {
@@ -42,7 +44,6 @@ public class GoingGhostCommand extends Command {
         if (preAudioChecks(event)) {
             String selectedTrack = audioFiles[SpoopyUtils.random.nextInt(audioFiles.length)];
             int p = SpoopyUtils.random.nextInt(100);
-            System.out.println(p);
             if (p >= 50 && p <= 55) {
                 selectedTrack = "extra/its going ghost.mp3";
             }

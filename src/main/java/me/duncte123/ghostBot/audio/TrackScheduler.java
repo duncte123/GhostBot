@@ -19,16 +19,17 @@
 package me.duncte123.ghostBot.audio;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
-import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
+import lavalink.client.player.IPlayer;
+import lavalink.client.player.event.AudioEventAdapterWrapped;
 
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-public class TrackScheduler extends AudioEventAdapter {
+public class TrackScheduler extends AudioEventAdapterWrapped {
 
     /**
      * This stores our queue
@@ -38,26 +39,37 @@ public class TrackScheduler extends AudioEventAdapter {
     /**
      * Hey look at that, it's our player
      */
-    final AudioPlayer player;
-    final GuildMusicManager guildMusicManager;
+    private final IPlayer player;
+
     /**
      * This is the last playing track
      */
-    AudioTrack lastTrack;
+    private AudioTrack lastTrack;
+
+    //private final GuildMusicManager guildMusicManager;
+
     /**
      * Are we repeating the track
      */
     private boolean repeating = false;
 
+
+    /**
+     * Are we repeating playlists
+     */
+    private boolean repeatPlayList = false;
+
+    //private LavaplayerPlayerWrapper lavaplayerPlayer;
+
     /**
      * This instantiates our player
      *
-     * @param player Our me.duncte123.ghostBot.audio player
+     * @param player Our audio player
      */
-    public TrackScheduler(AudioPlayer player, GuildMusicManager guildMusicManager) {
+    TrackScheduler(IPlayer player) {
         this.player = player;
         this.queue = new LinkedList<>();
-        this.guildMusicManager = guildMusicManager;
+        //this.guildMusicManager = guildMusicManager;
     }
 
     /**
@@ -66,8 +78,10 @@ public class TrackScheduler extends AudioEventAdapter {
      * @param track The {@link AudioTrack AudioTrack} to queue
      */
     public void queue(AudioTrack track) {
-        if (!player.startTrack(track, true)) {
+        if(player.getPlayingTrack() != null) {
             queue.offer(track);
+        } else {
+            player.playTrack(track);
         }
     }
 
@@ -75,7 +89,8 @@ public class TrackScheduler extends AudioEventAdapter {
      * Starts the next track
      */
     public void nextTrack() {
-        player.startTrack(queue.poll(), false);
+        if(queue.peek() != null)
+            player.playTrack(queue.poll());
     }
 
     /**
@@ -91,7 +106,11 @@ public class TrackScheduler extends AudioEventAdapter {
 
         if (endReason.mayStartNext) {
             if (repeating) {
-                player.startTrack(lastTrack.makeClone(), false);
+                if (!repeatPlayList) {
+                    player.playTrack(lastTrack.makeClone());
+                } else {
+                    queue(lastTrack.makeClone());
+                }
             } else {
                 nextTrack();
             }
@@ -108,12 +127,30 @@ public class TrackScheduler extends AudioEventAdapter {
     }
 
     /**
+     * This will tell you if the player is repeating playlists
+     *
+     * @return true if the player is set to repeat playlists
+     */
+    public boolean isRepeatingPlaylists() {
+        return repeatPlayList;
+    }
+
+    /**
      * tell the player if needs to repeat
      *
      * @param repeating if the player needs to repeat
      */
     public void setRepeating(boolean repeating) {
         this.repeating = repeating;
+    }
+
+    /**
+     * tell the player if needs to repeat playlists
+     *
+     * @param repeatingPlaylists if the player needs to repeat playlists
+     */
+    public void setRepeatingPlaylists(boolean repeatingPlaylists) {
+        this.repeatPlayList = repeatingPlaylists;
     }
 
     /**

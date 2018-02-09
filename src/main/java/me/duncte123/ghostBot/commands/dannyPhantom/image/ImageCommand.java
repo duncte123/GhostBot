@@ -30,6 +30,8 @@ import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 import java.io.IOException;
 
+import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
+
 public class ImageCommand extends Command {
 
     private final String url = "https://www.googleapis.com/customsearch/v1" +

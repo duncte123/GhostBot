@@ -26,9 +26,7 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import me.duncte123.ghostBot.audio.GuildMusicManager;
-import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.entities.TextChannel;
 
 import java.util.HashMap;
@@ -39,22 +37,40 @@ import java.util.logging.Level;
 public class AudioUtils {
 
     private static final int DEFAULT_VOLUME = 35; //(0-150, where 100 is the default max volume)
-    public final String BASE_AUDIO_DIR = "./audioFiles/";
+    public final String BASE_AUDIO_DIR = "../GhostBot/audioFiles/";
     private final String embedTitle = "Spoopy-Luma-Player";
-    private final AudioPlayerManager playerManager;
+    private AudioPlayerManager playerManager;
 
     private final Map<String, GuildMusicManager> musicManagers;
 
-    AudioUtils() {
+    public static AudioUtils ins = new AudioUtils();
+
+    private AudioUtils() {
         java.util.logging.Logger.getLogger("org.apache.http.client.protocol.ResponseProcessCookies").setLevel(Level.OFF);
 
-        this.playerManager = new DefaultAudioPlayerManager();
-
-        AudioSourceManagers.registerLocalSource(playerManager);
+        initPlayerManager();
 
         musicManagers = new HashMap<>();
     }
 
+    private void initPlayerManager() {
+        if(playerManager == null) {
+            playerManager = new DefaultAudioPlayerManager();
+            AudioSourceManagers.registerLocalSource(playerManager);
+        }
+    }
+
+    public AudioPlayerManager getPlayerManager() {
+        initPlayerManager();
+        return playerManager;
+    }
+
+    /**
+     * This will return the formatted timestamp for the current playing track
+     *
+     * @param milliseconds the milliseconds that the track is at
+     * @return a formatted time
+     */
     public static String getTimestamp(long milliseconds) {
         int seconds = (int) (milliseconds / 1000) % 60;
         int minutes = (int) ((milliseconds / (1000 * 60)) % 60);
@@ -67,6 +83,14 @@ public class AudioUtils {
         }
     }
 
+    /**
+     * Loads a track and plays it if the bot isn't playing
+     *
+     * @param mng         The {@link GuildMusicManager MusicManager} for the guild
+     * @param channel     The {@link net.dv8tion.jda.core.entities.MessageChannel channel} that the bot needs to send the messages to
+     * @param trackUrlRaw The url from the track to play
+     * @param addPlayList If the url is a playlist
+     */
     public void loadAndPlay(GuildMusicManager mng, final TextChannel channel, final String trackUrlRaw, final boolean addPlayList) {
         final String trackUrl;
 
@@ -79,20 +103,14 @@ public class AudioUtils {
 
         playerManager.loadItemOrdered(mng, trackUrl, new AudioLoadResultHandler() {
 
+
             @Override
             public void trackLoaded(AudioTrack track) {
-                /*String msg = "Adding to queue: " + track.getInfo().title;
-                if (mng.player.getPlayingTrack() == null) {
-                    msg += "\nand the Player has started playing;";
-                }
-
-                sendEmbed(EmbedUtils.embedField(embedTitle, msg), channel);*/
-                //Stop any playing tracks
                 if (mng.player.getPlayingTrack() != null) {
                     mng.player.stopTrack();
                 }
-                mng.scheduler.queue(track);
 
+                mng.scheduler.queue(track);
             }
 
             @Override
@@ -100,66 +118,66 @@ public class AudioUtils {
                 AudioTrack firstTrack = playlist.getSelectedTrack();
                 List<AudioTrack> tracks = playlist.getTracks();
 
-                if (firstTrack == null) {
+                if (tracks.size() == 0) {
+                    MessageUtils.sendEmbed(channel, EmbedUtils.embedField(embedTitle, "Error: This playlist is empty."));
+                    return;
+
+                } else if (firstTrack == null) {
                     firstTrack = playlist.getTracks().get(0);
                 }
-                //String msg;
+                String msg;
 
                 if (addPlayList) {
-                    /*msg = "Adding **" + playlist.getTracks().size() + "** tracks to queue from playlist: " + playlist.getName();
+                    msg = "Adding **" + playlist.getTracks().size() + "** tracks to queue from playlist: " + playlist.getName();
                     if (mng.player.getPlayingTrack() == null) {
                         msg += "\nand the Player has started playing;";
-                    }*/
+                    }
                     tracks.forEach(mng.scheduler::queue);
                 } else {
-                    /*msg = "Adding to queue " + firstTrack.getInfo().title + " (first track of playlist " + playlist.getName() + ")";
+                    msg = "Adding to queue " + firstTrack.getInfo().title + " (first track of playlist " + playlist.getName() + ")";
                     if (mng.player.getPlayingTrack() == null) {
                         msg += "\nand the Player has started playing;";
-                    }*/
+                    }
                     mng.scheduler.queue(firstTrack);
                 }
-                //sendEmbed(EmbedUtils.embedField(embedTitle, msg), channel);
+                MessageUtils.sendEmbed(channel, EmbedUtils.embedField(embedTitle, msg));
             }
+
 
             @Override
             public void noMatches() {
-                sendEmbed(EmbedUtils.embedField(embedTitle, "Nothing found by _" + trackUrl + "_"), channel);
+                MessageUtils.sendEmbed(channel, EmbedUtils.embedField(embedTitle, "Nothing found by _" + trackUrl + "_"));
             }
 
             @Override
             public void loadFailed(FriendlyException exception) {
-                sendEmbed(EmbedUtils.embedField(embedTitle, "Could not play: " + exception.getMessage() + "\nIf this happens often try another link or join our [support guild](https://discord.gg/NKM9Xtk) for more!"), channel);
+                MessageUtils.sendEmbed(channel, EmbedUtils.embedField(embedTitle, "Could not play: " + exception.getMessage()
+                        + "\nIf this happens often try another link or join our [support guild](https://discord.gg/NKM9Xtk) for more!"));
             }
         });
     }
 
-    public synchronized GuildMusicManager getMusicManager(Guild guild) {
+    /**
+     * This will get the music manager for the guild or register it if we don't have it yet
+     *
+     * @param guild The guild that we need the manager for
+     * @return The music manager for that guild
+     */
+    public GuildMusicManager getMusicManager(Guild guild) {
         String guildId = guild.getId();
         GuildMusicManager mng = musicManagers.get(guildId);
         if (mng == null) {
             synchronized (musicManagers) {
                 mng = musicManagers.get(guildId);
                 if (mng == null) {
-                    mng = new GuildMusicManager(playerManager);
+                    mng = new GuildMusicManager(guild);
                     mng.player.setVolume(DEFAULT_VOLUME);
                     musicManagers.put(guildId, mng);
                 }
             }
         }
-
         guild.getAudioManager().setSendingHandler(mng.getSendHandler());
-
         return mng;
-    }
-
-    private void sendEmbed(MessageEmbed embed, TextChannel tc) {
-        if (tc.canTalk()) {
-            if (!tc.getGuild().getSelfMember().hasPermission(tc, Permission.MESSAGE_EMBED_LINKS)) {
-                tc.sendMessage(EmbedUtils.embedToMessage(embed)).queue();
-                return;
-            }
-            tc.sendMessage(embed).queue();
-        }
     }
 
     public Map<String, GuildMusicManager> getMusicManagers() {

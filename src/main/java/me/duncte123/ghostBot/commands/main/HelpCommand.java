@@ -31,6 +31,9 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static me.duncte123.ghostBot.utils.MessageUtils.sendEmbed;
+import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
+
 public class HelpCommand extends Command {
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
