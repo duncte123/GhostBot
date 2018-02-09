@@ -44,7 +44,6 @@ public class GoingGhostCommand extends Command {
         if (preAudioChecks(event)) {
             String selectedTrack = audioFiles[SpoopyUtils.random.nextInt(audioFiles.length)];
             int p = SpoopyUtils.random.nextInt(100);
-            System.out.println(p);
             if (p >= 50 && p <= 55) {
                 selectedTrack = "extra/its going ghost.mp3";
             }
