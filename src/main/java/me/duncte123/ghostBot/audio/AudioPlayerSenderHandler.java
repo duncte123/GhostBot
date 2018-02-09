@@ -18,23 +18,24 @@
 
 package me.duncte123.ghostBot.audio;
 
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame;
+import lavalink.client.player.IPlayer;
+import lavalink.client.player.LavaplayerPlayerWrapper;
 import net.dv8tion.jda.core.audio.AudioSendHandler;
 
 public class AudioPlayerSenderHandler implements AudioSendHandler {
 
     /**
-     * This is our me.duncte123.ghostBot.audio player
+     * This is our audio player
      */
-    private final AudioPlayer audioPlayer;
+    private final IPlayer audioPlayer;
 
     /**
      * I don't know what this does but it seems important
      */
     private AudioFrame lastFrame;
 
-    public AudioPlayerSenderHandler(AudioPlayer audioPlayer) {
+    AudioPlayerSenderHandler(IPlayer audioPlayer) {
         this.audioPlayer = audioPlayer;
     }
 
@@ -45,21 +46,23 @@ public class AudioPlayerSenderHandler implements AudioSendHandler {
      */
     @Override
     public boolean canProvide() {
+        LavaplayerPlayerWrapper lavaplayerPlayer = (LavaplayerPlayerWrapper) audioPlayer;
         if (lastFrame == null) {
-            lastFrame = audioPlayer.provide();
+            lastFrame = lavaplayerPlayer.provide();
         }
         return lastFrame != null;
     }
 
     /**
-     * This <em>should</em> gives us our me.duncte123.ghostBot.audio
+     * This <em>should</em> gives us our audio
      *
-     * @return The me.duncte123.ghostBot.audio in some nice bytes
+     * @return The audio in some nice bytes
      */
     @Override
     public byte[] provide20MsAudio() {
+        LavaplayerPlayerWrapper lavaplayerPlayer = (LavaplayerPlayerWrapper) audioPlayer;
         if (lastFrame == null) {
-            lastFrame = audioPlayer.provide();
+            lastFrame = lavaplayerPlayer.provide();
         }
 
         byte[] data = lastFrame != null ? lastFrame.data : null;
@@ -68,7 +71,7 @@ public class AudioPlayerSenderHandler implements AudioSendHandler {
     }
 
     /**
-     * "Checks" if this me.duncte123.ghostBot.audio is opus
+     * "Checks" if this audio is opus
      *
      * @return always true
      */

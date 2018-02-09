@@ -18,6 +18,7 @@
 
 package me.duncte123.ghostBot;
 
+import fredboat.audio.player.LavalinkManager;
 import me.duncte123.ghostBot.audio.GuildMusicManager;
 import me.duncte123.ghostBot.utils.PostStats;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
@@ -57,7 +58,12 @@ public class BotListener extends ListenerAdapter {
                     success -> event.getJDA().shutdown(),
                     failure -> event.getJDA().shutdown()
             );
-            System.exit(0);
+            LavalinkManager.ins.getLavalink().shutdown();
+            try {
+                Thread.sleep(2 * 1000);
+                System.exit(0);
+            }
+            catch (InterruptedException ignored) {}
             return;
         }
 
@@ -133,8 +139,8 @@ public class BotListener extends ListenerAdapter {
             manager.player.setPaused(false);
             manager.scheduler.queue.clear();
 
-            if (g.getAudioManager().isConnected()) {
-                g.getAudioManager().closeAudioConnection();
+            if (LavalinkManager.ins.isConnected(g)) {
+                LavalinkManager.ins.closeConnection(g);
                 g.getAudioManager().setSendingHandler(null);
             }
         }

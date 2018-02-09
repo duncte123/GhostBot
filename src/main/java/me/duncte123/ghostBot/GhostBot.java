@@ -18,9 +18,11 @@
 
 package me.duncte123.ghostBot;
 
+import fredboat.audio.player.LavalinkManager;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.AccountType;
+import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.Game;
 import org.slf4j.Logger;
@@ -32,17 +34,21 @@ public class GhostBot {
 
     private static final Logger logger = LoggerFactory.getLogger(GhostBot.class);
 
+    private static final GhostBot ins = new GhostBot();
+    private static JDA jda;
+
 
     public static void main(String[] args) throws Exception {
         logger.info("Booting GhostBot");
         String token = SpoopyUtils.config.getString("discord.token");
-
+        LavalinkManager.ins.start();
         try {
-            new JDABuilder(AccountType.BOT)
+            jda = new JDABuilder(AccountType.BOT)
                     .setAudioEnabled(true)
                     .setGame(Game.playing(Variables.PREFIX + "help | Going Ghost"))
                     .setToken(token)
                     .addEventListener(new BotListener())
+                    .addEventListener(LavalinkManager.ins.getLavalink())
                     .buildAsync();
         } catch (LoginException e) {
             e.printStackTrace();
@@ -51,5 +57,11 @@ public class GhostBot {
 
     }
 
+    public JDA getFakeShard(int shardId) {
+        return jda;
+    }
 
+    public static GhostBot getInstance() {
+        return ins;
+    }
 }

@@ -23,6 +23,8 @@ import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
+import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
+
 public class GoingGhostCommand extends Command {
     /*private final String audioPath = SpoopyUtils.audio.BASE_AUDIO_DIR + "goingghost/";
     private final String[] audioFiles = {

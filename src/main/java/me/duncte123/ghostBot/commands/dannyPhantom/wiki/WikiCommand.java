@@ -32,6 +32,9 @@ import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
 
+import static me.duncte123.ghostBot.utils.MessageUtils.sendEmbed;
+import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
+
 public class WikiCommand extends Command {
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {

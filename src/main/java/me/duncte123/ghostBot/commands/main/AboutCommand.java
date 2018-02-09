@@ -23,6 +23,8 @@ import me.duncte123.ghostBot.utils.EmbedUtils;
 import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
+import static me.duncte123.ghostBot.utils.MessageUtils.sendEmbed;
+
 public class AboutCommand extends Command {
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {

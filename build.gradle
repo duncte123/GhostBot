@@ -31,13 +31,21 @@ sourceCompatibility = 1.8
 
 repositories {
     jcenter()
+
+    maven {
+        name 'jitpack'
+        url 'https://jitpack.io'
+    }
 }
 
 dependencies {
     //JDA
     compile group: 'net.dv8tion', name: 'JDA', version: '3.5.0_330'
-    //LavaPlayer
-    compile group: 'com.sedmelluq', name: 'lavaplayer', version: '1.2.45'
+    //LavaPlayer/Lavalink
+    compile(group: 'com.github.Frederikam', name: 'Lavalink', version: 'fa6f096') {
+        exclude group: 'com.github.Frederikam.Lavalink', module: 'Lavalink-Server'
+        exclude group: 'net.dv8tion', module: 'JDA'
+    }
     //JSON Extension
     compile group: 'com.afollestad', name: 'ason', version: '1.4.16'
     // Logback core

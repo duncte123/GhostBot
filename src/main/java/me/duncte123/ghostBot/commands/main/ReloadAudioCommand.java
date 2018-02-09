@@ -27,6 +27,8 @@ import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.Set;
 
+import static me.duncte123.ghostBot.utils.MessageUtils.sendSuccess;
+
 public class ReloadAudioCommand extends Command {
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
