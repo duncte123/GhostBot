@@ -38,7 +38,8 @@ public class ImageCommand extends Command {
             "?q=%s&cx=012048784535646064391:v-fxkttbw54&hl=en&searchType=image&key=" + SpoopyUtils.config.getString("api.google");
     private final String[] keywords = {
             "Danny Phantom",
-            "Pitch Pearl",
+            "Danny Phantom",
+            "Danny Phantom",
             "Pitch Pearl",
             "Danny Fenton",
             "Samantha Manson",
@@ -57,37 +58,6 @@ public class ImageCommand extends Command {
             "Vlad Masters (Danny Phantom)",
             "Vlad Plasmius (Danny Phantom)",*/
             "Danny Fenton"
-    };
-
-    private final String[] pornKeywords = {
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "porn",
-            "yaoi",
-            "naked",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
     };
 
     @Override
