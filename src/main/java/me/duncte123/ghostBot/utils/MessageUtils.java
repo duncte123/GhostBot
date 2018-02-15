@@ -36,10 +36,12 @@ public class MessageUtils {
 
     private static Logger logger = LoggerFactory.getLogger(MessageUtils.class);
 
-    private static final Consumer<Throwable> CUSTOM_QUEUE_ERROR = it -> {
-        if(it instanceof ErrorResponseException){
-            if(((ErrorResponseException) it).getErrorCode() != 10008)
-                logger.error("RestAction queue returned failure", it);
+    private static final Consumer<Throwable> CUSTOM_QUEUE_ERROR = ex -> {
+        if(ex instanceof ErrorResponseException){
+            if(((ErrorResponseException) ex).getErrorCode() != 10008) {
+                logger.error("RestAction queue returned failure", ex);
+                ex.printStackTrace();
+            }
         }
     };
 
@@ -195,9 +197,10 @@ public class MessageUtils {
      * @param args    the arguments that should be used in the msg parameter
      */
     public static void sendMsgFormatAndDeleteAfter(TextChannel channel, long delay, TimeUnit unit, String msg, Object... args) {
-        if(channel.getGuild().getSelfMember().hasPermission(channel, Permission.MESSAGE_WRITE, Permission.MESSAGE_READ))
-            channel.sendMessage(new MessageBuilder().append(String.format(msg, args)).build())
-                    .queue(it -> it.delete().reason("automatic remove").queueAfter(delay, unit, null, CUSTOM_QUEUE_ERROR));
+
+        sendMsg(channel, new MessageBuilder().append(String.format(msg, args)).build(),
+                it -> it.delete().reason("automatic remove").queueAfter(delay, unit, null, CUSTOM_QUEUE_ERROR)
+        );
     }
 
     /**
@@ -208,7 +211,7 @@ public class MessageUtils {
      * @param args    the arguments that should be used in the msg parameter
      */
     public static void sendMsgFormat(GuildMessageReceivedEvent event, String msg, Object... args) {
-        sendMsg(event.getChannel(), (new MessageBuilder().append(String.format(msg, args)).build()), null, null);
+        sendMsg(event.getChannel(), (new MessageBuilder().append(String.format(msg, args)).build()), null, CUSTOM_QUEUE_ERROR);
     }
 
     /**
@@ -219,7 +222,7 @@ public class MessageUtils {
      * @param args    the arguments that should be used in the msg parameter
      */
     public static void sendMsgFormat(TextChannel channel, String msg, Object... args) {
-        sendMsg(channel, (new MessageBuilder().append(String.format(msg, args)).build()), null, null);
+        sendMsg(channel, (new MessageBuilder().append(String.format(msg, args)).build()), null, CUSTOM_QUEUE_ERROR);
     }
 
     /**
@@ -229,7 +232,7 @@ public class MessageUtils {
      * @param msg   the message to send
      */
     public static void sendMsg(GuildMessageReceivedEvent event, String msg) {
-        sendMsg(event.getChannel(), (new MessageBuilder()).append(msg).build(), null, null);
+        sendMsg(event.getChannel(), (new MessageBuilder()).append(msg).build(), null, CUSTOM_QUEUE_ERROR);
     }
 
     /**
@@ -240,7 +243,7 @@ public class MessageUtils {
      * @param success The success consumer
      */
     public static void sendMsg(GuildMessageReceivedEvent event, String msg, Consumer<Message> success) {
-        sendMsg(event.getChannel(), (new MessageBuilder()).append(msg).build(), success, null);
+        sendMsg(event.getChannel(), (new MessageBuilder()).append(msg).build(), success, CUSTOM_QUEUE_ERROR);
     }
 
     /**
@@ -262,7 +265,7 @@ public class MessageUtils {
      * @param msg   the message to send
      */
     public static void sendMsg(TextChannel channel, String msg) {
-        sendMsg(channel, (new MessageBuilder()).append(msg).build(), null, null);
+        sendMsg(channel, (new MessageBuilder()).append(msg).build(), null, CUSTOM_QUEUE_ERROR);
     }
 
     /**
@@ -273,7 +276,7 @@ public class MessageUtils {
      * @param success The success consumer
      */
     public static void sendMsg(TextChannel channel, String msg, Consumer<Message> success) {
-        sendMsg(channel, (new MessageBuilder()).append(msg).build(), success, null);
+        sendMsg(channel, (new MessageBuilder()).append(msg).build(), success, CUSTOM_QUEUE_ERROR);
     }
 
     /**
@@ -295,7 +298,7 @@ public class MessageUtils {
      * @param msg   the message to send
      */
     public static void sendMsg(GuildMessageReceivedEvent event, MessageEmbed msg) {
-        sendMsg(event.getChannel(), (new MessageBuilder()).setEmbed(msg).build(), null, null);
+        sendMsg(event.getChannel(), (new MessageBuilder()).setEmbed(msg).build(), null, CUSTOM_QUEUE_ERROR);
     }
 
     /**
@@ -305,7 +308,7 @@ public class MessageUtils {
      * @param msg   the message to send
      */
     public static void sendMsg(TextChannel channel, MessageEmbed msg) {
-        sendMsg(channel, (new MessageBuilder()).setEmbed(msg).build(), null, null);
+        sendMsg(channel, (new MessageBuilder()).setEmbed(msg).build(), null, CUSTOM_QUEUE_ERROR);
     }
 
     /**
@@ -315,7 +318,7 @@ public class MessageUtils {
      * @param msg   the message to send
      */
     public static void sendMsg(GuildMessageReceivedEvent event, Message msg) {
-        sendMsg(event.getChannel(), msg, null, null);
+        sendMsg(event.getChannel(), msg, null, CUSTOM_QUEUE_ERROR);
     }
 
     /**
@@ -326,7 +329,7 @@ public class MessageUtils {
      * @param success The success consumer
      */
     public static void sendMsg(GuildMessageReceivedEvent event, Message msg, Consumer<Message> success) {
-        sendMsg(event.getChannel(), msg, success, null);
+        sendMsg(event.getChannel(), msg, success, CUSTOM_QUEUE_ERROR);
     }
 
     /**
@@ -348,7 +351,7 @@ public class MessageUtils {
      * @param msg   the message to send
      */
     public static void sendMsg(TextChannel channel, Message msg) {
-        sendMsg(channel, msg, null, null);
+        sendMsg(channel, msg, null, CUSTOM_QUEUE_ERROR);
     }
 
     /**
@@ -359,7 +362,7 @@ public class MessageUtils {
      * @param success The success consumer
      */
     public static void sendMsg(TextChannel channel, Message msg, Consumer<Message> success) {
-        sendMsg(channel, msg, success, null);
+        sendMsg(channel, msg, success, CUSTOM_QUEUE_ERROR);
     }
 
     /**
@@ -372,7 +375,8 @@ public class MessageUtils {
      */
     public static void sendMsg(TextChannel channel, Message msg, Consumer<Message> success, Consumer<Throwable> failure) {
         //Only send a message if we can talk
-        if(channel != null && channel.getGuild().getSelfMember().hasPermission(channel, Permission.MESSAGE_WRITE, Permission.MESSAGE_READ))
+        if(channel != null && channel.getGuild().getSelfMember().hasPermission(channel,
+                Permission.MESSAGE_WRITE, Permission.MESSAGE_READ))
             channel.sendMessage(msg).queue(success, failure);
     }
 }

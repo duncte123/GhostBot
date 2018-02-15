@@ -62,34 +62,38 @@ public class ImageCommand extends Command {
 
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
-        String keyword = keywords[SpoopyUtils.random.nextInt(keywords.length)];
+
+        sendMsg(event, "Loading....", msg -> {
+            String keyword = keywords[SpoopyUtils.random.nextInt(keywords.length)];
         /* if(event.getChannel().isNSFW()) {
             String selected = pornKeywords[SpoopyUtils.random.nextInt(pornKeywords.length)];
             keyword += !"".equals(selected) ? " " + selected : "";
         }*/
-        try {
-            Ason data = WebUtils.getAson(String.format(url, keyword.replaceAll(" ", "+")));
-            AsonArray<Ason> arr = data.getJsonArray("items");
-            if (arr.size() == 0) {
-                execute(invoke, args, event);
-                return;
-            }
-            Ason randomItem = arr.getJsonObject(SpoopyUtils.random.nextInt(arr.size()));
-            sendMsg(event, new MessageBuilder()
-                    .append("Keyword: ")
-                    .append(keyword)
-                    .setEmbed(EmbedUtils.defaultEmbed()
-                            .setTitle(randomItem.getString("title"), randomItem.getString("image.contextLink"))
-                            .setImage(randomItem.getString("link")).build()).build());
+            try {
+                Ason data = WebUtils.getAson(String.format(url, keyword.replaceAll(" ", "+")));
+                AsonArray<Ason> arr = data.getJsonArray("items");
+                if (arr.size() == 0) {
+                    execute(invoke, args, event);
+                    return;
+                }
+                Ason randomItem = arr.getJsonObject(SpoopyUtils.random.nextInt(arr.size()));
+                msg.editMessage(new MessageBuilder()
+                        .append("Keyword: ")
+                        .append(keyword)
+                        .setEmbed(EmbedUtils.defaultEmbed()
+                                .setTitle(randomItem.getString("title"), randomItem.getString("image.contextLink"))
+                                .setImage(randomItem.getString("link")).build()).build())
+                        .queue();
             /*sendEmbed(event,
                     EmbedUtils.defaultEmbed()
                             .setTitle(randomItem.getString("title"), randomItem.getString("image.contextLink"))
                             .setImage(randomItem.getString("link")).build()
             );*/
-        } catch (IOException | NullPointerException e) {
-            e.printStackTrace();
-            sendMsg(event, "Something went wrong while looking up the image");
-        }
+            } catch (IOException | NullPointerException e) {
+                e.printStackTrace();
+                sendMsg(event, "Something went wrong while looking up the image");
+            }
+        });
     }
 
     @Override
