@@ -20,12 +20,13 @@ plugins {
     id 'java'
     id 'application'
     id 'com.github.johnrengelman.shadow' version '2.0.2'
+    id 'de.fuerstenau.buildconfig' version '1.1.8'
 }
 
 mainClassName = 'me.duncte123.ghostBot.GhostBot'
 
 group = 'me.duncte123.ghostbot'
-version = "0.0.${getVersionBuild()}"
+version = "0.1.0_${getGitHash()}"
 
 sourceCompatibility = 1.8
 
@@ -42,9 +43,11 @@ dependencies {
     //JDA
     compile group: 'net.dv8tion', name: 'JDA', version: '3.5.0_330'
     //LavaPlayer/Lavalink
-    compile(group: 'com.github.Frederikam', name: 'Lavalink', version: 'fa6f096') {
+    compile group: 'com.sedmelluq', name: 'lavaplayer', version: '1.2.53'
+    compile(group: 'com.github.Frederikam', name: 'Lavalink', version: 'ab75962') {
         exclude group: 'com.github.Frederikam.Lavalink', module: 'Lavalink-Server'
         exclude group: 'net.dv8tion', module: 'JDA'
+        exclude group: "com.sedmelluq", module: "lavaplayer"
     }
     //JSON Extension
     compile group: 'com.afollestad', name: 'ason', version: '1.4.16'
@@ -60,21 +63,11 @@ dependencies {
 
 compileJava.options.encoding = 'UTF-8'
 
-def getVersionBuild() {
-    def versionPropsFile = file('version.properties')
-    def versionBuild
-
-    if (versionPropsFile.canRead()) {
-        Properties versionProps = new Properties()
-        versionProps.load(new FileInputStream(versionPropsFile))
-        versionBuild = Integer.valueOf(versionProps['VERSION_BUILD'].toString()) + 1
-        versionProps['VERSION_BUILD'] = versionBuild.toString()
-        PrintWriter writer = new PrintWriter("version.properties", "UTF-8")
-        writer.println("VERSION_BUILD=$versionBuild")
-        writer.close()
-    } else {
-        throw new FileNotFoundException("Could not read version.properties!")
+def getGitHash() {
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'rev-parse', '--short', 'HEAD'
+        standardOutput = stdout
     }
-
-    return versionBuild
+    return stdout.toString().trim()
 }
