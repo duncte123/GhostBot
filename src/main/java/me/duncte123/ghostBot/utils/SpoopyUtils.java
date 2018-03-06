@@ -31,7 +31,7 @@ public class SpoopyUtils {
     public static final AudioUtils audio = AudioUtils.ins;
     public static final Config config = new ConfigUtils().loadConfig();
     public static final Random random = new Random();
-    public static final FandomApi FANDOM_API = new FandomApi("http://dannyphantom.wikia.com");
+    public static final FandomApi FANDOM_API = new FandomApi("https://dannyphantom.wikia.com");
 
     public static final CommandManager commandManager = new CommandManager();
 

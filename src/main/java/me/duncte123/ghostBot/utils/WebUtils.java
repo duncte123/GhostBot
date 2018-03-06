@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -61,7 +62,7 @@ public class WebUtils {
      * @throws IOException When something broke
      */
     public static JSONObject getJSONObject(String url) throws IOException {
-        return new JSONObject(getRequest(url, AcceptType.TEXT_JSON).body().string());
+        return new JSONObject(Objects.requireNonNull(getRequest(url, AcceptType.TEXT_JSON).body()).string());
     }
 
     /**
@@ -72,7 +73,7 @@ public class WebUtils {
      * @throws IOException When something broke
      */
     public static Ason getAson(String url) throws IOException {
-        return new Ason(getRequest(url, AcceptType.TEXT_JSON).body().string());
+        return new Ason(Objects.requireNonNull(getRequest(url).body()).string());
     }
 
     /**
@@ -83,7 +84,7 @@ public class WebUtils {
      * @throws IOException When something broke
      */
     public static JSONArray getJSONArray(String url) throws IOException {
-        return new JSONArray(getRequest(url, AcceptType.TEXT_JSON).body().string());
+        return new JSONArray(Objects.requireNonNull(getRequest(url, AcceptType.TEXT_JSON).body()).string());
     }
 
     /**
@@ -94,7 +95,7 @@ public class WebUtils {
      * @throws IOException when things break
      */
     public static InputStream getInputStream(String url) throws IOException {
-        return getRequest(url).body().byteStream();
+        return Objects.requireNonNull(getRequest(url).body()).byteStream();
     }
 
     /**

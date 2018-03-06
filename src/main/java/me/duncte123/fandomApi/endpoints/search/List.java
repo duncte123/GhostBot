@@ -29,6 +29,7 @@ import me.duncte123.ghostBot.utils.WebUtils;
 import java.io.IOException;
 import java.util.ArrayList;
 
+@SuppressWarnings("unused")
 public class List extends SearchEndpoint {
     private final String query;
     private final String type;
@@ -101,6 +102,16 @@ public class List extends SearchEndpoint {
                     batch,
                     namespaces
             ));
+            //noinspection ConstantConditions
+            if(ason == null) {
+                return new FandomException(
+                        "NotFound",
+                        "Something borked",
+                        404,
+                        "Something borked",
+                        "0000000"
+                );
+            }
             if (ason.has("exception")) {
                 return new FandomException(
                         ason.getString("exception.type"),
