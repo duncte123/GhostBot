@@ -28,7 +28,7 @@ import static me.duncte123.ghostBot.utils.MessageUtils.sendEmbed;
 public class AboutCommand extends Command {
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
-        sendEmbed(event, EmbedUtils.embedMessage("Hey there I'm GhostBot, I'm here for all your <:DPEmblemInvertStroke:402746292788264960> Danny Phantom needs.\n" +
+        sendEmbed(event, EmbedUtils.embedMessage("Hey there I'm GhostBot, I'm here for all your <:DPEmblemInvertStroke:422022982450282496> Danny Phantom needs.\n" +
                 "I'm being developed by duncte123 (duncte123#1245) and if you have any ideas of what to add to me you can contact him or join [this server](https://discord.gg/NKM9Xtk)\n\n" +
 
                 "**Useful information:**\n" +
