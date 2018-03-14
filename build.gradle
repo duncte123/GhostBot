@@ -41,10 +41,10 @@ repositories {
 
 dependencies {
     //JDA
-    compile group: 'net.dv8tion', name: 'JDA', version: '3.5.0_330'
+    compile group: 'net.dv8tion', name: 'JDA', version: '3.5.1_348'
     //LavaPlayer/Lavalink
-    compile group: 'com.sedmelluq', name: 'lavaplayer', version: '1.2.53'
-    compile(group: 'com.github.Frederikam', name: 'Lavalink', version: 'ab75962') {
+    compile group: 'com.sedmelluq', name: 'lavaplayer', version: '1.2.56'
+    compile(group: 'com.github.Frederikam', name: 'Lavalink', version: 'd648861') {
         exclude group: 'com.github.Frederikam.Lavalink', module: 'Lavalink-Server'
         exclude group: 'net.dv8tion', module: 'JDA'
         exclude group: "com.sedmelluq", module: "lavaplayer"
@@ -79,4 +79,10 @@ buildConfig {
     charset = 'UTF-8'
 
     clsName = 'BuildConfig'
+}
+build {
+    dependsOn clean
+    dependsOn jar
+
+    jar.mustRunAfter clean
 }
