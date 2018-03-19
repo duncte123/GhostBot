@@ -21,6 +21,7 @@ package me.duncte123.ghostBot;
 import me.duncte123.ghostBot.commands.dannyPhantom.audio.FruitloopCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.audio.GoingGhostCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.audio.WailCommand;
+import me.duncte123.ghostBot.commands.dannyPhantom.image.GifCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.image.ImageCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.wiki.WikiCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.wiki.WikiUserCommand;
@@ -49,6 +50,7 @@ public class CommandManager {
         this.addCommand(new FruitloopCommand());
 
         this.addCommand(new ImageCommand());
+        this.addCommand(new GifCommand());
 
         this.addCommand(new WikiCommand());
         this.addCommand(new WikiUserCommand());
@@ -62,7 +64,7 @@ public class CommandManager {
         return UnmodifiableSet.unmodifiableSet(commands);
     }
 
-    public Command getCommand(String name) {
+    private Command getCommand(String name) {
         Optional<Command> cmd = commands.stream().filter(c -> c.getName().equalsIgnoreCase(name)).findFirst();
 
         if (cmd.isPresent()) {
@@ -74,7 +76,8 @@ public class CommandManager {
         return cmd.orElse(null);
     }
 
-    public boolean addCommand(Command command) {
+    @SuppressWarnings("UnusedReturnValue")
+    private boolean addCommand(Command command) {
         if (command.getName().contains(" ")) {
             throw new IllegalArgumentException("Name can't have spaces!");
         }

@@ -20,7 +20,6 @@ package me.duncte123.ghostBot.commands.dannyPhantom.image;
 
 import com.afollestad.ason.Ason;
 import com.afollestad.ason.AsonArray;
-import me.duncte123.ghostBot.objects.Category;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.utils.EmbedUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
@@ -32,39 +31,15 @@ import java.io.IOException;
 
 import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
 
-public class ImageCommand extends Command {
+public class GifCommand extends Command {
 
     private final String url = "https://www.googleapis.com/customsearch/v1" +
-            "?q=%s&cx=012048784535646064391:v-fxkttbw54&hl=en&searchType=image&key=" + SpoopyUtils.config.getString("api.google");
-    private final String[] keywords = {
-            "Danny Phantom",
-            "Danny Phantom",
-            "Danny Phantom",
-            "Pitch Pearl",
-            "Danny Fenton",
-            "Samantha Manson",
-            "Sam Manson",
-            "Tucker Foley",
-            "Jack Fenton",
-            "Maddy Fenton",
-            "Jazz Fenton",
-            "Vlad Plasmius",
-            /*"Danny Fenton (Danny Phantom)",
-            "Sam Manson (Danny Phantom)",
-            "Tucker Foley (Danny Phantom)",
-            "Jack Fenton (Danny Phantom)",
-            "Maddy Fenton (Danny Phantom)",
-            "Jazz Fenton (Danny Phantom)",
-            "Vlad Masters (Danny Phantom)",
-            "Vlad Plasmius (Danny Phantom)",*/
-            "Danny Fenton"
-    };
+            "?q=%s&cx=012048784535646064391:v-fxkttbw54&hl=en&searchType=image&fileType=gif&safe=off&key=" + SpoopyUtils.config.getString("api.google");
 
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
-
         sendMsg(event, "Loading....", msg -> {
-            String keyword = keywords[SpoopyUtils.random.nextInt(keywords.length)];
+            String keyword = "Danny Phantom gif";
             try {
                 Ason data = WebUtils.getAson(String.format(url, keyword.replaceAll(" ", "+")));
                 AsonArray<Ason> arr = data.getJsonArray("items");
@@ -73,38 +48,27 @@ public class ImageCommand extends Command {
                     return;
                 }
                 Ason randomItem = arr.getJsonObject(SpoopyUtils.random.nextInt(arr.size()));
+                assert randomItem != null;
                 msg.editMessage(new MessageBuilder()
-                       /* .append("Keyword: ")
-                        .append(keyword)*/
                         .setEmbed(EmbedUtils.defaultEmbed()
                                 .setTitle(randomItem.getString("title"), randomItem.getString("image.contextLink"))
                                 .setImage(randomItem.getString("link")).build()).build())
                         .override(true)
                         .queue();
-            /*sendEmbed(event,
-                    EmbedUtils.defaultEmbed()
-                            .setTitle(randomItem.getString("title"), randomItem.getString("image.contextLink"))
-                            .setImage(randomItem.getString("link")).build()
-            );*/
             } catch (IOException | NullPointerException e) {
                 e.printStackTrace();
-                sendMsg(event, "Something went wrong while looking up the image");
+                msg.editMessage("Something went wrong while looking up the image").queue();
             }
         });
     }
 
     @Override
     public String getName() {
-        return "image";
-    }
-
-    @Override
-    public Category getCategory() {
-        return Category.IMAGE;
+        return "gif";
     }
 
     @Override
     public String getHelp() {
-        return "Gives you a random Danny Phantom <:DPEmblemInvertStroke:402746292788264960> related image from google";
+        return "Gives you a random Danny Phantom gif";
     }
 }

@@ -35,6 +35,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class WebUtils {
 
     private static final String USER_AGENT = "Mozilla/5.0 GhostBot (GhostBot v" + Variables.VERSION + ", https://ghostbot.duncte123.me/)";
@@ -51,7 +52,7 @@ public class WebUtils {
      * @throws IOException When something broke
      */
     public static String getText(String url) throws IOException {
-        return getRequest(url).body().string();
+        return Objects.requireNonNull(getRequest(url).body()).string();
     }
 
     /**
@@ -92,9 +93,8 @@ public class WebUtils {
      *
      * @param url the url to read
      * @return the InputStream of the url
-     * @throws IOException when things break
      */
-    public static InputStream getInputStream(String url) throws IOException {
+    public static InputStream getInputStream(String url) {
         return Objects.requireNonNull(getRequest(url).body()).byteStream();
     }
 
