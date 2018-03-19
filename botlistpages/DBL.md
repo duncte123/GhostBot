@@ -58,6 +58,7 @@ gb.wail: Gives you a nice ghostly wail
 gb.fuitloop: You're one crazed up fruitloop 
 
 gb.image: Gives you a random Danny Phantom related image from google
+gb.gif: Gives you a random Danny Phantom gif
 
 gb.wiki: Search the Danny Phantom wiki
 gb.wikiuser: Search wikia for users.
