@@ -143,7 +143,7 @@ public class List extends SearchEndpoint {
 
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
-        return null;
     }
 }

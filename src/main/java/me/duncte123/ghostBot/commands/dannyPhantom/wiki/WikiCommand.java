@@ -44,37 +44,47 @@ public class WikiCommand extends Command {
             return;
         }
         String searchQuery = StringUtils.join(args, " ");
-        FandomResult result = SpoopyUtils.FANDOM_API.searchEndpoints.list(searchQuery);
+        try {
+            FandomResult result = SpoopyUtils.FANDOM_API.searchEndpoints.list(searchQuery);
 
-        if (result instanceof FandomException) {
-            //noinspection RedundantCast
-            sendMsg(event, "Error: " + ((FandomException) result).toString());
-            return;
-        } else if (result == null) {
-            sendMsg(event, "Something went wrong while looking up data.");
-            return;
+            if (result instanceof FandomException) {
+                //noinspection RedundantCast
+                sendMsg(event, "Error: " + ((FandomException) result).toString());
+                return;
+            } else if (result == null) {
+                sendMsg(event, "Something went wrong while looking up data.");
+                return;
+            }
+
+            LocalWikiSearchResultSet wikiSearchResultSet = (LocalWikiSearchResultSet) result;
+
+            EmbedBuilder eb = EmbedUtils.defaultEmbed()
+                    .setTitle("Query: " + searchQuery, FandomApi.getWikiUrl() + "/wiki/Special:Search?query=" + searchQuery.replaceAll(" ", "%20"))
+                    .setAuthor("Requester: " + String.format("%#s", event.getAuthor()), "https://ghostbot.duncte123.me/", event.getAuthor().getEffectiveAvatarUrl())
+                    .setDescription("Total results: " + wikiSearchResultSet.getTotal() + "\n" +
+                            "Current Listed: " + wikiSearchResultSet.getItems().size() + "\n\n");
+
+            for (LocalWikiSearchResult localWikiSearchResult : wikiSearchResultSet.getItems()) {
+                eb.appendDescription("[")
+                        .appendDescription(localWikiSearchResult.getTitle())
+                        .appendDescription(" - ")
+                        .appendDescription(StringUtils.abbreviate(
+                                localWikiSearchResult.getSnippet()
+                                .replaceAll("<span class=\"searchmatch\">", "**")
+                                .replaceAll("</span>", "**")
+                                .replaceAll("\\[", "{")
+                                .replaceAll("]", "}")
+                                , 60)
+                        )
+                        .appendDescription("](")
+                        .appendDescription(localWikiSearchResult.getUrl())
+                        .appendDescription(")\n");
+            }
+            sendEmbed(event, eb.build());
         }
-
-        LocalWikiSearchResultSet wikiSearchResultSet = (LocalWikiSearchResultSet) result;
-
-        EmbedBuilder eb = EmbedUtils.defaultEmbed()
-                .setTitle("Query: " + searchQuery, FandomApi.getWikiUrl() + "/wiki/Special:Search?query=" + searchQuery.replaceAll(" ", "%20"))
-                .setAuthor("Requester: " + String.format("%#s", event.getAuthor()), "https://ghostbot.duncte123.me/", event.getAuthor().getEffectiveAvatarUrl())
-                .setDescription("Total results: " + wikiSearchResultSet.getTotal() + "\n" +
-                        "Current Listed: " + wikiSearchResultSet.getItems().size() + "\n\n");
-
-        for (LocalWikiSearchResult localWikiSearchResult : wikiSearchResultSet.getItems()) {
-            eb.appendDescription("[")
-                    .appendDescription(localWikiSearchResult.getTitle())
-                    .appendDescription(" - ")
-                    .appendDescription(StringUtils.abbreviate(localWikiSearchResult.getSnippet()
-                            .replaceAll("<span class=\"searchmatch\">", "**")
-                            .replaceAll("</span>", "**"), 40))
-                    .appendDescription("](")
-                    .appendDescription(localWikiSearchResult.getUrl())
-                    .appendDescription(")\n");
+        catch (Exception e) {
+            sendMsg(event, "Something went wrong, try again later.\n" + e);
         }
-        sendEmbed(event, eb.build());
     }
 
     @Override

@@ -74,7 +74,7 @@ public class WebUtils {
      * @throws IOException When something broke
      */
     public static Ason getAson(String url) throws IOException {
-        return new Ason(Objects.requireNonNull(getRequest(url).body()).string());
+        return new Ason(Objects.requireNonNull(getRequest(url, AcceptType.TEXT_JSON).body()).string());
     }
 
     /**
@@ -112,7 +112,6 @@ public class WebUtils {
                         .get()
                         .addHeader("User-Agent", USER_AGENT)
                         .addHeader("Accept", accept.getType())
-                        .addHeader("cache-control", "no-cache")
                         .build()
         );
     }
