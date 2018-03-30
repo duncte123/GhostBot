@@ -74,7 +74,7 @@ public class WikiCommand extends Command {
                                 .replaceAll("</span>", "**")
                                 .replaceAll("\\[", "{")
                                 .replaceAll("]", "}")
-                                , 60)
+                                , 50)
                         )
                         .appendDescription("](")
                         .appendDescription(localWikiSearchResult.getUrl())
@@ -84,6 +84,7 @@ public class WikiCommand extends Command {
         }
         catch (Exception e) {
             sendMsg(event, "Something went wrong, try again later.\n" + e);
+            e.printStackTrace();
         }
     }
 

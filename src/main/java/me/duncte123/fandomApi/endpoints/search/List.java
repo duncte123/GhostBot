@@ -93,14 +93,16 @@ public class List extends SearchEndpoint {
     public FandomResult execute() {
         try {
             Ason ason = WebUtils.getAson(getEndpoint() + String.format(
-                    "?query=%s&type=%s&rank=%s&limit=%s&minArticleQuality=%s&batch=%s&namespaces=%s",
+//                    "?query=%s&type=%s&rank=%s&limit=%s&minArticleQuality=%s&batch=%s&namespaces=%s",
+                    "?query=%s&limit=%s",
                     query.replaceAll(" ", "%20"),
-                    type,
+                    10
+                    /*type,
                     rank,
                     limit,
                     minArticleQuality,
                     batch,
-                    namespaces
+                    namespaces*/
             ));
             //noinspection ConstantConditions
             if(ason == null) {
@@ -137,7 +139,7 @@ public class List extends SearchEndpoint {
                     ason.getInt("batches"),
                     results,
                     ason.getInt("total"),
-                    ason.getString("currentBatch"),
+                    ason.getInt("currentBatch"),
                     ason.getInt("next")
             );
 

@@ -26,10 +26,10 @@ public class LocalWikiSearchResultSet implements FandomResult {
     private final int batches;
     private final List<LocalWikiSearchResult> items;
     private final int total;
-    private final String currentBatch;
+    private final int currentBatch;
     private final int next;
 
-    public LocalWikiSearchResultSet(int batches, List<LocalWikiSearchResult> items, int total, String currentBatch, int next) {
+    public LocalWikiSearchResultSet(int batches, List<LocalWikiSearchResult> items, int total, int currentBatch, int next) {
         this.batches = batches;
         this.items = items;
         this.total = total;
@@ -41,7 +41,7 @@ public class LocalWikiSearchResultSet implements FandomResult {
         return batches;
     }
 
-    public String getCurrentBatch() {
+    public int getCurrentBatch() {
         return currentBatch;
     }
 
@@ -54,7 +54,7 @@ public class LocalWikiSearchResultSet implements FandomResult {
     }
 
     public int getNextBatch() {
-        return Integer.valueOf(currentBatch) + 1;
+        return currentBatch + 1;
     }
 
     public List<LocalWikiSearchResult> getItems() {

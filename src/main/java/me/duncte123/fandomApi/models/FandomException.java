@@ -57,6 +57,6 @@ public class FandomException implements FandomResult {
 
     @Override
     public String toString() {
-        return getType() + ": " + getMessage();
+        return getType() + ": " + getMessage() + "(" + getDetails() + ")";
     }
 }

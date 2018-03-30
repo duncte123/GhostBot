@@ -40,7 +40,7 @@ public class WebUtils {
 
     private static final String USER_AGENT = "Mozilla/5.0 (compatible; GhostBot/v" + Variables.VERSION + "; +https://ghostbot.duncte123.me)";
     private static final OkHttpClient client = new OkHttpClient.Builder()
-            .readTimeout(10L, TimeUnit.SECONDS).writeTimeout(10L, TimeUnit.SECONDS).build();
+            .readTimeout(30L, TimeUnit.SECONDS).writeTimeout(30L, TimeUnit.SECONDS).build();
     private static final ScheduledExecutorService service
             = Executors.newScheduledThreadPool(2, r -> new Thread(r, "Web-Thread"));
 
