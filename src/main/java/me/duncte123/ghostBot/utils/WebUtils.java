@@ -38,7 +38,7 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class WebUtils {
 
-    private static final String USER_AGENT = "Mozilla/5.0 GhostBot (GhostBot v" + Variables.VERSION + ", https://ghostbot.duncte123.me/)";
+    private static final String USER_AGENT = "Mozilla/5.0 (compatible; GhostBot/v" + Variables.VERSION + "; +https://ghostbot.duncte123.me)";
     private static final OkHttpClient client = new OkHttpClient.Builder()
             .readTimeout(10L, TimeUnit.SECONDS).writeTimeout(10L, TimeUnit.SECONDS).build();
     private static final ScheduledExecutorService service

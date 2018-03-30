@@ -41,10 +41,10 @@ repositories {
 
 dependencies {
     //JDA
-    compile group: 'net.dv8tion', name: 'JDA', version: '3.5.1_348'
+    compile group: 'net.dv8tion', name: 'JDA', version: '3.6.0_354'
     //LavaPlayer/Lavalink
-    compile group: 'com.sedmelluq', name: 'lavaplayer', version: '1.2.56'
-    compile(group: 'com.github.Frederikam', name: 'Lavalink', version: 'd648861') {
+    compile group: 'com.sedmelluq', name: 'lavaplayer', version: '1.2.58'
+    compile(group: 'com.github.Frederikam', name: 'Lavalink', version: 'f19d1af') {
         exclude group: 'com.github.Frederikam.Lavalink', module: 'Lavalink-Server'
         exclude group: 'net.dv8tion', module: 'JDA'
         exclude group: "com.sedmelluq", module: "lavaplayer"
