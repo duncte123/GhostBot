@@ -156,7 +156,7 @@ public class List extends SearchEndpoint {
             return URLEncoder.encode(in, "UTF-8");
         } catch (UnsupportedEncodingException exc) {
             exc.printStackTrace();
-            return null;
+            return in.replace(" ", "%20");
         }
     }
 }
