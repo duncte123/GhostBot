@@ -27,6 +27,8 @@ import me.duncte123.fandomApi.models.search.LocalWikiSearchResultSet;
 import me.duncte123.ghostBot.utils.WebUtils;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 @SuppressWarnings("unused")
@@ -95,7 +97,7 @@ public class List extends SearchEndpoint {
             Ason ason = WebUtils.getAson(getEndpoint() + String.format(
 //                    "?query=%s&type=%s&rank=%s&limit=%s&minArticleQuality=%s&batch=%s&namespaces=%s",
                     "?query=%s&limit=%s",
-                    query.replaceAll(" ", "%20"),
+                    encode(query),
                     10
                     /*type,
                     rank,
@@ -146,6 +148,15 @@ public class List extends SearchEndpoint {
         } catch (IOException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    private static String encode(String in) {
+        try {
+            return URLEncoder.encode(in, "UTF-8");
+        } catch (UnsupportedEncodingException exc) {
+            exc.printStackTrace();
+            return in.replace(" ", "%20");
         }
     }
 }
