@@ -20,6 +20,7 @@ package me.duncte123.ghostBot.commands.dannyPhantom.image;
 
 import com.afollestad.ason.Ason;
 import com.afollestad.ason.AsonArray;
+import me.duncte123.ghostBot.objects.Category;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.utils.EmbedUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
@@ -70,5 +71,10 @@ public class GifCommand extends Command {
     @Override
     public String getHelp() {
         return "Gives you a random Danny Phantom gif";
+    }
+
+    @Override
+    public Category getCategory() {
+        return Category.IMAGE;
     }
 }
