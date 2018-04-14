@@ -32,6 +32,9 @@ import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static me.duncte123.ghostBot.utils.MessageUtils.sendEmbed;
 import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
 
@@ -58,13 +61,24 @@ public class WikiCommand extends Command {
 
             LocalWikiSearchResultSet wikiSearchResultSet = (LocalWikiSearchResultSet) result;
 
+            List<LocalWikiSearchResult> items = wikiSearchResultSet.getItems();
+            if(items.size() > 10) {
+                List<LocalWikiSearchResult> temp = new ArrayList<>();
+                for(int i = 0; i < 10; i++) {
+                    temp.add(items.get(i));
+                }
+                items.clear();
+                items.addAll(temp);
+            }
+
             EmbedBuilder eb = EmbedUtils.defaultEmbed()
                     .setTitle("Query: " + searchQuery, FandomApi.getWikiUrl() + "/wiki/Special:Search?query=" + searchQuery.replaceAll(" ", "%20"))
                     .setAuthor("Requester: " + String.format("%#s", event.getAuthor()), "https://ghostbot.duncte123.me/", event.getAuthor().getEffectiveAvatarUrl())
                     .setDescription("Total results: " + wikiSearchResultSet.getTotal() + "\n" +
-                            "Current Listed: " + wikiSearchResultSet.getItems().size() + "\n\n");
+                            "Current Listed: " + items.size() + "\n\n");
 
-            for (LocalWikiSearchResult localWikiSearchResult : wikiSearchResultSet.getItems()) {
+
+            for (LocalWikiSearchResult localWikiSearchResult : items) {
                 eb.appendDescription("[")
                         .appendDescription(localWikiSearchResult.getTitle())
                         .appendDescription(" - ")
