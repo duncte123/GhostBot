@@ -29,9 +29,9 @@ public class Endpoints {
             return new List(query).execute();
         }
 
-        public FandomResult list(String query, int batch) {
+        /*public FandomResult list(String query, int batch) {
             return new List(query, batch).execute();
-        }
+        }*/
     }
 
     public static class User {

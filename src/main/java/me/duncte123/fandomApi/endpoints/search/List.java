@@ -34,14 +34,14 @@ import java.util.ArrayList;
 @SuppressWarnings("unused")
 public class List extends SearchEndpoint {
     private final String query;
-    private final String type;
+    /*private final String type;
     private final String rank;
     private final int limit;
     private final int minArticleQuality;
     private final int batch;
-    private final String namespaces;
+    private final String namespaces;*/
 
-    public List(String query) {
+   /* public List(String query) {
         this(query, "articles", "newest", 10, 10, 1, "0,14");
     }
 
@@ -61,9 +61,13 @@ public class List extends SearchEndpoint {
         this.minArticleQuality = minArticleQuality;
         this.batch = batch;
         this.namespaces = namespaces;
+    }*/
+
+    public List(String query) {
+        this.query = query;
     }
 
-    public int getBatch() {
+    /*public int getBatch() {
         return batch;
     }
 
@@ -89,17 +93,17 @@ public class List extends SearchEndpoint {
 
     public String getType() {
         return type;
-    }
+    }*/
 
     @Override
     public FandomResult execute() {
         try {
             Ason ason = WebUtils.getAson(getEndpoint() + String.format(
 //                    "?query=%s&type=%s&rank=%s&limit=%s&minArticleQuality=%s&batch=%s&namespaces=%s",
-                    "?query=%s&limit=%s",
-                    encode(query),
-                    10
-                    /*type,
+                    "?query=%s",
+                    encode(query)
+                    /*10
+                    type,
                     rank,
                     limit,
                     minArticleQuality,
