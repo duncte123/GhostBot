@@ -23,6 +23,7 @@ import me.duncte123.ghostBot.commands.dannyPhantom.audio.GoingGhostCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.audio.WailCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.image.GifCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.image.ImageCommand;
+import me.duncte123.ghostBot.commands.dannyPhantom.text.QuotesCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.wiki.WikiCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.wiki.WikiUserCommand;
 import me.duncte123.ghostBot.commands.main.AboutCommand;
@@ -54,6 +55,8 @@ public class CommandManager {
 
         this.addCommand(new WikiCommand());
         this.addCommand(new WikiUserCommand());
+
+        this.addCommand(new QuotesCommand());
 
         this.addCommand(new HelpCommand());
         this.addCommand(new AboutCommand());
