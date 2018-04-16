@@ -20,15 +20,14 @@ package me.duncte123.ghostBot.commands.dannyPhantom.image;
 
 import com.afollestad.ason.Ason;
 import com.afollestad.ason.AsonArray;
+import me.duncte123.botCommons.web.WebUtils;
 import me.duncte123.ghostBot.objects.Category;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.utils.EmbedUtils;
+import me.duncte123.ghostBot.utils.MessageUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
-import me.duncte123.ghostBot.utils.WebUtils;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
-
-import java.io.IOException;
 
 import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
 
@@ -64,6 +63,36 @@ public class ImageCommand extends Command {
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
 
         sendMsg(event, "Loading....", msg -> {
+            String keyword = "Danny Phantom gif";
+            try {
+                WebUtils.ins.getAson(String.format(url, keyword.replaceAll(" ", "+"))).async(data -> {
+                    AsonArray<Ason> arr = data.getJsonArray("items");
+                    if (arr.size() == 0) {
+                        execute(invoke, args, event);
+                        return;
+                    }
+                    Ason randomItem = arr.getJsonObject(SpoopyUtils.random.nextInt(arr.size()));
+                    msg.editMessage(new MessageBuilder()
+                            /* .append("Keyword: ")
+                             .append(keyword)*/
+                            .setEmbed(EmbedUtils.defaultEmbed()
+                                    .setTitle(randomItem.getString("title"), randomItem.getString("image.contextLink"))
+                                    .setImage(randomItem.getString("link")).build()).build())
+                            .override(true)
+                            .queue();
+            /*sendEmbed(event,
+                    EmbedUtils.defaultEmbed()
+                            .setTitle(randomItem.getString("title"), randomItem.getString("image.contextLink"))
+                            .setImage(randomItem.getString("link")).build()
+            );*/
+                }, er -> MessageUtils.sendMsg(event, "Error while looking up image: " + er) );
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+                msg.editMessage("Something went wrong while looking up the image").queue();
+            }
+        });
+
+        /*sendMsg(event, "Loading....", msg -> {
             String keyword = keywords[SpoopyUtils.random.nextInt(keywords.length)];
             try {
                 Ason data = WebUtils.getAson(String.format(url, keyword.replaceAll(" ", "+")));
@@ -74,23 +103,23 @@ public class ImageCommand extends Command {
                 }
                 Ason randomItem = arr.getJsonObject(SpoopyUtils.random.nextInt(arr.size()));
                 msg.editMessage(new MessageBuilder()
-                       /* .append("Keyword: ")
-                        .append(keyword)*/
+                       *//* .append("Keyword: ")
+                        .append(keyword)*//*
                         .setEmbed(EmbedUtils.defaultEmbed()
                                 .setTitle(randomItem.getString("title"), randomItem.getString("image.contextLink"))
                                 .setImage(randomItem.getString("link")).build()).build())
                         .override(true)
                         .queue();
-            /*sendEmbed(event,
+            *//*sendEmbed(event,
                     EmbedUtils.defaultEmbed()
                             .setTitle(randomItem.getString("title"), randomItem.getString("image.contextLink"))
                             .setImage(randomItem.getString("link")).build()
-            );*/
+            );*//*
             } catch (IOException | NullPointerException e) {
                 e.printStackTrace();
                 sendMsg(event, "Something went wrong while looking up the image");
             }
-        });
+        });*/
     }
 
     @Override

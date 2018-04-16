@@ -18,22 +18,22 @@
 
 package me.duncte123.ghostBot.utils;
 
-import me.duncte123.ghostBot.config.Config;
-import me.duncte123.ghostBot.config.ConfigLoader;
+import me.duncte123.botCommons.config.Config;
+import me.duncte123.botCommons.config.ConfigLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
-public class ConfigUtils {
-    private Logger logger = LoggerFactory.getLogger(ConfigUtils.class);
+class ConfigUtils {
+    private static final Logger logger = LoggerFactory.getLogger(ConfigUtils.class);
 
     private Config config;
 
     /**
      * This will try to load the bot config and kill the program if it fails
      */
-    public ConfigUtils() {
+    ConfigUtils() {
         try {
             logger.info("Loading config.json");
             this.config = ConfigLoader.getConfig(new File("config.json"));
@@ -49,7 +49,7 @@ public class ConfigUtils {
      *
      * @return the config for the bot
      */
-    public Config loadConfig() {
+    Config loadConfig() {
         return config;
     }
 }

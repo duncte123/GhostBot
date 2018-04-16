@@ -20,13 +20,12 @@ package me.duncte123.fandomApi.endpoints.search;
 
 import com.afollestad.ason.Ason;
 import com.afollestad.ason.AsonArray;
+import me.duncte123.botCommons.web.WebUtils;
 import me.duncte123.fandomApi.models.FandomException;
 import me.duncte123.fandomApi.models.FandomResult;
 import me.duncte123.fandomApi.models.search.LocalWikiSearchResult;
 import me.duncte123.fandomApi.models.search.LocalWikiSearchResultSet;
-import me.duncte123.ghostBot.utils.WebUtils;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -98,7 +97,7 @@ public class List extends SearchEndpoint {
     @Override
     public FandomResult execute() {
         try {
-            Ason ason = WebUtils.getAson(getEndpoint() + String.format(
+            Ason ason = WebUtils.ins.getAson(getEndpoint() + String.format(
 //                    "?query=%s&type=%s&rank=%s&limit=%s&minArticleQuality=%s&batch=%s&namespaces=%s",
                     "?query=%s",
                     encode(query)
@@ -109,7 +108,7 @@ public class List extends SearchEndpoint {
                     minArticleQuality,
                     batch,
                     namespaces*/
-            ));
+            )).execute();
             //noinspection ConstantConditions
             if(ason == null) {
                 return new FandomException(
@@ -149,7 +148,7 @@ public class List extends SearchEndpoint {
                     ason.getInt("next")
             );
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }

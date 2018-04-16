@@ -18,9 +18,9 @@
 
 package me.duncte123.ghostBot.utils;
 
+import me.duncte123.botCommons.config.Config;
 import me.duncte123.fandomApi.FandomApi;
 import me.duncte123.ghostBot.CommandManager;
-import me.duncte123.ghostBot.config.Config;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.utils.cache.MemberCacheView;

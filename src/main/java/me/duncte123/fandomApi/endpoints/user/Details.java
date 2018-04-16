@@ -20,13 +20,12 @@ package me.duncte123.fandomApi.endpoints.user;
 
 import com.afollestad.ason.Ason;
 import com.afollestad.ason.AsonArray;
+import me.duncte123.botCommons.web.WebUtils;
 import me.duncte123.fandomApi.models.FandomException;
 import me.duncte123.fandomApi.models.FandomResult;
 import me.duncte123.fandomApi.models.user.UserElement;
 import me.duncte123.fandomApi.models.user.UserResultSet;
-import me.duncte123.ghostBot.utils.WebUtils;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,10 +55,10 @@ public class Details extends UserEndpoint {
     public FandomResult execute() {
 
         try {
-            Ason ason = WebUtils.getAson(getEndpoint() + String.format("?ids=%s&size=%s",
+            Ason ason = WebUtils.ins.getAson(getEndpoint() + String.format("?ids=%s&size=%s",
                     ids,
                     size
-            ));
+            )).execute();
 
             if (ason.has("exception")) {
                 return new FandomException(
@@ -87,7 +86,7 @@ public class Details extends UserEndpoint {
             }
 
             return new UserResultSet(basePath, users);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

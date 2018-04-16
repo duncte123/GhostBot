@@ -43,13 +43,16 @@ public class GhostBot {
         String token = SpoopyUtils.config.getString("discord.token");
         LavalinkManager.ins.start();
         try {
-            jda = new JDABuilder(AccountType.BOT)
+            JDABuilder builder = new JDABuilder(AccountType.BOT)
                     .setAudioEnabled(true)
                     .setGame(Game.playing(Variables.PREFIX + "help | Going Ghost"))
                     .setToken(token)
-                    .addEventListener(new BotListener())
-                    .addEventListener(LavalinkManager.ins.getLavalink())
-                    .buildAsync();
+                    .addEventListener(new BotListener());
+
+            if(LavalinkManager.ins.isEnabled())
+                builder.addEventListener(LavalinkManager.ins.getLavalink());
+
+                    jda = builder.buildAsync();
         } catch (LoginException e) {
             e.printStackTrace();
             System.exit(-1);
