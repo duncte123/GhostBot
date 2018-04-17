@@ -91,9 +91,10 @@ public class QuotesCommand extends Command {
                         break;
                     case "text" :
                         String bodyRaw = selectedPost.getString("body", "");
+                        String replacePWith = bodyRaw.contains("\n") ? "" : "\n";
                         String bodyParsed = bodyRaw.replaceAll(Pattern.quote("<p>"), "")
                                 .replaceAll("\\*", "\\\\*")
-                                .replaceAll(Pattern.quote("</p>"), "")
+                                .replaceAll(Pattern.quote("</p>"), replacePWith)
                                 .replaceAll(Pattern.quote("<i>"), "_")
                                 .replaceAll(Pattern.quote("</i>"), "_")
                                 .replaceAll(Pattern.quote("<b>"), "**")
