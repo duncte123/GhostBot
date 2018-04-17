@@ -23,5 +23,6 @@ public enum Category {
     IMAGE,
     WIKI,
     HIDDEN,
+    TEXT,
     NONE
 }

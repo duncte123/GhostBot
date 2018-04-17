@@ -55,6 +55,8 @@ dependencies {
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
     //JSON Extension
     compile group: 'com.afollestad', name: 'ason', version: '1.4.16'
+    //jsoup
+    compile group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
 }
 
 compileJava.options.encoding = 'UTF-8'

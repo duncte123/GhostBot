@@ -21,6 +21,7 @@ package me.duncte123.ghostBot.commands.dannyPhantom.text;
 import com.afollestad.ason.Ason;
 import com.afollestad.ason.AsonArray;
 import me.duncte123.botCommons.web.WebUtils;
+import me.duncte123.ghostBot.objects.Category;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.objects.QuoteTypeStorageThingy;
 import me.duncte123.ghostBot.utils.EmbedUtils;
@@ -125,5 +126,10 @@ public class QuotesCommand extends Command {
     @Override
     public String getHelp() {
         return "Get a random quote from http://totallycorrectdannyphantomquotes.tumblr.com/";
+    }
+
+    @Override
+    public Category getCategory() {
+        return Category.TEXT;
     }
 }
