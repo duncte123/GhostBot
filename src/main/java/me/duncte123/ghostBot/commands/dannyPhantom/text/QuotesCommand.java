@@ -22,22 +22,34 @@ import com.afollestad.ason.Ason;
 import com.afollestad.ason.AsonArray;
 import me.duncte123.botCommons.web.WebUtils;
 import me.duncte123.ghostBot.objects.Command;
+import me.duncte123.ghostBot.objects.QuoteTypeStorageThingy;
 import me.duncte123.ghostBot.utils.EmbedUtils;
 import me.duncte123.ghostBot.utils.MessageUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringEscapeUtils;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public class QuotesCommand extends Command {
 
     private final String[] types = {"chat", "text", "quote"};
 
+    private final Map<String, QuoteTypeStorageThingy> quoteIndexes = new HashMap<>();
+
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
         try {
+            Guild guild = event.getGuild();
+
+            if(!quoteIndexes.containsKey(guild.getId())) {
+                quoteIndexes.put(guild.getId(), new QuoteTypeStorageThingy());
+            }
+
             String type = types[SpoopyUtils.random.nextInt(types.length)];
 
             WebUtils.ins.getAson(
@@ -47,8 +59,20 @@ public class QuotesCommand extends Command {
                             type
                     )
             ).async(ason -> {
+
+                QuoteTypeStorageThingy q = quoteIndexes.get(guild.getId());
+
+                int index = q.getFromType(type);
+
+//                System.out.println("type: " + type + ", index: " + index);
+
                 AsonArray<Ason> posts = ason.getJsonArray("response.posts");
-                Ason selectedPost = posts.getJsonObject(SpoopyUtils.random.nextInt(posts.size()));
+
+                if(index > posts.size())
+                    q.resetFromType(type);
+
+                Ason selectedPost = posts.getJsonObject(index /*SpoopyUtils.random.nextInt(posts.size())*/ );
+
                 assert selectedPost != null;
 
                 EmbedBuilder eb = EmbedUtils.defaultEmbed()
@@ -69,6 +93,8 @@ public class QuotesCommand extends Command {
                         String bodyParsed = bodyRaw.replaceAll(Pattern.quote("<p>"), "")
                                 .replaceAll("\\*", "\\\\*")
                                 .replaceAll(Pattern.quote("</p>"), "")
+                                .replaceAll(Pattern.quote("<i>"), "_")
+                                .replaceAll(Pattern.quote("</i>"), "_")
                                 .replaceAll(Pattern.quote("<b>"), "**")
                                 .replaceAll(Pattern.quote("</b>"), "**");
                         eb.setDescription(StringEscapeUtils.unescapeHtml4(bodyParsed));
@@ -82,6 +108,7 @@ public class QuotesCommand extends Command {
                 }
 
                 MessageUtils.sendEmbed(event, eb.build());
+                q.incFromType(type);
             }, er -> MessageUtils.sendMsg(event, "Error while looking up quote: " + er) );
 
         }
