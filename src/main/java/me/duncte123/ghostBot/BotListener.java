@@ -19,10 +19,11 @@
 package me.duncte123.ghostBot;
 
 import fredboat.audio.player.LavalinkManager;
+import me.duncte123.botCommons.web.WebUtils;
 import me.duncte123.ghostBot.audio.GuildMusicManager;
-import me.duncte123.ghostBot.utils.PostStats;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import me.duncte123.ghostBot.variables.Variables;
+import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.events.ReadyEvent;
@@ -32,18 +33,28 @@ import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceMoveEvent;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import okhttp3.MediaType;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class BotListener extends ListenerAdapter {
 
     private final Logger logger = LoggerFactory.getLogger(BotListener.class);
-    private final String dblToken = SpoopyUtils.config.getString("api.dbl", "");
+    private final String dbotsToken = SpoopyUtils.config.getString("api.dbots", "");
+    private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
 
     @Override
     public void onReady(ReadyEvent event) {
         logger.info("Logged in as " + String.format("%#s", event.getJDA().getSelfUser()));
-        PostStats.toDiscordBots(event.getJDA(), dblToken);
+        postServerCount(event.getJDA());
     }
 
     @Override
@@ -53,6 +64,7 @@ public class BotListener extends ListenerAdapter {
 
         if (event.getMessage().getContentRaw().equals(Variables.PREFIX + "shutdown") && event.getAuthor().getId().equals(Variables.OWNER_ID)) {
             logger.info("Shutting down!!");
+            service.shutdown();
             event.getMessage().addReaction("✅").queue(
                     //Shutdown on both success and failure
                     success -> event.getJDA().shutdown(),
@@ -62,8 +74,8 @@ public class BotListener extends ListenerAdapter {
                 //noinspection PointlessArithmeticExpression
                 Thread.sleep(1 * 1000);
                 System.exit(0);
+            } catch (InterruptedException ignored) {
             }
-            catch (InterruptedException ignored) {}
             return;
         }
 
@@ -74,7 +86,7 @@ public class BotListener extends ListenerAdapter {
     public void onGuildJoin(GuildJoinEvent event) {
         //if 70 of a guild is bots, we'll leave it
         double[] botToUserRatio = SpoopyUtils.getBotRatio(event.getGuild());
-        if (botToUserRatio[1] > 60) {
+        if (botToUserRatio[1] > 80) {
             SpoopyUtils.getPublicChannel(event.getGuild()).sendMessage(String.format("Hey %s, %s%s of this server are bots (%s is the total btw). I'm outta here.",
                     event.getGuild().getOwner().getAsMention(),
                     botToUserRatio[1],
@@ -86,20 +98,18 @@ public class BotListener extends ListenerAdapter {
             return;
         }
         logger.info("Joining guild: " + event.getGuild().toString());
-        PostStats.toDiscordBots(event.getJDA(), dblToken);
     }
 
     @Override
     public void onGuildLeave(GuildLeaveEvent event) {
         logger.info("Leaving guild: " + event.getGuild().toString());
-        PostStats.toDiscordBots(event.getJDA(), dblToken);
     }
 
     @Override
     public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
         if (LavalinkManager.ins.isConnected(event.getGuild())) {
             if (!event.getVoiceState().getMember().getUser().getId().equals(event.getJDA().getSelfUser().getId())) {
-                if (!event.getChannelLeft().getId().equals( LavalinkManager.ins.getConnectedChannel(event.getGuild()).getId() )) {
+                if (!event.getChannelLeft().getId().equals(LavalinkManager.ins.getConnectedChannel(event.getGuild()).getId())) {
                     return;
                 }
                 channelCheckThing(event.getGuild(), event.getChannelLeft());
@@ -112,7 +122,7 @@ public class BotListener extends ListenerAdapter {
         if (LavalinkManager.ins.isConnected(event.getGuild())) {
             if (!event.getVoiceState().getMember().getUser().getId().equals(event.getJDA().getSelfUser().getId())) {
                 if (event.getChannelLeft() != null) {
-                    if (!event.getChannelLeft().getId().equals( LavalinkManager.ins.getConnectedChannel(event.getGuild()).getId() )) {
+                    if (!event.getChannelLeft().getId().equals(LavalinkManager.ins.getConnectedChannel(event.getGuild()).getId())) {
                         return;
                     }
                     channelCheckThing(event.getGuild(), event.getChannelLeft());
@@ -121,7 +131,7 @@ public class BotListener extends ListenerAdapter {
 
                 if (event.getChannelJoined() != null) {
                     if (event.getGuild().getAudioManager().getConnectedChannel() != null &&
-                            !event.getChannelJoined().getId().equals( LavalinkManager.ins.getConnectedChannel(event.getGuild()).getId() )) {
+                            !event.getChannelJoined().getId().equals(LavalinkManager.ins.getConnectedChannel(event.getGuild()).getId())) {
                         return;
                         //System.out.println("Self (this might be buggy)");
                     }
@@ -129,6 +139,20 @@ public class BotListener extends ListenerAdapter {
                 }
             }
         }
+    }
+
+    private void postServerCount(JDA jda) {
+        service.scheduleWithFixedDelay(() ->
+                WebUtils.ins.prepareRaw(
+                        new Request.Builder()
+                                .url("https://bots.discord.pw/api/bots/397297702150602752/stats")
+                                .post(RequestBody.create(MediaType.parse("application/json"),
+                                        new JSONObject().put("server_count", jda.getGuilds().size()).toString()))
+                                .addHeader("User-Agent", "DiscordBot " + jda.getSelfUser().getName())
+                                .addHeader("Authorization", dbotsToken)
+                                .build(), ResponseBody::string).async(empty -> logger.info("Posted stats to dbots"), nothing -> {})
+                , 0L, 1L, TimeUnit.DAYS);
+
     }
 
     private void channelCheckThing(Guild g, VoiceChannel vc) {
