@@ -78,7 +78,7 @@ public class TrackScheduler extends AudioEventAdapterWrapped {
      * @param track The {@link AudioTrack AudioTrack} to queue
      */
     public void queue(AudioTrack track) {
-        if(player.getPlayingTrack() != null) {
+        if (player.getPlayingTrack() != null) {
             queue.offer(track);
         } else {
             player.playTrack(track);
@@ -89,7 +89,7 @@ public class TrackScheduler extends AudioEventAdapterWrapped {
      * Starts the next track
      */
     public void nextTrack() {
-        if(queue.peek() != null)
+        if (queue.peek() != null)
             player.playTrack(queue.poll());
     }
 
@@ -127,21 +127,21 @@ public class TrackScheduler extends AudioEventAdapterWrapped {
     }
 
     /**
-     * This will tell you if the player is repeating playlists
-     *
-     * @return true if the player is set to repeat playlists
-     */
-    public boolean isRepeatingPlaylists() {
-        return repeatPlayList;
-    }
-
-    /**
      * tell the player if needs to repeat
      *
      * @param repeating if the player needs to repeat
      */
     public void setRepeating(boolean repeating) {
         this.repeating = repeating;
+    }
+
+    /**
+     * This will tell you if the player is repeating playlists
+     *
+     * @return true if the player is set to repeat playlists
+     */
+    public boolean isRepeatingPlaylists() {
+        return repeatPlayList;
     }
 
     /**

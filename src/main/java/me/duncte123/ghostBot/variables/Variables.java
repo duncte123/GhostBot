@@ -18,8 +18,8 @@
 
 package me.duncte123.ghostBot.variables;
 
-import me.duncte123.ghostBot.utils.SpoopyUtils;
 import me.duncte123.ghostBot.BuildConfig;
+import me.duncte123.ghostBot.utils.SpoopyUtils;
 
 public class Variables {
 

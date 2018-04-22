@@ -24,8 +24,6 @@ import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.utils.MessageUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
@@ -36,8 +34,41 @@ import java.util.List;
 
 public class RandomGhostCommand extends Command {
 
-    private final List<String> ghosts = new ArrayList<>();
     private static final Logger LOGGER = LoggerFactory.getLogger(RandomGhostCommand.class);
+    private final List<String> ghosts = new ArrayList<>();
+
+    public RandomGhostCommand() {
+        LOGGER.info("Scraping ghosts async");
+        WebUtils.ins.scrapeWebPage("http://dannyphantom.wikia.com/wiki/Category:Ghosts?display=page&sort=alphabetical").async((doc) -> {
+            try {
+                Element el = doc.getElementsByClass("mw-content-ltr").get(2);
+
+                Elements tds = el.child(0).child(0).children();
+
+                Elements trs = tds.get(0).children();
+
+                List<Element> anchors = new ArrayList<>();
+
+                trs.forEach(tr ->
+                        tr.children().forEach(ul -> {
+                            if (ul.tagName().equals("ul")) {
+                                ul.children().forEach(listItem ->
+                                        anchors.addAll(listItem.children())
+                                );
+                            }
+                        })
+                );
+
+                LOGGER.info("Scraped " + anchors.size() + " Ghosts from the wiki");
+
+                anchors.forEach(a -> ghosts.add("http://dannyphantom.wikia.com" + a.attr("href")));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }, Throwable::printStackTrace);
+    }
 
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
@@ -63,40 +94,5 @@ public class RandomGhostCommand extends Command {
     @Override
     public String[] getAliases() {
         return new String[]{"ghost"};
-    }
-
-    public RandomGhostCommand() {
-        LOGGER.info("Scraping ghosts async");
-        WebUtils.ins.getText("http://dannyphantom.wikia.com/wiki/Category:Ghosts?display=page&sort=alphabetical").async((text) -> {
-            try {
-                Document doc = Jsoup.parse(text);
-
-                Element el = doc.getElementsByClass("mw-content-ltr").get(2);
-
-                Elements tds = el.child(0).child(0).children();
-
-                Elements trs = tds.get(0).children();
-
-                List<Element> anchors = new ArrayList<>();
-
-                trs.forEach(tr ->
-                        tr.children().forEach(ul -> {
-                            if (ul.tagName().equals("ul")) {
-                                ul.children().forEach(listItem ->
-                                        anchors.addAll(listItem.children())
-                                );
-                            }
-                        })
-                );
-
-                LOGGER.info("Scraped " + anchors.size() + " Ghosts from the wiki");
-
-                anchors.forEach(a -> ghosts.add("http://dannyphantom.wikia.com" + a.attr("href")) );
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        }, Throwable::printStackTrace);
     }
 }

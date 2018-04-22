@@ -40,8 +40,8 @@ import java.util.regex.Pattern;
 
 public class QuotesCommand extends Command {
 
+    private static final Logger logger = LoggerFactory.getLogger(QuotesCommand.class);
     private final String[] types = {"chat", "text", "quote"};
-
     private final String[] messages = {
             "Starting to reload quotes",
             "Clearing posts",
@@ -52,11 +52,12 @@ public class QuotesCommand extends Command {
             "Going Ghost",
             "Finished"
     };
-
     private final List<TumblrPost> tumblrPosts = new ArrayList<>();
     private final Map<String, Integer> indexes = new HashMap<>();
 
-    private static final Logger logger = LoggerFactory.getLogger(QuotesCommand.class);
+    public QuotesCommand() {
+        reloadQuotes();
+    }
 
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
@@ -70,7 +71,8 @@ public class QuotesCommand extends Command {
                             for (String m : Arrays.copyOfRange(messages, 1, messages.length)) {
                                 try {
                                     Thread.sleep(3000);
-                                } catch (InterruptedException ignored) { }
+                                } catch (InterruptedException ignored) {
+                                }
                                 logger.info(m);
                                 success.editMessage(m).queue();
 
@@ -142,10 +144,6 @@ public class QuotesCommand extends Command {
     @Override
     public Category getCategory() {
         return Category.TEXT;
-    }
-
-    public QuotesCommand() {
-        reloadQuotes();
     }
 
     private void reloadQuotes() {

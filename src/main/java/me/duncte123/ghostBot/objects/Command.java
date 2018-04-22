@@ -23,7 +23,7 @@ import me.duncte123.ghostBot.audio.GuildMusicManager;
 import me.duncte123.ghostBot.utils.EmbedUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.PermissionException;
 
@@ -31,7 +31,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static me.duncte123.ghostBot.utils.MessageUtils.*;
+import static me.duncte123.ghostBot.utils.MessageUtils.sendEmbed;
+import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
 
 public abstract class Command {
     protected String audioPath = "";

@@ -49,10 +49,10 @@ public class GhostBot {
                     .setToken(token)
                     .addEventListener(new BotListener());
 
-            if(LavalinkManager.ins.isEnabled())
+            if (LavalinkManager.ins.isEnabled())
                 builder.addEventListener(LavalinkManager.ins.getLavalink());
 
-                    jda = builder.buildAsync();
+            jda = builder.buildAsync();
         } catch (LoginException e) {
             e.printStackTrace();
             System.exit(-1);
@@ -60,11 +60,11 @@ public class GhostBot {
 
     }
 
-    public JDA getFakeShard(int shardId) {
-        return jda;
-    }
-
     public static GhostBot getInstance() {
         return ins;
+    }
+
+    public JDA getFakeShard(int shardId) {
+        return jda;
     }
 }

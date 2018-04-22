@@ -85,7 +85,7 @@ public class ImageCommand extends Command {
                             .setTitle(randomItem.getString("title"), randomItem.getString("image.contextLink"))
                             .setImage(randomItem.getString("link")).build()
             );*/
-                }, er -> MessageUtils.sendMsg(event, "Error while looking up image: " + er) );
+                }, er -> MessageUtils.sendMsg(event, "Error while looking up image: " + er));
             } catch (NullPointerException e) {
                 e.printStackTrace();
                 msg.editMessage("Something went wrong while looking up the image").queue();

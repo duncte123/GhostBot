@@ -94,6 +94,15 @@ public class List extends SearchEndpoint {
         return type;
     }*/
 
+    private static String encode(String in) {
+        try {
+            return URLEncoder.encode(in, "UTF-8");
+        } catch (UnsupportedEncodingException exc) {
+            exc.printStackTrace();
+            return in.replace(" ", "%20");
+        }
+    }
+
     @Override
     public FandomResult execute() {
         try {
@@ -110,7 +119,7 @@ public class List extends SearchEndpoint {
                     namespaces*/
             )).execute();
             //noinspection ConstantConditions
-            if(ason == null) {
+            if (ason == null) {
                 return new FandomException(
                         "NotFound",
                         "Something borked",
@@ -151,15 +160,6 @@ public class List extends SearchEndpoint {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
-        }
-    }
-
-    private static String encode(String in) {
-        try {
-            return URLEncoder.encode(in, "UTF-8");
-        } catch (UnsupportedEncodingException exc) {
-            exc.printStackTrace();
-            return in.replace(" ", "%20");
         }
     }
 }

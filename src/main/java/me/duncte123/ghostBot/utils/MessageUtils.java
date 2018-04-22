@@ -37,8 +37,8 @@ public class MessageUtils {
     private static Logger logger = LoggerFactory.getLogger(MessageUtils.class);
 
     private static final Consumer<Throwable> CUSTOM_QUEUE_ERROR = ex -> {
-        if(ex instanceof ErrorResponseException){
-            if(((ErrorResponseException) ex).getErrorCode() != 10008) {
+        if (ex instanceof ErrorResponseException) {
+            if (((ErrorResponseException) ex).getErrorCode() != 10008) {
                 logger.error("RestAction queue returned failure", ex);
                 ex.printStackTrace();
             }
@@ -63,9 +63,9 @@ public class MessageUtils {
     /**
      * This method uses the sendError and sendMsg methods
      *
-     * @param message the {@link Message} for the sendError method
+     * @param message     the {@link Message} for the sendError method
      * @param textChannel the {@link TextChannel} for the sendMsg method
-     * @param text the {@link String} for the sendMsg method
+     * @param text        the {@link String} for the sendMsg method
      */
     public static void sendErrorWithMessage(Message message, TextChannel textChannel, String text) {
         sendError(message);
@@ -77,8 +77,8 @@ public class MessageUtils {
      * This method uses the sendError and sendMsg methods
      *
      * @param message the {@link Message} for the sendError method
-     * @param event the {@link GuildMessageReceivedEvent} for the sendMsg method
-     * @param text the {@link String} for the sendMsg method
+     * @param event   the {@link GuildMessageReceivedEvent} for the sendMsg method
+     * @param text    the {@link String} for the sendMsg method
      */
     public static void sendErrorWithMessage(Message message, GuildMessageReceivedEvent event, String text) {
         sendError(message);
@@ -105,7 +105,7 @@ public class MessageUtils {
      *
      * @param message the {@link Message} for the sendSuccess method
      * @param channel the {@link TextChannel} for the sendMsg method
-     * @param text the {@link String} for the sendMsg method
+     * @param text    the {@link String} for the sendMsg method
      */
     public static void sendSuccessWithMessage(Message message, TextChannel channel, String text) {
         sendSuccess(message);
@@ -116,8 +116,8 @@ public class MessageUtils {
      * This method uses the sendSuccess and sendMsg methods
      *
      * @param message the {@link Message} for the sendSuccess method
-     * @param event the {@link GuildMessageReceivedEvent} for the sendMsg method
-     * @param text the {@link String} for the sendMsg method
+     * @param event   the {@link GuildMessageReceivedEvent} for the sendMsg method
+     * @param text    the {@link String} for the sendMsg method
      */
     public static void sendSuccessWithMessage(Message message, GuildMessageReceivedEvent event, String text) {
         sendSuccess(message);
@@ -138,10 +138,10 @@ public class MessageUtils {
      * This will check if we can send a embed and convert it to a message if we can't send embeds
      *
      * @param channel the {@link TextChannel TextChannel} that we want to send the embed to
-     * @param embed The embed to send
+     * @param embed   The embed to send
      */
     public static void sendEmbed(TextChannel channel, MessageEmbed embed) {
-        if(channel != null) {
+        if (channel != null) {
             if (!channel.getGuild().getSelfMember().hasPermission(channel, Permission.MESSAGE_EMBED_LINKS)) {
                 sendMsg(channel, EmbedUtils.embedToMessage(embed));
                 return;
@@ -165,7 +165,7 @@ public class MessageUtils {
     /**
      * This is a shortcut for sending formatted messages to a channel which also deletes it after delay unit
      *
-     * @param tc an instance of {@link TextChannel TextChannel}
+     * @param tc    an instance of {@link TextChannel TextChannel}
      * @param delay the {@link Long} that is our delay
      * @param unit  the {@link TimeUnit} that is our unit that uses the delay parameter
      * @param msg   the message format to send
@@ -207,8 +207,8 @@ public class MessageUtils {
      * This is a shortcut for sending formatted messages to a channel
      *
      * @param event an instance of {@link GuildMessageReceivedEvent GuildMessageReceivedEvent}
-     * @param msg     the message format to send
-     * @param args    the arguments that should be used in the msg parameter
+     * @param msg   the message format to send
+     * @param args  the arguments that should be used in the msg parameter
      */
     public static void sendMsgFormat(GuildMessageReceivedEvent event, String msg, Object... args) {
         sendMsg(event.getChannel(), (new MessageBuilder().append(String.format(msg, args)).build()), null, CUSTOM_QUEUE_ERROR);
@@ -238,8 +238,8 @@ public class MessageUtils {
     /**
      * This is a shortcut for sending messages to a channel
      *
-     * @param event a instance of {@link GuildMessageReceivedEvent GuildMessageReceivedEvent}
-     * @param msg   the message to send
+     * @param event   a instance of {@link GuildMessageReceivedEvent GuildMessageReceivedEvent}
+     * @param msg     the message to send
      * @param success The success consumer
      */
     public static void sendMsg(GuildMessageReceivedEvent event, String msg, Consumer<Message> success) {
@@ -249,8 +249,8 @@ public class MessageUtils {
     /**
      * This is a shortcut for sending messages to a channel
      *
-     * @param event a instance of {@link GuildMessageReceivedEvent GuildMessageReceivedEvent}
-     * @param msg   the message to send
+     * @param event   a instance of {@link GuildMessageReceivedEvent GuildMessageReceivedEvent}
+     * @param msg     the message to send
      * @param success The success consumer
      * @param failure the failure consumer
      */
@@ -262,7 +262,7 @@ public class MessageUtils {
      * This is a shortcut for sending messages to a channel
      *
      * @param channel he {@link TextChannel TextChannel} that we want to send our message to
-     * @param msg   the message to send
+     * @param msg     the message to send
      */
     public static void sendMsg(TextChannel channel, String msg) {
         sendMsg(channel, (new MessageBuilder()).append(msg).build(), null, CUSTOM_QUEUE_ERROR);
@@ -272,7 +272,7 @@ public class MessageUtils {
      * This is a shortcut for sending messages to a channel
      *
      * @param channel he {@link TextChannel TextChannel} that we want to send our message to
-     * @param msg   the message to send
+     * @param msg     the message to send
      * @param success The success consumer
      */
     public static void sendMsg(TextChannel channel, String msg, Consumer<Message> success) {
@@ -283,7 +283,7 @@ public class MessageUtils {
      * This is a shortcut for sending messages to a channel
      *
      * @param channel he {@link TextChannel TextChannel} that we want to send our message to
-     * @param msg   the message to send
+     * @param msg     the message to send
      * @param success The success consumer
      * @param failure the failure consumer
      */
@@ -305,7 +305,7 @@ public class MessageUtils {
      * This is a shortcut for sending messages to a channel
      *
      * @param channel he {@link TextChannel TextChannel} that we want to send our message to
-     * @param msg   the message to send
+     * @param msg     the message to send
      */
     public static void sendMsg(TextChannel channel, MessageEmbed msg) {
         sendMsg(channel, (new MessageBuilder()).setEmbed(msg).build(), null, CUSTOM_QUEUE_ERROR);
@@ -324,8 +324,8 @@ public class MessageUtils {
     /**
      * This is a shortcut for sending messages to a channel
      *
-     * @param event a instance of {@link GuildMessageReceivedEvent GuildMessageReceivedEvent}
-     * @param msg   the message to send
+     * @param event   a instance of {@link GuildMessageReceivedEvent GuildMessageReceivedEvent}
+     * @param msg     the message to send
      * @param success The success consumer
      */
     public static void sendMsg(GuildMessageReceivedEvent event, Message msg, Consumer<Message> success) {
@@ -335,8 +335,8 @@ public class MessageUtils {
     /**
      * This is a shortcut for sending messages to a channel
      *
-     * @param event a instance of {@link GuildMessageReceivedEvent GuildMessageReceivedEvent}
-     * @param msg   the message to send
+     * @param event   a instance of {@link GuildMessageReceivedEvent GuildMessageReceivedEvent}
+     * @param msg     the message to send
      * @param success The success consumer
      * @param failure the failure consumer
      */
@@ -348,7 +348,7 @@ public class MessageUtils {
      * This is a shortcut for sending messages to a channel
      *
      * @param channel he {@link TextChannel TextChannel} that we want to send our message to
-     * @param msg   the message to send
+     * @param msg     the message to send
      */
     public static void sendMsg(TextChannel channel, Message msg) {
         sendMsg(channel, msg, null, CUSTOM_QUEUE_ERROR);
@@ -358,7 +358,7 @@ public class MessageUtils {
      * This is a shortcut for sending messages to a channel
      *
      * @param channel he {@link TextChannel TextChannel} that we want to send our message to
-     * @param msg   the message to send
+     * @param msg     the message to send
      * @param success The success consumer
      */
     public static void sendMsg(TextChannel channel, Message msg, Consumer<Message> success) {
@@ -369,13 +369,13 @@ public class MessageUtils {
      * This is a shortcut for sending messages to a channel
      *
      * @param channel he {@link TextChannel TextChannel} that we want to send our message to
-     * @param msg   the message to send
+     * @param msg     the message to send
      * @param success The success consumer
      * @param failure the failure consumer
      */
     public static void sendMsg(TextChannel channel, Message msg, Consumer<Message> success, Consumer<Throwable> failure) {
         //Only send a message if we can talk
-        if(channel != null && channel.getGuild().getSelfMember().hasPermission(channel,
+        if (channel != null && channel.getGuild().getSelfMember().hasPermission(channel,
                 Permission.MESSAGE_WRITE, Permission.MESSAGE_READ))
             channel.sendMessage(msg).queue(success, failure);
     }

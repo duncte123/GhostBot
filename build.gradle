@@ -41,7 +41,7 @@ repositories {
 
 dependencies {
     //My little utils
-    compile 'com.github.duncte123:botCommons:42f3de4'
+    compile 'com.github.duncte123:botCommons:a857bf6ffc'
     //JDA
     compile group: 'net.dv8tion', name: 'JDA', version: '3.6.0_355'
     //LavaPlayer/Lavalink
@@ -53,10 +53,6 @@ dependencies {
     compile group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
     // Logback classic
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
-    //JSON Extension
-    compile group: 'com.afollestad', name: 'ason', version: '1.4.16'
-    //jsoup
-    compile group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
 }
 
 compileJava.options.encoding = 'UTF-8'

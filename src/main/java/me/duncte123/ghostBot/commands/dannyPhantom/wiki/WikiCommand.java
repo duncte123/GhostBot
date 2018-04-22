@@ -62,9 +62,9 @@ public class WikiCommand extends Command {
             LocalWikiSearchResultSet wikiSearchResultSet = (LocalWikiSearchResultSet) result;
 
             List<LocalWikiSearchResult> items = wikiSearchResultSet.getItems();
-            if(items.size() > 10) {
+            if (items.size() > 10) {
                 List<LocalWikiSearchResult> temp = new ArrayList<>();
-                for(int i = 0; i < 10; i++) {
+                for (int i = 0; i < 10; i++) {
                     temp.add(items.get(i));
                 }
                 items.clear();
@@ -84,10 +84,10 @@ public class WikiCommand extends Command {
                         .appendDescription(" - ")
                         .appendDescription(StringUtils.abbreviate(
                                 localWikiSearchResult.getSnippet()
-                                .replaceAll("<span class=\"searchmatch\">", "**")
-                                .replaceAll("</span>", "**")
-                                .replaceAll("\\[", "{")
-                                .replaceAll("]", "}")
+                                        .replaceAll("<span class=\"searchmatch\">", "**")
+                                        .replaceAll("</span>", "**")
+                                        .replaceAll("\\[", "{")
+                                        .replaceAll("]", "}")
                                 , 50)
                         )
                         .appendDescription("](")
@@ -95,8 +95,7 @@ public class WikiCommand extends Command {
                         .appendDescription(")\n");
             }
             sendEmbed(event, eb.build());
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             sendMsg(event, "Something went wrong, try again later.\n" + e);
             e.printStackTrace();
         }

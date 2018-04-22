@@ -37,13 +37,11 @@ import java.util.logging.Level;
 public class AudioUtils {
 
     private static final int DEFAULT_VOLUME = 35; //(0-150, where 100 is the default max volume)
+    public static AudioUtils ins = new AudioUtils();
     public final String BASE_AUDIO_DIR = "../GhostBot/audioFiles/";
     private final String embedTitle = "Spoopy-Luma-Player";
-    private AudioPlayerManager playerManager;
-
     private final Map<String, GuildMusicManager> musicManagers;
-
-    public static AudioUtils ins = new AudioUtils();
+    private AudioPlayerManager playerManager;
 
     private AudioUtils() {
         java.util.logging.Logger.getLogger("org.apache.http.client.protocol.ResponseProcessCookies").setLevel(Level.OFF);
@@ -51,18 +49,6 @@ public class AudioUtils {
         initPlayerManager();
 
         musicManagers = new HashMap<>();
-    }
-
-    private void initPlayerManager() {
-        if(playerManager == null) {
-            playerManager = new DefaultAudioPlayerManager();
-            AudioSourceManagers.registerLocalSource(playerManager);
-        }
-    }
-
-    public AudioPlayerManager getPlayerManager() {
-        initPlayerManager();
-        return playerManager;
     }
 
     /**
@@ -81,6 +67,18 @@ public class AudioUtils {
         } else {
             return String.format("%02d:%02d", minutes, seconds);
         }
+    }
+
+    private void initPlayerManager() {
+        if (playerManager == null) {
+            playerManager = new DefaultAudioPlayerManager();
+            AudioSourceManagers.registerLocalSource(playerManager);
+        }
+    }
+
+    public AudioPlayerManager getPlayerManager() {
+        initPlayerManager();
+        return playerManager;
     }
 
     /**

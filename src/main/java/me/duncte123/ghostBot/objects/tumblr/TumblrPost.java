@@ -52,6 +52,7 @@ public class TumblrPost {
     /*Chat post*/
     public List<TumblrDialogue> dialogue;
 
-    public TumblrPost() {}
+    public TumblrPost() {
+    }
 
 }

@@ -55,7 +55,7 @@ public class GifCommand extends Command {
                                     .setImage(randomItem.getString("link")).build()).build())
                             .override(true)
                             .queue();
-                }, er -> MessageUtils.sendMsg(event, "Error while looking up image: " + er) );
+                }, er -> MessageUtils.sendMsg(event, "Error while looking up image: " + er));
             } catch (NullPointerException e) {
                 e.printStackTrace();
                 msg.editMessage("Something went wrong while looking up the image").queue();

@@ -24,5 +24,6 @@ public class TumblrDialogue {
     public String label;
     public String phrase;
 
-    public TumblrDialogue() {}
+    public TumblrDialogue() {
+    }
 }
