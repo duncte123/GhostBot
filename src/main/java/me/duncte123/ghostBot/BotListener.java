@@ -150,7 +150,10 @@ public class BotListener extends ListenerAdapter {
                                         new JSONObject().put("server_count", jda.getGuilds().size()).toString()))
                                 .addHeader("User-Agent", "DiscordBot " + jda.getSelfUser().getName())
                                 .addHeader("Authorization", dbotsToken)
-                                .build(), ResponseBody::string).async(empty -> logger.info("Posted stats to dbots"), nothing -> {})
+                                .build(), ResponseBody::string).async(empty -> logger.info("Posted stats to dbots"), nothing -> {
+                                    logger.info("something borked");
+                                    logger.info(nothing.getMessage());
+                })
                 , 0L, 1L, TimeUnit.DAYS);
 
     }

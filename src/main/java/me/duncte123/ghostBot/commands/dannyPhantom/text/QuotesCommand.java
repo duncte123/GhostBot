@@ -23,79 +23,110 @@ import com.afollestad.ason.AsonArray;
 import me.duncte123.botCommons.web.WebUtils;
 import me.duncte123.ghostBot.objects.Category;
 import me.duncte123.ghostBot.objects.Command;
+import me.duncte123.ghostBot.objects.tumblr.TumblrDialogue;
+import me.duncte123.ghostBot.objects.tumblr.TumblrPost;
 import me.duncte123.ghostBot.utils.EmbedUtils;
 import me.duncte123.ghostBot.utils.MessageUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
+import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class QuotesCommand extends Command {
 
     private final String[] types = {"chat", "text", "quote"};
 
+    private final String[] messages = {
+            "Starting to reload quotes",
+            "Clearing posts",
+            "Clearing indexes",
+            "<a:downloading:437572253605953557> Downloading new quotes",
+            "Banning all admins",
+            "Adding new quotes to list",
+            "Going Ghost",
+            "Finished"
+    };
+
+    private final List<TumblrPost> tumblrPosts = new ArrayList<>();
+    private final Map<String, Integer> indexes = new HashMap<>();
+
+    private static final Logger logger = LoggerFactory.getLogger(QuotesCommand.class);
+
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
-        try {
 
-            String type = types[SpoopyUtils.random.nextInt(types.length)];
+        if (args.length > 0 && "reload".equals(args[0])) {
 
-            WebUtils.ins.getAson(
-                    String.format(
-                            "https://api.tumblr.com/v2/blog/totallycorrectdannyphantomquotes.tumblr.com/posts?api_key=%s&type=%s",
-                            SpoopyUtils.config.getString("api.tumblr", "API_KEY"),
-                            type
-                    )
-            ).async(ason -> {
+            if (event.getAuthor().getId().equals(Variables.OWNER_ID)) {
+                reloadQuotes();
+                new Thread(() ->
+                        MessageUtils.sendMsg(event, messages[0], success -> {
+                            for (String m : Arrays.copyOfRange(messages, 1, messages.length)) {
+                                try {
+                                    Thread.sleep(3000);
+                                } catch (InterruptedException ignored) { }
+                                logger.info(m);
+                                success.editMessage(m).queue();
 
-                AsonArray<Ason> posts = ason.getJsonArray("response.posts");
-
-                Ason selectedPost = posts.getJsonObject(SpoopyUtils.random.nextInt(posts.size()));
-
-                assert selectedPost != null;
-
-                EmbedBuilder eb = EmbedUtils.defaultEmbed()
-                        .setTitle("Link to Post", selectedPost.getString("short_url"));
-
-                switch (type) {
-                    case "chat" :
-                        AsonArray<Ason> dialogue = selectedPost.getJsonArray("dialogue");
-                        dialogue.forEach(
-                                a -> eb.appendDescription("**").appendDescription(a.getString("label"))
-                                        .appendDescription("** ")
-                                        .appendDescription(StringEscapeUtils.unescapeHtml4(a.getString("phrase")))
-                                        .appendDescription("\n")
-                        );
-                        break;
-                    case "text" :
-                        String bodyRaw = selectedPost.getString("body", "");
-                        String replacePWith = bodyRaw.contains("</p>\n") ? "" : "\n";
-                        String bodyParsed = bodyRaw.replaceAll(Pattern.quote("<p>"), "")
-                                .replaceAll("\\*", "\\\\*")
-                                .replaceAll(Pattern.quote("</p>"), replacePWith)
-                                .replaceAll(Pattern.quote("<i>"), "_")
-                                .replaceAll(Pattern.quote("</i>"), "_")
-                                .replaceAll(Pattern.quote("<b>"), "**")
-                                .replaceAll(Pattern.quote("</b>"), "**");
-                        eb.setDescription(StringEscapeUtils.unescapeHtml4(bodyParsed));
-                        break;
-                    case "quote" :
-                        String text = StringEscapeUtils.unescapeHtml4(selectedPost.getString("text"));
-                        String source = selectedPost.getString("source");
-                        eb.setDescription("\"" + text + "\"");
-                        eb.appendDescription("\n\n - _ " + source + "_");
-                        break;
-                }
-
-                MessageUtils.sendEmbed(event, eb.build());
-            }, er -> MessageUtils.sendMsg(event, "Error while looking up quote: " + er) );
-
+                            }
+                        }), "Message fun thinh").start();
+            } else {
+                MessageUtils.sendMsg(event, "Only the bot owner can reload quotes");
+            }
+            return;
         }
-        catch (NullPointerException e) {
-            e.printStackTrace();
+
+        String gid = event.getGuild().getId();
+        if (!indexes.containsKey(gid) || indexes.get(gid) >= tumblrPosts.size()) {
+            indexes.put(gid, 0);
         }
+
+        int index = indexes.get(gid);
+        TumblrPost post = tumblrPosts.get(index);
+        String type = post.type;
+
+        EmbedBuilder eb = EmbedUtils.defaultEmbed()
+                .setTitle("Link to Post", post.short_url);
+
+        switch (type) {
+            case "chat":
+                List<TumblrDialogue> dialogue = post.dialogue;
+                dialogue.forEach(
+                        a -> eb.appendDescription("**").appendDescription(a.label)
+                                .appendDescription("** ")
+                                .appendDescription(StringEscapeUtils.unescapeHtml4(a.phrase))
+                                .appendDescription("\n")
+                );
+                break;
+            case "text":
+                String bodyRaw = post.body;
+                String replacePWith = bodyRaw.contains("</p>\n") ? "" : "\n";
+                String bodyParsed = bodyRaw.replaceAll(Pattern.quote("<p>"), "")
+                        .replaceAll("\\*", "\\\\*")
+                        .replaceAll(Pattern.quote("</p>"), replacePWith)
+                        .replaceAll(Pattern.quote("<i>"), "_")
+                        .replaceAll(Pattern.quote("</i>"), "_")
+                        .replaceAll(Pattern.quote("<b>"), "**")
+                        .replaceAll(Pattern.quote("</b>"), "**")
+                        .replaceAll("<a(?:.*)>(.*)<\\/a>", "$1");
+                eb.setDescription(StringEscapeUtils.unescapeHtml4(bodyParsed));
+                break;
+            case "quote":
+                String text = StringEscapeUtils.unescapeHtml4(post.text);
+                String source = post.source;
+                eb.setDescription("\"" + text + "\"");
+                eb.appendDescription("\n\n - _ " + source + "_");
+                break;
+        }
+
+        indexes.put(gid, ++index);
+        MessageUtils.sendEmbed(event, eb.build());
     }
 
     @Override
@@ -111,5 +142,31 @@ public class QuotesCommand extends Command {
     @Override
     public Category getCategory() {
         return Category.TEXT;
+    }
+
+    public QuotesCommand() {
+        reloadQuotes();
+    }
+
+    private void reloadQuotes() {
+        tumblrPosts.clear();
+        indexes.clear();
+        for (String type : types) {
+            logger.info("Getting quotes from type " + type);
+            WebUtils.ins.getAson(
+                    String.format(
+                            "https://api.tumblr.com/v2/blog/totallycorrectdannyphantomquotes.tumblr.com/posts?api_key=%s&type=%s",
+                            SpoopyUtils.config.getString("api.tumblr", "API_KEY"),
+                            type
+                    )
+            ).async(json -> {
+                AsonArray<Ason> fetched = json.getJsonArray("response.posts");
+                logger.info("Got " + fetched.size() + " quotes from type " + type);
+                tumblrPosts.addAll(
+                        Ason.deserializeList(fetched, TumblrPost.class)
+                );
+                Collections.shuffle(tumblrPosts);
+            });
+        }
     }
 }
