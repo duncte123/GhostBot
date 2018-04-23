@@ -123,7 +123,7 @@ public class QuotesCommand extends Command {
                 );
                 break;
             case "text":
-                String bodyRaw = post.body;
+                String bodyRaw = post.body.replaceAll(Pattern.quote("<br/>"), "\n");
                 String replacePWith = bodyRaw.contains("</p>\n") ? "" : "\n";
                 String bodyParsed = bodyRaw.replaceAll(Pattern.quote("<p>"), "")
                         .replaceAll("\\*", "\\\\*")
