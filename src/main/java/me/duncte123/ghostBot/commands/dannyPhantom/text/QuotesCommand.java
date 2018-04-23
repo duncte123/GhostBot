@@ -176,13 +176,14 @@ public class QuotesCommand extends Command {
                     )
             ).async(json -> {
                 int total = json.getInt("response.total_posts");
-                for(int i = 0; i <= (total % 20); i++ ) {
+                for(int i = 0; i <= total; i+=20 ) {
                     WebUtils.ins.getAson(
                             String.format(
-                                    "https://api.tumblr.com/v2/blog/totallycorrectdannyphantomquotes.tumblr.com/posts?api_key=%s&type=%s&offset=%s",
+                                    "https://api.tumblr.com/v2/blog/totallycorrectdannyphantomquotes.tumblr.com/posts" +
+                                            "?api_key=%s&type=%s&limit=20&offset=%s",
                                     SpoopyUtils.config.getString("api.tumblr", "API_KEY"),
                                     type,
-                                    i * 20
+                                    i
                             )
                     ).async(j -> {
                         AsonArray<Ason> fetched = j.getJsonArray("response.posts");
