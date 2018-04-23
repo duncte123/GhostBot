@@ -49,8 +49,8 @@ public class QuotesCommand extends Command {
             "<a:downloading:437572253605953557> Downloading new quotes",
             "Found {TOTAL} quotes.",
             "Adding {COUNT_NEW) new quotes to list",
-            "Going Ghost",
-            "Finished"
+            "Going Ghost <a:DPTransform8bit:425714608406528012>",
+            "Finished <:DPJoy:425714609702305804> ({TOTAL} quotes in the system)"
     };
     private final List<TumblrPost> tumblrPosts = new ArrayList<>();
     private final Map<String, Integer> indexes = new HashMap<>();
@@ -64,34 +64,38 @@ public class QuotesCommand extends Command {
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
 
-        if (args.length > 0 && "reload".equals(args[0])) {
+        if (args.length > 0) {
+            if("reload".equals(args[0])) {
 
-            if (event.getAuthor().getId().equals(Variables.OWNER_ID)) {
-                reloadQuotes();
-                new Thread(() ->
-                        MessageUtils.sendMsg(event, messages[0], success -> {
-                            for (String m : Arrays.copyOfRange(messages, 1, messages.length)) {
-                                try {
-                                    Thread.sleep(3000);
-                                } catch (InterruptedException ignored) {
-                                }
-                                logger.info(m);
-                                if(m.contains("{COUNT_NEW)")) {
-                                    success.editMessage(
-                                            m.replaceAll(Pattern.quote("{COUNT_NEW)"), String.valueOf(tumblrPosts.size() - oldCount) )
-                                    ).queue();
-                                } else if(m.contains("{TOTAL}")) {
-                                    success.editMessage(
-                                            m.replaceAll(Pattern.quote("{TOTAL)"), String.valueOf(tumblrPosts.size()) )
-                                    ).queue();
-                                } else {
-                                    success.editMessage(m).queue();
-                                }
+                if (event.getAuthor().getId().equals(Variables.OWNER_ID)) {
+                    reloadQuotes();
+                    new Thread(() ->
+                            MessageUtils.sendMsg(event, messages[0], success -> {
+                                for (String m : Arrays.copyOfRange(messages, 1, messages.length)) {
+                                    try {
+                                        Thread.sleep(3500);
+                                    } catch (InterruptedException ignored) {
+                                    }
+                                    logger.info(m);
+                                    if (m.contains("{COUNT_NEW)")) {
+                                        success.editMessage(
+                                                m.replaceAll(Pattern.quote("{COUNT_NEW)"), String.valueOf(tumblrPosts.size() - oldCount))
+                                        ).queue();
+                                    } else if (m.contains("{TOTAL}")) {
+                                        success.editMessage(
+                                                m.replaceAll(Pattern.quote("{TOTAL)"), String.valueOf(tumblrPosts.size()))
+                                        ).queue();
+                                    } else {
+                                        success.editMessage(m).queue();
+                                    }
 
-                            }
-                        }), "Message fun thinh").start();
-            } else {
-                MessageUtils.sendMsg(event, "Only the bot owner can reload quotes");
+                                }
+                            }), "Message fun thinh").start();
+                } else {
+                    MessageUtils.sendMsg(event, "Only the bot owner can reload quotes");
+                }
+            } else if("total".equals(args[0])) {
+                MessageUtils.sendMsg(event, "There are a total of " + tumblrPosts.size() + " quotes in the system at the moment");
             }
             return;
         }
@@ -159,6 +163,7 @@ public class QuotesCommand extends Command {
     }
 
     private void reloadQuotes() {
+        oldCount = tumblrPosts.size();
         tumblrPosts.clear();
         indexes.clear();
         for (String type : types) {
@@ -170,12 +175,24 @@ public class QuotesCommand extends Command {
                             type
                     )
             ).async(json -> {
-                AsonArray<Ason> fetched = json.getJsonArray("response.posts");
-                logger.info("Got " + fetched.size() + " quotes from type " + type);
-                tumblrPosts.addAll(
-                        Ason.deserializeList(fetched, TumblrPost.class)
-                );
-                Collections.shuffle(tumblrPosts);
+                int total = json.getInt("response.total_posts");
+                for(int i = 0; i <= (total % 20); i++ ) {
+                    WebUtils.ins.getAson(
+                            String.format(
+                                    "https://api.tumblr.com/v2/blog/totallycorrectdannyphantomquotes.tumblr.com/posts?api_key=%s&type=%s&offset=%s",
+                                    SpoopyUtils.config.getString("api.tumblr", "API_KEY"),
+                                    type,
+                                    i * 20
+                            )
+                    ).async(j -> {
+                        AsonArray<Ason> fetched = j.getJsonArray("response.posts");
+                        logger.info("Got " + fetched.size() + " quotes from type " + type);
+                        tumblrPosts.addAll(
+                                Ason.deserializeList(fetched, TumblrPost.class)
+                        );
+                        Collections.shuffle(tumblrPosts);
+                    });
+                }
             });
         }
     }

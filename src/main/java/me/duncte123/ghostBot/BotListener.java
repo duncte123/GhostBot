@@ -138,21 +138,23 @@ public class BotListener extends ListenerAdapter {
     }
 
     private void postServerCount(JDA jda) {
-        service.scheduleWithFixedDelay(() ->
-                        WebUtils.ins.prepareRaw(
-                                new Request.Builder()
-                                        .url("https://bots.discord.pw/api/bots/397297702150602752/stats")
-                                        .post(RequestBody.create(MediaType.parse("application/json"),
-                                                new JSONObject().put("server_count", jda.getGuilds().size()).toString()))
-                                        .addHeader("User-Agent", "DiscordBot " + jda.getSelfUser().getName())
-                                        .addHeader("Authorization", dbotsToken)
-                                        .build(), r -> r.body().string()).async(
-                                empty -> logger.info("Posted stats to dbots (" + empty + ")"),
-                                nothing -> {
-                                    logger.info("something borked");
-                                    logger.info(nothing.getMessage());
-                                })
-                , 0L, 1L, TimeUnit.DAYS);
+        if(!dbotsToken.isEmpty()) {
+            service.scheduleWithFixedDelay(() ->
+                            WebUtils.ins.prepareRaw(
+                                    new Request.Builder()
+                                            .url("https://bots.discord.pw/api/bots/397297702150602752/stats")
+                                            .post(RequestBody.create(MediaType.parse("application/json"),
+                                                    new JSONObject().put("server_count", jda.getGuilds().size()).toString()))
+                                            .addHeader("User-Agent", "DiscordBot " + jda.getSelfUser().getName())
+                                            .addHeader("Authorization", dbotsToken)
+                                            .build(), r -> r.body().string()).async(
+                                    empty -> logger.info("Posted stats to dbots (" + empty + ")"),
+                                    nothing -> {
+                                        logger.info("something borked");
+                                        logger.info(nothing.getMessage());
+                                    })
+                    , 0L, 1L, TimeUnit.DAYS);
+        }
 
     }
 
