@@ -36,7 +36,6 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -107,9 +106,11 @@ public class BotListener extends ListenerAdapter {
 
     @Override
     public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
-        if (LavalinkManager.ins.isConnected(event.getGuild())) {
-            if (!event.getVoiceState().getMember().getUser().getId().equals(event.getJDA().getSelfUser().getId())) {
-                if (!event.getChannelLeft().getId().equals(LavalinkManager.ins.getConnectedChannel(event.getGuild()).getId())) {
+        if (LavalinkManager.ins.isConnected(event.getGuild())
+                && !event.getVoiceState().getMember().equals(event.getGuild().getSelfMember())) {
+            VoiceChannel vc = LavalinkManager.ins.getConnectedChannel(event.getGuild());
+            if (vc != null) {
+                if (!event.getChannelLeft().equals(vc)) {
                     return;
                 }
                 channelCheckThing(event.getGuild(), event.getChannelLeft());
@@ -119,25 +120,20 @@ public class BotListener extends ListenerAdapter {
 
     @Override
     public void onGuildVoiceMove(GuildVoiceMoveEvent event) {
-        if (LavalinkManager.ins.isConnected(event.getGuild())) {
-            if (!event.getVoiceState().getMember().getUser().getId().equals(event.getJDA().getSelfUser().getId())) {
-                if (event.getChannelLeft() != null) {
-                    if (!event.getChannelLeft().getId().equals(LavalinkManager.ins.getConnectedChannel(event.getGuild()).getId())) {
-                        return;
-                    }
-                    channelCheckThing(event.getGuild(), event.getChannelLeft());
-
+        try {
+            if (LavalinkManager.ins.isConnected(event.getGuild())) {
+                if (event.getChannelJoined().equals(LavalinkManager.ins.getConnectedChannel(event.getGuild()))
+                        && !event.getMember().equals(event.getGuild().getSelfMember())) {
+                    return;
+                } else {
+                    channelCheckThing(event.getGuild(), LavalinkManager.ins.getConnectedChannel(event.getGuild()));
                 }
-
-                if (event.getChannelJoined() != null) {
-                    if (event.getGuild().getAudioManager().getConnectedChannel() != null &&
-                            !event.getChannelJoined().getId().equals(LavalinkManager.ins.getConnectedChannel(event.getGuild()).getId())) {
-                        return;
-                        //System.out.println("Self (this might be buggy)");
-                    }
-                    channelCheckThing(event.getGuild(), event.getChannelJoined());
+                if (event.getChannelLeft().equals(LavalinkManager.ins.getConnectedChannel(event.getGuild()))) {
+                    channelCheckThing(event.getGuild(), event.getChannelLeft());
+                    //return;
                 }
             }
+        } catch (NullPointerException ignored) {
         }
     }
 
@@ -150,10 +146,12 @@ public class BotListener extends ListenerAdapter {
                                                 new JSONObject().put("server_count", jda.getGuilds().size()).toString()))
                                         .addHeader("User-Agent", "DiscordBot " + jda.getSelfUser().getName())
                                         .addHeader("Authorization", dbotsToken)
-                                        .build(), r -> r.body().string()).async(empty -> logger.info("Posted stats to dbots (" + empty + ")"), nothing -> {
-                            logger.info("something borked");
-                            logger.info(nothing.getMessage());
-                        })
+                                        .build(), r -> r.body().string()).async(
+                                empty -> logger.info("Posted stats to dbots (" + empty + ")"),
+                                nothing -> {
+                                    logger.info("something borked");
+                                    logger.info(nothing.getMessage());
+                                })
                 , 0L, 1L, TimeUnit.DAYS);
 
     }

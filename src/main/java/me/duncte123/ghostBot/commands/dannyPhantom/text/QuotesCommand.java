@@ -47,13 +47,15 @@ public class QuotesCommand extends Command {
             "Clearing posts",
             "Clearing indexes",
             "<a:downloading:437572253605953557> Downloading new quotes",
-            "Banning all admins",
-            "Adding new quotes to list",
+            "Found {TOTAL} quotes.",
+            "Adding {COUNT_NEW) new quotes to list",
             "Going Ghost",
             "Finished"
     };
     private final List<TumblrPost> tumblrPosts = new ArrayList<>();
     private final Map<String, Integer> indexes = new HashMap<>();
+
+    private int oldCount = 0;
 
     public QuotesCommand() {
         reloadQuotes();
@@ -74,7 +76,17 @@ public class QuotesCommand extends Command {
                                 } catch (InterruptedException ignored) {
                                 }
                                 logger.info(m);
-                                success.editMessage(m).queue();
+                                if(m.contains("{COUNT_NEW)")) {
+                                    success.editMessage(
+                                            m.replaceAll(Pattern.quote("{COUNT_NEW)"), String.valueOf(tumblrPosts.size() - oldCount) )
+                                    ).queue();
+                                } else if(m.contains("{TOTAL}")) {
+                                    success.editMessage(
+                                            m.replaceAll(Pattern.quote("{TOTAL)"), String.valueOf(tumblrPosts.size()) )
+                                    ).queue();
+                                } else {
+                                    success.editMessage(m).queue();
+                                }
 
                             }
                         }), "Message fun thinh").start();
