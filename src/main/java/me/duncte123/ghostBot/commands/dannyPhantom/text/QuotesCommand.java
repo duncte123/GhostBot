@@ -37,6 +37,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class QuotesCommand extends Command {
 
@@ -52,6 +53,12 @@ public class QuotesCommand extends Command {
             "Going Ghost <a:DPTransform8bit:425714608406528012>",
             "Finished <:DPJoy:425714609702305804> ({TOTAL} quotes in the system)"
     };
+	
+	private final Long[] badPostIds = {
+		156199508936L,
+		141701068521L
+	};
+	
     private final List<TumblrPost> tumblrPosts = new ArrayList<>();
     private final Map<String, Integer> indexes = new HashMap<>();
 
@@ -76,19 +83,16 @@ public class QuotesCommand extends Command {
                                         Thread.sleep(3500);
                                     } catch (InterruptedException ignored) {
                                     }
-                                    logger.info(m);
+									String mf;
                                     if (m.contains("{COUNT_NEW)")) {
-                                        success.editMessage(
-                                                m.replaceAll(Pattern.quote("{COUNT_NEW)"), String.valueOf(tumblrPosts.size() - oldCount))
-                                        ).queue();
+                                        mf = m.replaceAll(Pattern.quote("{COUNT_NEW)"), String.valueOf(tumblrPosts.size() - oldCount));
                                     } else if (m.contains("{TOTAL}")) {
-                                        success.editMessage(
-                                                m.replaceAll(Pattern.quote("{TOTAL)"), String.valueOf(tumblrPosts.size()))
-                                        ).queue();
+                                        mf = m.replaceAll(Pattern.quote("{TOTAL)"), String.valueOf(tumblrPosts.size()));
                                     } else {
-                                        success.editMessage(m).queue();
+                                        mf = m;
                                     }
-
+                                    logger.info(mf);
+									success.editMessage(mf).queue();
                                 }
                             }), "Message fun thinh").start();
                 } else {
@@ -163,6 +167,7 @@ public class QuotesCommand extends Command {
     }
 
     private void reloadQuotes() {
+        List<Long> filterIds = Arrays.asList(badPostIds);
         oldCount = tumblrPosts.size();
         tumblrPosts.clear();
         indexes.clear();
@@ -188,8 +193,10 @@ public class QuotesCommand extends Command {
                     ).async(j -> {
                         AsonArray<Ason> fetched = j.getJsonArray("response.posts");
                         logger.info("Got " + fetched.size() + " quotes from type " + type);
+                        List<TumblrPost> posts = Ason.deserializeList(fetched, TumblrPost.class);
+                        List<TumblrPost> filteredPosts = posts.stream().filter(post -> !filterIds.contains(post.id)).collect(Collectors.toList());
                         tumblrPosts.addAll(
-                                Ason.deserializeList(fetched, TumblrPost.class)
+                                filteredPosts
                         );
                         Collections.shuffle(tumblrPosts);
                     });
