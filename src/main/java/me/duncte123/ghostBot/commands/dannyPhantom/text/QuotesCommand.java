@@ -87,7 +87,7 @@ public class QuotesCommand extends Command {
                                     if (m.contains("{COUNT_NEW)")) {
                                         mf = m.replaceAll(Pattern.quote("{COUNT_NEW)"), String.valueOf(tumblrPosts.size() - oldCount));
                                     } else if (m.contains("{TOTAL}")) {
-                                        mf = m.replaceAll(Pattern.quote("{TOTAL)"), String.valueOf(tumblrPosts.size()));
+                                        mf = m.replaceAll(Pattern.quote("{TOTAL}"), String.valueOf(tumblrPosts.size()));
                                     } else {
                                         mf = m;
                                     }
