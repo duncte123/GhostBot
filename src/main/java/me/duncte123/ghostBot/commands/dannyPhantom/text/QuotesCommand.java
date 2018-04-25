@@ -162,10 +162,8 @@ public class QuotesCommand extends Command {
                 eb.setDescription(parseText(post.body));
                 break;
             case "quote":
-                String text = StringEscapeUtils.unescapeHtml4(post.text);
-                String source = post.source;
-                eb.setDescription("\"" + parseText(text) + "\"");
-                eb.appendDescription("\n\n - _ " + parseText(source) + "_");
+                eb.setDescription("\"" + parseText(post.text) + "\"");
+                eb.appendDescription("\n\n - _ " + parseText(post.source) + "_");
                 break;
         }
 
