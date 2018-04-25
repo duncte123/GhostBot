@@ -53,12 +53,31 @@ public class QuotesCommand extends Command {
             "Going Ghost <a:DPTransform8bit:425714608406528012>",
             "Finished <:DPJoy:425714609702305804> ({TOTAL} quotes in the system)"
     };
-	
-	private final Long[] badPostIds = {
-		156199508936L,
-		141701068521L
-	};
-	
+
+    private final Long[] badPostIds = {
+            156199508936L,
+            141701068521L,
+            139748205676L,
+            145485004576L,
+            131957587201L,
+            145767003281L,
+            122464866251L,
+            149288809271L,
+            131048227566L,
+            160064523456L,
+            146961714036L,
+            157865830301L,
+            136789766336L,
+            148512885491L,
+            137376851771L,
+            147819522951L,
+            147825378346L,
+            156199957996L,
+            143194957186L,
+            121801283241L,
+            121891439031L
+    };
+
     private final List<TumblrPost> tumblrPosts = new ArrayList<>();
     private final Map<String, Integer> indexes = new HashMap<>();
 
@@ -83,7 +102,7 @@ public class QuotesCommand extends Command {
                                         Thread.sleep(3500);
                                     } catch (InterruptedException ignored) {
                                     }
-									String mf;
+                                    String mf;
                                     if (m.contains("{COUNT_NEW)")) {
                                         mf = m.replaceAll(Pattern.quote("{COUNT_NEW)"), String.valueOf(tumblrPosts.size() - oldCount));
                                     } else if (m.contains("{TOTAL}")) {
@@ -92,7 +111,7 @@ public class QuotesCommand extends Command {
                                         mf = m;
                                     }
                                     logger.info(mf);
-									success.editMessage(mf).queue();
+                                    success.editMessage(mf).queue();
                                 }
                             }), "Message fun thinh").start();
                 } else {
@@ -122,12 +141,12 @@ public class QuotesCommand extends Command {
                 dialogue.forEach(
                         a -> eb.appendDescription("**").appendDescription(a.label)
                                 .appendDescription("** ")
-                                .appendDescription(StringEscapeUtils.unescapeHtml4(a.phrase))
+                                .appendDescription(parseText(a.phrase))
                                 .appendDescription("\n")
                 );
                 break;
             case "text":
-                String bodyRaw = post.body.replaceAll(Pattern.quote("<br/>"), "\n");
+                /*String bodyRaw = post.body.replaceAll(Pattern.quote("<br/>"), "\n");
                 String replacePWith = bodyRaw.contains("</p>\n") ? "" : "\n";
                 String bodyParsed = bodyRaw.replaceAll(Pattern.quote("<p>"), "")
                         .replaceAll("\\*", "\\\\*")
@@ -136,14 +155,17 @@ public class QuotesCommand extends Command {
                         .replaceAll(Pattern.quote("</i>"), "_")
                         .replaceAll(Pattern.quote("<b>"), "**")
                         .replaceAll(Pattern.quote("</b>"), "**")
-                        .replaceAll("<a(?:.*)>(.*)<\\/a>", "$1");
-                eb.setDescription(StringEscapeUtils.unescapeHtml4(bodyParsed));
+                        .replaceAll(Pattern.quote("<small>"), "")
+                        .replaceAll(Pattern.quote("</small>"), "")
+                        .replaceAll("<a(?:.*)href=\"(.*)\"(?:.*)>(.*)<\\/a>", "[$2]($1)");
+                eb.setDescription(StringEscapeUtils.unescapeHtml4(bodyParsed));*/
+                eb.setDescription(parseText(post.body));
                 break;
             case "quote":
                 String text = StringEscapeUtils.unescapeHtml4(post.text);
                 String source = post.source;
-                eb.setDescription("\"" + text + "\"");
-                eb.appendDescription("\n\n - _ " + source + "_");
+                eb.setDescription("\"" + parseText(text) + "\"");
+                eb.appendDescription("\n\n - _ " + parseText(source) + "_");
                 break;
         }
 
@@ -173,24 +195,15 @@ public class QuotesCommand extends Command {
         indexes.clear();
         for (String type : types) {
             logger.info("Getting quotes from type " + type);
-            WebUtils.ins.getAson(
-                    String.format(
-                            "https://api.tumblr.com/v2/blog/totallycorrectdannyphantomquotes.tumblr.com/posts?api_key=%s&type=%s",
-                            SpoopyUtils.config.getString("api.tumblr", "API_KEY"),
-                            type
-                    )
-            ).async(json -> {
+            String url = String.format(
+                    "https://api.tumblr.com/v2/blog/totallycorrectdannyphantomquotes.tumblr.com/posts?api_key=%s&type=%s&limit=20",
+                    SpoopyUtils.config.getString("api.tumblr", "API_KEY"),
+                    type
+            );
+            WebUtils.ins.getAson(url).async(json -> {
                 int total = json.getInt("response.total_posts");
                 for(int i = 0; i <= total; i+=20 ) {
-                    WebUtils.ins.getAson(
-                            String.format(
-                                    "https://api.tumblr.com/v2/blog/totallycorrectdannyphantomquotes.tumblr.com/posts" +
-                                            "?api_key=%s&type=%s&limit=20&offset=%s",
-                                    SpoopyUtils.config.getString("api.tumblr", "API_KEY"),
-                                    type,
-                                    i
-                            )
-                    ).async(j -> {
+                    WebUtils.ins.getAson(url + "&offset=" + ( i > 1 ? i + 1 : 1)).async(j -> {
                         AsonArray<Ason> fetched = j.getJsonArray("response.posts");
                         logger.info("Got " + fetched.size() + " quotes from type " + type);
                         List<TumblrPost> posts = Ason.deserializeList(fetched, TumblrPost.class);
@@ -203,5 +216,26 @@ public class QuotesCommand extends Command {
                 }
             });
         }
+    }
+
+    private String parseText(String raw) {
+        String input = raw.replaceAll(Pattern.quote("<br/>"), "\n");
+        String replacePWith = input.contains("</p>\n") ? "" : "\n";
+        String finalStage = input.replaceAll(Pattern.quote("<p>"), "")
+                .replaceAll("\\*", "\\\\*")
+                .replaceAll(Pattern.quote("</p>"), replacePWith)
+                .replaceAll(Pattern.quote("<i>"), "_")
+                .replaceAll(Pattern.quote("</i>"), "_")
+                .replaceAll(Pattern.quote("<em>"), "_")
+                .replaceAll(Pattern.quote("</em>"), "_")
+                .replaceAll(Pattern.quote("<b>"), "**")
+                .replaceAll(Pattern.quote("</b>"), "**")
+                .replaceAll(Pattern.quote("<strong>"), "**")
+                .replaceAll(Pattern.quote("</strong>"), "**")
+                .replaceAll(Pattern.quote("<small>"), "")
+                .replaceAll(Pattern.quote("</small>"), "")
+                .replaceAll("<a(?:.*)href=\"(\\S+)\"(?:.*)>(.*)<\\/a>", "[$2]($1)");
+
+        return StringEscapeUtils.unescapeHtml4(finalStage);
     }
 }
