@@ -51,7 +51,7 @@ public class QuotesCommand extends Command {
             "Found {TOTAL} quotes.",
             "Adding {COUNT_NEW) new quotes to list",
             "Going Ghost <a:DPTransform8bit:425714608406528012>",
-            "Finished <:DPJoy:425714609702305804> ({TOTAL} quotes in the system)"
+            "Finished <:DPJoy:425714609702305804> ({TOTAL} quotes in the system and {COUNT_NEW) new)"
     };
 
     private final Long[] badPostIds = {
@@ -102,15 +102,14 @@ public class QuotesCommand extends Command {
                                         Thread.sleep(3500);
                                     } catch (InterruptedException ignored) {
                                     }
-                                    String mf;
+                                    String mf = m;
                                     if (m.contains("{COUNT_NEW)")) {
-                                        mf = m.replaceAll(Pattern.quote("{COUNT_NEW)"), String.valueOf(tumblrPosts.size() - oldCount));
-                                    } else if (m.contains("{TOTAL}")) {
-                                        mf = m.replaceAll(Pattern.quote("{TOTAL}"), String.valueOf(tumblrPosts.size()));
-                                    } else {
-                                        mf = m;
+                                        mf = mf.replaceAll(Pattern.quote("{COUNT_NEW)"), String.valueOf(tumblrPosts.size() - oldCount));
+                                    } 
+									if (m.contains("{TOTAL}")) {
+                                        mf = mf.replaceAll(Pattern.quote("{TOTAL}"), String.valueOf(tumblrPosts.size()));
                                     }
-                                    logger.info(mf);
+                                    logger.debug(mf);
                                     success.editMessage(mf).queue();
                                 }
                             }), "Message fun thinh").start();
@@ -182,6 +181,11 @@ public class QuotesCommand extends Command {
     }
 
     @Override
+    public String[] getAliases() {
+        return new String[] {"quotes"};
+    }
+
+    @Override
     public Category getCategory() {
         return Category.TEXT;
     }
@@ -203,7 +207,7 @@ public class QuotesCommand extends Command {
                 for(int i = 0; i <= total; i+=20 ) {
                     WebUtils.ins.getAson(url + "&offset=" + ( i > 1 ? i + 1 : 1)).async(j -> {
                         AsonArray<Ason> fetched = j.getJsonArray("response.posts");
-                        logger.info("Got " + fetched.size() + " quotes from type " + type);
+                        logger.debug("Got " + fetched.size() + " quotes from type " + type);
                         List<TumblrPost> posts = Ason.deserializeList(fetched, TumblrPost.class);
                         List<TumblrPost> filteredPosts = posts.stream().filter(post -> !filterIds.contains(post.id)).collect(Collectors.toList());
                         tumblrPosts.addAll(
@@ -212,6 +216,7 @@ public class QuotesCommand extends Command {
                         Collections.shuffle(tumblrPosts);
                     });
                 }
+                logger.info("Fetched " + total + " from type " + type);
             });
         }
     }
