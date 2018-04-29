@@ -27,6 +27,7 @@ import me.duncte123.ghostBot.utils.EmbedUtils;
 import me.duncte123.ghostBot.utils.MessageUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.MessageBuilder;
+import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
@@ -38,6 +39,7 @@ public class ImageCommand extends Command {
             "Pitch Pearl",
             "Pitch Pearl",
             "Pitch Pearl",
+            "Pitch Pearl",
             "Danny Fenton",
             "Samantha Manson",
             "Sam Manson",
@@ -46,14 +48,14 @@ public class ImageCommand extends Command {
             "Maddy Fenton",
             "Jazz Fenton",
             "Vlad Plasmius",
-            /*"Danny Fenton (Danny Phantom)",
+            "Danny Fenton (Danny Phantom)",
             "Sam Manson (Danny Phantom)",
             "Tucker Foley (Danny Phantom)",
             "Jack Fenton (Danny Phantom)",
             "Maddy Fenton (Danny Phantom)",
             "Jazz Fenton (Danny Phantom)",
             "Vlad Masters (Danny Phantom)",
-            "Vlad Plasmius (Danny Phantom)",*/
+            "Vlad Plasmius (Danny Phantom)",
             "Danny Fenton"
     };
 
@@ -67,69 +69,31 @@ public class ImageCommand extends Command {
             else keyword = keywords[SpoopyUtils.random.nextInt(keywords.length)];
 
             try {
-                WebUtils.ins.getAson( SpoopyUtils.getGoogleSearchUrl(keyword) ).async(data -> {
-                    AsonArray<Ason> arr = data.getJsonArray("items");
-                    if (arr.size() == 0) {
-                        execute(invoke, args, event);
-                        return;
-                    }
-                    Ason randomItem = arr.getJsonObject(SpoopyUtils.random.nextInt(arr.size()));
-
-                    msg.editMessage(
-                            EmbedUtils.defaultEmbed()
-                                    .setTitle(randomItem.getString("title"), randomItem.getString("image.contextLink"))
-                                    .setImage(randomItem.getString("link")).build())
-                            .override(true)
-                            .queue();
-
-                    /*msg.editMessage(new MessageBuilder()
-                            *//* .append("Keyword: ")
-                             .append(keyword)*//*
-                            .setEmbed(EmbedUtils.defaultEmbed()
-                                    .setTitle(randomItem.getString("title"), randomItem.getString("image.contextLink"))
-                                    .setImage(randomItem.getString("link")).build()).build())
-                            .override(true)
-                            .queue();*/
-            /*sendEmbed(event,
-                    EmbedUtils.defaultEmbed()
-                            .setTitle(randomItem.getString("title"), randomItem.getString("image.contextLink"))
-                            .setImage(randomItem.getString("link")).build()
-            );*/
-                }, er -> MessageUtils.sendMsg(event, "Error while looking up image: " + er));
+                WebUtils.ins.getAson( SpoopyUtils.getGoogleSearchUrl(keyword) ).async(
+                        data -> sendMessageFromData(msg, data, keyword),
+                        er -> MessageUtils.sendMsg(event, "Error while looking up image: " + er));
             } catch (NullPointerException e) {
                 e.printStackTrace();
                 msg.editMessage("Something went wrong while looking up the image").queue();
             }
         });
+    }
 
-        /*sendMsg(event, "Loading....", msg -> {
-            String keyword = keywords[SpoopyUtils.random.nextInt(keywords.length)];
-            try {
-                Ason data = WebUtils.getAson(String.format(url, keyword.replaceAll(" ", "+")));
-                AsonArray<Ason> arr = data.getJsonArray("items");
-                if (arr.size() == 0) {
-                    execute(invoke, args, event);
-                    return;
-                }
-                Ason randomItem = arr.getJsonObject(SpoopyUtils.random.nextInt(arr.size()));
-                msg.editMessage(new MessageBuilder()
-                       *//* .append("Keyword: ")
-                        .append(keyword)*//*
-                        .setEmbed(EmbedUtils.defaultEmbed()
-                                .setTitle(randomItem.getString("title"), randomItem.getString("image.contextLink"))
-                                .setImage(randomItem.getString("link")).build()).build())
-                        .override(true)
-                        .queue();
-            *//*sendEmbed(event,
-                    EmbedUtils.defaultEmbed()
-                            .setTitle(randomItem.getString("title"), randomItem.getString("image.contextLink"))
-                            .setImage(randomItem.getString("link")).build()
-            );*//*
-            } catch (IOException | NullPointerException e) {
-                e.printStackTrace();
-                sendMsg(event, "Something went wrong while looking up the image");
-            }
-        });*/
+    void sendMessageFromData(Message msg, Ason data, String key) {
+        AsonArray<Ason> arr = data.getJsonArray("items");
+        if (arr.size() == 0) {
+            msg.editMessage("Nothing was found for the search query: `" + key + "`").queue();
+            return;
+        }
+        Ason randomItem = arr.getJsonObject(SpoopyUtils.random.nextInt(arr.size()));
+
+        assert randomItem != null;
+        msg.editMessage(
+                EmbedUtils.defaultEmbed()
+                        .setTitle(randomItem.getString("title"), randomItem.getString("image.contextLink"))
+                        .setImage(randomItem.getString("link")).build())
+                .override(true)
+                .queue();
     }
 
     @Override

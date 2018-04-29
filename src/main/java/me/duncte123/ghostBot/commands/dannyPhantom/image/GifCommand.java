@@ -31,28 +31,16 @@ import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
 
-public class GifCommand extends Command {
+public class GifCommand extends ImageCommand {
 
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
         sendMsg(event, "Loading....", msg -> {
             String keyword = "Danny Phantom gif";
             try {
-                WebUtils.ins.getAson( SpoopyUtils.getGoogleSearchUrl(keyword) + "&fileType=gif" ).async(data -> {
-                    AsonArray<Ason> arr = data.getJsonArray("items");
-                    if (arr.size() == 0) {
-                        execute(invoke, args, event);
-                        return;
-                    }
-                    Ason randomItem = arr.getJsonObject(SpoopyUtils.random.nextInt(arr.size()));
-                    assert randomItem != null;
-                    msg.editMessage(new MessageBuilder()
-                            .setEmbed(EmbedUtils.defaultEmbed()
-                                    .setTitle(randomItem.getString("title"), randomItem.getString("image.contextLink"))
-                                    .setImage(randomItem.getString("link")).build()).build())
-                            .override(true)
-                            .queue();
-                }, er -> MessageUtils.sendMsg(event, "Error while looking up image: " + er));
+                WebUtils.ins.getAson( SpoopyUtils.getGoogleSearchUrl(keyword) + "&fileType=gif" ).async(
+                        data -> sendMessageFromData(msg, data, keyword),
+                        er -> MessageUtils.sendMsg(event, "Error while looking up image: " + er));
             } catch (NullPointerException e) {
                 e.printStackTrace();
                 msg.editMessage("Something went wrong while looking up the image").queue();
