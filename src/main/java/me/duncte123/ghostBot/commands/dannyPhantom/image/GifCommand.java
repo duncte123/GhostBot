@@ -33,15 +33,12 @@ import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
 
 public class GifCommand extends Command {
 
-    private final String url = "https://www.googleapis.com/customsearch/v1" +
-            "?q=%s&cx=012048784535646064391:v-fxkttbw54&hl=en&searchType=image&fileType=gif&safe=off&key=" + SpoopyUtils.config.getString("api.google");
-
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
         sendMsg(event, "Loading....", msg -> {
             String keyword = "Danny Phantom gif";
             try {
-                WebUtils.ins.getAson(String.format(url, keyword.replaceAll(" ", "+"))).async(data -> {
+                WebUtils.ins.getAson( SpoopyUtils.getGoogleSearchUrl(keyword) + "&fileType=gif" ).async(data -> {
                     AsonArray<Ason> arr = data.getJsonArray("items");
                     if (arr.size() == 0) {
                         execute(invoke, args, event);

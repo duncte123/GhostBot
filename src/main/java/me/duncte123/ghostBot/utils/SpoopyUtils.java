@@ -35,6 +35,9 @@ public class SpoopyUtils {
 
     public static final CommandManager commandManager = new CommandManager();
 
+    private static final String GOOGLE_URL = "https://www.googleapis.com/customsearch/v1" +
+            "?q=%s&cx=012048784535646064391:v-fxkttbw54&hl=en&searchType=image&key=" + config.getString("api.google");
+
     // [0] = users, [1] = bots
     public static double[] getBotRatio(Guild g) {
 
@@ -61,6 +64,10 @@ public class SpoopyUtils {
         }
 
         return pubChann;
+    }
+
+    public static String getGoogleSearchUrl(String query) {
+        return String.format(GOOGLE_URL, query.replaceAll(" ", "+"));
     }
 }
 

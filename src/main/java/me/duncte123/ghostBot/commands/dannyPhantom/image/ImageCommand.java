@@ -33,12 +33,10 @@ import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
 
 public class ImageCommand extends Command {
 
-    private final String url = "https://www.googleapis.com/customsearch/v1" +
-            "?q=%s&cx=012048784535646064391:v-fxkttbw54&hl=en&searchType=image&key=" + SpoopyUtils.config.getString("api.google");
     private final String[] keywords = {
             "Danny Phantom",
-            "Danny Phantom",
-            "Danny Phantom",
+            "Pitch Pearl",
+            "Pitch Pearl",
             "Pitch Pearl",
             "Danny Fenton",
             "Samantha Manson",
@@ -63,23 +61,35 @@ public class ImageCommand extends Command {
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
 
         sendMsg(event, "Loading....", msg -> {
-            String keyword = "Danny Phantom gif";
+            String keyword;
+
+            if(invoke.equals("cujo")) keyword = "Cujo Danny Phantom";
+            else keyword = keywords[SpoopyUtils.random.nextInt(keywords.length)];
+
             try {
-                WebUtils.ins.getAson(String.format(url, keyword.replaceAll(" ", "+"))).async(data -> {
+                WebUtils.ins.getAson( SpoopyUtils.getGoogleSearchUrl(keyword) ).async(data -> {
                     AsonArray<Ason> arr = data.getJsonArray("items");
                     if (arr.size() == 0) {
                         execute(invoke, args, event);
                         return;
                     }
                     Ason randomItem = arr.getJsonObject(SpoopyUtils.random.nextInt(arr.size()));
-                    msg.editMessage(new MessageBuilder()
-                            /* .append("Keyword: ")
-                             .append(keyword)*/
+
+                    msg.editMessage(
+                            EmbedUtils.defaultEmbed()
+                                    .setTitle(randomItem.getString("title"), randomItem.getString("image.contextLink"))
+                                    .setImage(randomItem.getString("link")).build())
+                            .override(true)
+                            .queue();
+
+                    /*msg.editMessage(new MessageBuilder()
+                            *//* .append("Keyword: ")
+                             .append(keyword)*//*
                             .setEmbed(EmbedUtils.defaultEmbed()
                                     .setTitle(randomItem.getString("title"), randomItem.getString("image.contextLink"))
                                     .setImage(randomItem.getString("link")).build()).build())
                             .override(true)
-                            .queue();
+                            .queue();*/
             /*sendEmbed(event,
                     EmbedUtils.defaultEmbed()
                             .setTitle(randomItem.getString("title"), randomItem.getString("image.contextLink"))
@@ -130,6 +140,11 @@ public class ImageCommand extends Command {
     @Override
     public Category getCategory() {
         return Category.IMAGE;
+    }
+
+    @Override
+    public String[] getAliases() {
+        return new String[] {"cujo"};
     }
 
     @Override
