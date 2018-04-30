@@ -19,41 +19,52 @@
 package me.duncte123.ghostBot.commands.dannyPhantom.image;
 
 import me.duncte123.botCommons.web.WebUtils;
-import me.duncte123.ghostBot.objects.Category;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
 
-public class GifCommand extends ImageCommand {
-
+public class OtherGhostCommands extends ImageCommand {
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
-        sendMsg(event, "Loading....", msg -> {
-            String keyword = "Danny Phantom gif";
-            try {
-                WebUtils.ins.getAson( SpoopyUtils.getGoogleSearchUrl(keyword) + "&fileType=gif" ).async(
-                        data -> sendMessageFromData(msg, data, keyword),
-                        er -> sendMsg(event, "Error while looking up image: " + er));
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-                msg.editMessage("Something went wrong while looking up the image").queue();
-            }
-        });
+        switch (invoke) {
+            case "cujo":
+                sendFromKeyword("Cujo Danny Phantom", event);
+                break;
+            case "ember":
+                sendFromKeyword("ember mclain", event);
+                break;
+            case "dan":
+                if(SpoopyUtils.random.nextInt(2) > 0) {
+                    sendFromKeyword("Dan Phantom", event);
+                } else {
+                    sendFromKeyword("Dark Danny", event);
+                }
+                break;
+        }
     }
 
     @Override
     public String getName() {
-        return "gif";
+        return "cujo";
     }
 
     @Override
     public String getHelp() {
-        return "Gives you a random Danny Phantom gif";
+        return super.getHelp();
     }
 
     @Override
-    public Category getCategory() {
-        return Category.IMAGE;
+    public String[] getAliases() {
+        return new String[] {"ember", "dan"};
+    }
+
+    private void sendFromKeyword(String keyword, GuildMessageReceivedEvent event) {
+        sendMsg(event, "Loading....", msg ->
+                WebUtils.ins.getAson(SpoopyUtils.getGoogleSearchUrl(keyword)).async(
+                        data -> sendMessageFromData(msg, data, keyword),
+                        er -> sendMsg(event, "Error while looking up image: " + er)
+                )
+        );
     }
 }

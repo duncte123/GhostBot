@@ -54,7 +54,7 @@ public class QuotesCommand extends Command {
             "Finished <:DPJoy:425714609702305804> ({TOTAL} quotes in the system and {COUNT_NEW) new)"
     };
 
-    private final Long[] badPostIds = {
+    private final List<Long> badPostIds = List.of(
             156199508936L,
             141701068521L,
             139748205676L,
@@ -76,7 +76,7 @@ public class QuotesCommand extends Command {
             143194957186L,
             121801283241L,
             121891439031L
-    };
+    );
 
     private final List<TumblrPost> tumblrPosts = new ArrayList<>();
     private final Map<String, Integer> indexes = new HashMap<>();
@@ -145,19 +145,6 @@ public class QuotesCommand extends Command {
                 );
                 break;
             case "text":
-                /*String bodyRaw = post.body.replaceAll(Pattern.quote("<br/>"), "\n");
-                String replacePWith = bodyRaw.contains("</p>\n") ? "" : "\n";
-                String bodyParsed = bodyRaw.replaceAll(Pattern.quote("<p>"), "")
-                        .replaceAll("\\*", "\\\\*")
-                        .replaceAll(Pattern.quote("</p>"), replacePWith)
-                        .replaceAll(Pattern.quote("<i>"), "_")
-                        .replaceAll(Pattern.quote("</i>"), "_")
-                        .replaceAll(Pattern.quote("<b>"), "**")
-                        .replaceAll(Pattern.quote("</b>"), "**")
-                        .replaceAll(Pattern.quote("<small>"), "")
-                        .replaceAll(Pattern.quote("</small>"), "")
-                        .replaceAll("<a(?:.*)href=\"(.*)\"(?:.*)>(.*)<\\/a>", "[$2]($1)");
-                eb.setDescription(StringEscapeUtils.unescapeHtml4(bodyParsed));*/
                 eb.setDescription(parseText(post.body));
                 break;
             case "quote":
@@ -191,7 +178,6 @@ public class QuotesCommand extends Command {
     }
 
     private void reloadQuotes() {
-        List<Long> filterIds = Arrays.asList(badPostIds);
         oldCount = tumblrPosts.size();
         tumblrPosts.clear();
         indexes.clear();
@@ -209,7 +195,7 @@ public class QuotesCommand extends Command {
                         AsonArray<Ason> fetched = j.getJsonArray("response.posts");
                         logger.debug("Got " + fetched.size() + " quotes from type " + type);
                         List<TumblrPost> posts = Ason.deserializeList(fetched, TumblrPost.class);
-                        List<TumblrPost> filteredPosts = posts.stream().filter(post -> !filterIds.contains(post.id)).collect(Collectors.toList());
+                        List<TumblrPost> filteredPosts = posts.stream().filter(post -> !badPostIds.contains(post.id)).collect(Collectors.toList());
                         tumblrPosts.addAll(
                                 filteredPosts
                         );

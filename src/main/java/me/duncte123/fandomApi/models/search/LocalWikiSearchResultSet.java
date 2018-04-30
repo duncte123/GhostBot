@@ -22,12 +22,13 @@ import me.duncte123.fandomApi.models.FandomResult;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class LocalWikiSearchResultSet implements FandomResult {
-    private final int batches;
-    private final List<LocalWikiSearchResult> items;
-    private final int total;
-    private final int currentBatch;
-    private final int next;
+    private int batches;
+    private List<LocalWikiSearchResult> items;
+    private int total;
+    private int currentBatch;
+    private int next;
 
     public LocalWikiSearchResultSet(int batches, List<LocalWikiSearchResult> items, int total, int currentBatch, int next) {
         this.batches = batches;
@@ -36,6 +37,8 @@ public class LocalWikiSearchResultSet implements FandomResult {
         this.currentBatch = currentBatch;
         this.next = next;
     }
+
+    public LocalWikiSearchResultSet() {}
 
     public int getBatches() {
         return batches;

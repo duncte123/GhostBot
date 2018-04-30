@@ -25,6 +25,8 @@ import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.utils.cache.MemberCacheView;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Random;
 
 public class SpoopyUtils {
@@ -32,6 +34,8 @@ public class SpoopyUtils {
     public static final Config config = new ConfigUtils().loadConfig();
     public static final Random random = new Random();
     public static final FandomApi FANDOM_API = new FandomApi("https://dannyphantom.wikia.com");
+
+    public static final WikiHolder WIKI_HOLDER = new WikiHolder("https://dannyphantom.wikia.com");
 
     public static final CommandManager commandManager = new CommandManager();
 
@@ -67,7 +71,16 @@ public class SpoopyUtils {
     }
 
     public static String getGoogleSearchUrl(String query) {
-        return String.format(GOOGLE_URL, query.replaceAll(" ", "+"));
+        return String.format(GOOGLE_URL, encode(query) );
+    }
+
+    public static String encode(String in) {
+        try {
+            return URLEncoder.encode(in, "UTF-8");
+        } catch (UnsupportedEncodingException exc) {
+            exc.printStackTrace();
+            return in.replace(" ", "%20");
+        }
     }
 }
 

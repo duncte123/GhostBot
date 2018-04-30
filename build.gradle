@@ -28,7 +28,7 @@ mainClassName = 'me.duncte123.ghostBot.GhostBot'
 group 'me.duncte123.ghostBot'
 version "0.1.0_${getGitHash()}"
 
-sourceCompatibility = 1.8
+sourceCompatibility = 1.9
 
 repositories {
     jcenter()

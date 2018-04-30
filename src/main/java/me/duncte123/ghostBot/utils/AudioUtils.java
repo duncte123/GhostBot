@@ -22,6 +22,7 @@ import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
+import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -51,27 +52,10 @@ public class AudioUtils {
         musicManagers = new HashMap<>();
     }
 
-    /**
-     * This will return the formatted timestamp for the current playing track
-     *
-     * @param milliseconds the milliseconds that the track is at
-     * @return a formatted time
-     */
-    public static String getTimestamp(long milliseconds) {
-        int seconds = (int) (milliseconds / 1000) % 60;
-        int minutes = (int) ((milliseconds / (1000 * 60)) % 60);
-        int hours = (int) ((milliseconds / (1000 * 60 * 60)) % 24);
-
-        if (hours > 0) {
-            return String.format("%02d:%02d:%02d", hours, minutes, seconds);
-        } else {
-            return String.format("%02d:%02d", minutes, seconds);
-        }
-    }
-
     private void initPlayerManager() {
         if (playerManager == null) {
             playerManager = new DefaultAudioPlayerManager();
+            playerManager.registerSourceManager(new YoutubeAudioSourceManager(false));
             AudioSourceManagers.registerLocalSource(playerManager);
         }
     }

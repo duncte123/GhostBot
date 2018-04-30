@@ -24,9 +24,7 @@ import me.duncte123.botCommons.web.WebUtils;
 import me.duncte123.ghostBot.objects.Category;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.utils.EmbedUtils;
-import me.duncte123.ghostBot.utils.MessageUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
-import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
@@ -36,6 +34,8 @@ public class ImageCommand extends Command {
 
     private final String[] keywords = {
             "Danny Phantom",
+            "Pitch Pearl",
+            "Pitch Pearl",
             "Pitch Pearl",
             "Pitch Pearl",
             "Pitch Pearl",
@@ -69,15 +69,12 @@ public class ImageCommand extends Command {
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
 
         sendMsg(event, "Loading....", msg -> {
-            String keyword;
-
-            if(invoke.equals("cujo")) keyword = "Cujo Danny Phantom";
-            else keyword = keywords[SpoopyUtils.random.nextInt(keywords.length)];
+            String keyword = keywords[SpoopyUtils.random.nextInt(keywords.length)];
 
             try {
                 WebUtils.ins.getAson( SpoopyUtils.getGoogleSearchUrl(keyword) ).async(
                         data -> sendMessageFromData(msg, data, keyword),
-                        er -> MessageUtils.sendMsg(event, "Error while looking up image: " + er));
+                        er -> sendMsg(event, "Error while looking up image: " + er));
             } catch (NullPointerException e) {
                 e.printStackTrace();
                 msg.editMessage("Something went wrong while looking up the image").queue();
@@ -110,11 +107,6 @@ public class ImageCommand extends Command {
     @Override
     public Category getCategory() {
         return Category.IMAGE;
-    }
-
-    @Override
-    public String[] getAliases() {
-        return new String[] {"cujo"};
     }
 
     @Override

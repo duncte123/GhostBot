@@ -18,14 +18,15 @@
 
 package me.duncte123.fandomApi.models.search;
 
+@SuppressWarnings("unused")
 public class LocalWikiSearchResult {
 
-    private final int quality;
-    private final String url;
-    private final int ns;
-    private final int id;
-    private final String title;
-    private final String snippet;
+    private int quality;
+    private String url;
+    private int ns;
+    private int id;
+    private String title;
+    private String snippet;
 
     public LocalWikiSearchResult(int quality, String url, int ns, int id, String title, String snippet) {
         this.quality = quality;
@@ -35,6 +36,8 @@ public class LocalWikiSearchResult {
         this.title = title;
         this.snippet = snippet;
     }
+
+    public LocalWikiSearchResult() {}
 
     public int getId() {
         return id;
