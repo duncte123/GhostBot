@@ -16,30 +16,29 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.fandomApi.models.user;
+package me.duncte123.ghostBot.commands.dannyPhantom.wiki;
 
-import me.duncte123.fandomApi.models.FandomResult;
+import com.afollestad.ason.Ason;
+import me.duncte123.fandomApi.models.FandomException;
+import me.duncte123.ghostBot.objects.Command;
+import me.duncte123.ghostBot.utils.SpoopyUtils;
+import me.duncte123.ghostBot.utils.WikiHolder;
 
-import java.util.List;
+/**
+ * This class stores objects that are useful to the wiki commands
+ */
+abstract class WikiBaseCommand extends Command {
 
-public class UserResultSet implements FandomResult {
+    //shortcut to the wiki
+    WikiHolder wiki = SpoopyUtils.WIKI_HOLDER;
 
-    private String basepath;
-    private List<UserElement> items;
-
-    public UserResultSet(String basePath, List<UserElement> items) {
-        this.basepath = basePath;
-        this.items = items;
-    }
-
-
-    public UserResultSet() {}
-
-    public List<UserElement> getItems() {
-        return items;
-    }
-
-    public String getBasepath() {
-        return basepath;
+    FandomException toEx(Ason ason) {
+        return new FandomException(
+                ason.getString("exception.type"),
+                ason.getString("exception.message"),
+                ason.getInt("exception.code"),
+                ason.getString("exception.details"),
+                ason.getString("trace_id")
+        );
     }
 }

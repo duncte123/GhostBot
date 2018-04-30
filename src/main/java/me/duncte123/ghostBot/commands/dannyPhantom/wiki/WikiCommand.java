@@ -20,14 +20,11 @@ package me.duncte123.ghostBot.commands.dannyPhantom.wiki;
 
 import com.afollestad.ason.Ason;
 import me.duncte123.botCommons.web.WebUtils;
-import me.duncte123.fandomApi.models.FandomException;
 import me.duncte123.fandomApi.models.search.LocalWikiSearchResult;
 import me.duncte123.fandomApi.models.search.LocalWikiSearchResultSet;
 import me.duncte123.ghostBot.objects.Category;
-import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.utils.EmbedUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
-import me.duncte123.ghostBot.utils.WikiHolder;
 import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
@@ -39,7 +36,7 @@ import java.util.List;
 import static me.duncte123.ghostBot.utils.MessageUtils.sendEmbed;
 import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
 
-public class WikiCommand extends Command {
+public class WikiCommand extends WikiBaseCommand {
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
         //
@@ -49,24 +46,14 @@ public class WikiCommand extends Command {
         }
         String searchQuery = StringUtils.join(args, " ");
 
-        WikiHolder wiki = SpoopyUtils.WIKI_HOLDER;
-
         WebUtils.ins.getAson(String.format(
                 "%s?query=%s",
                 wiki.getSearchListEndpoint(),
-                SpoopyUtils.encode(searchQuery))
+                SpoopyUtils.encodeUrl(searchQuery))
         ).async(
                 ason -> {
                     if (ason.has("exception")) {
-                        sendMsg(event, "An error occurred: " +
-                                new FandomException(
-                                    ason.getString("exception.type"),
-                                    ason.getString("exception.message"),
-                                    ason.getInt("exception.code"),
-                                    ason.getString("exception.details"),
-                                    ason.getString("trace_id")
-                                )
-                        );
+                        sendMsg(event, "An error occurred: " + toEx(ason) );
                         return;
                     }
 

@@ -19,7 +19,6 @@
 package me.duncte123.ghostBot.utils;
 
 import me.duncte123.botCommons.config.Config;
-import me.duncte123.fandomApi.FandomApi;
 import me.duncte123.ghostBot.CommandManager;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.TextChannel;
@@ -33,7 +32,6 @@ public class SpoopyUtils {
     public static final AudioUtils audio = AudioUtils.ins;
     public static final Config config = new ConfigUtils().loadConfig();
     public static final Random random = new Random();
-    public static final FandomApi FANDOM_API = new FandomApi("https://dannyphantom.wikia.com");
 
     public static final WikiHolder WIKI_HOLDER = new WikiHolder("https://dannyphantom.wikia.com");
 
@@ -71,10 +69,10 @@ public class SpoopyUtils {
     }
 
     public static String getGoogleSearchUrl(String query) {
-        return String.format(GOOGLE_URL, encode(query) );
+        return String.format(GOOGLE_URL, encodeUrl(query) );
     }
 
-    public static String encode(String in) {
+    public static String encodeUrl(String in) {
         try {
             return URLEncoder.encode(in, "UTF-8");
         } catch (UnsupportedEncodingException exc) {

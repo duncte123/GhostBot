@@ -18,12 +18,11 @@
 
 package me.duncte123.ghostBot.commands.dannyPhantom.wiki;
 
-import me.duncte123.fandomApi.models.FandomException;
-import me.duncte123.fandomApi.models.FandomResult;
+import com.afollestad.ason.Ason;
+import me.duncte123.botCommons.web.WebUtils;
 import me.duncte123.fandomApi.models.user.UserElement;
 import me.duncte123.fandomApi.models.user.UserResultSet;
 import me.duncte123.ghostBot.objects.Category;
-import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.utils.EmbedUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import me.duncte123.ghostBot.variables.Variables;
@@ -34,7 +33,8 @@ import org.apache.commons.lang3.StringUtils;
 import static me.duncte123.ghostBot.utils.MessageUtils.sendEmbed;
 import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
 
-public class WikiUserCommand extends Command {
+public class WikiUserCommand extends WikiBaseCommand {
+
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
         if (args.length == 0) {
@@ -42,7 +42,53 @@ public class WikiUserCommand extends Command {
             return;
         }
         String searchQuery = StringUtils.join(args, " ");
-        FandomResult result = SpoopyUtils.FANDOM_API.userEndpoints.details(searchQuery);
+
+        WebUtils.ins.getAson(String.format(
+                "%s?ids=%s",
+                wiki.getUserDetailsEndpoint(),
+                SpoopyUtils.encodeUrl(searchQuery)
+        )).async(
+                ason -> {
+                    if (ason.has("exception")) {
+                        sendMsg(event, "An error occurred: " + toEx(ason) );
+                        return;
+                    }
+
+                    UserResultSet userResultSet = Ason.deserialize(ason, UserResultSet.class, true);
+
+                    if (userResultSet.getItems().size() == 1) {
+                        UserElement user = userResultSet.getItems().get(0);
+                        user.setBasePath(userResultSet.getBasepath());
+                        System.out.println(user.getAbsoluteUrl());
+                        sendEmbed(event, EmbedUtils.defaultEmbed()
+                                .setThumbnail(user.getAvatar())
+                                .setTitle("Profile link", user.getAbsoluteUrl())
+                                .setAuthor(user.getName(), user.getAbsoluteUrl(), user.getAvatar())
+                                .addField("User Info:", String.format("**Name:** %s\n" +
+                                                "**Id:** %s\n" +
+                                                "**Title:** %s\n" +
+                                                "**Number of edits:** %s",
+                                        user.getName(),
+                                        user.getUserId(),
+                                        user.getTitle(),
+                                        user.getNumberofedits()), false)
+                                .build());
+                    } else {
+                        EmbedBuilder eb = EmbedUtils.defaultEmbed().setTitle("I found the following users:");
+                        for (UserElement user : userResultSet.getItems()) {
+                            eb.appendDescription("[")
+                                    .appendDescription(user.getName())
+                                    .appendDescription("](")
+                                    .appendDescription(user.getAbsoluteUrl())
+                                    .appendDescription(")\n");
+                        }
+                        sendEmbed(event, eb.build());
+                    }
+                },
+                error -> {sendMsg(event, "Something went wrong: " + error.getMessage());/* error.printStackTrace();*/}
+        );
+
+        /*FandomResult result = SpoopyUtils.FANDOM_API.userEndpoints.details(searchQuery);
 
         if (result instanceof FandomException) {
             FandomException ex = (FandomException) result;
@@ -83,7 +129,7 @@ public class WikiUserCommand extends Command {
                         .appendDescription(")\n");
             }
             sendEmbed(event, eb.build());
-        }
+        }*/
     }
 
     @Override
