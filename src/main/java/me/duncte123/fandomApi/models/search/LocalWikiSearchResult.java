@@ -37,7 +37,8 @@ public class LocalWikiSearchResult {
         this.snippet = snippet;
     }
 
-    public LocalWikiSearchResult() {}
+    public LocalWikiSearchResult() {
+    }
 
     public int getId() {
         return id;

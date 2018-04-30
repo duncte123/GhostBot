@@ -37,7 +37,7 @@ public class GhostBot {
     private static final GhostBot ins = new GhostBot();
     private static JDA jda;
 
-    public static void main(String[] args)  {
+    public static void main(String[] args) {
         logger.info("Booting GhostBot");
         String token = SpoopyUtils.config.getString("discord.token");
         LavalinkManager.ins.start();

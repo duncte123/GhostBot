@@ -39,7 +39,8 @@ public class UserElement {
         this.basePath = basePath;
     }
 
-    public UserElement() {}
+    public UserElement() {
+    }
 
 
     public void setBasePath(String basePath) {

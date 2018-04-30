@@ -50,7 +50,7 @@ public class WikiUserCommand extends WikiBaseCommand {
         )).async(
                 ason -> {
                     if (ason.has("exception")) {
-                        sendMsg(event, "An error occurred: " + toEx(ason) );
+                        sendMsg(event, "An error occurred: " + toEx(ason));
                         return;
                     }
 
@@ -59,7 +59,6 @@ public class WikiUserCommand extends WikiBaseCommand {
                     if (userResultSet.getItems().size() == 1) {
                         UserElement user = userResultSet.getItems().get(0);
                         user.setBasePath(userResultSet.getBasepath());
-                        System.out.println(user.getAbsoluteUrl());
                         sendEmbed(event, EmbedUtils.defaultEmbed()
                                 .setThumbnail(user.getAvatar())
                                 .setTitle("Profile link", user.getAbsoluteUrl())
@@ -79,57 +78,16 @@ public class WikiUserCommand extends WikiBaseCommand {
                             eb.appendDescription("[")
                                     .appendDescription(user.getName())
                                     .appendDescription("](")
-                                    .appendDescription(user.getAbsoluteUrl())
+                                    .appendDescription(userResultSet.getBasepath() + user.getUrl())
                                     .appendDescription(")\n");
                         }
                         sendEmbed(event, eb.build());
                     }
                 },
-                error -> {sendMsg(event, "Something went wrong: " + error.getMessage());/* error.printStackTrace();*/}
+                error -> {
+                    sendMsg(event, "Something went wrong: " + error.getMessage());/* error.printStackTrace();*/
+                }
         );
-
-        /*FandomResult result = SpoopyUtils.FANDOM_API.userEndpoints.details(searchQuery);
-
-        if (result instanceof FandomException) {
-            FandomException ex = (FandomException) result;
-            if (ex.getCode() == 404)
-                sendMsg(event, "No users with this username found");
-            else
-                sendMsg(event, "Error: " + result);
-            return;
-        } else if (result == null) {
-            sendMsg(event, "Something went wrong while looking up data.");
-            return;
-        }
-
-        UserResultSet userResultSet = (UserResultSet) result;
-
-        if (userResultSet.getItems().size() == 1) {
-            UserElement user = userResultSet.getItems().get(0);
-            sendEmbed(event, EmbedUtils.defaultEmbed()
-                    .setThumbnail(user.getAvatar())
-                    .setTitle("Profile link", user.getAbsoluteUrl())
-                    .setAuthor(user.getName(), user.getAbsoluteUrl(), user.getAvatar())
-                    .addField("User Info:", String.format("**Name:** %s\n" +
-                                    "**Id:** %s\n" +
-                                    "**Title:** %s\n" +
-                                    "**Number of edits:** %s",
-                            user.getName(),
-                            user.getUserId(),
-                            user.getTitle(),
-                            user.getNumberofedits()), false)
-                    .build());
-        } else {
-            EmbedBuilder eb = EmbedUtils.defaultEmbed().setTitle("I found the following users:");
-            for (UserElement user : userResultSet.getItems()) {
-                eb.appendDescription("[")
-                        .appendDescription(user.getName())
-                        .appendDescription("](")
-                        .appendDescription(user.getAbsoluteUrl())
-                        .appendDescription(")\n");
-            }
-            sendEmbed(event, eb.build());
-        }*/
     }
 
     @Override

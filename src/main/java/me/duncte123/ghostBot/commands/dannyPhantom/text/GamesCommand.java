@@ -26,7 +26,7 @@ import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 public class GamesCommand extends Command {
 
-    private final String[] games =  {
+    private final String[] games = {
             "https://paurachan.deviantart.com/art/Danny-Phantom-Dress-up-game-v0-1-435498005",
             "http://www.dannyphantomgames.net/fright-flight.php",
             "http://www.dannyphantomgames.net/dueling-decks.php",

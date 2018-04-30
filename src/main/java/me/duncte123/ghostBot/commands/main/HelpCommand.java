@@ -63,21 +63,16 @@ public class HelpCommand extends Command {
             return;
         }
 
-        List<String> dannyPhantomCommands = SpoopyUtils.commandManager.getCommands()
-                .stream().filter(c -> c.getCategory().equals(Category.AUDIO)).map(Command::getName).collect(Collectors.toList());
-        List<String> imageCommands = SpoopyUtils.commandManager.getCommands()
-                .stream().filter(c -> c.getCategory().equals(Category.IMAGE)).map(Command::getName).collect(Collectors.toList());
-        List<String> wikiCommands = SpoopyUtils.commandManager.getCommands()
-                .stream().filter(c -> c.getCategory().equals(Category.WIKI)).map(Command::getName).collect(Collectors.toList());
-        List<String> textCommands = SpoopyUtils.commandManager.getCommands()
-                .stream().filter(c -> c.getCategory().equals(Category.TEXT)).map(Command::getName).collect(Collectors.toList());
-        List<String> otherCommands = SpoopyUtils.commandManager.getCommands()
-                .stream().filter(c -> c.getCategory().equals(Category.NONE)).map(Command::getName).collect(Collectors.toList());
+        List<String> audioCommands = getCommandsForCategory(Category.AUDIO);
+        List<String> imageCommands = getCommandsForCategory(Category.IMAGE);
+        List<String> wikiCommands = getCommandsForCategory(Category.WIKI);
+        List<String> textCommands = getCommandsForCategory(Category.TEXT);
+        List<String> otherCommands = getCommandsForCategory(Category.NONE);
 
         MessageEmbed helpEmbed = EmbedUtils.defaultEmbed()
                 .setDescription("Use `" + Variables.PREFIX + "help [command]` for more info about a command")
                 .addField("Audio commands",
-                        "`" + Variables.PREFIX + StringUtils.join(dannyPhantomCommands, "`\n`" + Variables.PREFIX) + "`", false)
+                        "`" + Variables.PREFIX + StringUtils.join(audioCommands, "`\n`" + Variables.PREFIX) + "`", false)
                 .addField("Image commands",
                         "`" + Variables.PREFIX + StringUtils.join(imageCommands, "`\n`" + Variables.PREFIX) + "`", false)
                 .addField("Text commands",
@@ -108,5 +103,16 @@ public class HelpCommand extends Command {
     @Override
     public String[] getAliases() {
         return new String[]{"commands"};
+    }
+
+    private List<String> getCommandsForCategory(Category category) {
+
+        List<String> temp = SpoopyUtils.commandManager.getCommands()
+                .stream().filter(c -> c.getCategory().equals(category)).map(Command::getName).collect(Collectors.toList());
+        SpoopyUtils.commandManager.getCommands()
+                .stream().filter(c -> c.getCategory().equals(category) )
+                .map(cmd -> List.of(cmd.getAliases())).forEach(temp::addAll);
+
+        return temp;
     }
 }

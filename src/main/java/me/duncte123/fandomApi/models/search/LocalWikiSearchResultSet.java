@@ -38,7 +38,8 @@ public class LocalWikiSearchResultSet implements FandomResult {
         this.next = next;
     }
 
-    public LocalWikiSearchResultSet() {}
+    public LocalWikiSearchResultSet() {
+    }
 
     public int getBatches() {
         return batches;

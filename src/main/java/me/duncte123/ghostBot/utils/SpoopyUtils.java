@@ -69,7 +69,7 @@ public class SpoopyUtils {
     }
 
     public static String getGoogleSearchUrl(String query) {
-        return String.format(GOOGLE_URL, encodeUrl(query) );
+        return String.format(GOOGLE_URL, encodeUrl(query));
     }
 
     public static String encodeUrl(String in) {

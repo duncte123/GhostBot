@@ -138,7 +138,7 @@ public class BotListener extends ListenerAdapter {
     }
 
     private void postServerCount(JDA jda) {
-        if(!dbotsToken.isEmpty()) {
+        if (!dbotsToken.isEmpty()) {
             service.scheduleWithFixedDelay(() ->
                             WebUtils.ins.prepareRaw(
                                     new Request.Builder()

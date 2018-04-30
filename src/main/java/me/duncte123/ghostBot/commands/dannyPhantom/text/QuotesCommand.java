@@ -91,7 +91,7 @@ public class QuotesCommand extends Command {
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
 
         if (args.length > 0) {
-            if("reload".equals(args[0])) {
+            if ("reload".equals(args[0])) {
 
                 if (event.getAuthor().getId().equals(Variables.OWNER_ID)) {
                     reloadQuotes();
@@ -105,8 +105,8 @@ public class QuotesCommand extends Command {
                                     String mf = m;
                                     if (m.contains("{COUNT_NEW)")) {
                                         mf = mf.replaceAll(Pattern.quote("{COUNT_NEW)"), String.valueOf(tumblrPosts.size() - oldCount));
-                                    } 
-									if (m.contains("{TOTAL}")) {
+                                    }
+                                    if (m.contains("{TOTAL}")) {
                                         mf = mf.replaceAll(Pattern.quote("{TOTAL}"), String.valueOf(tumblrPosts.size()));
                                     }
                                     logger.debug(mf);
@@ -116,7 +116,7 @@ public class QuotesCommand extends Command {
                 } else {
                     MessageUtils.sendMsg(event, "Only the bot owner can reload quotes");
                 }
-            } else if("total".equals(args[0])) {
+            } else if ("total".equals(args[0])) {
                 MessageUtils.sendMsg(event, "There are a total of " + tumblrPosts.size() + " quotes in the system at the moment");
             }
             return;
@@ -169,7 +169,7 @@ public class QuotesCommand extends Command {
 
     @Override
     public String[] getAliases() {
-        return new String[] {"quotes"};
+        return new String[]{"quotes"};
     }
 
     @Override
@@ -190,8 +190,8 @@ public class QuotesCommand extends Command {
             );
             WebUtils.ins.getAson(url).async(json -> {
                 int total = json.getInt("response.total_posts");
-                for(int i = 0; i <= total; i+=20 ) {
-                    WebUtils.ins.getAson(url + "&offset=" + ( i > 1 ? i + 1 : 1)).async(j -> {
+                for (int i = 0; i <= total; i += 20) {
+                    WebUtils.ins.getAson(url + "&offset=" + (i > 1 ? i + 1 : 1)).async(j -> {
                         AsonArray<Ason> fetched = j.getJsonArray("response.posts");
                         logger.debug("Got " + fetched.size() + " quotes from type " + type);
                         List<TumblrPost> posts = Ason.deserializeList(fetched, TumblrPost.class);

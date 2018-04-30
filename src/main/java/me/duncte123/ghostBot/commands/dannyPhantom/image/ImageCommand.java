@@ -72,7 +72,7 @@ public class ImageCommand extends Command {
             String keyword = keywords[SpoopyUtils.random.nextInt(keywords.length)];
 
             try {
-                WebUtils.ins.getAson( SpoopyUtils.getGoogleSearchUrl(keyword) ).async(
+                WebUtils.ins.getAson(SpoopyUtils.getGoogleSearchUrl(keyword)).async(
                         data -> sendMessageFromData(msg, data, keyword),
                         er -> sendMsg(event, "Error while looking up image: " + er));
             } catch (NullPointerException e) {

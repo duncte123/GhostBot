@@ -21,8 +21,8 @@ package me.duncte123.ghostBot.commands.main;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.utils.EmbedUtils;
 import me.duncte123.ghostBot.variables.Variables;
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 import static me.duncte123.ghostBot.utils.MessageUtils.sendEmbed;
 
@@ -50,15 +50,15 @@ public class AboutCommand extends Command {
     public String getHelp() {
         return "Get some info about the bot";
     }
-	
-	private String getDevName(String id, String defaultVal, GuildMessageReceivedEvent event) {
-		
-		long f = event.getGuild().getMemberCache().stream().map(Member::getUser).filter(user -> user.getId().equals(id)).count();
-		
-		if(f > 0)
-			return event.getGuild().getMemberById(id).getAsMention();
-		else 
-			return defaultVal;	
-	}
+
+    private String getDevName(String id, String defaultVal, GuildMessageReceivedEvent event) {
+
+        long f = event.getGuild().getMemberCache().stream().map(Member::getUser).filter(user -> user.getId().equals(id)).count();
+
+        if (f > 0)
+            return event.getGuild().getMemberById(id).getAsMention();
+        else
+            return defaultVal;
+    }
 
 }

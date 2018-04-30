@@ -32,7 +32,7 @@ public class GifCommand extends ImageCommand {
         sendMsg(event, "Loading....", msg -> {
             String keyword = "Danny Phantom gif";
             try {
-                WebUtils.ins.getAson( SpoopyUtils.getGoogleSearchUrl(keyword) + "&fileType=gif" ).async(
+                WebUtils.ins.getAson(SpoopyUtils.getGoogleSearchUrl(keyword) + "&fileType=gif").async(
                         data -> sendMessageFromData(msg, data, keyword),
                         er -> sendMsg(event, "Error while looking up image: " + er));
             } catch (NullPointerException e) {

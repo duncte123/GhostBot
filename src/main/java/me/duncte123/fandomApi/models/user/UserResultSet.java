@@ -33,7 +33,8 @@ public class UserResultSet implements FandomResult {
     }
 
 
-    public UserResultSet() {}
+    public UserResultSet() {
+    }
 
     public List<UserElement> getItems() {
         return items;

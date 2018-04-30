@@ -35,7 +35,7 @@ public class OtherGhostCommands extends ImageCommand {
                 sendFromKeyword("ember mclain", event);
                 break;
             case "dan":
-                if(SpoopyUtils.random.nextInt(2) > 0) {
+                if (SpoopyUtils.random.nextInt(2) > 0) {
                     sendFromKeyword("Dan Phantom", event);
                 } else {
                     sendFromKeyword("Dark Danny", event);
@@ -56,7 +56,7 @@ public class OtherGhostCommands extends ImageCommand {
 
     @Override
     public String[] getAliases() {
-        return new String[] {"ember", "dan"};
+        return new String[]{"ember", "dan"};
     }
 
     private void sendFromKeyword(String keyword, GuildMessageReceivedEvent event) {

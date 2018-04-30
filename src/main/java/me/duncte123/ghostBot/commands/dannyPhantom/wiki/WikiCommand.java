@@ -53,7 +53,7 @@ public class WikiCommand extends WikiBaseCommand {
         ).async(
                 ason -> {
                     if (ason.has("exception")) {
-                        sendMsg(event, "An error occurred: " + toEx(ason) );
+                        sendMsg(event, "An error occurred: " + toEx(ason));
                         return;
                     }
 
@@ -86,7 +86,7 @@ public class WikiCommand extends WikiBaseCommand {
                                         safeUrl(localWikiSearchResult.getSnippet()), 50)
                                 )
                                 .appendDescription("](")
-                                .appendDescription( safeUrl(localWikiSearchResult.getUrl()) )
+                                .appendDescription(safeUrl(localWikiSearchResult.getUrl()))
                                 .appendDescription(")\n");
                     }
                     sendEmbed(event, eb.build());
