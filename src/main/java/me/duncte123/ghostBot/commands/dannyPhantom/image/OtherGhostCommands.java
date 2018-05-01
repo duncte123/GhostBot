@@ -29,17 +29,31 @@ public class OtherGhostCommands extends ImageCommand {
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
         switch (invoke) {
             case "cujo":
-                sendFromKeyword("Cujo Danny Phantom", event);
+                sendFromKeyword(event, "Cujo Danny Phantom");
                 break;
             case "ember":
-                sendFromKeyword("ember mclain", event);
+                sendFromKeyword(event, "ember mclain");
                 break;
             case "dan":
-                if (SpoopyUtils.random.nextInt(2) > 0) {
-                    sendFromKeyword("Dan Phantom", event);
-                } else {
-                    sendFromKeyword("Dark Danny", event);
-                }
+                sendFromKeywords(event, "Dan Phantom", "Dark Danny");
+                break;
+            case "vlad":
+                sendFromKeywords(event, "Vlad plasmius", "Vlad Masters");
+                break;
+            case "sam":
+                sendFromKeyword(event, "Sam Manson");
+                break;
+            case "tucker":
+                sendFromKeyword(event, "Tucker Foley");
+                break;
+            case "danny":
+                sendFromKeywords(event, "Danny Fenton", "Danny Phantom");
+                break;
+            case "clockwork":
+                sendFromKeyword(event, "Clockwork Danny Phantom");
+                break;
+            case "pitchpearl":
+                sendFromKeyword(event, "pitch pearl");
                 break;
         }
     }
@@ -56,10 +70,17 @@ public class OtherGhostCommands extends ImageCommand {
 
     @Override
     public String[] getAliases() {
-        return new String[]{"ember", "dan"};
+        return new String[]{"ember", "dan", "vlad", "sam", "tucker", "danny", "clockwork", "pitchpearl"};
     }
 
-    private void sendFromKeyword(String keyword, GuildMessageReceivedEvent event) {
+    private void sendFromKeywords(GuildMessageReceivedEvent event, String... words) {
+        sendFromKeyword(
+                event,
+                words[SpoopyUtils.random.nextInt(words.length)]
+        );
+    }
+
+    private void sendFromKeyword(GuildMessageReceivedEvent event, String keyword) {
         sendMsg(event, "Loading....", msg ->
                 WebUtils.ins.getAson(SpoopyUtils.getGoogleSearchUrl(keyword)).async(
                         data -> sendMessageFromData(msg, data, keyword),
