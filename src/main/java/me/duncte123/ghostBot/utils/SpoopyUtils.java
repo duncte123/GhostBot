@@ -45,7 +45,7 @@ public class SpoopyUtils {
             "&hl=en" +
             "&searchType=image" +
             "&filter=1" +
-            "&safe=high" +
+            "&safe=medium" +
             "&key=" + config.getString("api.google");
 
     // [0] = users, [1] = bots
