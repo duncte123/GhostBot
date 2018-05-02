@@ -75,7 +75,7 @@ public class OtherGhostCommands extends ImageBase {
 
     @Override
     public String[] getAliases() {
-        return new String[]{"ember", "dan", "vlad", "sam", "tucker", "danny", "clockwork", "pitchpearl"};
+        return new String[]{"ember", "dan", "vlad", "sam", "tucker", "danny", "clockwork", "pitchpearl", "valerie", "dani"};
     }
 
     private void sendFromKeywords(GuildMessageReceivedEvent event, String... words) {
