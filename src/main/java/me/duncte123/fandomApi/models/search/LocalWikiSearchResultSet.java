@@ -18,12 +18,10 @@
 
 package me.duncte123.fandomApi.models.search;
 
-import me.duncte123.fandomApi.models.FandomResult;
-
 import java.util.List;
 
 @SuppressWarnings("unused")
-public class LocalWikiSearchResultSet implements FandomResult {
+public class LocalWikiSearchResultSet {
     private int batches;
     private List<LocalWikiSearchResult> items;
     private int total;

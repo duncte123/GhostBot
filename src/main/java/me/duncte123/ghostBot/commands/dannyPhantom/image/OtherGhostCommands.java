@@ -18,13 +18,12 @@
 
 package me.duncte123.ghostBot.commands.dannyPhantom.image;
 
-import me.duncte123.botCommons.web.WebUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
 
-public class OtherGhostCommands extends ImageCommand {
+public class OtherGhostCommands extends ImageBase {
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
         switch (invoke) {
@@ -55,6 +54,12 @@ public class OtherGhostCommands extends ImageCommand {
             case "pitchpearl":
                 sendFromKeyword(event, "pitch pearl");
                 break;
+            case "valerie":
+                sendFromKeyword(event, "valerie gray");
+                break;
+            case "dani":
+                sendFromKeywords(event, "Dani Fenton", "Dani Phantom");
+                break;
         }
     }
 
@@ -65,7 +70,7 @@ public class OtherGhostCommands extends ImageCommand {
 
     @Override
     public String getHelp() {
-        return super.getHelp();
+        return "";
     }
 
     @Override
@@ -82,10 +87,13 @@ public class OtherGhostCommands extends ImageCommand {
 
     private void sendFromKeyword(GuildMessageReceivedEvent event, String keyword) {
         sendMsg(event, "Loading....", msg ->
-                WebUtils.ins.getAson(SpoopyUtils.getGoogleSearchUrl(keyword)).async(
+                requestSearch(keyword,
+                        data -> sendMessageFromData(msg, data, keyword),
+                        er -> er.printStackTrace()/*sendMsg(event, "Error while looking up image: " + er)*/)
+                /*WebUtils.ins.getAson(SpoopyUtils.getGoogleSearchUrl(keyword)).async(
                         data -> sendMessageFromData(msg, data, keyword),
                         er -> sendMsg(event, "Error while looking up image: " + er)
-                )
+                )*/
         );
     }
 }

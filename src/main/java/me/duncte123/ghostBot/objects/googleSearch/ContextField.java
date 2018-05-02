@@ -16,7 +16,14 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.fandomApi.models;
+package me.duncte123.ghostBot.objects.googleSearch;
 
-public interface FandomResult {
+public class ContextField {
+    private String title;
+
+    public ContextField() {}
+
+    public String getTitle() {
+        return title;
+    }
 }

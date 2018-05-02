@@ -16,13 +16,29 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.fandomApi.endpoints.user;
+package me.duncte123.ghostBot.objects.googleSearch;
 
-import me.duncte123.fandomApi.endpoints.Endpoint;
+public class SearchInformationField {
+    private double searchTime;
+    private String formattedSearchTime;
+    private String totalResults;
+    private String formattedTotalResults;
 
-public abstract class UserEndpoint extends Endpoint {
-    @Override
-    public String getEndpoint() {
-        return super.getEndpoint() + "/User/" + getClass().getSimpleName();
+    public SearchInformationField() {}
+
+    public String getTotalResults() {
+        return totalResults;
+    }
+
+    public double getSearchTime() {
+        return searchTime;
+    }
+
+    public String getFormattedSearchTime() {
+        return formattedSearchTime;
+    }
+
+    public String getFormattedTotalResults() {
+        return formattedTotalResults;
     }
 }

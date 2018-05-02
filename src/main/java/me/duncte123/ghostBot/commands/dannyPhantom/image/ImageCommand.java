@@ -18,19 +18,13 @@
 
 package me.duncte123.ghostBot.commands.dannyPhantom.image;
 
-import com.afollestad.ason.Ason;
-import com.afollestad.ason.AsonArray;
-import me.duncte123.botCommons.web.WebUtils;
 import me.duncte123.ghostBot.objects.Category;
-import me.duncte123.ghostBot.objects.Command;
-import me.duncte123.ghostBot.utils.EmbedUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
-import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
 
-public class ImageCommand extends Command {
+public class ImageCommand extends ImageBase {
 
     private final String[] keywords = {
             "Danny Phantom",
@@ -67,32 +61,19 @@ public class ImageCommand extends Command {
         sendMsg(event, "Loading....", msg -> {
             String keyword = keywords[SpoopyUtils.random.nextInt(keywords.length)];
 
-            try {
+            requestSearch(keyword,
+                    data -> sendMessageFromData(msg, data, keyword),
+                    er -> sendMsg(event, "Error while looking up image: " + er));
+
+            /*try {
                 WebUtils.ins.getAson(SpoopyUtils.getGoogleSearchUrl(keyword)).async(
                         data -> sendMessageFromData(msg, data, keyword),
                         er -> sendMsg(event, "Error while looking up image: " + er));
             } catch (NullPointerException e) {
                 e.printStackTrace();
                 msg.editMessage("Something went wrong while looking up the image").queue();
-            }
+            }*/
         });
-    }
-
-    void sendMessageFromData(Message msg, Ason data, String key) {
-        AsonArray<Ason> arr = data.getJsonArray("items");
-        if (arr.size() == 0) {
-            msg.editMessage("Nothing was found for the search query: `" + key + "`").queue();
-            return;
-        }
-        Ason randomItem = arr.getJsonObject(SpoopyUtils.random.nextInt(arr.size()));
-
-        assert randomItem != null;
-        msg.editMessage(
-                EmbedUtils.defaultEmbed()
-                        .setTitle(randomItem.getString("title"), randomItem.getString("image.contextLink"))
-                        .setImage(randomItem.getString("link")).build())
-                .override(true)
-                .queue();
     }
 
     @Override

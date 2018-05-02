@@ -43,7 +43,7 @@ dependencies {
     //My little utils
     compile 'com.github.duncte123:botCommons:a857bf6ffc'
     //JDA
-    compile group: 'net.dv8tion', name: 'JDA', version: '3.6.0_359'
+    compile group: 'net.dv8tion', name: 'JDA', version: '3.6.0_361'
     //LavaPlayer/Lavalink
     compile(group: 'com.github.Frederikam', name: 'Lavalink', version: '36f2bf8') {
         exclude group: 'com.github.Frederikam.Lavalink', module: 'Lavalink-Server'

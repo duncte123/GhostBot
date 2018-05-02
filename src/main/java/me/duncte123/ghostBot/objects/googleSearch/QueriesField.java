@@ -16,14 +16,22 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.fandomApi;
+package me.duncte123.ghostBot.objects.googleSearch;
 
-import me.duncte123.fandomApi.models.user.UserResultSet;
+import java.util.List;
 
-public class TempMainClass {
-    public static void main(String... args) {
-        FandomApi fandomApi = new FandomApi("http://dannyphantom.wikia.com");
-        UserResultSet userResultSet = (UserResultSet) fandomApi.userEndpoints.details("duncte123");
-        System.out.println(userResultSet.getItems().get(0).getAbsoluteUrl());
+public class QueriesField {
+    private List<InnerQueries> request;
+    private List<InnerQueries> nextPage;
+
+    public List<InnerQueries> getNextPage() {
+        return nextPage;
     }
+
+    public List<InnerQueries> getRequest() {
+        return request;
+    }
+
+    public QueriesField() {}
+
 }

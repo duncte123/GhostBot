@@ -18,7 +18,7 @@
 
 package me.duncte123.fandomApi.models;
 
-public class FandomException implements FandomResult {
+public class FandomException {
 
     private final String type;
     private final String message;

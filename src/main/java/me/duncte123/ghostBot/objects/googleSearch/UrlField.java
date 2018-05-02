@@ -16,18 +16,19 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.fandomApi.endpoints;
+package me.duncte123.ghostBot.objects.googleSearch;
 
-import me.duncte123.fandomApi.FandomApi;
-import me.duncte123.fandomApi.models.FandomResult;
-import me.duncte123.fandomApi.utils.CommonVars;
+public class UrlField {
+    private String type;
+    private String template;
 
-public abstract class Endpoint {
+    public UrlField() {}
 
-    public String getEndpoint() {
-        return FandomApi.getWikiUrl() + CommonVars.apiBase;
+    public String getType() {
+        return type;
     }
 
-    public abstract FandomResult execute();
-
+    public String getTemplate() {
+        return template;
+    }
 }

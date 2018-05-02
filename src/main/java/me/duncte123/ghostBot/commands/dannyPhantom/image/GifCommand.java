@@ -18,19 +18,22 @@
 
 package me.duncte123.ghostBot.commands.dannyPhantom.image;
 
-import me.duncte123.botCommons.web.WebUtils;
 import me.duncte123.ghostBot.objects.Category;
-import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
 
-public class GifCommand extends ImageCommand {
+public class GifCommand extends ImageBase {
 
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
         sendMsg(event, "Loading....", msg -> {
             String keyword = "Danny Phantom gif";
+
+            requestSearch(keyword,
+                    data -> sendMessageFromData(msg, data, keyword),
+                    er -> sendMsg(event, "Error while looking up image: " + er));
+            /*
             try {
                 WebUtils.ins.getAson(SpoopyUtils.getGoogleSearchUrl(keyword) + "&fileType=gif").async(
                         data -> sendMessageFromData(msg, data, keyword),
@@ -38,7 +41,7 @@ public class GifCommand extends ImageCommand {
             } catch (NullPointerException e) {
                 e.printStackTrace();
                 msg.editMessage("Something went wrong while looking up the image").queue();
-            }
+            }*/
         });
     }
 

@@ -16,14 +16,44 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.fandomApi.endpoints.search;
+package me.duncte123.ghostBot.objects.googleSearch;
 
-import me.duncte123.fandomApi.endpoints.Endpoint;
+public class ImageData {
+    private String contextLink;
+    private int height;
+    private int width;
+    private int byteSize;
+    private String thumbnailLink;
+    private int thumbnailHeight;
+    private int thumbnailWidth;
 
-public abstract class SearchEndpoint extends Endpoint {
+    public ImageData() {}
 
-    @Override
-    public String getEndpoint() {
-        return super.getEndpoint() + "/Search/" + getClass().getSimpleName();
+    public int getByteSize() {
+        return byteSize;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getThumbnailHeight() {
+        return thumbnailHeight;
+    }
+
+    public int getThumbnailWidth() {
+        return thumbnailWidth;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public String getContextLink() {
+        return contextLink;
+    }
+
+    public String getThumbnailLink() {
+        return thumbnailLink;
     }
 }

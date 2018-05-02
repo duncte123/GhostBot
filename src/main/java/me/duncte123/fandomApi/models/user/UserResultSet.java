@@ -18,11 +18,9 @@
 
 package me.duncte123.fandomApi.models.user;
 
-import me.duncte123.fandomApi.models.FandomResult;
-
 import java.util.List;
 
-public class UserResultSet implements FandomResult {
+public class UserResultSet {
 
     private String basepath;
     private List<UserElement> items;

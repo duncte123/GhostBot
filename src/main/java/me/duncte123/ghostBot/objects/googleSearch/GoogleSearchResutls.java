@@ -16,8 +16,42 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.fandomApi.utils;
+package me.duncte123.ghostBot.objects.googleSearch;
 
-public class CommonVars {
-    public static final String apiBase = "/api/v1";
+import java.util.List;
+
+@SuppressWarnings("unused")
+public class GoogleSearchResutls {
+
+    private String kind;
+    private UrlField url;
+    private QueriesField queries;
+    private ContextField context;
+    private SearchInformationField searchInformation;
+    private List<SearchItem> items;
+
+    public String getKind() {
+        return kind;
+    }
+
+    public ContextField getContext() {
+        return context;
+    }
+
+    public List<SearchItem> getItems() {
+        return items;
+    }
+
+    public QueriesField getQueries() {
+        return queries;
+    }
+
+    public SearchInformationField getSearchInformation() {
+        return searchInformation;
+    }
+
+    public UrlField getUrl() {
+        return url;
+    }
+
 }
