@@ -56,13 +56,13 @@ public class GhostBot {
             e.printStackTrace();
             System.exit(-1);
         }
-
     }
 
     public static GhostBot getInstance() {
         return ins;
     }
 
+    @SuppressWarnings("unused")
     public JDA getFakeShard(int shardId) {
         return jda;
     }

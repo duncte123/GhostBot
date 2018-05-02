@@ -22,12 +22,15 @@ import com.afollestad.ason.Ason;
 import com.github.natanbc.reliqua.request.RequestException;
 import me.duncte123.botCommons.web.WebUtils;
 import me.duncte123.ghostBot.objects.Command;
-import me.duncte123.ghostBot.objects.googleSearch.GoogleSearchResutls;
-import me.duncte123.ghostBot.objects.googleSearch.SearchItem;
+import me.duncte123.ghostBot.objects.googleSearch.GoogleSearchResults;
+import me.duncte123.ghostBot.objects.googleSearch.GoogleSearchResults.SearchItem;
 import me.duncte123.ghostBot.utils.EmbedUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.entities.Message;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,23 +43,25 @@ abstract class ImageBase extends Command {
      *
      * The key is the query and the values is the response
      */
-    static final Map<String, GoogleSearchResutls> searchCache = new HashMap<>();
+    static final Map<String, GoogleSearchResults> searchCache = new HashMap<>();
 
-    void requestSearch(String query, Consumer<GoogleSearchResutls> success, Consumer<RequestException> error) {
+    static final Logger logger = LoggerFactory.getLogger(ImageBase.class);
+
+    void requestSearch(String query, Consumer<GoogleSearchResults> success, Consumer<RequestException> error) {
         if(searchCache.containsKey(query)) {
             success.accept(searchCache.get(query));
         } else {
-            System.out.println("MAKING IMAGE REQUEST: " + query);
+            logger.info("MAKING IMAGE REQUEST: " + query);
             WebUtils.ins.getAson(SpoopyUtils.getGoogleSearchUrl(query)).async(
                     ason -> {
-                        GoogleSearchResutls data = Ason.deserialize(ason, GoogleSearchResutls.class, true);
+                        GoogleSearchResults data = Ason.deserialize(ason, GoogleSearchResults.class, true);
                         success.accept(data);
                         searchCache.put(query, data);
                     }, error);
         }
     }
 
-    void sendMessageFromData(Message msg, GoogleSearchResutls data, String key) {
+    void sendMessageFromData(Message msg, GoogleSearchResults data, String key) {
         List<SearchItem> arr = data.getItems();
         if (arr == null || arr.isEmpty()) {
             msg.editMessage("Nothing was found for the search query: `" + key + "`").queue();

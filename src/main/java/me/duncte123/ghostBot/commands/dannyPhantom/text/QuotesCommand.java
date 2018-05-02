@@ -54,30 +54,6 @@ public class QuotesCommand extends Command {
             "Finished <:DPJoy:425714609702305804> ({TOTAL} quotes in the system and {COUNT_NEW) new)"
     };
 
-    private final List<Long> badPostIds = List.of(
-            156199508936L,
-            141701068521L,
-            139748205676L,
-            145485004576L,
-            131957587201L,
-            145767003281L,
-            122464866251L,
-            149288809271L,
-            131048227566L,
-            160064523456L,
-            146961714036L,
-            157865830301L,
-            136789766336L,
-            148512885491L,
-            137376851771L,
-            147819522951L,
-            147825378346L,
-            156199957996L,
-            143194957186L,
-            121801283241L,
-            121891439031L
-    );
-
     private final List<TumblrPost> tumblrPosts = new ArrayList<>();
     private final Map<String, Integer> indexes = new HashMap<>();
 
@@ -227,4 +203,30 @@ public class QuotesCommand extends Command {
 
         return StringEscapeUtils.unescapeHtml4(finalStage);
     }
+
+    private final List<Long> badPostIds = List.of(
+            156199508936L,
+            141701068521L,
+            139748205676L,
+            145485004576L,
+            131957587201L,
+            145767003281L,
+            122464866251L,
+            149288809271L,
+            131048227566L,
+            160064523456L,
+            146961714036L,
+            157865830301L,
+            136789766336L,
+            148512885491L,
+            137376851771L,
+            147819522951L,
+            147825378346L,
+            156199957996L,
+            143194957186L,
+            121801283241L,
+            121891439031L,
+            144734161886L,
+            130808913006L
+    );
 }
