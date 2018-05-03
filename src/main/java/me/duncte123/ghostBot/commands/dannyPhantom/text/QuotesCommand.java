@@ -184,24 +184,31 @@ public class QuotesCommand extends Command {
     }
 
     private String parseText(String raw) {
+        raw = StringEscapeUtils.unescapeHtml4(raw);
         String input = raw.replaceAll(Pattern.quote("<br/>"), "\n");
         String replacePWith = input.contains("</p>\n") ? "" : "\n";
-        String finalStage = input.replaceAll(Pattern.quote("<p>"), "")
+
+        return input
+                //show the stars and remove the ps
                 .replaceAll("\\*", "\\\\*")
+                .replaceAll(Pattern.quote("<p>"), "")
                 .replaceAll(Pattern.quote("</p>"), replacePWith)
+                .replaceAll(Pattern.quote("<p/>"), replacePWith) //because some posts are fucked
+                //Italics
                 .replaceAll(Pattern.quote("<i>"), "_")
                 .replaceAll(Pattern.quote("</i>"), "_")
                 .replaceAll(Pattern.quote("<em>"), "_")
                 .replaceAll(Pattern.quote("</em>"), "_")
+                //bold
                 .replaceAll(Pattern.quote("<b>"), "**")
                 .replaceAll(Pattern.quote("</b>"), "**")
                 .replaceAll(Pattern.quote("<strong>"), "**")
                 .replaceAll(Pattern.quote("</strong>"), "**")
+                //useless crap that we don't need
                 .replaceAll(Pattern.quote("<small>"), "")
                 .replaceAll(Pattern.quote("</small>"), "")
-                .replaceAll("<a(?:.*)href=\"(\\S+)\"(?:.*)>(.*)<\\/a>", "[$2]($1)");
-
-        return StringEscapeUtils.unescapeHtml4(finalStage);
+                //links
+                .replaceAll("<a(?:.*)href=\"(\\S+)\"(?:.*)>(.*)</a>", "[$2]($1)");
     }
 
     private final List<Long> badPostIds = List.of(

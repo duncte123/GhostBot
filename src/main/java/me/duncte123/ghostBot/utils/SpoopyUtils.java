@@ -41,7 +41,7 @@ public class SpoopyUtils {
             "?q=%s" +
             "&prettyPrint=false" +
             "&cx=012048784535646064391:v-fxkttbw54" +
-            //"&num=100" +
+            "&num=10" +
             "&hl=en" +
             "&searchType=image" +
             "&filter=1" +
