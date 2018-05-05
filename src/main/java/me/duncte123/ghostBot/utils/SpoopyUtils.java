@@ -31,6 +31,7 @@ import java.util.Random;
 public class SpoopyUtils {
     public static final AudioUtils audio = AudioUtils.ins;
     public static final Config config = new ConfigUtils().loadConfig();
+    public static final Config IMAGES = new ConfigUtils().loadImages();
     public static final Random random = new Random();
 
     public static final WikiHolder WIKI_HOLDER = new WikiHolder("https://dannyphantom.wikia.com");

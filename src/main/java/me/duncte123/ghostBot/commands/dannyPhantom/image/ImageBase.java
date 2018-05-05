@@ -30,7 +30,6 @@ import net.dv8tion.jda.core.entities.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +39,7 @@ abstract class ImageBase extends Command {
 
     /**
      * This holds the search queries that we have performed so we won't go over quota
-     *
+     * <p>
      * The key is the query and the values is the response
      */
     static final Map<String, GoogleSearchResults> searchCache = new HashMap<>();
@@ -48,7 +47,7 @@ abstract class ImageBase extends Command {
     static final Logger logger = LoggerFactory.getLogger(ImageBase.class);
 
     void requestSearch(String query, Consumer<GoogleSearchResults> success, Consumer<RequestException> error) {
-        if(searchCache.containsKey(query)) {
+        if (searchCache.containsKey(query)) {
             success.accept(searchCache.get(query));
         } else {
             logger.info("MAKING IMAGE REQUEST: " + query);
@@ -59,6 +58,29 @@ abstract class ImageBase extends Command {
                         searchCache.put(query, data);
                     }, error);
         }
+    }
+
+    String requestImage(String query) {
+        System.out.println(query);
+        List<String> items = SpoopyUtils.IMAGES.getArray("images." + query);
+        return items.get(SpoopyUtils.random.nextInt(items.size()));
+    }
+
+    void sendMessageFromName(Message msg, String fileName, String key) {
+        if(fileName == null || fileName.isEmpty()) {
+            msg.editMessage("Nothing was found for the search query: `" + key + "`").queue();
+            return;
+        }
+
+        System.out.println("https://i.duncte123.me/" + replaceSpaces(key) + "/" + fileName);
+
+        msg.editMessage(
+                EmbedUtils.defaultEmbed()
+                        .setTitle(key)
+                        .setImage("https://i.duncte123.me/" + replaceSpaces(key) + "/" + fileName)
+                        .build())
+                .override(true)
+                .queue();
     }
 
     void sendMessageFromData(Message msg, GoogleSearchResults data, String key) {
@@ -76,6 +98,10 @@ abstract class ImageBase extends Command {
                         .setImage(randomItem.getLink()).build())
                 .override(true)
                 .queue();
+    }
+
+    private String replaceSpaces(String in) {
+        return in.replaceAll(" " , "%20");
     }
 
 }

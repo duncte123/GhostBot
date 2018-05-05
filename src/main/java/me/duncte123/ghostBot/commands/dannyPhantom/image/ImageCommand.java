@@ -28,14 +28,14 @@ public class ImageCommand extends ImageBase {
 
     private final String[] keywords = {
             "Danny Phantom",
-            "Pitch Pearl",
-            "Pitch Pearl",
-            "Pitch Pearl",
-            "Pitch Pearl",
-            "Pitch Pearl",
-            "Pitch Pearl",
-            "Pitch Pearl",
-            "Pitch Pearl",
+            "pitch pearl",
+            "pitch pearl",
+            "pitch pearl",
+            "pitch pearl",
+            "pitch pearl",
+            "pitch pearl",
+            "pitch pearl",
+            "pitch pearl",
             "Danny Fenton",
             "Samantha Manson",
             "Sam Manson",
@@ -61,18 +61,13 @@ public class ImageCommand extends ImageBase {
         sendMsg(event, "Loading....", msg -> {
             String keyword = keywords[SpoopyUtils.random.nextInt(keywords.length)];
 
-            requestSearch(keyword,
-                    data -> sendMessageFromData(msg, data, keyword),
-                    er -> sendMsg(event, "Error while looking up image: " + er));
+            String file = requestImage(keyword);
+            sendMessageFromName(msg, file, keyword);
 
-            /*try {
-                WebUtils.ins.getAson(SpoopyUtils.getGoogleSearchUrl(keyword)).async(
-                        data -> sendMessageFromData(msg, data, keyword),
-                        er -> sendMsg(event, "Error while looking up image: " + er));
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-                msg.editMessage("Something went wrong while looking up the image").queue();
-            }*/
+            /*requestSearch(keyword,
+                    data -> sendMessageFromData(msg, data, keyword),
+                    er -> sendMsg(event, "Error while looking up image: " + er));*/
+
         });
     }
 

@@ -29,6 +29,7 @@ class ConfigUtils {
     private static final Logger logger = LoggerFactory.getLogger(ConfigUtils.class);
 
     private Config config;
+    private Config images;
 
     /**
      * This will try to load the bot config and kill the program if it fails
@@ -37,6 +38,7 @@ class ConfigUtils {
         try {
             logger.info("Loading config.json");
             this.config = ConfigLoader.getConfig(new File("config.json"));
+            this.images = ConfigLoader.getConfig(new File("images.json"));
             logger.info("Loaded config.json");
         } catch (Exception e) {
             logger.error("Could not load config, aborting", e);
@@ -51,5 +53,9 @@ class ConfigUtils {
      */
     Config loadConfig() {
         return config;
+    }
+
+    Config loadImages() {
+        return images;
     }
 }
