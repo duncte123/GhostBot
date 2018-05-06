@@ -61,18 +61,18 @@ abstract class ImageBase extends Command {
     }
 
     String requestImage(String query) {
-        System.out.println(query);
+        logger.debug("Getting image for '" + query + "'");
         List<String> items = SpoopyUtils.IMAGES.getArray("images." + query);
         return items.get(SpoopyUtils.random.nextInt(items.size()));
     }
 
     void sendMessageFromName(Message msg, String fileName, String key) {
-        if(fileName == null || fileName.isEmpty()) {
+        if (fileName == null || fileName.isEmpty()) {
             msg.editMessage("Nothing was found for the search query: `" + key + "`").queue();
             return;
         }
 
-        System.out.println("https://i.duncte123.me/" + replaceSpaces(key) + "/" + fileName);
+        logger.debug("Image Link: 'https://i.duncte123.me/" + replaceSpaces(key) + "/" + fileName + "'");
 
         msg.editMessage(
                 EmbedUtils.defaultEmbed()
@@ -101,7 +101,7 @@ abstract class ImageBase extends Command {
     }
 
     private String replaceSpaces(String in) {
-        return in.replaceAll(" " , "%20");
+        return in.replaceAll(" ", "%20");
     }
 
 }
