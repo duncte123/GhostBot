@@ -37,7 +37,7 @@ public class OtherGhostCommands extends ImageBase {
                 sendFromKeywords(event, "Dan Phantom", "Dark Danny");
                 break;
             case "vlad":
-                sendFromKeywords(event, "Vlad plasmius", "Vlad Masters");
+                sendFromKeywords(event, "Vlad Plasmius", "Vlad masters");
                 break;
             case "sam":
                 sendFromKeyword(event, "Sam Manson");
