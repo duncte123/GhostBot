@@ -25,6 +25,7 @@ import me.duncte123.ghostBot.utils.SpoopyUtils;
 import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
+import java.util.Iterator;
 import java.util.Set;
 
 import static me.duncte123.ghostBot.utils.MessageUtils.sendSuccess;
@@ -46,10 +47,15 @@ public class ReloadAudioCommand extends Command {
 
         CommandManager commandManager = SpoopyUtils.commandManager;
         Set<Command> commands = commandManager.getCommands();
-        for (Command cmd : commands) {
+        Iterator<Command> commandIterator = commands.iterator();
+        while (commandIterator.hasNext()) {
+            Command c = commandIterator.next();
+            c.reloadAudioFiles();
+        }
+        /*for (Command cmd : commands) {
             if (cmd.getCategory().equals(Category.AUDIO))
                 cmd.reloadAudioFiles();
-        }
+        }*/
 
         System.out.println("this should never run");
     }

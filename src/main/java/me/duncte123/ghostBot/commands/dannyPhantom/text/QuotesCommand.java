@@ -32,8 +32,6 @@ import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -41,7 +39,7 @@ import java.util.stream.Collectors;
 
 public class QuotesCommand extends Command {
 
-    private static final Logger logger = LoggerFactory.getLogger(QuotesCommand.class);
+    //private static final Logger logger = LoggerFactory.getLogger(QuotesCommand.class);
     private final String[] types = {"chat", "text", "quote"};
     private final String[] messages = {
             "Starting to reload quotes",

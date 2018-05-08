@@ -18,10 +18,7 @@
 
 package me.duncte123.ghostBot;
 
-import me.duncte123.ghostBot.commands.dannyPhantom.audio.EmberCommand;
-import me.duncte123.ghostBot.commands.dannyPhantom.audio.FruitloopCommand;
-import me.duncte123.ghostBot.commands.dannyPhantom.audio.GoingGhostCommand;
-import me.duncte123.ghostBot.commands.dannyPhantom.audio.WailCommand;
+import me.duncte123.ghostBot.commands.dannyPhantom.audio.*;
 import me.duncte123.ghostBot.commands.dannyPhantom.image.GifCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.image.ImageCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.image.OtherGhostCommands;
@@ -51,6 +48,7 @@ public class CommandManager {
         this.addCommand(new WailCommand());
         this.addCommand(new FruitloopCommand());
         this.addCommand(new EmberCommand());
+        this.addCommand(new BoxGhostCommand());
 
         this.addCommand(new ImageCommand());
         this.addCommand(new GifCommand());

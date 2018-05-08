@@ -45,7 +45,7 @@ public class WailCommand extends Command {
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
         if (preAudioChecks(event)) {
-            String selectedTrack = audioFiles[SpoopyUtils.random.nextInt(audioFiles.length)];
+            String selectedTrack = getRandomTrack();
             sendMsg(event, "Selected track: _" + selectedTrack + "_");
             SpoopyUtils.audio.loadAndPlay(getMusicManager(event.getGuild()), event.getChannel(),
                     audioPath + selectedTrack, false);

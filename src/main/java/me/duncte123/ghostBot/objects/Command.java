@@ -26,6 +26,8 @@ import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.PermissionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -35,6 +37,13 @@ import static me.duncte123.ghostBot.utils.MessageUtils.sendEmbed;
 import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
 
 public abstract class Command {
+
+    protected final Logger logger;
+
+    public Command() {
+        logger = LoggerFactory.getLogger(getClass());
+    }
+
     protected String audioPath = "";
     protected String[] audioFiles = {};
 
@@ -55,7 +64,7 @@ public abstract class Command {
     public void reloadAudioFiles() {
         if (!getCategory().equals(Category.AUDIO)) return;
 
-        System.out.println(getName() + ": " + audioPath);
+        logger.info("Path: " + audioPath);
         File folder = new File(audioPath);
         File[] listOfFiles = folder.listFiles();
         List<String> filesFound = new ArrayList<>();
@@ -64,12 +73,17 @@ public abstract class Command {
 
         for (File file : listOfFiles) {
             if (file.isFile()) {
-                System.out.println(getName() + ": " + audioPath + file.getName());
+                logger.info("File found: " + audioPath + file.getName());
                 filesFound.add(file.getName());
             }
         }
 
         audioFiles = filesFound.toArray(new String[0]);
+    }
+
+    protected String getRandomTrack() {
+        if (!getCategory().equals(Category.AUDIO)) return null;
+        return audioFiles[SpoopyUtils.random.nextInt(audioFiles.length)];
     }
 
     protected GuildMusicManager getMusicManager(Guild guild) {

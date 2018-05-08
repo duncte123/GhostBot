@@ -26,19 +26,17 @@ import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RandomGhostCommand extends Command {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RandomGhostCommand.class);
+    //private static final Logger logger = LoggerFactory.getLogger(RandomGhostCommand.class);
     private final List<String> ghosts = new ArrayList<>();
 
     public RandomGhostCommand() {
-        LOGGER.info("Scraping ghosts async");
+        logger.info("Scraping ghosts async");
         WebUtils.ins.scrapeWebPage("http://dannyphantom.wikia.com/wiki/Category:Ghosts?display=page&sort=alphabetical").async((doc) -> {
             try {
                 Element el = doc.getElementsByClass("mw-content-ltr").get(2);
@@ -59,7 +57,7 @@ public class RandomGhostCommand extends Command {
                         })
                 );
 
-                LOGGER.info("Scraped " + anchors.size() + " Ghosts from the wiki");
+                logger.info("Scraped " + anchors.size() + " Ghosts from the wiki");
 
                 anchors.forEach(a -> ghosts.add("http://dannyphantom.wikia.com" + a.attr("href")));
 

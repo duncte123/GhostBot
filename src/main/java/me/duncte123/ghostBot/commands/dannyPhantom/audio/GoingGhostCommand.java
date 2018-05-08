@@ -42,7 +42,7 @@ public class GoingGhostCommand extends Command {
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
         if (preAudioChecks(event)) {
-            String selectedTrack = audioFiles[SpoopyUtils.random.nextInt(audioFiles.length)];
+            String selectedTrack = getRandomTrack();
             int p = SpoopyUtils.random.nextInt(100);
             if (p >= 50 && p <= 55) {
                 selectedTrack = "extra/its going ghost.mp3";
