@@ -26,13 +26,6 @@ import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
 
 public class GoingGhostCommand extends Command {
-    /*private final String audioPath = SpoopyUtils.audio.BASE_AUDIO_DIR + "goingghost/";
-    private final String[] audioFiles = {
-            "going ghost 1 (priate radio).mp3",
-            "going ghost 2 (priate radio).mp3",
-            "going ghost 3 (priate radio).mp3",
-            "going ghost 4 (mistery meat).mp3"
-    };*/
 
     public GoingGhostCommand() {
         this.audioPath = SpoopyUtils.audio.BASE_AUDIO_DIR + "goingghost/";

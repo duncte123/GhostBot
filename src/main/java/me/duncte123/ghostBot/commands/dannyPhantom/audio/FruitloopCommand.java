@@ -23,15 +23,7 @@ import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
-import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
-
 public class FruitloopCommand extends Command {
-
-    //private final String audioPath = SpoopyUtils.audio.BASE_AUDIO_DIR + "fruitloop/";
-    /*private String[] audioFiles = {
-            "fruitloop 1.mp3",
-            "fruitloop 2.mp3"
-    };*/
 
     public FruitloopCommand() {
         this.audioPath = SpoopyUtils.audio.BASE_AUDIO_DIR + "fruitloop/";
@@ -40,12 +32,7 @@ public class FruitloopCommand extends Command {
 
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
-        if (preAudioChecks(event)) {
-            String selectedTrack = getRandomTrack();
-            sendMsg(event, "Selected track: _" + selectedTrack + "_");
-            SpoopyUtils.audio.loadAndPlay(getMusicManager(event.getGuild()), event.getChannel(),
-                    audioPath + selectedTrack, false);
-        }
+        doAudioStuff(event);
     }
 
     @Override

@@ -23,19 +23,7 @@ import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
-import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
-
 public class WailCommand extends Command {
-
-   /* private final String audioPath = SpoopyUtils.audio.BASE_AUDIO_DIR + "wail/";
-    private final String[] audioFiles = {
-            "ghost wail 1.mp3",
-            "ghost wail 2.mp3",
-            "ghost wail 3.mp3",
-            "ghost wail 4.mp3",
-            "ghost wail 5.mp3",
-            "ghost wail 6.mp3"
-    };*/
 
     public WailCommand() {
         this.audioPath = SpoopyUtils.audio.BASE_AUDIO_DIR + "wail/";
@@ -44,12 +32,7 @@ public class WailCommand extends Command {
 
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
-        if (preAudioChecks(event)) {
-            String selectedTrack = getRandomTrack();
-            sendMsg(event, "Selected track: _" + selectedTrack + "_");
-            SpoopyUtils.audio.loadAndPlay(getMusicManager(event.getGuild()), event.getChannel(),
-                    audioPath + selectedTrack, false);
-        }
+        doAudioStuff(event);
     }
 
     @Override

@@ -86,6 +86,18 @@ public abstract class Command {
         return audioFiles[SpoopyUtils.random.nextInt(audioFiles.length)];
     }
 
+    protected void doAudioStuff(GuildMessageReceivedEvent event) {
+        if (!getCategory().equals(Category.AUDIO)) return;
+
+        if (preAudioChecks(event)) {
+            String selectedTrack = getRandomTrack();
+            sendMsg(event, "Selected track: _" + selectedTrack + "_");
+            SpoopyUtils.audio.loadAndPlay(getMusicManager(event.getGuild()), event.getChannel(),
+                    audioPath + selectedTrack, false);
+        }
+
+    }
+
     protected GuildMusicManager getMusicManager(Guild guild) {
         return SpoopyUtils.audio.getMusicManager(guild);
     }
