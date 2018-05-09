@@ -20,12 +20,12 @@ package me.duncte123.ghostBot.audio;
 
 import com.afollestad.ason.Ason;
 
-public class LavalinkNode {
+public class LavalinkNode_java {
 
     private final String wsUrl;
     private final String pass;
 
-    public LavalinkNode(Ason ason) {
+    public LavalinkNode_java(Ason ason) {
         this.wsUrl = ason.getString("wsUrl");
         this.pass = ason.getString("pass");
     }

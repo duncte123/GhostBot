@@ -35,7 +35,7 @@ import java.util.logging.Logger
 
 class AudioUtils {
 
-    static def ins = new AudioUtils()
+    static AudioUtils ins = new AudioUtils()
     static final def DEFAULT_VOLUME = 35
     final def BASE_AUDIO_DIR = "../GhostBot/audioFiles/"
     final def embedTitle = "Spoopy-Luma-Player"
@@ -117,7 +117,7 @@ class AudioUtils {
                 }
             }
         }
-        guild.audioManager.sendingHandler = mng.getSendHandler()
+        guild.audioManager.sendingHandler = mng.sendHandler
         return mng
     }
 }

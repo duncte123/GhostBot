@@ -22,7 +22,7 @@ import fredboat.audio.player.LavalinkManager;
 import lavalink.client.player.IPlayer;
 import net.dv8tion.jda.core.entities.Guild;
 
-public class GuildMusicManager {
+public class GuildMusicManager_java {
 
     /**
      * This is our player
@@ -32,31 +32,31 @@ public class GuildMusicManager {
     /**
      * This is the scheduler
      */
-    public final TrackScheduler scheduler;
+    public final TrackScheduler_java scheduler;
 
     /**
      * This is what actually sends the audio
      */
-    private final AudioPlayerSenderHandler sendHandler;
+    private final AudioPlayerSenderHandler_java sendHandler;
 
     /**
      * Constructor
      *
      * @param g The guild that we wannt the manager for
      */
-    public GuildMusicManager(Guild g) {
+    public GuildMusicManager_java(Guild g) {
         player = LavalinkManager.ins.createPlayer(g.getId());
-        scheduler = new TrackScheduler(player);
-        sendHandler = new AudioPlayerSenderHandler(player);
+        scheduler = new TrackScheduler_java(player);
+        sendHandler = new AudioPlayerSenderHandler_java(player);
         player.addListener(scheduler);
     }
 
     /**
      * This will get our sendings handler
      *
-     * @return The {@link AudioPlayerSenderHandler thing} that sends our audio
+     * @return The {@link AudioPlayerSenderHandler_java thing} that sends our audio
      */
-    public AudioPlayerSenderHandler getSendHandler() {
+    public AudioPlayerSenderHandler_java getSendHandler() {
         return sendHandler;
     }
 }

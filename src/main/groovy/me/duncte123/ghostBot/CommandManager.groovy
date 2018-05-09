@@ -20,6 +20,14 @@ package me.duncte123.ghostBot
 
 import me.duncte123.ghostBot.commands.AboutCommand
 import me.duncte123.ghostBot.commands.HelpCommand
+import me.duncte123.ghostBot.commands.dannyPhantom.audio.BoxGhostCommand
+import me.duncte123.ghostBot.commands.dannyPhantom.audio.EmberCommand
+import me.duncte123.ghostBot.commands.dannyPhantom.audio.FruitLoopCommand
+import me.duncte123.ghostBot.commands.dannyPhantom.audio.GoingGhostCommand
+import me.duncte123.ghostBot.commands.dannyPhantom.audio.WailCommand
+import me.duncte123.ghostBot.commands.dannyPhantom.image.GifCommand
+import me.duncte123.ghostBot.commands.dannyPhantom.image.ImageCommand
+import me.duncte123.ghostBot.commands.dannyPhantom.image.OtherGhostCommands
 import me.duncte123.ghostBot.commands.dannyPhantom.text.GamesCommand
 import me.duncte123.ghostBot.commands.dannyPhantom.text.QuotesCommand
 import me.duncte123.ghostBot.commands.dannyPhantom.text.RandomGhostCommand
@@ -47,6 +55,16 @@ class CommandManager {
         addCommand(new GamesCommand())
         addCommand(new QuotesCommand())
         addCommand(new RandomGhostCommand())
+
+        addCommand(new ImageCommand())
+        addCommand(new GifCommand())
+        addCommand(new OtherGhostCommands())
+
+        addCommand(new BoxGhostCommand())
+        addCommand(new EmberCommand())
+        addCommand(new FruitLoopCommand())
+        addCommand(new GoingGhostCommand())
+        addCommand(new WailCommand())
     }
 
     Set<Command> getCommands() {

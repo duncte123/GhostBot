@@ -24,16 +24,16 @@ import me.duncte123.botCommons.web.WebUtils
 import me.duncte123.ghostBot.objects.Command
 import me.duncte123.ghostBot.objects.CommandCategory
 import me.duncte123.ghostBot.objects.googleSearch.GoogleSearchResults
-import me.duncte123.ghostBot.objects.googleSearch.GoogleSearchResults_java
-import me.duncte123.ghostBot.utils.EmbedUtils_java
-import me.duncte123.ghostBot.utils.MessageUtils
+import me.duncte123.ghostBot.utils.EmbedUtils
 import me.duncte123.ghostBot.utils.SpoopyUtils
-import me.duncte123.ghostBot.utils.SpoopyUtils_java
-import net.dv8tion.jda.core.entities.Message
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 import org.slf4j.LoggerFactory
 
+import javax.validation.constraints.NotNull
 import java.util.function.Consumer
+
+import static me.duncte123.ghostBot.utils.MessageUtils.sendEmbed
+import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg
 
 abstract class ImageBase extends Command {
     /**
@@ -50,7 +50,7 @@ abstract class ImageBase extends Command {
             success.accept(searchCache[query])
         } else {
             logger.info("MAKING IMAGE REQUEST: " + query);
-            WebUtils.ins.getAson(SpoopyUtils.getGoogleSearchUrl(query)).async( { ason ->
+            WebUtils.ins.getAson(SpoopyUtils.getGoogleSearchUrl(query)).async({ ason ->
                 GoogleSearchResults data = Ason.deserialize(ason, GoogleSearchResults.class, true)
                 success.accept(data)
                 searchCache[query] = data
@@ -64,44 +64,38 @@ abstract class ImageBase extends Command {
         return items.get(SpoopyUtils.RANDOM.nextInt(items.size()))
     }
 
-    void sendMessageFromName(GuildMessageReceivedEvent event, LocalImage i) {
-        if (fileName == null || fileName.isEmpty()) {
-            MessageUtils.sendMsg(event, "Nothing was found for the search query: `" + key + "`")
+    static void sendMessageFromName(GuildMessageReceivedEvent event, @NotNull LocalImage i) {
+        if (i.fileName == null || i.fileName.isEmpty()) {
+            sendMsg(event, "Nothing was found for the search query: `$i.key`")
             return
         }
 
         logger.debug("Image Link: 'https://i.duncte123.me/${replaceSpaces(i.key)}/$i.fileName'")
 
-
-
-        msg.editMessage(
-                EmbedUtils_java.defaultEmbed()
+        sendEmbed(event,
+                EmbedUtils.defaultEmbed()
                         .setTitle(i.key)
                         .setImage("https://i.duncte123.me/${replaceSpaces(i.key)}/$i.fileName")
-                        .build())
-                .override(true)
-                .queue();
+                        .build()
+        )
     }
 
-    void sendMessageFromData(Message msg, GoogleSearchResults_java data, String key) {
-        List<GoogleSearchResults_java.SearchItem> arr = data.getItems();
+    void sendMessageFromData(GuildMessageReceivedEvent event, GoogleSearchResults data, String key) {
+        List<GoogleSearchResults.SearchItem> arr = data.items
         if (arr == null || arr.isEmpty()) {
-            msg.editMessage("Nothing was found for the search query: `" + key + "`").queue();
-            return;
+            sendMsg(event, "Nothing was found for the search query: `$key`")
+            return
         }
-        GoogleSearchResults_java.SearchItem randomItem = arr.get(SpoopyUtils_java.random.nextInt(arr.size()));
+        GoogleSearchResults.SearchItem randomItem = arr.get(SpoopyUtils.RANDOM.nextInt(arr.size()))
 
-        assert randomItem != null;
-        msg.editMessage(
-                EmbedUtils_java.defaultEmbed()
-                        .setTitle(randomItem.getTitle(), randomItem.getImage().getContextLink())
-                        .setImage(randomItem.getLink()).build())
-                .override(true)
-                .queue();
+        assert randomItem != null
+        sendEmbed(event, EmbedUtils.defaultEmbed()
+                .setTitle(randomItem.title, randomItem.image.contextLink)
+                .setImage(randomItem.link).build())
     }
 
-    private String replaceSpaces(String inp) {
-        return inp.replaceAll(" ", "%20");
+    private static String replaceSpaces(String inp) {
+        return inp.replaceAll(" ", "%20")
     }
 
     @Override
@@ -112,6 +106,7 @@ abstract class ImageBase extends Command {
     static class LocalImage {
         String key
         String fileName
+
         LocalImage(String key, String fileName) {
             this.key = key
             this.fileName = fileName

@@ -23,7 +23,7 @@ import lavalink.client.player.IPlayer;
 import lavalink.client.player.LavaplayerPlayerWrapper;
 import net.dv8tion.jda.core.audio.AudioSendHandler;
 
-public class AudioPlayerSenderHandler implements AudioSendHandler {
+public class AudioPlayerSenderHandler_java implements AudioSendHandler {
 
     /**
      * This is our audio player
@@ -35,7 +35,7 @@ public class AudioPlayerSenderHandler implements AudioSendHandler {
      */
     private AudioFrame lastFrame;
 
-    AudioPlayerSenderHandler(IPlayer audioPlayer) {
+    AudioPlayerSenderHandler_java(IPlayer audioPlayer) {
         this.audioPlayer = audioPlayer;
     }
 

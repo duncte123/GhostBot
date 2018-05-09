@@ -29,7 +29,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-public class TrackScheduler extends AudioEventAdapterWrapped {
+public class TrackScheduler_java extends AudioEventAdapterWrapped {
 
     /**
      * This stores our queue
@@ -66,7 +66,7 @@ public class TrackScheduler extends AudioEventAdapterWrapped {
      *
      * @param player Our audio player
      */
-    TrackScheduler(IPlayer player) {
+    TrackScheduler_java(IPlayer player) {
         this.player = player;
         this.queue = new LinkedList<>();
         //this.guildMusicManager = guildMusicManager;

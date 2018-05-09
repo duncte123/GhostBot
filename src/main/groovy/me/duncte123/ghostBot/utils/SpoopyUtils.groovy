@@ -18,6 +18,7 @@
 
 package me.duncte123.ghostBot.utils
 
+import me.duncte123.botCommons.config.Config
 import me.duncte123.ghostBot.CommandManager
 import net.dv8tion.jda.core.entities.Guild
 import net.dv8tion.jda.core.entities.TextChannel
@@ -30,8 +31,8 @@ class SpoopyUtils {
 
     //public vars
     static final def AUDIO = AudioUtils.ins
-    static final def CONFIG = CU.config
-    static final def IMAGES = CU.images
+    static final Config CONFIG = CU.config
+    static final Config IMAGES = CU.images
     static final def RANDOM = new Random()
     static final def WIKI_HOLDER = new WikiHolder("https://dannyphantom.wikia.com")
     static final def COMMAND_MANAGER = new CommandManager()
