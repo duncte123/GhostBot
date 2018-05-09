@@ -89,7 +89,10 @@ class CommandManager {
 
     @SuppressWarnings("UnusedReturnValue")
     private boolean addCommand(Command command) {
-        if (command.getName().contains(" ")) {
+        if(command.name == null) {
+            throw new IllegalArgumentException("Command has a null name: $command")
+        }
+        if (command.name.contains(" ")) {
             throw new IllegalArgumentException("Name can't have spaces!")
         }
 

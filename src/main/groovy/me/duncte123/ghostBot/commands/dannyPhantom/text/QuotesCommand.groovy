@@ -25,7 +25,7 @@ import me.duncte123.ghostBot.objects.Command
 import me.duncte123.ghostBot.objects.CommandCategory
 import me.duncte123.ghostBot.objects.tumblr.TumblrDialogue
 import me.duncte123.ghostBot.objects.tumblr.TumblrPost
-import me.duncte123.ghostBot.utils.EmbedUtils_java
+import me.duncte123.ghostBot.utils.EmbedUtils
 import me.duncte123.ghostBot.utils.MessageUtils
 import me.duncte123.ghostBot.utils.SpoopyUtils
 import me.duncte123.ghostBot.variables.Variables
@@ -101,7 +101,7 @@ class QuotesCommand extends Command {
         TumblrPost post = tumblrPosts[index]
         String type = post.type
 
-        EmbedBuilder eb = EmbedUtils_java.defaultEmbed()
+        EmbedBuilder eb = EmbedUtils.defaultEmbed()
                 .setTitle("Link to Post", post.short_url)
 
         switch (type) {

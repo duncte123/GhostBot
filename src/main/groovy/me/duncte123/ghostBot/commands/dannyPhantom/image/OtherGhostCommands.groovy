@@ -88,6 +88,6 @@ class OtherGhostCommands extends ImageBase {
     }
 
     private void sendFromKeyword(GuildMessageReceivedEvent event, String keyword) { 
-        sendMessageFromName(event, new LocalImage(requestImage(keyword), keyword))
+        sendMessageFromName(event, new LocalImage(keyword, requestImage(keyword)))
     }
 }

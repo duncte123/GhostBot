@@ -20,7 +20,7 @@ package me.duncte123.ghostBot.commands.dannyPhantom.image
 
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 
-import static me.duncte123.ghostBot.utils.MessageUtils_java.sendMsg
+import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg
 
 class GifCommand extends ImageBase {
     @Override
@@ -38,11 +38,11 @@ class GifCommand extends ImageBase {
 
     @Override
     String getName() {
-        return null
+        return "gif"
     }
 
     @Override
     String getHelp() {
-        return null
+        return "Gives you a random Danny Phantom gif"
     }
 }

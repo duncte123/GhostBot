@@ -163,7 +163,7 @@ class BotListener extends ListenerAdapter {
             GuildMusicManager manager = SpoopyUtils.AUDIO.getMusicManager(g)
             manager.player.stopTrack()
             manager.player.paused = false
-            manager.scheduler.queue.clear()
+            manager.scheduler.queueList.clear()
 
             if (LavalinkManager.ins.isConnected(g)) {
                 LavalinkManager.ins.closeConnection(g)

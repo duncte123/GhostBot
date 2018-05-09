@@ -29,7 +29,7 @@ class AudioPlayerSenderHandler implements AudioSendHandler {
     /**
      * I don't know what this does but it seems important
      */
-    private AudioFrame lastFrame;
+    private AudioFrame lastFrame
 
     AudioPlayerSenderHandler(IPlayer audioPlayer) {
         this.audioPlayer = audioPlayer
@@ -73,6 +73,6 @@ class AudioPlayerSenderHandler implements AudioSendHandler {
      */
     @Override
     boolean isOpus() {
-        return true;
+        return true
     }
 }
