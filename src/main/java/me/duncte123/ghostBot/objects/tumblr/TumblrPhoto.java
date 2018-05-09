@@ -21,46 +21,17 @@ package me.duncte123.ghostBot.objects.tumblr;
 import java.util.List;
 
 @SuppressWarnings("unused")
-public class TumblrPost {
+public class TumblrPhoto {
 
-    public String blog_name;
-    public long id;
-    public String post_url;
-    public String short_url;
-    public String type;
-    public long timestamp;
-    public String date;
-    public String format;
-    public String reblog_key;
-    public String[] tags;
-    public boolean bookmarklet;
-    public boolean mobile;
-    public String source_url;
-    public String source_title;
-    public boolean liked;
-    public String state;
-    public String total_posts;
-
-    /*Text posts*/
-    public String title;
-    public String body;
-
-    /*Quopte posts*/
-    public String text;
-    public String source;
-
-    /*Chat post*/
-    public List<TumblrDialogue> dialogue;
-
-    /*Photo post*/
     public String caption;
-    public String image_permalink;
-    public int width;
-    public int height;
-    public List<TumblrPhoto> photos;
+    public TumblrPhotoElement original_size;
+    public List<TumblrPhotoElement> alt_sizes;
 
 
-    public TumblrPost() {
+    public static class TumblrPhotoElement {
+        public String url;
+        public int width;
+        public int height;
     }
 
 }

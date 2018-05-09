@@ -38,6 +38,15 @@ public class GhostBot {
     private static JDA jda;
 
     public static void main(String[] args) {
+        //Just some testing
+        /*String usn = "allyphantomrush";
+        WebUtils.ins.getText("https://backend.deviantart.com/rss.xml?type=deviation&q=by%3A" +
+                usn + "+sort%3Atime+meta%3Aall").async(txt -> {
+            Document doc = Jsoup.parse(txt, "", Parser.xmlParser());
+            Elements items = doc.select("item");
+            items.forEach(item -> System.out.println(item.selectFirst("link").text()));
+            //Use https://backend.deviantart.com/oembed?url= on the returned url
+        });*/
 
         logger.info("Booting GhostBot");
         String token = SpoopyUtils.config.getString("discord.token");
