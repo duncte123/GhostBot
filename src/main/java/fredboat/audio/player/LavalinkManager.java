@@ -25,8 +25,8 @@ import lavalink.client.player.IPlayer;
 import lavalink.client.player.LavaplayerPlayerWrapper;
 import me.duncte123.ghostBot.GhostBot;
 import me.duncte123.ghostBot.audio.LavalinkNode;
-import me.duncte123.ghostBot.utils.AudioUtils;
-import me.duncte123.ghostBot.utils.SpoopyUtils;
+import me.duncte123.ghostBot.utils.AudioUtils_java;
+import me.duncte123.ghostBot.utils.SpoopyUtils_java;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 
@@ -54,16 +54,16 @@ public class LavalinkManager {
     public void start() {
         if (!isEnabled()) return;
 
-        String userId = getIdFromToken(SpoopyUtils.config.getString("discord.token"));
+        String userId = getIdFromToken(SpoopyUtils_java.config.getString("discord.token"));
 
         lavalink = new Lavalink(
                 userId,
-                SpoopyUtils.config.getInt("discord.totalShards", 1),
+                SpoopyUtils_java.config.getInt("discord.totalShards", 1),
                 shardId -> GhostBot.getInstance().getFakeShard(shardId)
         );
         List<LavalinkNode> defaultNodes = new ArrayList<>();
         defaultNodes.add(new LavalinkNode(new Ason("{\"wsUrl\": \"ws://localhost\",\"pass\": \"youshallnotpass\"}")));
-        List<Ason> nodes = SpoopyUtils.config.getArray("lavalink.nodes", defaultNodes);
+        List<Ason> nodes = SpoopyUtils_java.config.getArray("lavalink.nodes", defaultNodes);
         List<LavalinkNode> nodeList = new ArrayList<>();
         nodes.forEach(it -> nodeList.add(new LavalinkNode(it)));
 
@@ -88,13 +88,13 @@ public class LavalinkManager {
     }
 
     public boolean isEnabled() {
-        return SpoopyUtils.config.getBoolean("lavalink.enable", false);
+        return SpoopyUtils_java.config.getBoolean("lavalink.enable", false);
     }
 
     public IPlayer createPlayer(String guildId) {
         return isEnabled()
                 ? lavalink.getLink(guildId).getPlayer()
-                : new LavaplayerPlayerWrapper(AudioUtils.ins.getPlayerManager().createPlayer());
+                : new LavaplayerPlayerWrapper(AudioUtils_java.ins.getPlayerManager().createPlayer());
     }
 
     public void openConnection(VoiceChannel channel) {
