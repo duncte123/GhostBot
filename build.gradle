@@ -55,11 +55,14 @@ dependencies {
     // Logback classic
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
 
-    compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.5.0-rc-2'
-    compile group: 'javax', name: 'javaee-api', version:'7.0'
-    /*compile group: 'javax.xml.bind', name: 'jaxb-api', version:'2.2.11'
-    compile group: 'com.sun.xml.bind', name: 'jaxb-core', version:'2.2.11'
-    compile group: 'com.sun.xml.bind', name: 'jaxb-impl', version:'2.2.11'*/
+    compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.0'
+
+    compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '3.0.0-alpha-2'
+
+    /*compile group: 'javax', name: 'javaee-api', version:'7.0'
+    compile group: 'javax.xml.bind', name: 'jaxb-api', version:'2.3.0'
+    compile group: 'com.sun.xml.bind', name: 'jaxb-core', version:'2.3.0'
+    compile group: 'com.sun.xml.bind', name: 'jaxb-impl', version:'2.3.0'*/
 }
 
 compileJava.options.encoding = 'UTF-8'
