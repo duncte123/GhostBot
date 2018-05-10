@@ -57,7 +57,8 @@ public class GoogleSearchResults {
     public static class ContextField {
         private String title;
 
-        public ContextField() {}
+        public ContextField() {
+        }
 
         public String getTitle() {
             return title;
@@ -73,7 +74,8 @@ public class GoogleSearchResults {
         private int thumbnailHeight;
         private int thumbnailWidth;
 
-        public ImageData() {}
+        public ImageData() {
+        }
 
         public int getByteSize() {
             return byteSize;
@@ -115,7 +117,8 @@ public class GoogleSearchResults {
         private String safe;
         private String cx;
 
-        public InnerQueries() {}
+        public InnerQueries() {
+        }
 
         public int getCount() {
             return count;
@@ -158,6 +161,9 @@ public class GoogleSearchResults {
         private List<InnerQueries> request;
         private List<InnerQueries> nextPage;
 
+        public QueriesField() {
+        }
+
         public List<InnerQueries> getNextPage() {
             return nextPage;
         }
@@ -165,8 +171,6 @@ public class GoogleSearchResults {
         public List<InnerQueries> getRequest() {
             return request;
         }
-
-        public QueriesField() {}
 
     }
 
@@ -176,7 +180,8 @@ public class GoogleSearchResults {
         private String totalResults;
         private String formattedTotalResults;
 
-        public SearchInformationField() {}
+        public SearchInformationField() {
+        }
 
         public String getTotalResults() {
             return totalResults;
@@ -206,7 +211,8 @@ public class GoogleSearchResults {
         private String mime;
         private ImageData image;
 
-        public SearchItem() {}
+        public SearchItem() {
+        }
 
         public String getTitle() {
             return title;
@@ -250,7 +256,8 @@ public class GoogleSearchResults {
         private String type;
         private String template;
 
-        public UrlField() {}
+        public UrlField() {
+        }
 
         public String getType() {
             return type;

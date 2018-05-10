@@ -39,13 +39,11 @@ import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
 public abstract class Command {
 
     protected final Logger logger;
-
+    protected String audioPath = "";
+    protected String[] audioFiles = {};
     public Command() {
         logger = LoggerFactory.getLogger(getClass());
     }
-
-    protected String audioPath = "";
-    protected String[] audioFiles = {};
 
     public abstract void execute(String invoke, String[] args, GuildMessageReceivedEvent event);
 

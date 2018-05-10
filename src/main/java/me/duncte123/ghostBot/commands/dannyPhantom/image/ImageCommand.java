@@ -22,8 +22,6 @@ import me.duncte123.ghostBot.objects.Category;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
-import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
-
 public class ImageCommand extends ImageBase {
 
     private final String[] keywords = {
@@ -57,18 +55,10 @@ public class ImageCommand extends ImageBase {
 
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
+        String keyword = keywords[SpoopyUtils.random.nextInt(keywords.length)];
 
-        sendMsg(event, "Loading....", msg -> {
-            String keyword = keywords[SpoopyUtils.random.nextInt(keywords.length)];
-
-            String file = requestImage(keyword);
-            sendMessageFromName(msg, file, keyword);
-
-            /*requestSearch(keyword,
-                    data -> sendMessageFromData(msg, data, keyword),
-                    er -> sendMsg(event, "Error while looking up image: " + er));*/
-
-        });
+        String file = requestImage(keyword);
+        sendMessageFromName(event, new ImageData(file, keyword));
     }
 
     @Override

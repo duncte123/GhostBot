@@ -35,7 +35,10 @@ import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.collections4.set.UnmodifiableSet;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
@@ -112,7 +115,10 @@ public class CommandManager {
 
         Command cmd = getCommand(invoke);
 
-        if (cmd != null)
+        if (cmd != null) {
+            event.getChannel().sendTyping().queue();
             cmd.execute(invoke, args, event);
+        }
+
     }
 }

@@ -21,8 +21,6 @@ package me.duncte123.ghostBot.commands.dannyPhantom.image;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
-import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
-
 public class OtherGhostCommands extends ImageBase {
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
@@ -90,11 +88,6 @@ public class OtherGhostCommands extends ImageBase {
     }
 
     private void sendFromKeyword(GuildMessageReceivedEvent event, String keyword) {
-        sendMsg(event, "Loading....", msg ->
-                        sendMessageFromName(msg, requestImage(keyword), keyword)
-                /*requestSearch(keyword,
-                        data -> sendMessageFromData(msg, data, keyword),
-                        er -> sendMsg(event, "Error while looking up image: " + er))*/
-        );
+        sendMessageFromName(event, new ImageData(requestImage(keyword), keyword));
     }
 }

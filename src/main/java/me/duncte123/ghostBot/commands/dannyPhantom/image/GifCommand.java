@@ -27,22 +27,11 @@ public class GifCommand extends ImageBase {
 
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
-        sendMsg(event, "Loading....", msg -> {
-            String keyword = "Danny Phantom gif";
+        String keyword = "Danny Phantom gif";
 
-            requestSearch(keyword,
-                    data -> sendMessageFromData(msg, data, keyword),
-                    er -> sendMsg(event, "Error while looking up image: " + er));
-            /*
-            try {
-                WebUtils.ins.getAson(SpoopyUtils.getGoogleSearchUrl(keyword) + "&fileType=gif").async(
-                        data -> sendMessageFromData(msg, data, keyword),
-                        er -> sendMsg(event, "Error while looking up image: " + er));
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-                msg.editMessage("Something went wrong while looking up the image").queue();
-            }*/
-        });
+        requestSearch(keyword,
+                data -> sendMessageFromData(event, data, keyword),
+                er -> sendMsg(event, "Error while looking up image: " + er));
     }
 
     @Override

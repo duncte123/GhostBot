@@ -110,7 +110,7 @@ public class HelpCommand extends Command {
         List<String> temp = SpoopyUtils.commandManager.getCommands()
                 .stream().filter(c -> c.getCategory().equals(category)).map(Command::getName).collect(Collectors.toList());
         SpoopyUtils.commandManager.getCommands()
-                .stream().filter(c -> c.getCategory().equals(category) )
+                .stream().filter(c -> c.getCategory().equals(category))
                 .map(cmd -> List.of(cmd.getAliases())).forEach(temp::addAll);
 
         return temp;
