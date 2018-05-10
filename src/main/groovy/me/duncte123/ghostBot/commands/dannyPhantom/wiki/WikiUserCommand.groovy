@@ -55,7 +55,7 @@ class WikiUserCommand extends WikiBaseCommand {
 
                 if (userResultSet.items.size() == 1) {
                     UserElement user = userResultSet.items[0]
-                    user.setBasePath(userResultSet.basepath)
+                    user.basePath = userResultSet.basepath
                     sendEmbed(event, EmbedUtils.defaultEmbed()
                             .setThumbnail(user.avatar)
                             .setTitle("Profile link", user.absoluteUrl)
@@ -65,7 +65,7 @@ class WikiUserCommand extends WikiBaseCommand {
                             "**Title:** %s\n" +
                             "**Number of edits:** %s",
                             user.name,
-                            user.userId,
+                            user.user_id,
                             user.title,
                             user.numberofedits), false)
                             .build())

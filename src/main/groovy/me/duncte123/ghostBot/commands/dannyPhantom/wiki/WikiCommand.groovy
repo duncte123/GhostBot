@@ -47,7 +47,7 @@ class WikiCommand extends WikiBaseCommand {
                 SpoopyUtils.encodeUrl(searchQuery))
         ).async( { ason ->
             if (ason.has("exception")) {
-                sendMsg(event, "An error occurred: " + toEx(ason))
+                sendMsg(event, "An error occurred: ${toEx(ason)}")
                 return
             }
 

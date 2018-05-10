@@ -52,7 +52,7 @@ class CommandManager {
         addCommand(new WikiCommand())
         addCommand(new WikiUserCommand())
 
-        addCommand(new GamesCommand())
+        /*addCommand(new GamesCommand())
         addCommand(new QuotesCommand())
         addCommand(new RandomGhostCommand())
 
@@ -64,7 +64,7 @@ class CommandManager {
         addCommand(new EmberCommand())
         addCommand(new FruitLoopCommand())
         addCommand(new GoingGhostCommand())
-        addCommand(new WailCommand())
+        addCommand(new WailCommand())*/
     }
 
     Set<Command> getCommands() {

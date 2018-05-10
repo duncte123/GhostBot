@@ -16,29 +16,26 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.fandomApi.models.user;
+package me.duncte123.fandomApi.models
 
-import java.util.List;
+class FandomException {
 
-public class UserResultSet {
+    String type
+    String message
+    int code
+    String details
+    String trace_id
 
-    private String basepath;
-    private List<UserElement> items;
-
-    public UserResultSet(String basePath, List<UserElement> items) {
-        this.basepath = basePath;
-        this.items = items;
+    FandomException(String type, String message, int code, String details, String trace_id) {
+        this.type = type
+        this.message = message
+        this.code = code
+        this.details = details
+        this.trace_id = trace_id
     }
 
-
-    public UserResultSet() {
-    }
-
-    public List<UserElement> getItems() {
-        return items;
-    }
-
-    public String getBasepath() {
-        return basepath;
+    @Override
+    String toString() {
+        return "$type: $message($details)"
     }
 }

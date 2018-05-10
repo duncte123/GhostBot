@@ -16,29 +16,19 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostBot.commands.dannyPhantom.image
+package me.duncte123.fandomApi.models.search
 
-class DPArtistsCommand {
-    /*
-   http://earthphantom.tumblr.com/ (approved)
-   http://amethystocean-adr.tumblr.com/
+@SuppressWarnings("GroovyUnusedDeclaration")
+class LocalWikiSearchResultSet {
 
-   https://allyphantomrush.deviantart.com/
+    int batches
+    List<LocalWikiSearchResult> items
+    int total
+    int currentBatch
+    int next
 
-   http://deadlandsqueen.tumblr.com/
-   http://askfentonworks.tumblr.com/
-   http://thickerthanectoplasm.tumblr.com/
-   http://umbrihearts.tumblr.com/
+    int getNextBatch() {
+        return currentBatch + 1
+    }
 
-   needed things
-   URL: link of the artist page
-   Type: Website where the data is from
-
-   Obtaining data:
-   Arrays.toString("URL".replaceAll("https?://", "").split("\\."))
-   the array should be
-   [0] = URL
-   [1] = Type
-   (and some more useless info)
-*/
 }

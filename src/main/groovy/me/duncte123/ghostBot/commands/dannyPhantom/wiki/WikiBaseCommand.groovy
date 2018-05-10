@@ -28,7 +28,7 @@ abstract class WikiBaseCommand extends Command {
 
     def wiki = SpoopyUtils.WIKI_HOLDER
 
-    FandomException toEx(Ason ason) {
+    static FandomException toEx(Ason ason) {
         return new FandomException(
                 ason.getString("exception.type"),
                 ason.getString("exception.message"),
