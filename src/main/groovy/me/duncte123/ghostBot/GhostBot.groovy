@@ -52,13 +52,13 @@ class GhostBot {
         LavalinkManager.ins.start()
         try {
             def builder = new JDABuilder(AccountType.BOT)
-                    .setAudioEnabled(true)
-                    .setGame(Game.playing("${Variables.PREFIX}help | Going Ghost"))
-                    .setToken(token)
                     .addEventListener(new BotListener())
+            builder.audioEnabled = true
+            builder.game = Game.playing("${Variables.PREFIX}help | Going Ghost")
+            builder.token = token
 
-            if (LavalinkManager.ins.isEnabled())
-                builder.addEventListener(LavalinkManager.ins.getLavalink())
+            if (LavalinkManager.ins.enabled)
+                builder.addEventListener(LavalinkManager.ins.lavalink)
 
             jda = builder.buildAsync()
         } catch (LoginException e) {

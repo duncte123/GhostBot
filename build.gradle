@@ -29,7 +29,7 @@ mainClassName = 'me.duncte123.ghostBot.GhostBot'
 group 'me.duncte123.ghostBot'
 version "2.0.0_${getGitHash()}"
 
-sourceCompatibility = 1.9
+sourceCompatibility = 1.8
 
 repositories {
     jcenter()
@@ -55,11 +55,19 @@ dependencies {
     // Logback classic
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
 
-    compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.5.0-rc-2'
-    compile group: 'javax', name: 'javaee-api', version:'7.0'
-    /*compile group: 'javax.xml.bind', name: 'jaxb-api', version:'2.2.11'
-    compile group: 'com.sun.xml.bind', name: 'jaxb-core', version:'2.2.11'
-    compile group: 'com.sun.xml.bind', name: 'jaxb-impl', version:'2.2.11'*/
+    compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '3.0.0-alpha-2'
+
+    /*compile group: 'javax.xml.bind', name: 'jaxb-api', version:'2.3.0'
+    compile group: 'com.sun.xml.bind', name: 'jaxb-core', version:'2.3.0'
+    compile group: 'com.sun.xml.bind', name: 'jaxb-impl', version:'2.3.0'
+//    compile group: 'javax', name: 'javaee-api', version:'8.0'
+    compile group: 'javax.activation', name: 'activation', version: '1.1.1'*/
+
+    compile "javax.xml.bind:jaxb-api:2.3.0"
+    compile "com.sun.xml.bind:jaxb-impl:2.3.0"
+    compile "com.sun.xml.bind:jaxb-core:2.3.0"
+    compile "javax.activation:activation:1.1.1"
+
 }
 
 compileJava.options.encoding = 'UTF-8'
