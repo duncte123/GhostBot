@@ -20,7 +20,7 @@ package me.duncte123.ghostBot.commands.dannyPhantom.image;
 
 public class DPArtistsCommand {
     /*
-    http://earthphantom.tumblr.com/
+    http://earthphantom.tumblr.com/ (approved)
     http://amethystocean-adr.tumblr.com/
 
     https://allyphantomrush.deviantart.com/

@@ -76,15 +76,6 @@ public class LavalinkManager {
                     }
                 }
         );
-
-        /*try {
-            lavalink.addNode(
-                    new URI(AirUtils.config.getString("lavalink.wsurl", "ws://localhost")),
-                    AirUtils.config.getString("lavalink.pass", "youshalnotpass")
-            );
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }*/
     }
 
     public boolean isEnabled() {
