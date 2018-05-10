@@ -54,16 +54,16 @@ public class LavalinkManager {
     public void start() {
         if (!isEnabled()) return;
 
-        String userId = getIdFromToken(SpoopyUtils.config.getString("discord.token"));
+        String userId = getIdFromToken(SpoopyUtils.getCONFIG().getString("discord.token"));
 
         lavalink = new Lavalink(
                 userId,
-                SpoopyUtils.config.getInt("discord.totalShards", 1),
+                SpoopyUtils.getCONFIG().getInt("discord.totalShards", 1),
                 shardId -> GhostBot.getInstance().getFakeShard(shardId)
         );
         List<LavalinkNode> defaultNodes = new ArrayList<>();
         defaultNodes.add(new LavalinkNode(new Ason("{\"wsUrl\": \"ws://localhost\",\"pass\": \"youshallnotpass\"}")));
-        List<Ason> nodes = SpoopyUtils.config.getArray("lavalink.nodes", defaultNodes);
+        List<Ason> nodes = SpoopyUtils.getCONFIG().getArray("lavalink.nodes", defaultNodes);
         List<LavalinkNode> nodeList = new ArrayList<>();
         nodes.forEach(it -> nodeList.add(new LavalinkNode(it)));
 
@@ -76,25 +76,16 @@ public class LavalinkManager {
                     }
                 }
         );
-
-        /*try {
-            lavalink.addNode(
-                    new URI(AirUtils.config.getString("lavalink.wsurl", "ws://localhost")),
-                    AirUtils.config.getString("lavalink.pass", "youshalnotpass")
-            );
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }*/
     }
 
     public boolean isEnabled() {
-        return SpoopyUtils.config.getBoolean("lavalink.enable", false);
+        return SpoopyUtils.getCONFIG().getBoolean("lavalink.enable", false);
     }
 
     public IPlayer createPlayer(String guildId) {
         return isEnabled()
                 ? lavalink.getLink(guildId).getPlayer()
-                : new LavaplayerPlayerWrapper(AudioUtils.ins.getPlayerManager().createPlayer());
+                : new LavaplayerPlayerWrapper(AudioUtils.getIns().getPlayerManager().createPlayer());
     }
 
     public void openConnection(VoiceChannel channel) {

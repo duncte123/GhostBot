@@ -18,6 +18,7 @@
 
 plugins {
     id 'java'
+    id 'groovy'
     id 'application'
     id 'idea'
     id 'com.github.johnrengelman.shadow' version '2.0.2'
@@ -26,7 +27,7 @@ plugins {
 
 mainClassName = 'me.duncte123.ghostBot.GhostBot'
 group 'me.duncte123.ghostBot'
-version "0.1.0_${getGitHash()}"
+version "2.0.0_${getGitHash()}"
 
 sourceCompatibility = 1.9
 
@@ -53,6 +54,12 @@ dependencies {
     compile group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
     // Logback classic
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+
+    compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.5.0-rc-2'
+    compile group: 'javax', name: 'javaee-api', version:'7.0'
+    /*compile group: 'javax.xml.bind', name: 'jaxb-api', version:'2.2.11'
+    compile group: 'com.sun.xml.bind', name: 'jaxb-core', version:'2.2.11'
+    compile group: 'com.sun.xml.bind', name: 'jaxb-impl', version:'2.2.11'*/
 }
 
 compileJava.options.encoding = 'UTF-8'
