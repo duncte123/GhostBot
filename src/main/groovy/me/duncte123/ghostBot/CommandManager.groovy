@@ -33,6 +33,7 @@ import me.duncte123.ghostBot.commands.dannyPhantom.text.QuotesCommand
 import me.duncte123.ghostBot.commands.dannyPhantom.text.RandomGhostCommand
 import me.duncte123.ghostBot.commands.dannyPhantom.wiki.WikiCommand
 import me.duncte123.ghostBot.commands.dannyPhantom.wiki.WikiUserCommand
+import me.duncte123.ghostBot.commands.ownerOnly.EvalCommand
 import me.duncte123.ghostBot.objects.Command
 import me.duncte123.ghostBot.variables.Variables
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
@@ -65,6 +66,8 @@ class CommandManager {
         addCommand(new FruitLoopCommand())
         addCommand(new GoingGhostCommand())
         addCommand(new WailCommand())*/
+
+        addCommand(new EvalCommand())
     }
 
     Set<Command> getCommands() {
