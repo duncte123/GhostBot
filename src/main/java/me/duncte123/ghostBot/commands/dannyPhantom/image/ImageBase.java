@@ -19,7 +19,6 @@
 package me.duncte123.ghostBot.commands.dannyPhantom.image;
 
 import com.afollestad.ason.Ason;
-import com.afollestad.ason.AsonArray;
 import com.github.natanbc.reliqua.request.RequestException;
 import me.duncte123.botCommons.web.WebUtils;
 import me.duncte123.ghostBot.objects.Category;
@@ -82,7 +81,7 @@ abstract class ImageBase extends Command {
         logger.debug("Image Link: '" + i.url + "'");
 
         sendEmbed(event, EmbedUtils.defaultEmbed()
-                .setTitle(i.title)
+                .setTitle(i.title, i.website)
                 .setImage(i.url)
                 .build());
     }
@@ -113,12 +112,7 @@ abstract class ImageBase extends Command {
     static class ImageData {
         public String title;
         public String url;
+        public String website;
 
-        ImageData(String title, String url) {
-            this.title = title;
-            this.url = url;
-        }
-
-        ImageData() {}
     }
 }

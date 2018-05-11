@@ -208,7 +208,10 @@ public class QuotesCommand extends Command {
         }
     }
 
-    private String parseText(String raw) {
+    public static String parseText(String raw) {
+        if(raw == null || raw.isEmpty())
+            return "";
+
         raw = StringEscapeUtils.unescapeHtml4(raw);
         String input = raw.replaceAll(Pattern.quote("<br/>"), "\n");
         String replacePWith = input.contains("</p>\n") ? "" : "\n";

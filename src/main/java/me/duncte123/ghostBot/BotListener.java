@@ -70,12 +70,14 @@ public class BotListener extends ListenerAdapter {
                     success -> event.getJDA().shutdown(),
                     failure -> event.getJDA().shutdown()
             );
-            try {
+            SpoopyUtils.commandManager.commandService.shutdown();
+            LavalinkManager.ins.getLavalink().shutdown();
+            /*try {
                 //noinspection PointlessArithmeticExpression
                 Thread.sleep(1 * 1000);
                 System.exit(0);
             } catch (InterruptedException ignored) {
-            }
+            }*/
             return;
         }
 

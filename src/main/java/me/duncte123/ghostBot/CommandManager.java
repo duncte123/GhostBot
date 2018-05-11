@@ -19,6 +19,7 @@
 package me.duncte123.ghostBot;
 
 import me.duncte123.ghostBot.commands.dannyPhantom.audio.*;
+import me.duncte123.ghostBot.commands.dannyPhantom.image.DPArtistsCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.image.GifCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.image.ImageCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.image.OtherGhostCommands;
@@ -40,11 +41,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 public class CommandManager {
 
     private final Set<Command> commands = ConcurrentHashMap.newKeySet();
+    public final ScheduledExecutorService commandService = Executors.newScheduledThreadPool(5,
+            (r) -> new Thread(r, "Command-Thread") );
 
     public CommandManager() {
         this.addCommand(new GoingGhostCommand());
@@ -56,6 +62,7 @@ public class CommandManager {
         this.addCommand(new ImageCommand());
         this.addCommand(new GifCommand());
         this.addCommand(new OtherGhostCommands());
+        this.addCommand(new DPArtistsCommand());
 
         this.addCommand(new WikiCommand());
         this.addCommand(new WikiUserCommand());
@@ -117,7 +124,10 @@ public class CommandManager {
 
         if (cmd != null) {
             event.getChannel().sendTyping().queue();
-            cmd.execute(invoke, args, event);
+            commandService.schedule(() ->
+                cmd.execute(invoke, args, event)
+            ,0, TimeUnit.MILLISECONDS);
+            /*cmd.execute(invoke, args, event);*/
         }
 
     }
