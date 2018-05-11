@@ -57,8 +57,8 @@ public class ImageCommand extends ImageBase {
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
         String keyword = keywords[SpoopyUtils.random.nextInt(keywords.length)];
 
-        String file = requestImage(keyword);
-        sendMessageFromName(event, new ImageData(file, keyword));
+        ImageData file = requestImage(keyword);
+        sendMessageFromName(event, file);
     }
 
     @Override

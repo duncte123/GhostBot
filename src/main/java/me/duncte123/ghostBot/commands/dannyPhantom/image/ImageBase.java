@@ -19,6 +19,7 @@
 package me.duncte123.ghostBot.commands.dannyPhantom.image;
 
 import com.afollestad.ason.Ason;
+import com.afollestad.ason.AsonArray;
 import com.github.natanbc.reliqua.request.RequestException;
 import me.duncte123.botCommons.web.WebUtils;
 import me.duncte123.ghostBot.objects.Category;
@@ -65,23 +66,24 @@ abstract class ImageBase extends Command {
         }
     }
 
-    String requestImage(String query) {
+    ImageData requestImage(String query) {
         logger.debug("Getting image for '" + query + "'");
-        List<String> items = SpoopyUtils.IMAGES.getArray("images." + query);
-        return items.get(SpoopyUtils.random.nextInt(items.size()));
+        List<Ason> items = SpoopyUtils.IMAGES.getArray(query);
+        Ason item = items.get(SpoopyUtils.random.nextInt(items.size()));
+        return Ason.deserialize(item, ImageData.class);
     }
 
     void sendMessageFromName(GuildMessageReceivedEvent event, @NotNull ImageData i) {
-        if (i.fileName == null || i.fileName.isEmpty()) {
-            sendMsg(event, "Nothing was found for the search query: `" + i.key + "`");
+        if (i.title == null || i.title.isEmpty()) {
+            sendMsg(event, "Nothing was found for the search query: `" + i.title + "`");
             return;
         }
 
-        logger.debug("Image Link: 'https://i.duncte123.me/" + replaceSpaces(i.key) + "/" + i.fileName + "'");
+        logger.debug("Image Link: '" + i.url + "'");
 
         sendEmbed(event, EmbedUtils.defaultEmbed()
-                .setTitle(i.key)
-                .setImage("https://i.duncte123.me/" + replaceSpaces(i.key) + "/" + i.fileName)
+                .setTitle(i.title)
+                .setImage(i.url)
                 .build());
     }
 
@@ -99,9 +101,9 @@ abstract class ImageBase extends Command {
                 .setImage(randomItem.getLink()).build());
     }
 
-    private String replaceSpaces(String in) {
+    /*private String replaceSpaces(String in) {
         return in.replaceAll(" ", "%20");
-    }
+    }*/
 
     @Override
     public Category getCategory() {
@@ -109,12 +111,14 @@ abstract class ImageBase extends Command {
     }
 
     static class ImageData {
-        final String fileName;
-        final String key;
+        public String title;
+        public String url;
 
-        ImageData(String fileName, String key) {
-            this.fileName = fileName;
-            this.key = key;
+        ImageData(String title, String url) {
+            this.title = title;
+            this.url = url;
         }
+
+        ImageData() {}
     }
 }
