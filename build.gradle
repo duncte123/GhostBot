@@ -53,6 +53,8 @@ dependencies {
     compile group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
     // Logback classic
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+
+    runtime group: 'org.codehaus.groovy', name: 'groovy-jsr223', version: '3.0.0-alpha-2'
 }
 
 compileJava.options.encoding = 'UTF-8'

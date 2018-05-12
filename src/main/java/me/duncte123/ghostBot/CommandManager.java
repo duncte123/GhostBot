@@ -29,6 +29,7 @@ import me.duncte123.ghostBot.commands.dannyPhantom.text.RandomGhostCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.wiki.WikiCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.wiki.WikiUserCommand;
 import me.duncte123.ghostBot.commands.main.AboutCommand;
+import me.duncte123.ghostBot.commands.main.EvalCommand;
 import me.duncte123.ghostBot.commands.main.HelpCommand;
 import me.duncte123.ghostBot.commands.main.ReloadAudioCommand;
 import me.duncte123.ghostBot.objects.Command;
@@ -73,7 +74,9 @@ public class CommandManager {
 
         this.addCommand(new HelpCommand());
         this.addCommand(new AboutCommand());
+
         this.addCommand(new ReloadAudioCommand());
+        this.addCommand(new EvalCommand());
     }
 
     public Set<Command> getCommands() {

@@ -64,25 +64,11 @@ public class MessageUtils {
      * This method uses the sendError and sendMsg methods
      *
      * @param message     the {@link Message} for the sendError method
-     * @param textChannel the {@link TextChannel} for the sendMsg method
      * @param text        the {@link String} for the sendMsg method
      */
-    public static void sendErrorWithMessage(Message message, TextChannel textChannel, String text) {
+    public static void sendErrorWithMessage(Message message, String text) {
         sendError(message);
-        sendMsg(textChannel, text);
-    }
-
-
-    /**
-     * This method uses the sendError and sendMsg methods
-     *
-     * @param message the {@link Message} for the sendError method
-     * @param event   the {@link GuildMessageReceivedEvent} for the sendMsg method
-     * @param text    the {@link String} for the sendMsg method
-     */
-    public static void sendErrorWithMessage(Message message, GuildMessageReceivedEvent event, String text) {
-        sendError(message);
-        sendMsg(event, text);
+        sendMsg(message.getTextChannel(), text);
     }
 
     /**
