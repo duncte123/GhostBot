@@ -80,7 +80,8 @@ public class QuotesCommand extends Command {
             130808913006L,
             130834334051L,
             131278048551L,
-            163028433406L
+            163028433406L,
+            150823532681L
     );
     private int oldCount = 0;
 

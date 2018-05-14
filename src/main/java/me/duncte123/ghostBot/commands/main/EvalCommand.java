@@ -65,7 +65,8 @@ public class EvalCommand extends Command {
             engine.put("guild", event.getGuild());
             engine.put("args", args);
 
-            final String script = "import " + String.join(".*\nimport ", packageImports) + ".*\n\n" + String.join(" ", args);
+            final String script = "import " + String.join(".*\nimport ", packageImports) + ".*\n\n" + 
+								event.getMessage().getContentRaw().split("\\s+", 2)[1];
 
             try {
                 ScheduledFuture<Object> task = service.schedule(() -> engine.eval(script), 0L, TimeUnit.NANOSECONDS);
@@ -85,9 +86,7 @@ public class EvalCommand extends Command {
             }
 
             sendSuccess(event.getMessage());
-
         }
-
 
     }
 
