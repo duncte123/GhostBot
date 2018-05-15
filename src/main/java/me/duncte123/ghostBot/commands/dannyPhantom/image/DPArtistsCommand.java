@@ -72,7 +72,7 @@ public class DPArtistsCommand extends Command {
         switch (args[0]) {
 
             case "earthphantom": {
-                doStuff("http://earthphantom.tumblr.com/", event);
+                doStuff("earthphantom.tumblr.com", event);
                 break;
             }
 
@@ -105,14 +105,16 @@ public class DPArtistsCommand extends Command {
         String type = i[1];
         if (type.equalsIgnoreCase("tumblr")) {
             extractPictureFromTumblr(usn, post ->
-                    sendEmbed(event,
-                            EmbedUtils.defaultEmbed()
-                                    .setAuthor(usn, post.short_url, null)
-                                    .setTitle(post.title, post.short_url)
-                                    .setDescription(QuotesCommand.parseText(post.caption))
-                                    .setImage(post.photos.get(0).original_size.url)
-                                    .build()
-                    )
+                    getTumblrPfp(url, profilePicture ->
+                            sendEmbed(event,
+                                    EmbedUtils.defaultEmbed()
+                                            .setAuthor(usn, post.short_url, profilePicture)
+                                            .setTitle(post.title, post.short_url)
+                                            .setDescription(QuotesCommand.parseText(post.caption))
+                                            .setThumbnail(profilePicture)
+                                            .setImage(post.photos.get(0).original_size.url)
+                                            .build()
+                            ))
             );
         } else if (type.equalsIgnoreCase("deviantart")) {
             //
@@ -132,6 +134,10 @@ public class DPArtistsCommand extends Command {
         WebUtils.ins.getAson(url).async(ason ->
                 cb.accept(Ason.deserializeList(ason.getJsonArray("response.posts"), TumblrPost.class).get(0)));
 
+    }
+
+    private void getTumblrPfp(String domain, Consumer<String> cb) {
+        WebUtils.ins.getText("https://apis.duncte123.me/tumblr_avatar/" + domain).async(cb);
     }
 
 }
