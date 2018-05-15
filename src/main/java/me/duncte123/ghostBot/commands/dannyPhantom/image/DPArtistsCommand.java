@@ -22,11 +22,17 @@ import com.afollestad.ason.Ason;
 import me.duncte123.botCommons.web.WebUtils;
 import me.duncte123.ghostBot.commands.dannyPhantom.text.QuotesCommand;
 import me.duncte123.ghostBot.objects.Command;
+import me.duncte123.ghostBot.objects.deviantart.Oembed;
 import me.duncte123.ghostBot.objects.tumblr.TumblrPost;
 import me.duncte123.ghostBot.utils.EmbedUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
+import org.apache.commons.lang3.tuple.Triple;
 import org.jetbrains.annotations.NotNull;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.parser.Parser;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -44,7 +50,7 @@ public class DPArtistsCommand extends Command {
     http://deadlandsqueen.tumblr.com/
     http://askfentonworks.tumblr.com/
     http://thickerthanectoplasm.tumblr.com/
-    http://umbrihearts.tumblr.com/
+    http://umbrihearts.tumblr.com/ or https://umbrihearts.deviantart.com/
 
     needed things
     URL: link of the artist page
@@ -59,7 +65,9 @@ public class DPArtistsCommand extends Command {
 */
 
     private final List<String> artits = List.of(
-            "earthphantom"
+            "earthphantom",
+            "allyphantomrush",
+            "umbrihearts"
     );
 
     @Override
@@ -73,6 +81,16 @@ public class DPArtistsCommand extends Command {
 
             case "earthphantom": {
                 doStuff("earthphantom.tumblr.com", event);
+                break;
+            }
+
+            case "allyphantomrush": {
+                doStuff("https://allyphantomrush.deviantart.com/", event);
+                break;
+            }
+
+            case "umbrihearts": {
+                doStuff("https://umbrihearts.deviantart.com/", event);
                 break;
             }
 
@@ -117,7 +135,17 @@ public class DPArtistsCommand extends Command {
                             ))
             );
         } else if (type.equalsIgnoreCase("deviantart")) {
-            //
+            getDeviantartData(usn, data -> {
+                Oembed embed = data.getRight();
+                sendEmbed(event,
+                        EmbedUtils.defaultEmbed()
+                                .setAuthor(usn, embed.author_url, data.getLeft())
+                                .setTitle(embed.title, data.getMiddle())
+                                .setThumbnail(data.getLeft())
+                                .setImage(embed.thumbnail_url)
+                                .build()
+                );
+            });
         }
     }
 
@@ -138,6 +166,21 @@ public class DPArtistsCommand extends Command {
 
     private void getTumblrPfp(String domain, Consumer<String> cb) {
         WebUtils.ins.getText("https://apis.duncte123.me/tumblr_avatar/" + domain).async(cb);
+    }
+
+    private void getDeviantartData(String usn, Consumer<Triple<String, String, Oembed>> cb) {
+        WebUtils.ins.getText("https://backend.deviantart.com/rss.xml?type=deviation&q=by%3A" +
+                usn + "+sort%3Atime+meta%3Aall").async(txt -> {
+            Document doc = Jsoup.parse(txt, "", Parser.xmlParser());
+            Element item = doc.select("item").get(0);
+            String link = item.selectFirst("link").text();
+            String avatarUrl = item.select("[role=\"author\"]").get(1).text();
+            //Use https://backend.deviantart.com/oembed?url= on the returned url
+            WebUtils.ins.getAson("https://backend.deviantart.com/oembed?url=" + link).async(ason -> {
+                Oembed oembed = Ason.deserialize(ason, Oembed.class);
+                cb.accept(Triple.of(avatarUrl, link, oembed));
+            });
+        });
     }
 
 }

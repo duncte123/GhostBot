@@ -44,9 +44,11 @@ public class GhostBot {
                 usn + "+sort%3Atime+meta%3Aall").async(txt -> {
             Document doc = Jsoup.parse(txt, "", Parser.xmlParser());
             Elements items = doc.select("item");
-            items.forEach(item -> System.out.println(item.selectFirst("link").text()));
+            //items.forEach(item -> System.out.println(item.selectFirst("link").text()));
+            items.forEach(item -> System.out.println(item.select("[role=\"author\"]").get(1).text()));
             //Use https://backend.deviantart.com/oembed?url= on the returned url
-        });*/
+        });
+        if(true) return;*/
 
         logger.info("Booting GhostBot");
         String token = SpoopyUtils.config.getString("discord.token");
