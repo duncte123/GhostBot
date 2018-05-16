@@ -54,7 +54,7 @@ public class QuotesCommand extends Command {
 
     private final List<TumblrPost> tumblrPosts = new ArrayList<>();
     private final Map<String, Integer> indexes = new HashMap<>();
-    private final List<Long> badPostIds = List.of(
+    private final List<Long> badPostIds = createList(
             156199508936L,
             141701068521L,
             139748205676L,
@@ -81,7 +81,8 @@ public class QuotesCommand extends Command {
             130834334051L,
             131278048551L,
             163028433406L,
-            150823532681L
+            150823532681L,
+            173944925826L
     );
     private int oldCount = 0;
 
@@ -238,5 +239,9 @@ public class QuotesCommand extends Command {
                 .replaceAll(Pattern.quote("</small>"), "")
                 //links
                 .replaceAll("<a(?:.*)href=\"(\\S+)\"(?:.*)>(.*)</a>", "[$2]($1)");
+    }
+
+    private List<Long> createList(Long... elements) {
+        return Arrays.asList(elements);
     }
 }

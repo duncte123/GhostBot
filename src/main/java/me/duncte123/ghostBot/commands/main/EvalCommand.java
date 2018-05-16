@@ -76,6 +76,8 @@ public class EvalCommand extends Command {
                 //service.schedule({ task.cancel(true) }, 60, TimeUnit.SECONDS)
 
                 if (result != null) sendMsg(event, result.toString());
+
+                sendSuccess(event.getMessage());
             } catch (Exception e) {
                 try {
                     sendErrorWithMessage(event.getMessage(), e.getCause().toString());
@@ -84,8 +86,6 @@ public class EvalCommand extends Command {
                 }
 
             }
-
-            sendSuccess(event.getMessage());
         }
 
     }
