@@ -35,7 +35,6 @@ import static me.duncte123.ghostBot.utils.MessageUtils.*;
 
 public class EvalCommand extends Command {
 
-//    private final GroovyShell shell = new GroovyShell();
     private final ScriptEngine engine = new ScriptEngineManager().getEngineByName("groovy");
     private final ScheduledExecutorService service = Executors.newScheduledThreadPool(1, (it) -> new Thread(it, "Eval-Thread"));
     private final List<String> packageImports = List.of(
@@ -72,8 +71,6 @@ public class EvalCommand extends Command {
                 ScheduledFuture<Object> task = service.schedule(() -> engine.eval(script), 0L, TimeUnit.NANOSECONDS);
 
                 Object result = task.get(1, TimeUnit.MINUTES);
-                //cancel it after 1 minute
-                //service.schedule({ task.cancel(true) }, 60, TimeUnit.SECONDS)
 
                 if (result != null) sendMsg(event, result.toString());
 
