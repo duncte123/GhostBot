@@ -122,17 +122,17 @@ public class DPArtistsCommand extends Command {
         String usn = i[0];
         String type = i[1];
         if (type.equalsIgnoreCase("tumblr")) {
+            String profilePicture = getTumblrPfp(url);
             extractPictureFromTumblr(usn, post ->
-                    getTumblrPfp(url, profilePicture ->
-                            sendEmbed(event,
-                                    EmbedUtils.defaultEmbed()
-                                            .setAuthor(usn, post.short_url, profilePicture)
-                                            .setTitle(post.title, post.short_url)
-                                            .setDescription(QuotesCommand.parseText(post.caption))
-                                            .setThumbnail(profilePicture)
-                                            .setImage(post.photos.get(0).original_size.url)
-                                            .build()
-                            ))
+                    sendEmbed(event,
+                            EmbedUtils.defaultEmbed()
+                                    .setAuthor(usn, post.short_url, profilePicture)
+                                    .setTitle(post.title, post.short_url)
+                                    .setDescription(QuotesCommand.parseText(post.caption))
+                                    .setThumbnail(profilePicture)
+                                    .setImage(post.photos.get(0).original_size.url)
+                                    .build()
+                    )
             );
         } else if (type.equalsIgnoreCase("deviantart")) {
             getDeviantartData(usn, data -> {
@@ -164,8 +164,8 @@ public class DPArtistsCommand extends Command {
 
     }
 
-    private void getTumblrPfp(String domain, Consumer<String> cb) {
-        WebUtils.ins.getText("https://apis.duncte123.me/tumblr_avatar/" + domain).async(cb);
+    private String getTumblrPfp(String domain) {
+        return "https://api.tumblr.com/v2/blog/" + domain + "/avatar/512";
     }
 
     private void getDeviantartData(String usn, Consumer<Triple<String, String, Oembed>> cb) {
