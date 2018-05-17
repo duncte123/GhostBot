@@ -64,7 +64,7 @@ public class DPArtistsCommand extends Command {
     (and some more useless info)
 */
 
-    private final List<String> artits = List.of(
+    private final List<String> artists = List.of(
             "earthphantom",
             "allyphantomrush",
             "umbrihearts"
@@ -95,7 +95,7 @@ public class DPArtistsCommand extends Command {
             }
 
             case "list": {
-                sendMsg(event, "The current list of artists is: `" + String.join("`, `", artits) + "`");
+                sendMsg(event, "The current list of artists is: `" + String.join("`, `", artists) + "`");
                 break;
             }
 
