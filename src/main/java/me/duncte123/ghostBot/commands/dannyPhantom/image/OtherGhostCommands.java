@@ -29,7 +29,7 @@ public class OtherGhostCommands extends ImageBase {
                 sendFromKeyword(event, "Cujo Danny Phantom");
                 break;
             case "ember":
-                sendFromKeyword(event, "ember mclain");
+                sendFromKeyword(event, "Ember Mclain");
                 break;
             case "dan":
                 sendFromKeywords(event, "Dan Phantom", "Dark Danny");
@@ -64,6 +64,9 @@ public class OtherGhostCommands extends ImageBase {
             case "jack":
                 sendFromKeywords(event, "Jack Fenton");
                 break;
+            case "jazz":
+                sendFromKeywords(event, "Jazz Fenton");
+                break;
         }
     }
 
@@ -80,7 +83,7 @@ public class OtherGhostCommands extends ImageBase {
     @Override
     public String[] getAliases() {
         return new String[]{"ember", "dan", "vlad",
-                "sam", "tucker", "danny", "clockwork", "pitchpearl", "valerie", "dani", "skulker", "jack"};
+                "sam", "tucker", "danny", "clockwork", "pitchpearl", "valerie", "dani", "skulker", "jack", "jazz"};
     }
 
     private void sendFromKeywords(GuildMessageReceivedEvent event, String... words) {
