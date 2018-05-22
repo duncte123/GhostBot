@@ -20,7 +20,7 @@ plugins {
     id 'java'
     id 'application'
     id 'idea'
-    id 'com.github.johnrengelman.shadow' version '2.0.2'
+    id 'com.github.johnrengelman.shadow' version '2.0.4'
     id 'de.fuerstenau.buildconfig' version '1.1.8'
 }
 
@@ -41,7 +41,7 @@ repositories {
 
 dependencies {
     //My little utils
-    compile 'com.github.duncte123:botCommons:a857bf6ffc'
+    compile 'com.github.duncte123:botCommons:bae72246fa'
     //JDA
     compile group: 'net.dv8tion', name: 'JDA', version: '3.6.0_367'
     //LavaPlayer/Lavalink

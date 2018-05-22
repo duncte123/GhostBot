@@ -39,7 +39,6 @@ import java.util.stream.Collectors;
 
 public class QuotesCommand extends Command {
 
-    //private static final Logger logger = LoggerFactory.getLogger(QuotesCommand.class);
     private final String[] types = {"chat", "text", "quote"};
     private final String[] messages = {
             "Starting to reload quotes",
@@ -52,9 +51,9 @@ public class QuotesCommand extends Command {
             "Finished <:DPJoy:425714609702305804> ({TOTAL} quotes in the system and {COUNT_NEW) new)"
     };
 
-    private final List<TumblrPost> tumblrPosts = new ArrayList<>();
-    private final Map<String, Integer> indexes = new HashMap<>();
-    private final List<Long> badPostIds = createList(
+    private final List<TumblrPost> allQuotes = new ArrayList<>();
+    private final Map<String, List<TumblrPost>> guildQuotes = new HashMap<>();
+    private final List<Long> badPostIds = Arrays.asList(
             156199508936L,
             141701068521L,
             139748205676L,
@@ -82,7 +81,8 @@ public class QuotesCommand extends Command {
             131278048551L,
             163028433406L,
             150823532681L,
-            173944925826L
+            173944925826L,
+            127476921111L
     );
     private int oldCount = 0;
 
@@ -107,35 +107,40 @@ public class QuotesCommand extends Command {
                                     }
                                     String mf = m;
                                     if (m.contains("{COUNT_NEW)")) {
-                                        mf = mf.replaceAll(Pattern.quote("{COUNT_NEW)"), String.valueOf(tumblrPosts.size() - oldCount));
+                                        mf = mf.replaceAll(Pattern.quote("{COUNT_NEW)"), String.valueOf(allQuotes.size() - oldCount));
                                     }
                                     if (m.contains("{TOTAL}")) {
-                                        mf = mf.replaceAll(Pattern.quote("{TOTAL}"), String.valueOf(tumblrPosts.size()));
+                                        mf = mf.replaceAll(Pattern.quote("{TOTAL}"), String.valueOf(allQuotes.size()));
                                     }
                                     logger.debug(mf);
                                     success.editMessage(mf).queue();
                                 }
                             }), "Message fun thinh").start();
+                    return;
                 } else {
                     MessageUtils.sendMsg(event, "Only the bot owner can reload quotes");
+                    return;
                 }
             } else if ("total".equals(args[0])) {
-                MessageUtils.sendMsg(event, "There are a total of " + tumblrPosts.size() + " quotes in the system at the moment");
+                MessageUtils.sendMsg(event, "There are a total of " + allQuotes.size() + " quotes in the system at the moment");
+                return;
             }
-            return;
         }
 
         String gid = event.getGuild().getId();
-        if (!indexes.containsKey(gid) || indexes.get(gid) >= tumblrPosts.size()) {
-            indexes.put(gid, 0);
+        if (!guildQuotes.containsKey(gid) || guildQuotes.get(gid).size() == 0) {
+            guildQuotes.put(gid, new ArrayList<>(allQuotes));
         }
 
-        int index = indexes.get(gid);
-        TumblrPost post = tumblrPosts.get(index);
+        /*int index = guildQuotes.get(gid);
+        TumblrPost post = allQuotes.get(index);*/
+        List<TumblrPost> posts = guildQuotes.get(gid);
+        TumblrPost post = posts.get(SpoopyUtils.random.nextInt(posts.size()));
+        posts.remove(post);
         String type = post.type;
 
         EmbedBuilder eb = EmbedUtils.defaultEmbed()
-                .setTitle("Link to Post", post.short_url);
+                .setTitle("Link to Post", post.post_url);
 
         switch (type) {
             case "chat":
@@ -156,7 +161,7 @@ public class QuotesCommand extends Command {
                 break;
         }
 
-        indexes.put(gid, ++index);
+        //guildQuotes.put(gid, ++index);
         MessageUtils.sendEmbed(event, eb.build());
     }
 
@@ -181,9 +186,11 @@ public class QuotesCommand extends Command {
     }
 
     private void reloadQuotes() {
-        oldCount = tumblrPosts.size();
-        tumblrPosts.clear();
-        indexes.clear();
+        if (SpoopyUtils.config.getBoolean("running_local", false)) return;
+
+        oldCount = allQuotes.size();
+        allQuotes.clear();
+        guildQuotes.clear();
         for (String type : types) {
             logger.info("Getting quotes from type " + type);
             String url = String.format(
@@ -199,10 +206,10 @@ public class QuotesCommand extends Command {
                         logger.debug("Got " + fetched.size() + " quotes from type " + type);
                         List<TumblrPost> posts = Ason.deserializeList(fetched, TumblrPost.class);
                         List<TumblrPost> filteredPosts = posts.stream().filter(post -> !badPostIds.contains(post.id)).collect(Collectors.toList());
-                        tumblrPosts.addAll(
+                        allQuotes.addAll(
                                 filteredPosts
                         );
-                        Collections.shuffle(tumblrPosts);
+                        //Collections.shuffle(allQuotes);
                     });
                 }
                 logger.info("Fetched " + total + " from type " + type);
@@ -211,7 +218,7 @@ public class QuotesCommand extends Command {
     }
 
     public static String parseText(String raw) {
-        if(raw == null || raw.isEmpty())
+        if (raw == null || raw.isEmpty())
             return "";
 
         raw = StringEscapeUtils.unescapeHtml4(raw);
@@ -239,9 +246,5 @@ public class QuotesCommand extends Command {
                 .replaceAll(Pattern.quote("</small>"), "")
                 //links
                 .replaceAll("<a(?:.*)href=\"(\\S+)\"(?:.*)>(.*)</a>", "[$2]($1)");
-    }
-
-    private List<Long> createList(Long... elements) {
-        return Arrays.asList(elements);
     }
 }

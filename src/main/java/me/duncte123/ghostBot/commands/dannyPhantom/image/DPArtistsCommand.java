@@ -22,19 +22,16 @@ import com.afollestad.ason.Ason;
 import me.duncte123.botCommons.web.WebUtils;
 import me.duncte123.ghostBot.commands.dannyPhantom.text.QuotesCommand;
 import me.duncte123.ghostBot.objects.Command;
-import me.duncte123.ghostBot.objects.deviantart.Oembed;
 import me.duncte123.ghostBot.objects.tumblr.TumblrPost;
 import me.duncte123.ghostBot.utils.EmbedUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
-import org.apache.commons.lang3.tuple.Triple;
 import org.jetbrains.annotations.NotNull;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.parser.Parser;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 import static me.duncte123.ghostBot.utils.MessageUtils.sendEmbed;
@@ -44,6 +41,7 @@ public class DPArtistsCommand extends Command {
     /*
     http://earthphantom.tumblr.com/ (approved)
     http://amethystocean-adr.tumblr.com/
+    http://doppelgangercomic.tumblr.com/ (approved)
 
     https://allyphantomrush.deviantart.com/
 
@@ -64,14 +62,20 @@ public class DPArtistsCommand extends Command {
     (and some more useless info)
 */
 
-    private final List<String> artists = List.of(
+    private final String[] artists = {
             "earthphantom",
             "allyphantomrush",
-            "umbrihearts"
-    );
+            "umbrihearts",
+            "doppelganger"
+    };
 
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
+
+        if (!getName().equalsIgnoreCase(invoke)) {
+            args = new String[]{invoke};
+        }
+
         if (args.length < 1) {
             sendMsg(event, "Correct usage is `gb." + getName() + " <artist name>`");
             return;
@@ -94,6 +98,11 @@ public class DPArtistsCommand extends Command {
                 break;
             }
 
+            case "doppelganger": {
+                doStuff("doppelgangercomic.tumblr.com", event);
+                break;
+            }
+
             case "list": {
                 sendMsg(event, "The current list of artists is: `" + String.join("`, `", artists) + "`");
                 break;
@@ -113,6 +122,11 @@ public class DPArtistsCommand extends Command {
     }
 
     @Override
+    public String[] getAliases() {
+        return artists;
+    }
+
+    @Override
     public String getHelp() {
         return "get the latest post of an artist";
     }
@@ -122,12 +136,12 @@ public class DPArtistsCommand extends Command {
         String usn = i[0];
         String type = i[1];
         if (type.equalsIgnoreCase("tumblr")) {
-            String profilePicture = getTumblrPfp(url);
+            String profilePicture = getTumblrProfilePictureUrl(url);
             extractPictureFromTumblr(usn, post ->
                     sendEmbed(event,
                             EmbedUtils.defaultEmbed()
-                                    .setAuthor(usn, post.short_url, profilePicture)
-                                    .setTitle(post.title, post.short_url)
+                                    .setAuthor(usn, post.post_url, profilePicture)
+                                    .setTitle(tumblrTitle(post.title), post.post_url)
                                     .setDescription(QuotesCommand.parseText(post.caption))
                                     .setThumbnail(profilePicture)
                                     .setImage(post.photos.get(0).original_size.url)
@@ -135,7 +149,19 @@ public class DPArtistsCommand extends Command {
                     )
             );
         } else if (type.equalsIgnoreCase("deviantart")) {
-            getDeviantartData(usn, data -> {
+
+            getDeviantartDataXmlOnly(usn, data ->
+                    sendEmbed(event,
+                            EmbedUtils.defaultEmbed()
+                                    .setAuthor(usn, data.authorUrl, data.avatarUrl)
+                                    .setTitle(data.title, data.link)
+                                    .setThumbnail(data.avatarUrl)
+                                    .setImage(data.thumbnailUrl)
+                                    .build()
+                    )
+            );
+            //Old junk that I might remove soon
+            /*getDeviantartData(usn, data -> {
                 Oembed embed = data.getRight();
                 sendEmbed(event,
                         EmbedUtils.defaultEmbed()
@@ -145,7 +171,7 @@ public class DPArtistsCommand extends Command {
                                 .setImage(embed.thumbnail_url)
                                 .build()
                 );
-            });
+            });*/
         }
     }
 
@@ -164,11 +190,12 @@ public class DPArtistsCommand extends Command {
 
     }
 
-    private String getTumblrPfp(String domain) {
-        return "https://api.tumblr.com/v2/blog/" + domain + "/avatar/512";
+    private String getTumblrProfilePictureUrl(String domain) {
+        return "https://api.tumblr.com/v2/blog/" + domain + "/avatar/48";
     }
 
-    private void getDeviantartData(String usn, Consumer<Triple<String, String, Oembed>> cb) {
+    //Old junk that I might remove soon
+    /*private void getDeviantartData(String usn, Consumer<Triple<String, String, Oembed>> cb) {
         WebUtils.ins.getText("https://backend.deviantart.com/rss.xml?type=deviation&q=by%3A" +
                 usn + "+sort%3Atime+meta%3Aall").async(txt -> {
             Document doc = Jsoup.parse(txt, "", Parser.xmlParser());
@@ -181,6 +208,46 @@ public class DPArtistsCommand extends Command {
                 cb.accept(Triple.of(avatarUrl, link, oembed));
             });
         });
+    }*/
+
+    private void getDeviantartDataXmlOnly(String usn, Consumer<LocalDeviantData> cb) {
+        WebUtils.ins.getText("https://backend.deviantart.com/rss.xml?type=deviation&q=by%3A" +
+                usn + "+sort%3Atime+meta%3Aall").async(txt -> {
+            Document doc = Jsoup.parse(txt, "", Parser.xmlParser());
+            //get an item
+            Element item = doc.selectFirst("item");
+            cb.accept(new LocalDeviantData(
+                    item.selectFirst("media|copyright").attr("url"),
+                    item.selectFirst("media|content[medium=\"image\"]").attr("url"),
+                    item.selectFirst("title").text(),
+                    item.select("media|credit").get(1).text(),
+                    item.selectFirst("link").text()
+            ));
+        });
+    }
+
+    private String tumblrTitle(String title) {
+        if (title == null || title.isEmpty()) {
+            return "Link to post";
+        }
+        return title;
+    }
+
+    private class LocalDeviantData {
+
+        String authorUrl;
+        String thumbnailUrl;
+        String title;
+        String avatarUrl;
+        String link;
+
+        LocalDeviantData(String a, String t, String ti, String pfp, String l) {
+            this.authorUrl = a;
+            this.thumbnailUrl = t;
+            this.title = ti;
+            this.avatarUrl = pfp;
+            this.link = l;
+        }
     }
 
 }

@@ -32,40 +32,41 @@ import java.util.List;
 
 public class RandomGhostCommand extends Command {
 
-    //private static final Logger logger = LoggerFactory.getLogger(RandomGhostCommand.class);
     private final List<String> ghosts = new ArrayList<>();
 
     public RandomGhostCommand() {
-        logger.info("Scraping ghosts async");
-        WebUtils.ins.scrapeWebPage("http://dannyphantom.wikia.com/wiki/Category:Ghosts?display=page&sort=alphabetical").async((doc) -> {
-            try {
-                Element el = doc.getElementsByClass("mw-content-ltr").get(2);
+        if (!SpoopyUtils.config.getBoolean("running_local", false)) {
+            logger.info("Scraping ghosts async");
+            WebUtils.ins.scrapeWebPage("http://dannyphantom.wikia.com/wiki/Category:Ghosts?display=page&sort=alphabetical").async((doc) -> {
+                try {
+                    Element el = doc.getElementsByClass("mw-content-ltr").get(2);
 
-                Elements tds = el.child(0).child(0).children();
+                    Elements tds = el.child(0).child(0).children();
 
-                Elements trs = tds.get(0).children();
+                    Elements trs = tds.get(0).children();
 
-                List<Element> anchors = new ArrayList<>();
+                    List<Element> anchors = new ArrayList<>();
 
-                trs.forEach(tr ->
-                        tr.children().forEach(ul -> {
-                            if (ul.tagName().equals("ul")) {
-                                ul.children().forEach(listItem ->
-                                        anchors.addAll(listItem.children())
-                                );
-                            }
-                        })
-                );
+                    trs.forEach(tr ->
+                            tr.children().forEach(ul -> {
+                                if (ul.tagName().equals("ul")) {
+                                    ul.children().forEach(listItem ->
+                                            anchors.addAll(listItem.children())
+                                    );
+                                }
+                            })
+                    );
 
-                logger.info("Scraped " + anchors.size() + " Ghosts from the wiki");
+                    logger.info("Scraped " + anchors.size() + " Ghosts from the wiki");
 
-                anchors.forEach(a -> ghosts.add("http://dannyphantom.wikia.com" + a.attr("href")));
+                    anchors.forEach(a -> ghosts.add("http://dannyphantom.wikia.com" + a.attr("href")));
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
-        }, Throwable::printStackTrace);
+            }, Throwable::printStackTrace);
+        }
     }
 
     @Override
