@@ -72,7 +72,8 @@ public class BotListener extends ListenerAdapter {
                     failure -> event.getJDA().shutdown()
             );
             SpoopyUtils.commandManager.commandService.shutdown();
-            LavalinkManager.ins.getLavalink().shutdown();
+            if(LavalinkManager.ins.isEnabled())
+                LavalinkManager.ins.getLavalink().shutdown();
             /*try {
                 //noinspection PointlessArithmeticExpression
                 Thread.sleep(1 * 1000);

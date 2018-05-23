@@ -31,6 +31,7 @@ import me.duncte123.ghostBot.utils.MessageUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,15 +64,12 @@ public class DoppelgangerComicCommand extends ReactionCommand {
 
         int page = pages.size();
         if (args.length > 0) {
-            if (args[0].startsWith(PAGE_SELECTOR)) {
+            String arg = StringUtils.join(args).toLowerCase();
+            if (arg.startsWith(PAGE_SELECTOR)) {
+                page = getNumberFromArg(arg.substring(PAGE_SELECTOR.length()));
+            } else if (arg.startsWith(CHAPTER_SELECTOR)) {
                 try {
-                    page = Integer.parseInt(args[0].substring(PAGE_SELECTOR.length()));
-                } catch (NumberFormatException ignored) {
-                }
-            } else if (args[0].startsWith(CHAPTER_SELECTOR)) {
-                try {
-                    page = chapters[Integer.parseInt(args[0].substring(CHAPTER_SELECTOR.length())) - 1];
-                } catch (NumberFormatException ignored) {
+                    page = chapters[ getNumberFromArg(arg.substring(CHAPTER_SELECTOR.length())) - 1];
                 } catch (IndexOutOfBoundsException ignored) {
                     sendMsg(event, "That chapter is not known");
                     return;
@@ -116,7 +114,17 @@ public class DoppelgangerComicCommand extends ReactionCommand {
 
     @Override
     public String getHelp() {
-        return "Read the doppelganger comic within discord (comic website: <http://doppelgangercomic.tumblr.com/>)";
+        return "Read the doppelganger comic within discord (comic website: <http://doppelgangercomic.tumblr.com/>)\n" +
+                "Usage: `gb." + getName() + " [page:number/chapter:number]`";
+    }
+
+    private int getNumberFromArg(String input) {
+        try {
+            return Integer.parseInt(input);
+        }
+        catch (NumberFormatException ignored) {
+            return pages.size();
+        }
     }
 
     private MessageEmbed getEmbed(int page) {
@@ -133,7 +141,7 @@ public class DoppelgangerComicCommand extends ReactionCommand {
     }
 
     private void loadPages() {
-        if (SpoopyUtils.config.getBoolean("running_local", false)) return;
+        //if (SpoopyUtils.config.getBoolean("running_local", false)) return;
 
         pages.clear();
         logger.info("Loading doppelganger pages");
