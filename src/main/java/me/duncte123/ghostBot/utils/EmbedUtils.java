@@ -28,6 +28,7 @@ import java.time.Instant;
 
 public class EmbedUtils {
 
+    public static final String FOOTER_ICON = "https://cdn.discordapp.com/emojis/394148311835344896.png";
 
     public static MessageEmbed embedField(String title, String message) {
         return defaultEmbed().addField(title, message, false).build();
@@ -44,7 +45,7 @@ public class EmbedUtils {
     public static EmbedBuilder defaultEmbed() {
         return new EmbedBuilder()
                 .setColor(Color.decode("#6ffe32"))
-                .setFooter("GhostBot", "https://cdn.discordapp.com/emojis/394148311835344896.png")
+                .setFooter("GhostBot", FOOTER_ICON)
                 .setTimestamp(Instant.now());
     }
 

@@ -18,6 +18,7 @@
 
 package me.duncte123.ghostBot.commands.dannyPhantom.image;
 
+import me.duncte123.ghostBot.objects.Category;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
@@ -95,5 +96,10 @@ public class OtherGhostCommands extends ImageBase {
 
     private void sendFromKeyword(GuildMessageReceivedEvent event, String keyword) {
         sendMessageFromName(event, requestImage(keyword));
+    }
+
+    @Override
+    public Category getCategory() {
+        return Category.CHARACTERS;
     }
 }

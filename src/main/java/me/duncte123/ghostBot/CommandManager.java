@@ -18,29 +18,22 @@
 
 package me.duncte123.ghostBot;
 
+import me.duncte123.ghostBot.commands.ReactionCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.audio.*;
-import me.duncte123.ghostBot.commands.dannyPhantom.image.DPArtistsCommand;
-import me.duncte123.ghostBot.commands.dannyPhantom.image.GifCommand;
-import me.duncte123.ghostBot.commands.dannyPhantom.image.ImageCommand;
-import me.duncte123.ghostBot.commands.dannyPhantom.image.OtherGhostCommands;
+import me.duncte123.ghostBot.commands.dannyPhantom.image.*;
 import me.duncte123.ghostBot.commands.dannyPhantom.text.GamesCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.text.QuotesCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.text.RandomGhostCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.wiki.WikiCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.wiki.WikiUserCommand;
-import me.duncte123.ghostBot.commands.main.AboutCommand;
-import me.duncte123.ghostBot.commands.main.EvalCommand;
-import me.duncte123.ghostBot.commands.main.HelpCommand;
-import me.duncte123.ghostBot.commands.main.ReloadAudioCommand;
+import me.duncte123.ghostBot.commands.main.*;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 import org.apache.commons.collections4.set.UnmodifiableSet;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -50,8 +43,10 @@ import java.util.regex.Pattern;
 public class CommandManager {
 
     private final Set<Command> commands = ConcurrentHashMap.newKeySet();
-    public final ScheduledExecutorService commandService = Executors.newScheduledThreadPool(5,
-            (r) -> new Thread(r, "Command-Thread") );
+    final ScheduledExecutorService commandService = Executors.newScheduledThreadPool(5,
+            (r) -> new Thread(r, "Command-Thread"));
+
+    final ReactionListenerRegistry reactListReg = new ReactionListenerRegistry();
 
     public CommandManager() {
         this.addCommand(new GoingGhostCommand());
@@ -64,6 +59,7 @@ public class CommandManager {
         this.addCommand(new GifCommand());
         this.addCommand(new OtherGhostCommands());
         this.addCommand(new DPArtistsCommand());
+        this.addCommand(new DoppelgangerComicCommand(this.reactListReg));
 
         this.addCommand(new WikiCommand());
         this.addCommand(new WikiUserCommand());
@@ -116,7 +112,7 @@ public class CommandManager {
         return true;
     }
 
-    public void handleCommand(GuildMessageReceivedEvent event) {
+    void handleCommand(GuildMessageReceivedEvent event) {
         final String rw = event.getMessage().getContentRaw();
         final String[] split = rw.replaceFirst("(?i)" + Pattern.quote(Variables.PREFIX), "")
                 .split("\\s+");
@@ -127,11 +123,46 @@ public class CommandManager {
 
         if (cmd != null) {
             event.getChannel().sendTyping().queue();
-            commandService.schedule(() ->
-                cmd.execute(invoke, args, event)
-            ,0, TimeUnit.MILLISECONDS);
+            commandService.schedule(() -> {
+                try {
+                    cmd.execute(invoke, args, event);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }, 0, TimeUnit.MILLISECONDS);
             /*cmd.execute(invoke, args, event);*/
         }
 
+    }
+
+    /**
+     * Taken from:
+     * https://github.com/Almighty-Alpaca/JDA-Butler/blob/master/src/main/java/com/almightyalpaca/discord/jdabutler/commands/Dispatcher.java#L135-L168
+     */
+    public static class ReactionListenerRegistry {
+        private final Set<ReactionCommand.ReactionListener> listeners;
+
+        private ReactionListenerRegistry() {
+            this.listeners = new HashSet<>();
+        }
+
+        public void register(final ReactionCommand.ReactionListener listener) {
+            synchronized (this.listeners) {
+                this.listeners.add(listener);
+            }
+        }
+
+        public void remove(final ReactionCommand.ReactionListener listener) {
+            synchronized (this.listeners) {
+                this.listeners.remove(listener);
+            }
+        }
+
+        void handle(final MessageReactionAddEvent event) {
+            synchronized (this.listeners) {
+                for (final ReactionCommand.ReactionListener listener : this.listeners)
+                    listener.handle(event);
+            }
+        }
     }
 }

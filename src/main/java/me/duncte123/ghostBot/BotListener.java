@@ -32,6 +32,7 @@ import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceMoveEvent;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import okhttp3.MediaType;
 import okhttp3.Request;
@@ -138,6 +139,11 @@ public class BotListener extends ListenerAdapter {
             }
         } catch (NullPointerException ignored) {
         }
+    }
+
+    @Override
+    public void onMessageReactionAdd(MessageReactionAddEvent event) {
+        SpoopyUtils.commandManager.reactListReg.handle(event);
     }
 
     private void postServerCount(JDA jda) {

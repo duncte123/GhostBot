@@ -19,6 +19,7 @@
 package me.duncte123.ghostBot;
 
 import fredboat.audio.player.LavalinkManager;
+import me.duncte123.botCommons.web.WebUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.AccountType;
@@ -38,20 +39,10 @@ public class GhostBot {
     private static JDA jda;
 
     public static void main(String[] args) {
-        //Just some testing
-        /*String usn = "allyphantomrush";
-        WebUtils.ins.getText("https://backend.deviantart.com/rss.xml?type=deviation&q=by%3A" +
-                usn + "+sort%3Atime+meta%3Aall").async(txt -> {
-            Document doc = Jsoup.parse(txt, "", Parser.xmlParser());
-            Elements items = doc.select("item");
-            //items.forEach(item -> System.out.println(item.selectFirst("link").text()));
-            items.forEach(item -> System.out.println(item.select("[role=\"author\"]").get(1).text()));
-            //Use https://backend.deviantart.com/oembed?url= on the returned url
-        });
-        if(true) return;*/
 
         logger.info("Booting GhostBot");
         String token = SpoopyUtils.config.getString("discord.token");
+        WebUtils.setUserAgent("Mozilla/5.0 (compatible; GhostBot/v" + Variables.VERSION + "; +https://github.com/duncte123/GhostBot)");
         LavalinkManager.ins.start();
         try {
             JDABuilder builder = new JDABuilder(AccountType.BOT)

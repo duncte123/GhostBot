@@ -24,11 +24,11 @@ plugins {
     id 'de.fuerstenau.buildconfig' version '1.1.8'
 }
 
-mainClassName = 'me.duncte123.ghostBot.GhostBot'
 group 'me.duncte123.ghostBot'
-version "0.1.0_${getGitHash()}"
+version "1.11.0_${getGitHash()}"
+mainClassName = "${version}.GhostBot"
 
-sourceCompatibility = 1.9
+sourceCompatibility = 1.8
 
 repositories {
     jcenter()

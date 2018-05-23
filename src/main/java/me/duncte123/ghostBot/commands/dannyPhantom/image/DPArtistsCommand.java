@@ -21,7 +21,6 @@ package me.duncte123.ghostBot.commands.dannyPhantom.image;
 import com.afollestad.ason.Ason;
 import me.duncte123.botCommons.web.WebUtils;
 import me.duncte123.ghostBot.commands.dannyPhantom.text.QuotesCommand;
-import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.objects.tumblr.TumblrPost;
 import me.duncte123.ghostBot.utils.EmbedUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
@@ -37,11 +36,11 @@ import java.util.function.Consumer;
 import static me.duncte123.ghostBot.utils.MessageUtils.sendEmbed;
 import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
 
-public class DPArtistsCommand extends Command {
+public class DPArtistsCommand extends ImageCommand {
     /*
     http://earthphantom.tumblr.com/ (approved)
     http://amethystocean-adr.tumblr.com/
-    http://doppelgangercomic.tumblr.com/ (approved)
+    http://doppelgangercomic.tumblr.com/ (approved, has own command)
 
     https://allyphantomrush.deviantart.com/
 
@@ -141,7 +140,7 @@ public class DPArtistsCommand extends Command {
                     sendEmbed(event,
                             EmbedUtils.defaultEmbed()
                                     .setAuthor(usn, post.post_url, profilePicture)
-                                    .setTitle(tumblrTitle(post.title), post.post_url)
+                                    .setTitle("Link to post", post.post_url)
                                     .setDescription(QuotesCommand.parseText(post.caption))
                                     .setThumbnail(profilePicture)
                                     .setImage(post.photos.get(0).original_size.url)
@@ -224,13 +223,6 @@ public class DPArtistsCommand extends Command {
                     item.selectFirst("link").text()
             ));
         });
-    }
-
-    private String tumblrTitle(String title) {
-        if (title == null || title.isEmpty()) {
-            return "Link to post";
-        }
-        return title;
     }
 
     private class LocalDeviantData {

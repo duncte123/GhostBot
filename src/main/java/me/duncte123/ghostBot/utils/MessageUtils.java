@@ -120,19 +120,27 @@ public class MessageUtils {
         sendEmbed(event.getChannel(), embed);
     }
 
+    public static void sendEmbed(GuildMessageReceivedEvent event, MessageEmbed embed, Consumer<Message> success) {
+        sendEmbed(event.getChannel(), embed, success);
+    }
+
+    public static void sendEmbed(TextChannel channel, MessageEmbed embed) {
+        sendEmbed(channel, embed, null);
+    }
+
     /**
      * This will check if we can send a embed and convert it to a message if we can't send embeds
      *
      * @param channel the {@link TextChannel TextChannel} that we want to send the embed to
      * @param embed   The embed to send
      */
-    public static void sendEmbed(TextChannel channel, MessageEmbed embed) {
+    public static void sendEmbed(TextChannel channel, MessageEmbed embed, Consumer<Message> success) {
         if (channel != null) {
             if (!channel.getGuild().getSelfMember().hasPermission(channel, Permission.MESSAGE_EMBED_LINKS)) {
                 sendMsg(channel, EmbedUtils.embedToMessage(embed));
                 return;
             }
-            sendMsg(channel, embed);
+            sendMsg(channel, embed, success);
         }
     }
 
@@ -297,6 +305,10 @@ public class MessageUtils {
         sendMsg(channel, (new MessageBuilder()).setEmbed(msg).build(), null, CUSTOM_QUEUE_ERROR);
     }
 
+    public static void sendMsg(TextChannel channel, MessageEmbed msg, Consumer<Message> success) {
+        sendMsg(channel, (new MessageBuilder()).setEmbed(msg).build(), success, CUSTOM_QUEUE_ERROR);
+    }
+
     /**
      * This is a shortcut for sending messages to a channel
      *
@@ -348,7 +360,7 @@ public class MessageUtils {
      * @param success The success consumer
      */
     public static void sendMsg(TextChannel channel, Message msg, Consumer<Message> success) {
-        sendMsg(channel, msg, success, CUSTOM_QUEUE_ERROR);
+        sendMsg(channel, msg, success, null);
     }
 
     /**

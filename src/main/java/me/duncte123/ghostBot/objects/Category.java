@@ -24,5 +24,6 @@ public enum Category {
     WIKI,
     HIDDEN,
     TEXT,
+    CHARACTERS,
     NONE
 }

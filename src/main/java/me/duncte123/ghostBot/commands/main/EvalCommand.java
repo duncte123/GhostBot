@@ -25,6 +25,7 @@ import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -37,7 +38,7 @@ public class EvalCommand extends Command {
 
     private final ScriptEngine engine = new ScriptEngineManager().getEngineByName("groovy");
     private final ScheduledExecutorService service = Executors.newScheduledThreadPool(1, (it) -> new Thread(it, "Eval-Thread"));
-    private final List<String> packageImports = List.of(
+    private final List<String> packageImports = Arrays.asList(
             "java.io",
             "java.lang",
             "java.util",

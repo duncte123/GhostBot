@@ -27,6 +27,7 @@ import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -63,23 +64,21 @@ public class HelpCommand extends Command {
             return;
         }
 
-        List<String> audioCommands = getCommandsForCategory(Category.AUDIO);
-        List<String> imageCommands = getCommandsForCategory(Category.IMAGE);
-        List<String> wikiCommands = getCommandsForCategory(Category.WIKI);
-        List<String> textCommands = getCommandsForCategory(Category.TEXT);
-        List<String> otherCommands = getCommandsForCategory(Category.NONE);
+        List<String> audioCommands =     getCommandsForCategory(Category.AUDIO);
+        List<String> imageCommands =     getCommandsForCategory(Category.IMAGE);
+        List<String> wikiCommands =      getCommandsForCategory(Category.WIKI);
+        List<String> textCommands =      getCommandsForCategory(Category.TEXT);
+        List<String> otherCommands =     getCommandsForCategory(Category.NONE);
+        List<String> characterCommands = getCommandsForCategory(Category.CHARACTERS);
 
         MessageEmbed helpEmbed = EmbedUtils.defaultEmbed()
                 .setDescription("Use `" + Variables.PREFIX + "help [command]` for more info about a command")
-                .addField("Audio commands",
-                        "`" + Variables.PREFIX + StringUtils.join(audioCommands, "`\n`" + Variables.PREFIX) + "`", false)
-                .addField("Image commands",
-                        "`" + Variables.PREFIX + StringUtils.join(imageCommands, "`\n`" + Variables.PREFIX) + "`", false)
-                .addField("Text commands",
-                        "`" + Variables.PREFIX + StringUtils.join(textCommands, "`\n`" + Variables.PREFIX) + "`", false)
-                .addField("Wiki commands",
-                        "`" + Variables.PREFIX + StringUtils.join(wikiCommands, "`\n`" + Variables.PREFIX) + "`", false)
-                .addField("Other commands", "`" + Variables.PREFIX + StringUtils.join(otherCommands, "`\n`" + Variables.PREFIX) + "`", false)
+                .addField("Audio commands",     buildCcmmands(audioCommands), false)
+                .addField("Image commands",     buildCcmmands(imageCommands), false)
+                .addField("Text commands",      buildCcmmands(textCommands), false)
+                .addField("Wiki commands",      buildCcmmands(wikiCommands), false)
+                .addField("Other commands",     buildCcmmands(otherCommands), false)
+                .addField("Character commands", buildCcmmands(characterCommands), false)
                 .build();
 
         event.getAuthor().openPrivateChannel().queue(pc -> pc.sendMessage(helpEmbed).queue(
@@ -105,13 +104,17 @@ public class HelpCommand extends Command {
         return new String[]{"commands"};
     }
 
+    private String buildCcmmands(List<String> commands) {
+        return "`" + Variables.PREFIX + StringUtils.join(commands, "`, `" + Variables.PREFIX) + "`";
+    }
+
     private List<String> getCommandsForCategory(Category category) {
 
         List<String> temp = SpoopyUtils.commandManager.getCommands()
                 .stream().filter(c -> c.getCategory().equals(category)).map(Command::getName).collect(Collectors.toList());
         SpoopyUtils.commandManager.getCommands()
                 .stream().filter(c -> c.getCategory().equals(category))
-                .map(cmd -> List.of(cmd.getAliases())).forEach(temp::addAll);
+                .map(cmd -> Arrays.asList(cmd.getAliases())).forEach(temp::addAll);
 
         return temp;
     }
