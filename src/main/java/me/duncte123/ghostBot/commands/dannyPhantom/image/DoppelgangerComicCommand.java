@@ -54,6 +54,7 @@ public class DoppelgangerComicCommand extends ReactionCommand {
     private static final String CHAPTER_SELECTOR = "chapter:";
 
     private final List<TumblrPost> pages = new ArrayList<>();
+    // The numbers in this list represent the page numbers of where the chapters start
     private final int[] chapters = {2, 29, 59};
     private final List<Long> filters = Collections.singletonList(167255413598L);
 
@@ -80,14 +81,14 @@ public class DoppelgangerComicCommand extends ReactionCommand {
         }
 
         if (page > pages.size()) {
-            sendMsg(event, "I could not find a page with number " + page);
+            sendMsg(event, "I could not find a page with number " + (page + 1));
             return;
         }
 
         AtomicInteger pa = new AtomicInteger(page);
         MessageUtils.sendEmbed(event, getEmbed(pa.get()),
                 m -> this.addReactions(m, Arrays.asList(ReactionCommand.LEFT_ARROW, ReactionCommand.RIGHT_ARROW,
-                        ReactionCommand.CANCEL), Collections.singleton(event.getAuthor()), 3, TimeUnit.MINUTES, index -> {
+                        ReactionCommand.CANCEL), Collections.singleton(event.getAuthor()), 30, TimeUnit.MINUTES, index -> {
                             if (index >= 2) { //cancel button or other error
                                 stopReactions(m);
                                 return;
@@ -125,7 +126,7 @@ public class DoppelgangerComicCommand extends ReactionCommand {
     }
 
     private MessageEmbed getEmbed(int page) {
-        TumblrPost post = pages.get(page);
+        final TumblrPost post = pages.get(page);
         return EmbedUtils.defaultEmbed()
                 .setAuthor("DOPPELGÄNGER", post.post_url, PROFILE_PICTURE)
                 .setTitle("Link to post", post.post_url)

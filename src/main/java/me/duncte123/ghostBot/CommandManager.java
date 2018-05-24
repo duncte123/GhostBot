@@ -58,8 +58,8 @@ public class CommandManager {
         this.addCommand(new ImageCommand());
         this.addCommand(new GifCommand());
         this.addCommand(new OtherGhostCommands());
-        this.addCommand(new DPArtistsCommand());
         this.addCommand(new DoppelgangerComicCommand(this.reactListReg));
+        this.addCommand(new DPArtistsCommand());
 
         this.addCommand(new WikiCommand());
         this.addCommand(new WikiUserCommand());
