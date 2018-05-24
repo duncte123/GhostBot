@@ -18,9 +18,6 @@
 
 package me.duncte123.ghostBot.commands.dannyPhantom.text;
 
-import com.afollestad.ason.Ason;
-import com.afollestad.ason.AsonArray;
-import me.duncte123.botCommons.web.WebUtils;
 import me.duncte123.ghostBot.objects.Category;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.objects.tumblr.TumblrDialogue;
@@ -28,6 +25,7 @@ import me.duncte123.ghostBot.objects.tumblr.TumblrPost;
 import me.duncte123.ghostBot.utils.EmbedUtils;
 import me.duncte123.ghostBot.utils.MessageUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
+import me.duncte123.ghostBot.utils.TumblrUtils;
 import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
@@ -82,7 +80,8 @@ public class QuotesCommand extends Command {
             163028433406L,
             150823532681L,
             173944925826L,
-            127476921111L
+            127476921111L,
+            174190854511L
     );
     private int oldCount = 0;
 
@@ -98,8 +97,8 @@ public class QuotesCommand extends Command {
 
                 if (event.getAuthor().getId().equals(Variables.OWNER_ID)) {
                     reloadQuotes();
-                    new Thread(() ->
-                            MessageUtils.sendMsg(event, messages[0], success -> {
+                    MessageUtils.sendMsg(event, messages[0], success ->
+                            new Thread(() -> {
                                 for (String m : Arrays.copyOfRange(messages, 1, messages.length)) {
                                     try {
                                         Thread.sleep(3500);
@@ -115,7 +114,8 @@ public class QuotesCommand extends Command {
                                     logger.debug(mf);
                                     success.editMessage(mf).queue();
                                 }
-                            }), "Message fun thinh").start();
+                                Thread.currentThread().interrupt();
+                            }, "Message fun thinh").start());
                     return;
                 } else {
                     MessageUtils.sendMsg(event, "Only the bot owner can reload quotes");
@@ -193,26 +193,11 @@ public class QuotesCommand extends Command {
         guildQuotes.clear();
         for (String type : types) {
             logger.info("Getting quotes from type " + type);
-            String url = String.format(
-                    "https://api.tumblr.com/v2/blog/totallycorrectdannyphantomquotes.tumblr.com/posts?api_key=%s&type=%s&limit=20",
-                    SpoopyUtils.config.getString("api.tumblr", "API_KEY"),
-                    type
-            );
-            WebUtils.ins.getAson(url).async(json -> {
-                int total = json.getInt("response.total_posts");
-                for (int i = 0; i <= total; i += 20) {
-                    WebUtils.ins.getAson(url + "&offset=" + (i > 1 ? i + 1 : 1)).async(j -> {
-                        AsonArray<Ason> fetched = j.getJsonArray("response.posts");
-                        logger.debug("Got " + fetched.size() + " quotes from type " + type);
-                        List<TumblrPost> posts = Ason.deserializeList(fetched, TumblrPost.class);
-                        List<TumblrPost> filteredPosts = posts.stream().filter(post -> !badPostIds.contains(post.id)).collect(Collectors.toList());
-                        allQuotes.addAll(
-                                filteredPosts
-                        );
-                        //Collections.shuffle(allQuotes);
-                    });
-                }
-                logger.info("Fetched " + total + " from type " + type);
+            TumblrUtils.fetchAllFromAccount("totallycorrectdannyphantomquotes.tumblr.com", type, posts -> {
+                List<TumblrPost> filteredPosts = posts.stream().filter(post -> !badPostIds.contains(post.id))
+                        .collect(Collectors.toList());
+                allQuotes.addAll(filteredPosts);
+                logger.info("Fetched " + filteredPosts.size() + " quotes from type " + type);
             });
         }
     }

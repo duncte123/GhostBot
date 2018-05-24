@@ -18,9 +18,6 @@
 
 package me.duncte123.ghostBot.commands.dannyPhantom.image;
 
-import com.afollestad.ason.Ason;
-import com.afollestad.ason.AsonArray;
-import me.duncte123.botCommons.web.WebUtils;
 import me.duncte123.ghostBot.CommandManager;
 import me.duncte123.ghostBot.commands.ReactionCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.text.QuotesCommand;
@@ -29,6 +26,7 @@ import me.duncte123.ghostBot.objects.tumblr.TumblrPost;
 import me.duncte123.ghostBot.utils.EmbedUtils;
 import me.duncte123.ghostBot.utils.MessageUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
+import me.duncte123.ghostBot.utils.TumblrUtils;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
@@ -69,7 +67,7 @@ public class DoppelgangerComicCommand extends ReactionCommand {
                 page = getNumberFromArg(arg.substring(PAGE_SELECTOR.length()));
             } else if (arg.startsWith(CHAPTER_SELECTOR)) {
                 try {
-                    page = chapters[ getNumberFromArg(arg.substring(CHAPTER_SELECTOR.length())) - 1];
+                    page = chapters[getNumberFromArg(arg.substring(CHAPTER_SELECTOR.length())) - 1];
                 } catch (IndexOutOfBoundsException ignored) {
                     sendMsg(event, "That chapter is not known");
                     return;
@@ -109,7 +107,7 @@ public class DoppelgangerComicCommand extends ReactionCommand {
 
     @Override
     public String[] getAliases() {
-        return new String[] {"doppelgangercomic"};
+        return new String[]{"doppelgangercomic"};
     }
 
     @Override
@@ -121,8 +119,7 @@ public class DoppelgangerComicCommand extends ReactionCommand {
     private int getNumberFromArg(String input) {
         try {
             return Integer.parseInt(input);
-        }
-        catch (NumberFormatException ignored) {
+        } catch (NumberFormatException ignored) {
             return pages.size();
         }
     }
@@ -141,34 +138,19 @@ public class DoppelgangerComicCommand extends ReactionCommand {
     }
 
     private void loadPages() {
-        //if (SpoopyUtils.config.getBoolean("running_local", false)) return;
+        if (SpoopyUtils.config.getBoolean("running_local", false)) return;
 
         pages.clear();
         logger.info("Loading doppelganger pages");
-        String url = String.format(
-                "https://api.tumblr.com/v2/blog/%s/posts?api_key=%s&type=%s&limit=20",
-                "doppelgangercomic.tumblr.com",
-                SpoopyUtils.config.getString("api.tumblr", "API_KEY"),
-                "photo"
-        );
-        WebUtils.ins.getAson(url).async(json -> {
-            int total = json.getInt("response.total_posts");
-            for (int i = 0; i <= total; i += 20) {
-                Ason j = WebUtils.ins.getAson(url + "&offset=" + (i > 1 ? i + 1 : 1)).execute();
-                AsonArray<Ason> fetched = j.getJsonArray("response.posts");
-                logger.info("Fetched " + fetched.size() + " Pages");
-                List<TumblrPost> posts = Ason.deserializeList(fetched, TumblrPost.class)
-                        .stream().filter(p -> !filters.contains(p.id)).collect(Collectors.toList());
-                /*List<TumblrPost> covers = posts.stream().filter(p -> p.id == 123542277988L).collect(Collectors.toList());
-                if(!covers.isEmpty()) {
-                    TumblrPost post = covers.get(0);
-                    posts.remove(post);
-                    post.id = 167255413598L;
-                    pages.add(post);
-                }*/
-                pages.addAll(posts);
-            }
-            Collections.reverse(pages);
+        TumblrUtils.fetchAllFromAccount("doppelgangercomic.tumblr.com", "photo", posts -> {
+            List<TumblrPost> posts1 = posts.stream().filter(p -> !filters.contains(p.id)).collect(Collectors.toList());
+            //This fetches the new front page that looks better than the old one
+            TumblrUtils.fetchSinglePost("doppelgangercomic.tumblr.com", 167255413598L, post -> {
+                posts1.set(posts1.size() - 1, post);
+                pages.addAll(posts1);
+                Collections.reverse(pages);
+                logger.info("Loaded " + pages.size() + " pages from the doppelganger comic.");
+            });
         });
     }
 

@@ -35,6 +35,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -52,30 +53,31 @@ public class LavalinkManager {
     }
 
     public void start() {
-        if (!isEnabled()) return;
+        if (isEnabled()) {
 
-        String userId = getIdFromToken(SpoopyUtils.config.getString("discord.token"));
+            String userId = getIdFromToken(SpoopyUtils.config.getString("discord.token"));
 
-        lavalink = new Lavalink(
-                userId,
-                SpoopyUtils.config.getInt("discord.totalShards", 1),
-                shardId -> GhostBot.getInstance().getFakeShard(shardId)
-        );
-        List<LavalinkNode> defaultNodes = new ArrayList<>();
-        defaultNodes.add(new LavalinkNode(new Ason("{\"wsUrl\": \"ws://localhost\",\"pass\": \"youshallnotpass\"}")));
-        List<Ason> nodes = SpoopyUtils.config.getArray("lavalink.nodes", defaultNodes);
-        List<LavalinkNode> nodeList = new ArrayList<>();
-        nodes.forEach(it -> nodeList.add(new LavalinkNode(it)));
+            lavalink = new Lavalink(
+                    userId,
+                    SpoopyUtils.config.getInt("discord.totalShards", 1),
+                    shardId -> GhostBot.getInstance().getFakeShard(shardId)
+            );
+            List<LavalinkNode> defaultNodes = Collections.singletonList(
+                    new LavalinkNode(new Ason("{\"wsUrl\": \"ws://localhost\",\"pass\": \"youshallnotpass\"}")));
+            List<Ason> nodes = SpoopyUtils.config.getArray("lavalink.nodes", defaultNodes);
+            List<LavalinkNode> nodeList = new ArrayList<>();
+            nodes.forEach(it -> nodeList.add(new LavalinkNode(it)));
 
-        nodeList.forEach(it ->
-                {
-                    try {
-                        lavalink.addNode(new URI(it.getWsUrl()), it.getPass());
-                    } catch (URISyntaxException e) {
-                        e.printStackTrace();
+            nodeList.forEach(it ->
+                    {
+                        try {
+                            lavalink.addNode(new URI(it.getWsUrl()), it.getPass());
+                        } catch (URISyntaxException e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
-        );
+            );
+        }
     }
 
     public boolean isEnabled() {

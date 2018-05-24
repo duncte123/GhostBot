@@ -43,6 +43,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 public class BotListener extends ListenerAdapter {
@@ -65,21 +66,17 @@ public class BotListener extends ListenerAdapter {
 
         if (event.getMessage().getContentRaw().equals(Variables.PREFIX + "shutdown") && event.getAuthor().getId().equals(Variables.OWNER_ID)) {
             logger.info("Shutting down!!");
-            service.shutdown();
-            event.getMessage().addReaction("✅").queue(
-                    //Shutdown on both success and failure
-                    success -> event.getJDA().shutdown(),
-                    failure -> event.getJDA().shutdown()
-            );
+            service.shutdownNow();
             SpoopyUtils.commandManager.commandService.shutdown();
-            if(LavalinkManager.ins.isEnabled())
+            if(LavalinkManager.ins.getLavalink() != null)
                 LavalinkManager.ins.getLavalink().shutdown();
-            /*try {
-                //noinspection PointlessArithmeticExpression
-                Thread.sleep(1 * 1000);
-                System.exit(0);
-            } catch (InterruptedException ignored) {
-            }*/
+            event.getJDA().shutdown();
+            /*event.getMessage().addReaction("✅").queue(
+                    //Shutdown on both success and failure
+                    success -> event.getJDA().shutdownNow(),
+                    failure -> event.getJDA().shutdownNow()
+            );*/
+
             return;
         }
 

@@ -63,4 +63,11 @@ public class TumblrPost {
     public TumblrPost() {
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof  TumblrPost))
+            return false;
+
+        return this.id == ((TumblrPost) obj).id;
+    }
 }
