@@ -48,7 +48,6 @@ public class DoppelgangerComicCommand extends ReactionCommand {
         loadPages();
     }
 
-    private static final String PROFILE_PICTURE = "https://api.tumblr.com/v2/blog/doppelgangercomic.tumblr.com/avatar/48";
 
     private static final String PAGE_SELECTOR = "page:";
     private static final String CHAPTER_SELECTOR = "chapter:";
@@ -56,13 +55,23 @@ public class DoppelgangerComicCommand extends ReactionCommand {
     private final List<TumblrPost> pages = new ArrayList<>();
     // The numbers in this list represent the page numbers of where the chapters start
     private final int[] chapters = {2, 29, 59};
-    private final List<Long> filters = Collections.singletonList(167255413598L);
+    private final long comicCover = 167255413598L;
+    private final List<Long> filters = Collections.singletonList(comicCover);
+    private static final String blog = "doppelgangercomic.tumblr.com";
+    private static final String PROFILE_PICTURE = "https://api.tumblr.com/v2/blog/" + blog + "/avatar/48";
 
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
 
         int page = pages.size();
         if (args.length > 0) {
+            if(args[0].equals("update")) {
+                TumblrUtils.fetchLatestPost(blog, post -> {
+                    pages.add(post);
+                    sendMsg(event, "fetched latest page");
+                });
+                return;
+            }
             String arg = StringUtils.join(args).toLowerCase();
             if (arg.startsWith(PAGE_SELECTOR)) {
                 page = getNumberFromArg(arg.substring(PAGE_SELECTOR.length()));
@@ -139,21 +148,28 @@ public class DoppelgangerComicCommand extends ReactionCommand {
     }
 
     private void loadPages() {
-        if (SpoopyUtils.config.getBoolean("running_local", false)) return;
-
+        //if (SpoopyUtils.config.getBoolean("running_local", false)) return;
         pages.clear();
         logger.info("Loading doppelganger pages");
-        TumblrUtils.fetchAllFromAccount("doppelgangercomic.tumblr.com", "photo", posts -> {
+        TumblrUtils.fetchAllFromAccount(blog, "photo", posts -> {
+            TumblrPost cover = posts.stream().filter( p -> p.id == comicCover ).findFirst().get();
             List<TumblrPost> posts1 = posts.stream().filter(p -> !filters.contains(p.id)).collect(Collectors.toList());
+            posts1.set(posts1.size() - 1, cover);
+            pages.addAll(posts1);
+            Collections.reverse(pages);
+            logger.info("Loaded " + pages.size() + " pages from the doppelganger comic.");
+
             //This fetches the new front page that looks better than the old one
-            TumblrUtils.fetchSinglePost("doppelgangercomic.tumblr.com", 167255413598L, post -> {
+            /*TumblrUtils.fetchSinglePost(blog, comicCover, post -> {
                 posts1.set(posts1.size() - 1, post);
                 pages.addAll(posts1);
                 Collections.reverse(pages);
                 logger.info("Loaded " + pages.size() + " pages from the doppelganger comic.");
-            });
+            });*/
         });
     }
+
+
 
     @Override
     public Category getCategory() {
