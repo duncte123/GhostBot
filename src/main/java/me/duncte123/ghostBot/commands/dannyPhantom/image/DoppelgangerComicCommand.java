@@ -148,7 +148,7 @@ public class DoppelgangerComicCommand extends ReactionCommand {
     }
 
     private void loadPages() {
-        //if (SpoopyUtils.config.getBoolean("running_local", false)) return;
+        if (SpoopyUtils.config.getBoolean("running_local", false)) return;
         pages.clear();
         logger.info("Loading doppelganger pages");
         TumblrUtils.fetchAllFromAccount(blog, "photo", posts -> {
