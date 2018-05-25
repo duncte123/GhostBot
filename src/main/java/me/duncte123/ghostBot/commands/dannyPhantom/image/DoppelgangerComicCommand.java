@@ -27,6 +27,7 @@ import me.duncte123.ghostBot.utils.EmbedUtils;
 import me.duncte123.ghostBot.utils.MessageUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import me.duncte123.ghostBot.utils.TumblrUtils;
+import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
@@ -65,7 +66,7 @@ public class DoppelgangerComicCommand extends ReactionCommand {
 
         int page = pages.size();
         if (args.length > 0) {
-            if(args[0].equals("update")) {
+            if(args[0].equals("update") && event.getAuthor().getId().equals(Variables.OWNER_ID)) {
                 TumblrUtils.fetchLatestPost(blog, post -> {
                     pages.add(post);
                     sendMsg(event, "fetched latest page");
