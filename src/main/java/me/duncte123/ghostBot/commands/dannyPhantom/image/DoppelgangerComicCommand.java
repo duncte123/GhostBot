@@ -28,6 +28,7 @@ import me.duncte123.ghostBot.utils.MessageUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import me.duncte123.ghostBot.utils.TumblrUtils;
 import me.duncte123.ghostBot.variables.Variables;
+import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
@@ -58,8 +59,8 @@ public class DoppelgangerComicCommand extends ReactionCommand {
     private final int[] chapters = {2, 29, 59};
     private final long comicCover = 167255413598L;
     private final List<Long> filters = Collections.singletonList(comicCover);
-    private static final String blog = "doppelgangercomic.tumblr.com";
-    private static final String PROFILE_PICTURE = "https://api.tumblr.com/v2/blog/" + blog + "/avatar/48";
+    private static final String BLOG_URL = "doppelgangercomic.tumblr.com";
+    private static final String PROFILE_PICTURE = "https://api.tumblr.com/v2/BLOG_URL/" + BLOG_URL + "/avatar/48";
 
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
@@ -67,7 +68,7 @@ public class DoppelgangerComicCommand extends ReactionCommand {
         int page = pages.size();
         if (args.length > 0) {
             if(args[0].equals("update") && event.getAuthor().getId().equals(Variables.OWNER_ID)) {
-                TumblrUtils.fetchLatestPost(blog, post -> {
+                TumblrUtils.fetchLatestPost(BLOG_URL, post -> {
                     pages.add(post);
                     sendMsg(event, "fetched latest page");
                 });
@@ -96,7 +97,12 @@ public class DoppelgangerComicCommand extends ReactionCommand {
         }
 
         AtomicInteger pa = new AtomicInteger(page);
-        MessageUtils.sendEmbed(event, getEmbed(pa.get()),
+        MessageUtils.sendMsg(event,
+                new MessageBuilder()
+                        .append("Use the emotes at the bottom to navigate through pages, use the ❌ emote when you are done reading.\n")
+                        .append("The controls have a timeout of 30 minutes")
+                        .setEmbed(getEmbed(pa.get()))
+                        .build(),
                 m -> this.addReactions(m, Arrays.asList(ReactionCommand.LEFT_ARROW, ReactionCommand.RIGHT_ARROW,
                         ReactionCommand.CANCEL), Collections.singleton(event.getAuthor()), 30, TimeUnit.MINUTES, index -> {
                             if (index >= 2) { //cancel button or other error
@@ -152,7 +158,8 @@ public class DoppelgangerComicCommand extends ReactionCommand {
         if (SpoopyUtils.config.getBoolean("running_local", false)) return;
         pages.clear();
         logger.info("Loading doppelganger pages");
-        TumblrUtils.fetchAllFromAccount(blog, "photo", posts -> {
+        TumblrUtils.fetchAllFromAccount(BLOG_URL, "photo", posts -> {
+            //noinspection ConstantConditions
             TumblrPost cover = posts.stream().filter( p -> p.id == comicCover ).findFirst().get();
             List<TumblrPost> posts1 = posts.stream().filter(p -> !filters.contains(p.id)).collect(Collectors.toList());
             posts1.set(posts1.size() - 1, cover);
@@ -161,7 +168,7 @@ public class DoppelgangerComicCommand extends ReactionCommand {
             logger.info("Loaded " + pages.size() + " pages from the doppelganger comic.");
 
             //This fetches the new front page that looks better than the old one
-            /*TumblrUtils.fetchSinglePost(blog, comicCover, post -> {
+            /*TumblrUtils.fetchSinglePost(BLOG_URL, comicCover, post -> {
                 posts1.set(posts1.size() - 1, post);
                 pages.addAll(posts1);
                 Collections.reverse(pages);
