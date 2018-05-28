@@ -19,8 +19,17 @@
 package me.duncte123.ghostBot.commands.dannyPhantom.image;
 
 import me.duncte123.ghostBot.objects.Category;
+import me.duncte123.ghostBot.utils.ConfigUtils;
+import me.duncte123.ghostBot.utils.MessageUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
+import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
+
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 
 public class ImageCommand extends ImageBase {
 
@@ -49,12 +58,43 @@ public class ImageCommand extends ImageBase {
             "Danny Fenton"
     };
 
+    private static boolean isReloading = false;
+
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
-        String keyword = keywords[SpoopyUtils.random.nextInt(keywords.length)];
 
-        ImageData file = requestImage(keyword);
-        sendMessageFromName(event, file);
+        if(args.length > 0 && args[0].equals("reload") && event.getAuthor().getId().equals(Variables.OWNER_ID) && !isReloading) {
+            isReloading = true;
+            new Thread(() -> {
+                File jarFile = new File("ghostBotImages.jar");
+                String className = "me.duncte123.ghostBotImages.ImageScraper2";
+                try {
+                    URL fileURL = jarFile.toURI().toURL();
+                    String jarURL = "jar:" + fileURL + "!/";
+                    URL urls[] = {new URL(jarURL)};
+                    URLClassLoader ucl = new URLClassLoader(urls);
+                    Class.forName(className, true, ucl).getDeclaredConstructor(Boolean.TYPE).newInstance(true);
+                    SpoopyUtils.IMAGES = new ConfigUtils().loadImages();
+                    isReloading = false;
+                    MessageUtils.sendMsg(event, "done reloading");
+                } catch (MalformedURLException | InstantiationException | IllegalAccessException |
+                        ClassNotFoundException | NoSuchMethodException | InvocationTargetException ex) {
+                    ex.printStackTrace();
+                    MessageUtils.sendMsg(event, "An error occurred: " + ex.getMessage());
+                    isReloading = false;
+                }
+            }).start();
+            return;
+        }
+
+        if(!isReloading) {
+            String keyword = keywords[SpoopyUtils.random.nextInt(keywords.length)];
+            System.out.println(keyword);
+            ImageData file = requestImage(keyword);
+            sendMessageFromName(event, file);
+        } else {
+            MessageUtils.sendMsg(event, "I'm looking for new images on the internet, please be patient.");
+        }
     }
 
     @Override

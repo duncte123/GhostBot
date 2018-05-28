@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
-class ConfigUtils {
+public class ConfigUtils {
     private static final Logger logger = LoggerFactory.getLogger(ConfigUtils.class);
 
     private Config config;
@@ -34,7 +34,7 @@ class ConfigUtils {
     /**
      * This will try to load the bot config and kill the program if it fails
      */
-    ConfigUtils() {
+    public ConfigUtils() {
         try {
             logger.info("Loading config.json");
             this.config = ConfigLoader.getConfig(new File("config.json"));
@@ -55,7 +55,7 @@ class ConfigUtils {
         return config;
     }
 
-    Config loadImages() {
+    public Config loadImages() {
         return images;
     }
 }
