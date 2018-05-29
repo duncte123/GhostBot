@@ -68,12 +68,16 @@ public class ImageCommand extends ImageBase {
             new Thread(() -> {
                 File jarFile = new File("ghostBotImages.jar");
                 String className = "me.duncte123.ghostBotImages.ImageScraper2";
+                boolean pretty = false;
+                if(args.length > 1 && args[1].equals("-pretty-print"))
+                    pretty = true;
                 try {
                     URL fileURL = jarFile.toURI().toURL();
                     String jarURL = "jar:" + fileURL + "!/";
                     URL urls[] = {new URL(jarURL)};
                     URLClassLoader ucl = new URLClassLoader(urls);
-                    Class.forName(className, true, ucl).getDeclaredConstructor(Boolean.TYPE).newInstance(true);
+                    Class.forName(className, true, ucl).getDeclaredConstructor(Boolean.TYPE)
+                            .newInstance(pretty);
                     SpoopyUtils.IMAGES = new ConfigUtils().loadImages();
                     isReloading = false;
                     MessageUtils.sendMsg(event, "done reloading");
