@@ -26,6 +26,7 @@ import me.duncte123.ghostBot.commands.dannyPhantom.text.QuotesCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.text.RandomGhostCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.wiki.WikiCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.wiki.WikiUserCommand;
+import me.duncte123.ghostBot.commands.fiveYearsLater.FylWikiCommand;
 import me.duncte123.ghostBot.commands.main.*;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.variables.Variables;
@@ -63,6 +64,7 @@ public class CommandManager {
 
         this.addCommand(new WikiCommand());
         this.addCommand(new WikiUserCommand());
+        this.addCommand(new FylWikiCommand());
 
         this.addCommand(new QuotesCommand());
         this.addCommand(new RandomGhostCommand());

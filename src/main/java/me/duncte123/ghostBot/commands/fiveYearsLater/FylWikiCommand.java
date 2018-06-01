@@ -16,49 +16,35 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostBot.commands.dannyPhantom.wiki;
+package me.duncte123.ghostBot.commands.fiveYearsLater;
 
-import me.duncte123.ghostBot.objects.Category;
+import me.duncte123.ghostBot.commands.dannyPhantom.wiki.WikiBaseCommand;
+import me.duncte123.ghostBot.utils.SpoopyUtils;
 import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
 
 import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
 
-public class WikiCommand extends WikiBaseCommand {
+public class FylWikiCommand extends WikiBaseCommand {
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
-        //
         if (args.length == 0) {
             sendMsg(event, "Insufficient arguments, Correct usage: `" + Variables.PREFIX + getName() + " <search term>`");
             return;
         }
 
-        handleWikiSearch(wiki, StringUtils.join(args, " "), event);
+        handleWikiSearch(SpoopyUtils.FYL_WIKI_HOLDER, StringUtils.join(args, " "), event);
     }
 
     @Override
     public String getName() {
-        return "wiki";
-    }
-
-    @Override
-    public Category getCategory() {
-        return Category.WIKI;
-    }
-
-    @Override
-    public String[] getAliases() {
-        return new String[]{
-                "wikia",
-                "wikisearch",
-                "dannyphantomwiki"
-        };
+        return "5yl";
     }
 
     @Override
     public String getHelp() {
-        return "Search the Danny Phantom wiki\n" +
+        return "Search the 5YL wiki\n" +
                 "Usage `" + Variables.PREFIX + getName() + " <search term>`\n" +
                 "Example: `" + Variables.PREFIX + getName() + " Danny`";
     }

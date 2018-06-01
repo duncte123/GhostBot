@@ -36,6 +36,7 @@ public class SpoopyUtils {
     public static final Random random = new Random();
 
     public static final WikiHolder WIKI_HOLDER = new WikiHolder("https://dannyphantom.wikia.com");
+    public static final WikiHolder FYL_WIKI_HOLDER = new WikiHolder("https://5yl.wikia.com");
 
     public static final CommandManager commandManager = new CommandManager();
 
