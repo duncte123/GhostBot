@@ -35,7 +35,6 @@ public class ImageCommand extends ImageBase {
 
     private final String[] keywords = {
             "Danny Phantom",
-            "pitch pearl",
             "Danny Fenton",
             "Danny Fenton",
             "Samantha Manson",
