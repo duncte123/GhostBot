@@ -65,6 +65,8 @@ abstract class ImageBase extends Command {
         }
     }
 
+    static boolean isReloading = false;
+
     ImageData requestImage(String query) {
         logger.debug("Getting image for '" + query + "'");
         List<Ason> items = SpoopyUtils.IMAGES.getArray(query);

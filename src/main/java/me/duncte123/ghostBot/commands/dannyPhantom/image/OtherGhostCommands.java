@@ -19,18 +19,27 @@
 package me.duncte123.ghostBot.commands.dannyPhantom.image;
 
 import me.duncte123.ghostBot.objects.Category;
+import me.duncte123.ghostBot.utils.MessageUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
+
+import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
 
 public class OtherGhostCommands extends ImageBase {
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
+
+        if(isReloading) {
+            sendMsg(event, "I'm looking for new images on the internet, please be patient.");
+            return;
+        }
+
         switch (invoke) {
             case "cujo":
-                sendFromKeyword(event, "Cujo Danny Phantom");
+                sendFromKeywords(event, "Cujo Danny Phantom");
                 break;
             case "ember":
-                sendFromKeyword(event, "Ember Mclain");
+                sendFromKeywords(event, "Ember Mclain");
                 break;
             case "dan":
                 sendFromKeywords(event, "Dan Phantom", "Dark Danny");
@@ -39,22 +48,22 @@ public class OtherGhostCommands extends ImageBase {
                 sendFromKeywords(event, "Vlad Plasmius", "Vlad masters");
                 break;
             case "sam":
-                sendFromKeyword(event, "Sam Manson");
+                sendFromKeywords(event, "Sam Manson");
                 break;
             case "tucker":
-                sendFromKeyword(event, "Tucker Foley");
+                sendFromKeywords(event, "Tucker Foley");
                 break;
             case "danny":
                 sendFromKeywords(event, "Danny Fenton", "Danny Phantom");
                 break;
             case "clockwork":
-                sendFromKeyword(event, "Clockwork Danny Phantom");
+                sendFromKeywords(event, "Clockwork Danny Phantom");
                 break;
-            case "pitchpearl":
-                sendFromKeyword(event, "pitch pearl");
-                break;
+            /*case "pitchpearl":
+                sendFromKeywords(event, "pitch pearl");
+                break;*/
             case "valerie":
-                sendFromKeyword(event, "valerie gray");
+                sendFromKeywords(event, "valerie gray");
                 break;
             case "dani":
                 sendFromKeywords(event, "Dani Fenton", "Dani Phantom");
@@ -88,14 +97,7 @@ public class OtherGhostCommands extends ImageBase {
     }
 
     private void sendFromKeywords(GuildMessageReceivedEvent event, String... words) {
-        sendFromKeyword(
-                event,
-                words[SpoopyUtils.random.nextInt(words.length)]
-        );
-    }
-
-    private void sendFromKeyword(GuildMessageReceivedEvent event, String keyword) {
-        sendMessageFromName(event, requestImage(keyword));
+        sendMessageFromName(event, requestImage(words[SpoopyUtils.random.nextInt(words.length)]));
     }
 
     @Override

@@ -36,9 +36,7 @@ public class ImageCommand extends ImageBase {
     private final String[] keywords = {
             "Danny Phantom",
             "pitch pearl",
-            "pitch pearl",
-            "pitch pearl",
-            "pitch pearl",
+            "Danny Fenton",
             "Danny Fenton",
             "Samantha Manson",
             "Sam Manson",
@@ -57,8 +55,6 @@ public class ImageCommand extends ImageBase {
             "Vlad Plasmius (Danny Phantom)",
             "Danny Fenton"
     };
-
-    private static boolean isReloading = false;
 
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
