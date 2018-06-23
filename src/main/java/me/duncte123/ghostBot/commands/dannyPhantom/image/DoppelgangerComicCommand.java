@@ -60,7 +60,7 @@ public class DoppelgangerComicCommand extends ReactionCommand {
     private final long comicCover = 167255413598L;
     private final List<Long> filters = Collections.singletonList(comicCover);
     private static final String BLOG_URL = "doppelgangercomic.tumblr.com";
-    private static final String PROFILE_PICTURE = "https://api.tumblr.com/v2/BLOG_URL/" + BLOG_URL + "/avatar/48";
+    private static final String PROFILE_PICTURE = "https://api.tumblr.com/v2/" + BLOG_URL + "/avatar/48";
 
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
