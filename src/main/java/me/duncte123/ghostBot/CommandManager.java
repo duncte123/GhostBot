@@ -22,12 +22,16 @@ import me.duncte123.ghostBot.commands.ReactionCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.audio.*;
 import me.duncte123.ghostBot.commands.dannyPhantom.image.*;
 import me.duncte123.ghostBot.commands.dannyPhantom.text.GamesCommand;
+import me.duncte123.ghostBot.commands.dannyPhantom.text.PetitionCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.text.QuotesCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.text.RandomGhostCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.wiki.WikiCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.wiki.WikiUserCommand;
 import me.duncte123.ghostBot.commands.fiveYearsLater.FylWikiCommand;
-import me.duncte123.ghostBot.commands.main.*;
+import me.duncte123.ghostBot.commands.main.AboutCommand;
+import me.duncte123.ghostBot.commands.main.EvalCommand;
+import me.duncte123.ghostBot.commands.main.HelpCommand;
+import me.duncte123.ghostBot.commands.main.ReloadAudioCommand;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
@@ -65,6 +69,7 @@ public class CommandManager {
         this.addCommand(new WikiCommand());
         this.addCommand(new WikiUserCommand());
         this.addCommand(new FylWikiCommand());
+        this.addCommand(new PetitionCommand());
 
         this.addCommand(new QuotesCommand());
         this.addCommand(new RandomGhostCommand());
@@ -101,7 +106,8 @@ public class CommandManager {
 
         //ParallelStream for less execution time
         if (this.commands.stream().anyMatch((cmd) -> cmd.getName().equalsIgnoreCase(command.getName()))) {
-            List<String> aliases = Arrays.asList(this.commands.stream().filter((cmd) -> cmd.getName().equalsIgnoreCase(command.getName())).findFirst().get().getAliases());
+            List<String> aliases = Arrays.asList(this.commands.stream().filter((cmd) -> cmd.getName()
+                    .equalsIgnoreCase(command.getName())).findFirst().get().getAliases());
             for (String alias : command.getAliases()) {
                 if (aliases.contains(alias)) {
                     return false;

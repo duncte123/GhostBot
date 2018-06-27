@@ -25,7 +25,7 @@ plugins {
 }
 
 group 'me.duncte123.ghostBot'
-version "1.11.2_${getGitHash()}"
+version "1.12.0_${getGitHash()}"
 mainClassName = "${group}.GhostBot"
 
 sourceCompatibility = 1.8
@@ -45,7 +45,7 @@ dependencies {
     //JDA
     compile group: 'net.dv8tion', name: 'JDA', version: '3.6.0_376'
     //LavaPlayer/Lavalink
-    compile(group: 'com.github.Frederikam', name: 'Lavalink', version: 'd5fed45d9e') {
+    compile(group: 'com.github.Frederikam', name: 'Lavalink', version: '6e911e45e7') {
         exclude group: 'com.github.Frederikam.Lavalink', module: 'Lavalink-Server'
         exclude group: 'net.dv8tion', module: 'JDA'
     }
