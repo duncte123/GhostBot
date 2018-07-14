@@ -27,9 +27,9 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import static me.duncte123.ghostBot.utils.MessageUtils.*;
@@ -37,7 +37,7 @@ import static me.duncte123.ghostBot.utils.MessageUtils.*;
 public class EvalCommand extends Command {
 
     private final ScriptEngine engine = new ScriptEngineManager().getEngineByName("groovy");
-    private final ScheduledExecutorService service = Executors.newScheduledThreadPool(1, (it) -> new Thread(it, "Eval-Thread"));
+    private final ExecutorService service = Executors.newCachedThreadPool( (it) -> new Thread(it, "Eval-Thread") );
     private final List<String> packageImports = Arrays.asList(
             "java.io",
             "java.lang",
@@ -69,7 +69,7 @@ public class EvalCommand extends Command {
 								event.getMessage().getContentRaw().split("\\s+", 2)[1];
 
             try {
-                ScheduledFuture<Object> task = service.schedule(() -> engine.eval(script), 0L, TimeUnit.NANOSECONDS);
+                Future<Object> task = service.submit(() -> engine.eval(script));
 
                 Object result = task.get(1, TimeUnit.MINUTES);
 

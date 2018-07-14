@@ -40,16 +40,14 @@ import org.apache.commons.collections4.set.UnmodifiableSet;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 public class CommandManager {
 
     private final Set<Command> commands = ConcurrentHashMap.newKeySet();
-    final ScheduledExecutorService commandService = Executors.newScheduledThreadPool(5,
-            (r) -> new Thread(r, "Command-Thread"));
+    final ExecutorService commandService = Executors.newCachedThreadPool((r) -> new Thread(r, "Command-Thread"));
 
     final ReactionListenerRegistry reactListReg = new ReactionListenerRegistry();
 
@@ -131,13 +129,13 @@ public class CommandManager {
 
         if (cmd != null) {
             event.getChannel().sendTyping().queue();
-            commandService.schedule(() -> {
+            commandService.submit(() -> {
                 try {
                     cmd.execute(invoke, args, event);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }, 0, TimeUnit.MILLISECONDS);
+            });
             /*cmd.execute(invoke, args, event);*/
         }
 

@@ -217,10 +217,10 @@ public class QuotesCommand extends Command {
                 .replaceAll(Pattern.quote("</p>"), replacePWith)
                 .replaceAll(Pattern.quote("<p/>"), replacePWith) //because some posts are fucked
                 //Italics
-                .replaceAll(Pattern.quote("<i>"), "_")
-                .replaceAll(Pattern.quote("</i>"), "_")
-                .replaceAll(Pattern.quote("<em>"), "_")
-                .replaceAll(Pattern.quote("</em>"), "_")
+                .replaceAll(Pattern.quote("<i>"), "*")
+                .replaceAll(Pattern.quote("</i>"), "*")
+                .replaceAll(Pattern.quote("<em>"), "*")
+                .replaceAll(Pattern.quote("</em>"), "*")
                 //bold
                 .replaceAll(Pattern.quote("<b>"), "**")
                 .replaceAll(Pattern.quote("</b>"), "**")
