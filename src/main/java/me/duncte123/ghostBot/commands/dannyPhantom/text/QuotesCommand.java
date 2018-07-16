@@ -18,6 +18,7 @@
 
 package me.duncte123.ghostBot.commands.dannyPhantom.text;
 
+import me.duncte123.ghostBot.BotListener;
 import me.duncte123.ghostBot.objects.Category;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.objects.tumblr.TumblrDialogue;
@@ -30,8 +31,10 @@ import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -48,6 +51,9 @@ public class QuotesCommand extends Command {
             "Going Ghost <a:DPTransform8bit:425714608406528012>",
             "Finished <:DPJoy:425714609702305804> ({TOTAL} quotes in the system and {COUNT_NEW) new)"
     };
+
+
+    private static final String DOMAIN = "totallycorrectdannyphantomquotes.tumblr.com";
 
     private final List<TumblrPost> allQuotes = new ArrayList<>();
     private final Map<String, List<TumblrPost>> guildQuotes = new HashMap<>();
@@ -93,29 +99,42 @@ public class QuotesCommand extends Command {
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
 
         if (args.length > 0) {
-            if ("reload".equals(args[0])) {
+            String joined = StringUtils.join(args);
+            if(joined.startsWith("id:") && event.getAuthor().getId().equals(Variables.OWNER_ID)) {
+
+                String id = joined.substring("id:".length());
+
+                if(!id.isEmpty()) {
+                    long idLong = Long.parseLong(id);
+                    getPostFromId(idLong, (post) -> sendQuote(event, post));
+                }
+
+                return;
+
+            } else if ("reload".equals(args[0])) {
 
                 if (event.getAuthor().getId().equals(Variables.OWNER_ID)) {
                     reloadQuotes();
                     MessageUtils.sendMsg(event, messages[0], success ->
-                            new Thread(() -> {
-                                for (String m : Arrays.copyOfRange(messages, 1, messages.length)) {
-                                    try {
-                                        Thread.sleep(3500);
-                                    } catch (InterruptedException ignored) {
-                                    }
-                                    String mf = m;
-                                    if (m.contains("{COUNT_NEW)")) {
-                                        mf = mf.replaceAll(Pattern.quote("{COUNT_NEW)"), String.valueOf(allQuotes.size() - oldCount));
-                                    }
-                                    if (m.contains("{TOTAL}")) {
-                                        mf = mf.replaceAll(Pattern.quote("{TOTAL}"), String.valueOf(allQuotes.size()));
-                                    }
-                                    logger.debug(mf);
-                                    success.editMessage(mf).queue();
-                                }
-                                Thread.currentThread().interrupt();
-                            }, "Message fun thinh").start());
+                           BotListener.service.execute(() -> {
+                               for (String m : Arrays.copyOfRange(messages, 1, messages.length)) {
+                                   try {
+                                       Thread.sleep(3500);
+                                   } catch (InterruptedException ignored) {
+                                   }
+                                   String mf = m;
+                                   if (m.contains("{COUNT_NEW)")) {
+                                       mf = mf.replaceAll(Pattern.quote("{COUNT_NEW)"), String.valueOf(allQuotes.size() - oldCount));
+                                   }
+                                   if (m.contains("{TOTAL}")) {
+                                       mf = mf.replaceAll(Pattern.quote("{TOTAL}"), String.valueOf(allQuotes.size()));
+                                   }
+                                   logger.debug(mf);
+                                   success.editMessage(mf).queue();
+                               }
+                               Thread.currentThread().interrupt();
+                           })
+                    );
                     return;
                 } else {
                     MessageUtils.sendMsg(event, "Only the bot owner can reload quotes");
@@ -137,8 +156,12 @@ public class QuotesCommand extends Command {
         List<TumblrPost> posts = guildQuotes.get(gid);
         TumblrPost post = posts.get(SpoopyUtils.random.nextInt(posts.size()));
         posts.remove(post);
-        String type = post.type;
 
+        sendQuote(event, post);
+    }
+
+    private void sendQuote(GuildMessageReceivedEvent event, TumblrPost post) {
+        String type = post.type;
         EmbedBuilder eb = EmbedUtils.defaultEmbed()
                 .setTitle("Link to Post", post.post_url);
 
@@ -163,6 +186,18 @@ public class QuotesCommand extends Command {
 
         //guildQuotes.put(gid, ++index);
         MessageUtils.sendEmbed(event, eb.build());
+    }
+
+    private void getPostFromId(long id, Consumer<TumblrPost> cb) {
+        TumblrUtils.fetchSinglePost(DOMAIN, id, (post) -> {
+
+            if(!allQuotes.contains(post)) {
+                allQuotes.add(post);
+            }
+
+            cb.accept(post);
+
+        });
     }
 
     @Override
@@ -193,7 +228,7 @@ public class QuotesCommand extends Command {
         guildQuotes.clear();
         for (String type : types) {
             logger.info("Getting quotes from type " + type);
-            TumblrUtils.fetchAllFromAccount("totallycorrectdannyphantomquotes.tumblr.com", type, posts -> {
+            TumblrUtils.fetchAllFromAccount(DOMAIN, type, posts -> {
                 List<TumblrPost> filteredPosts = posts.stream().filter(post -> !badPostIds.contains(post.id))
                         .collect(Collectors.toList());
                 allQuotes.addAll(filteredPosts);

@@ -49,7 +49,7 @@ public class BotListener extends ListenerAdapter {
 
     private final Logger logger = LoggerFactory.getLogger(BotListener.class);
     private final String dbotsToken = SpoopyUtils.config.getString("api.dbots", "");
-    private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+    public static final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
 
     @Override
     public void onReady(ReadyEvent event) {

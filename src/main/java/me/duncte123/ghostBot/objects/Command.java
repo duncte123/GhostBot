@@ -40,7 +40,7 @@ public abstract class Command {
 
     protected final Logger logger;
     protected String audioPath = "";
-    protected String[] audioFiles = {};
+    private String[] audioFiles = {};
     public Command() {
         logger = LoggerFactory.getLogger(getClass());
     }

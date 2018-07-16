@@ -70,4 +70,9 @@ public class TumblrPost {
 
         return this.id == ((TumblrPost) obj).id;
     }
+
+    @Override
+    public int hashCode() {
+        return String.valueOf(this.id).hashCode();
+    }
 }

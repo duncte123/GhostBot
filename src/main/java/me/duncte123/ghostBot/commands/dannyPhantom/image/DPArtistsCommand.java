@@ -65,7 +65,8 @@ public class DPArtistsCommand extends ImageCommand {
             "earthphantom",
             "allyphantomrush",
             "umbrihearts",
-            "doppelganger"
+            "doppelganger",
+            "amethystocean-adr"
     };
 
     @Override
@@ -99,6 +100,11 @@ public class DPArtistsCommand extends ImageCommand {
 
             case "doppelganger": {
                 doStuff("doppelgangercomic.tumblr.com", event);
+                break;
+            }
+
+            case "amethystocean-adr": {
+                doStuff("amethystocean-adr.tumblr.com", event);
                 break;
             }
 
