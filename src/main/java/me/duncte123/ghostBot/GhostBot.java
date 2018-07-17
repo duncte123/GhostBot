@@ -20,6 +20,7 @@ package me.duncte123.ghostBot;
 
 import fredboat.audio.player.LavalinkManager;
 import me.duncte123.botCommons.web.WebUtils;
+import me.duncte123.ghostBot.kuroslounge.FilterLogs;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.AccountType;
@@ -49,7 +50,7 @@ public class GhostBot {
                     .setAudioEnabled(true)
                     .setGame(Game.playing(Variables.PREFIX + "help | Going Ghost"))
                     .setToken(token)
-                    .addEventListener(new BotListener());
+                    .addEventListener(new BotListener(), new FilterLogs());
 
             if (LavalinkManager.ins.isEnabled())
                 builder.addEventListener(LavalinkManager.ins.getLavalink());
