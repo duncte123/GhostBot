@@ -100,7 +100,7 @@ public class QuotesCommand extends Command {
 
         if (args.length > 0) {
             String joined = StringUtils.join(args);
-            if(joined.startsWith("id:") && event.getAuthor().getId().equals(Variables.OWNER_ID)) {
+            if(joined.startsWith("id:")) {
 
                 String id = joined.substring("id:".length());
 
@@ -161,11 +161,11 @@ public class QuotesCommand extends Command {
     }
 
     private void sendQuote(GuildMessageReceivedEvent event, TumblrPost post) {
-        String type = post.type;
         EmbedBuilder eb = EmbedUtils.defaultEmbed()
-                .setTitle("Link to Post", post.post_url);
+                .setTitle("Link to Post", post.post_url)
+                .setFooter("Quote id: " + post.id, EmbedUtils.FOOTER_ICON);
 
-        switch (type) {
+        switch (post.type) {
             case "chat":
                 List<TumblrDialogue> dialogue = post.dialogue;
                 dialogue.forEach(
@@ -189,15 +189,17 @@ public class QuotesCommand extends Command {
     }
 
     private void getPostFromId(long id, Consumer<TumblrPost> cb) {
-        TumblrUtils.fetchSinglePost(DOMAIN, id, (post) -> {
 
-            if(!allQuotes.contains(post)) {
+        var opt = allQuotes.stream().filter( (post) -> post.id == id ).findFirst();
+
+        if(opt.isPresent()) {
+            cb.accept(opt.get());
+        } else {
+            TumblrUtils.fetchSinglePost(DOMAIN, id, (post) -> {
                 allQuotes.add(post);
-            }
-
-            cb.accept(post);
-
-        });
+                cb.accept(post);
+            });
+        }
     }
 
     @Override
