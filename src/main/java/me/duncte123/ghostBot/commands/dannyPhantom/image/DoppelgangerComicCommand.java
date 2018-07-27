@@ -56,7 +56,7 @@ public class DoppelgangerComicCommand extends ReactionCommand {
 
     private final List<TumblrPost> pages = new ArrayList<>();
     // The numbers in this list represent the page numbers of where the chapters start
-    private final int[] chapters = {2, 29, 59};
+    private final int[] chapters = {2, 29, 59, 82};
     private final long comicCover = 167255413598L;
     private final List<Long> filters = Collections.singletonList(comicCover);
     private static final String BLOG_URL = "doppelgangercomic.tumblr.com";
