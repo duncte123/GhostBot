@@ -65,7 +65,7 @@ public class AudioPlayerSenderHandler implements AudioSendHandler {
             lastFrame = lavaplayerPlayer.provide();
         }
 
-        byte[] data = lastFrame != null ? lastFrame.getData() : null;
+        byte[] data = lastFrame != null ? lastFrame.data : null;
         lastFrame = null;
         return data;
     }

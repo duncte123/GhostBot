@@ -39,7 +39,7 @@ public class FylWikiCommand extends WikiBaseCommand {
 
     @Override
     public String getName() {
-        return "5yl";
+        return "5ylwiki";
     }
 
     @Override

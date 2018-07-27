@@ -65,6 +65,9 @@ Current Command list:
     gb.help: Your avarage help command
     gb.about: Gives some information about the bot
     gb.quote: gives you a random and totally correct Danny Phantom quote
+    
+    gb.5yl: Allows you to read the 5 years later comic within discord
+    gb.5ylwiki: Search the 5 years later wiki
 ```
 
 It currently only includes voice commands and more commands will be added soon.
