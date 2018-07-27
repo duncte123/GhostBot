@@ -3,6 +3,9 @@
   	background: url("https://ghostbot.duncte123.me/img/dp__ghost_zone_background_by_mistyphantom.png") no-repeat !important;
    	background-size:cover !important;
   }
+  .column p {
+  	color:white !important;
+  }
   .bot-name, #createdby, .bot-description {
   	color: white !important;
   }
@@ -47,6 +50,10 @@
 .grow-more:hover {
 	transform: scale(1.2);
 }
+
+#bot-stats {
+ 	display: none; 
+ }
 </style>
 # GhostBot
 GhostBot is a discord bot made for Danny Phantom fans.
@@ -72,3 +79,5 @@ Current Command list:
 
 It currently only includes voice commands and more commands will be added soon.
 If you have any ideas for commands to add contact _duncte123#1245_ or join the support guild.
+
+https://im.going-g.host/xQ6rB6KwtJ.png

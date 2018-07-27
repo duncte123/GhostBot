@@ -117,10 +117,15 @@ public class FylCommicCommand extends ReactionCommand {
                                 chapterRef.updateAndGet( c -> chapterList.get(i));
                             } else if( nextPage == -1 ) {
                                 int i = chapterIndex.decrementAndGet();
-                                FylChapter captt = chapterRef.updateAndGet( c -> chapterList.get(i));
-                                nextPage = pageIndex.updateAndGet( c -> captt.pages - 1 );
+                                if(i > -1) {
+                                    FylChapter captt = chapterRef.updateAndGet(c -> chapterList.get(i));
+                                    nextPage = pageIndex.updateAndGet(c -> captt.pages - 1);
+                                } else {
+                                    chapterIndex.updateAndGet(c -> 0);
+                                }
                             }
-                            m.editMessage(getEmbed(chapterIndex.get(), nextPage)).queue();
+                            if(nextPage >= 0 && nextPage <= chap.pages)
+                                m.editMessage(getEmbed(chapterIndex.get(), nextPage)).queue();
                         }
                 )
         );
