@@ -45,10 +45,7 @@ dependencies {
     //JDA
     compile group: 'net.dv8tion', name: 'JDA', version: '3.7.1_386'
     //LavaPlayer/Lavalink
-    compile(group: 'com.github.Frederikam', name: 'Lavalink', version: 'fbc24237c1') {
-        exclude group: 'com.github.Frederikam.Lavalink', module: 'Lavalink-Server'
-        exclude group: 'net.dv8tion', module: 'JDA'
-    }
+    compile group: 'com.github.FredBoat', name: 'Lavalink-Client', version: '3.0'
     // Logback core
     compile group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
     // Logback classic
@@ -75,6 +72,10 @@ buildConfig {
     charset = 'UTF-8'
 
     clsName = 'BuildConfig'
+}
+shadowJar {
+    version = null
+    classifier = null
 }
 build {
     dependsOn clean

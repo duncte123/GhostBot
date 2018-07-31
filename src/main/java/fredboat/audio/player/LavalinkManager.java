@@ -21,6 +21,7 @@ package fredboat.audio.player;
 import com.afollestad.ason.Ason;
 import lavalink.client.io.Lavalink;
 import lavalink.client.io.Link;
+import lavalink.client.io.jda.JdaLavalink;
 import lavalink.client.player.IPlayer;
 import lavalink.client.player.LavaplayerPlayerWrapper;
 import me.duncte123.ghostBot.GhostBot;
@@ -47,7 +48,7 @@ import java.util.List;
 public class LavalinkManager {
 
     public static final LavalinkManager ins = new LavalinkManager();
-    private Lavalink lavalink = null;
+    private JdaLavalink lavalink = null;
 
     private LavalinkManager() {
     }
@@ -57,7 +58,7 @@ public class LavalinkManager {
 
             String userId = getIdFromToken(SpoopyUtils.config.getString("discord.token"));
 
-            lavalink = new Lavalink(
+            lavalink = new JdaLavalink(
                     userId,
                     SpoopyUtils.config.getInt("discord.totalShards", 1),
                     shardId -> GhostBot.getInstance().getFakeShard(shardId)
