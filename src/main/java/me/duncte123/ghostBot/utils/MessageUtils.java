@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class MessageUtils {
 
     private static Logger logger = LoggerFactory.getLogger(MessageUtils.class);
@@ -134,6 +135,7 @@ public class MessageUtils {
      * @param channel the {@link TextChannel TextChannel} that we want to send the embed to
      * @param embed   The embed to send
      */
+    @SuppressWarnings("deprecation")
     public static void sendEmbed(TextChannel channel, MessageEmbed embed, Consumer<Message> success) {
         if (channel != null) {
             if (!channel.getGuild().getSelfMember().hasPermission(channel, Permission.MESSAGE_EMBED_LINKS)) {
@@ -301,10 +303,12 @@ public class MessageUtils {
      * @param channel he {@link TextChannel TextChannel} that we want to send our message to
      * @param msg     the message to send
      */
+    @Deprecated
     public static void sendMsg(TextChannel channel, MessageEmbed msg) {
         sendMsg(channel, (new MessageBuilder()).setEmbed(msg).build(), null, CUSTOM_QUEUE_ERROR);
     }
 
+    @Deprecated
     public static void sendMsg(TextChannel channel, MessageEmbed msg, Consumer<Message> success) {
         sendMsg(channel, (new MessageBuilder()).setEmbed(msg).build(), success, CUSTOM_QUEUE_ERROR);
     }

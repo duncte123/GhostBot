@@ -89,7 +89,7 @@ public abstract class Command {
 
         if (preAudioChecks(event)) {
             String selectedTrack = getRandomTrack();
-            sendMsg(event, "Selected track: _" + selectedTrack + "_");
+            sendMsg(event, "Selected track: _" + selectedTrack.replaceAll("_", "\\_") + "_");
             SpoopyUtils.audio.loadAndPlay(getMusicManager(event.getGuild()), event.getChannel(),
                     audioPath + selectedTrack, false);
         }
@@ -110,9 +110,9 @@ public abstract class Command {
             LavalinkManager.ins.openConnection(event.getMember().getVoiceState().getChannel());
         } catch (PermissionException e) {
             if (e.getPermission() == Permission.VOICE_CONNECT) {
-                sendMsg(event, EmbedUtils.embedMessage(String.format("I don't have permission to join `%s`", event.getMember().getVoiceState().getChannel().getName())));
+                sendEmbed(event, EmbedUtils.embedMessage(String.format("I don't have permission to join `%s`", event.getMember().getVoiceState().getChannel().getName())));
             } else {
-                sendMsg(event, EmbedUtils.embedMessage(String.format("Error while joining channel `%s`: %s"
+                sendEmbed(event, EmbedUtils.embedMessage(String.format("Error while joining channel `%s`: %s"
                         , event.getMember().getVoiceState().getChannel().getName(), e.getMessage())));
             }
             return false;
