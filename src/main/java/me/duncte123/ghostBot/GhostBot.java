@@ -55,7 +55,7 @@ public class GhostBot {
             if (LavalinkManager.ins.isEnabled())
                 builder.addEventListener(LavalinkManager.ins.getLavalink());
 
-            jda = builder.buildAsync();
+            jda = builder.build();
         } catch (LoginException e) {
             e.printStackTrace();
             System.exit(-1);
