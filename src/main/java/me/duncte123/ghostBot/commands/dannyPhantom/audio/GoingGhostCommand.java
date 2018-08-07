@@ -40,7 +40,7 @@ public class GoingGhostCommand extends Command {
             if (p >= 50 && p <= 55) {
                 selectedTrack = "extra/its going ghost.mp3";
             }
-            sendMsg(event, "Selected track: _" + selectedTrack.replaceAll("_", "\\_") + "_");
+            sendMsg(event, "Selected track: _" + selectedTrack.replace("_", "\\_") + "_");
             SpoopyUtils.audio.loadAndPlay(getMusicManager(event.getGuild()), event.getChannel(),
                     audioPath + selectedTrack, false);
         }
