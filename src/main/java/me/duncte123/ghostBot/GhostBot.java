@@ -34,14 +34,13 @@ import javax.security.auth.login.LoginException;
 
 public class GhostBot {
 
-    private static final Logger logger = LoggerFactory.getLogger(GhostBot.class);
+    private static GhostBot ins;
+    private JDA jda;
 
-    private static final GhostBot ins = new GhostBot();
-    private static JDA jda;
+   private GhostBot() {
+       final Logger logger = LoggerFactory.getLogger(GhostBot.class);
 
-    public static void main(String[] args) {
-
-        logger.info("Booting GhostBot");
+       logger.info("Booting GhostBot");
         String token = SpoopyUtils.config.getString("discord.token");
         WebUtils.setUserAgent("Mozilla/5.0 (compatible; GhostBot/v" + Variables.VERSION + "; +https://github.com/duncte123/GhostBot)");
         LavalinkManager.ins.start();
@@ -60,6 +59,10 @@ public class GhostBot {
             e.printStackTrace();
             System.exit(-1);
         }
+    }
+
+    public static void main(String[] args) {
+        ins = new GhostBot();
     }
 
     public static GhostBot getInstance() {

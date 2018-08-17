@@ -65,7 +65,6 @@ public class DPArtistsCommand extends ImageCommand {
             "earthphantom",
             "allyphantomrush",
             "umbrihearts",
-            "doppelganger",
             "amethystocean-adr",
             "ceciliaspen"
     };
@@ -96,11 +95,6 @@ public class DPArtistsCommand extends ImageCommand {
 
             case "umbrihearts": {
                 doStuff("https://umbrihearts.deviantart.com/", event);
-                break;
-            }
-
-            case "doppelganger": {
-                doStuff("doppelgangercomic.tumblr.com", event);
                 break;
             }
 
