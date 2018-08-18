@@ -188,7 +188,7 @@ public class DPArtistsCommand extends ImageCommand {
         String url = String.format(
                 "https://api.tumblr.com/v2/blog/%s.tumblr.com/posts?api_key=%s&type=photo&limit=1",
                 username,
-                SpoopyUtils.config.getString("api.tumblr", "API_KEY")
+                SpoopyUtils.config.api.tumblr
         );
         WebUtils.ins.getAson(url).async(ason ->
                 cb.accept(Ason.deserializeList(ason.getJsonArray("response.posts"), TumblrPost.class).get(0)));

@@ -20,18 +20,30 @@ package me.duncte123.ghostBot.utils;
 
 import me.duncte123.botCommons.config.Config;
 import me.duncte123.ghostBot.CommandManager;
+import me.duncte123.ghostBot.objects.config.GhostBotConfig;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.utils.cache.MemberCacheView;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 public class SpoopyUtils {
     public static final AudioUtils audio = AudioUtils.ins;
     private static final ConfigUtils CU = new ConfigUtils();
-    public static final Config config = CU.loadConfig();
+    public static GhostBotConfig config;
+
+    static {
+        try {
+            config = me.duncte123.botCommons.config.ConfigUtils.loadFromFile("config.json", GhostBotConfig.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static Config IMAGES = CU.loadImages();
     public static final Random random = new Random();
 
@@ -49,7 +61,7 @@ public class SpoopyUtils {
             "&searchType=image" +
             "&filter=1" +
             "&safe=medium" +
-            "&key=" + config.getString("api.google");
+            "&key=" + config.api.google;
 
     // [0] = users, [1] = bots
     public static double[] getBotRatio(Guild g) {
@@ -84,12 +96,7 @@ public class SpoopyUtils {
     }
 
     public static String encodeUrl(String in) {
-        try {
-            return URLEncoder.encode(in, "UTF-8");
-        } catch (UnsupportedEncodingException exc) {
-            exc.printStackTrace();
-            return in.replace(" ", "%20");
-        }
+        return URLEncoder.encode(in, StandardCharsets.UTF_8);
     }
 }
 

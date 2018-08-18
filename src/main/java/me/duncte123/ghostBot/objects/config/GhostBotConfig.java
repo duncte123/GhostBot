@@ -16,14 +16,36 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostBot.variables;
+package me.duncte123.ghostBot.objects.config;
 
-import me.duncte123.ghostBot.BuildConfig;
-import me.duncte123.ghostBot.utils.SpoopyUtils;
+public class GhostBotConfig {
 
-public class Variables {
+    public Discord discord;
+    public Lavalink lavalink;
+    public Api api;
+    public boolean running_local;
 
-    public static final String PREFIX = SpoopyUtils.config.discord.prefix;
-    public static final String OWNER_ID = "191231307290771456";
-    public static final String VERSION = BuildConfig.VERSION;
+    public static class Discord {
+        public String prefix;
+        public int totalShards;
+        public String token;
+    }
+
+    public static class Lavalink {
+        public Node[] nodes;
+        public boolean enable;
+
+        public static class Node {
+            public String wsUrl;
+            public String pass;
+        }
+    }
+
+    public static class Api {
+        public String dbots;
+        public String dbl;
+        public String google;
+        public String tumblr;
+    }
+
 }

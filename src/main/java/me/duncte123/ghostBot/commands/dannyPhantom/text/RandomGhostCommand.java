@@ -35,7 +35,7 @@ public class RandomGhostCommand extends Command {
     private final List<String> ghosts = new ArrayList<>();
 
     public RandomGhostCommand() {
-        if (!SpoopyUtils.config.getBoolean("running_local", false)) {
+        if (!SpoopyUtils.config.running_local) {
             logger.info("Scraping ghosts async");
             WebUtils.ins.scrapeWebPage("http://dannyphantom.wikia.com/wiki/Category:Ghosts?display=page&sort=alphabetical").async((doc) -> {
                 try {

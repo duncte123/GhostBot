@@ -223,7 +223,7 @@ public class QuotesCommand extends Command {
     }
 
     private void reloadQuotes() {
-        if (SpoopyUtils.config.getBoolean("running_local", false)) return;
+        if (SpoopyUtils.config.running_local) return;
 
         oldCount = allQuotes.size();
         allQuotes.clear();

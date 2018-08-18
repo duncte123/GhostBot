@@ -26,6 +26,7 @@ import lavalink.client.player.IPlayer;
 import lavalink.client.player.LavaplayerPlayerWrapper;
 import me.duncte123.ghostBot.GhostBot;
 import me.duncte123.ghostBot.audio.LavalinkNode;
+import me.duncte123.ghostBot.objects.config.GhostBotConfig;
 import me.duncte123.ghostBot.utils.AudioUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.entities.Guild;
@@ -56,33 +57,26 @@ public class LavalinkManager {
     public void start() {
         if (isEnabled()) {
 
-            String userId = getIdFromToken(SpoopyUtils.config.getString("discord.token"));
+            String userId = getIdFromToken(SpoopyUtils.config.discord.token);
 
             lavalink = new JdaLavalink(
                     userId,
-                    SpoopyUtils.config.getInt("discord.totalShards", 1),
+                    SpoopyUtils.config.discord.totalShards,
                     shardId -> GhostBot.getInstance().getFakeShard(shardId)
             );
-            List<LavalinkNode> defaultNodes = Collections.singletonList(
-                    new LavalinkNode(new Ason("{\"wsUrl\": \"ws://localhost\",\"pass\": \"youshallnotpass\"}")));
-            List<Ason> nodes = SpoopyUtils.config.getArray("lavalink.nodes", defaultNodes);
-            List<LavalinkNode> nodeList = new ArrayList<>();
-            nodes.forEach(it -> nodeList.add(new LavalinkNode(it)));
 
-            nodeList.forEach(it ->
-                    {
-                        try {
-                            lavalink.addNode(new URI(it.getWsUrl()), it.getPass());
-                        } catch (URISyntaxException e) {
-                            e.printStackTrace();
-                        }
-                    }
-            );
+            for(GhostBotConfig.Lavalink.Node it : SpoopyUtils.config.lavalink.nodes) {
+                try {
+                    lavalink.addNode(new URI(it.wsUrl), it.pass);
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
     public boolean isEnabled() {
-        return SpoopyUtils.config.getBoolean("lavalink.enable", false);
+        return SpoopyUtils.config.lavalink.enable;
     }
 
     public IPlayer createPlayer(String guildId) {

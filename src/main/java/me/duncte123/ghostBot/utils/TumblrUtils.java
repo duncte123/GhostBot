@@ -31,7 +31,7 @@ import java.util.function.Consumer;
 public class TumblrUtils {
 
     public static final String API_URL = "https://api.tumblr.com/v2/blog/%s/posts%s?limit=20&api_key=" +
-            SpoopyUtils.config.getString("api.tumblr", "API_KEY");
+            SpoopyUtils.config.api.tumblr;
 
     /*public static void fetcheAllFromAccount(String domain, @NotNull Consumer<List<TumblrPost>> cb) {
         fetchAllFromAccount(domain, null, cb);

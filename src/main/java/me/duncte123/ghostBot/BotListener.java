@@ -20,6 +20,7 @@ package me.duncte123.ghostBot;
 
 import fredboat.audio.player.LavalinkManager;
 import me.duncte123.botCommons.web.WebUtils;
+import me.duncte123.botCommons.web.WebUtilsErrorUtils;
 import me.duncte123.ghostBot.audio.GuildMusicManager;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import me.duncte123.ghostBot.variables.Variables;
@@ -45,10 +46,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import static me.duncte123.botCommons.web.WebUtils.EncodingType.APPLICATION_JSON;
+
 public class BotListener extends ListenerAdapter {
 
     private final Logger logger = LoggerFactory.getLogger(BotListener.class);
-    private final String dbotsToken = SpoopyUtils.config.getString("api.dbots", "");
+    private final String dbotsToken = SpoopyUtils.config.api.dbots;
+    private final String dblToken = SpoopyUtils.config.api.dbl;
     public static final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
 
     @Override
@@ -144,22 +148,34 @@ public class BotListener extends ListenerAdapter {
     }
 
     private void postServerCount(JDA jda) {
-        if (!dbotsToken.isEmpty()) {
-            service.scheduleWithFixedDelay(() ->
-                            WebUtils.ins.prepareRaw(
-                                    new Request.Builder()
-                                            .url("https://bots.discord.pw/api/bots/397297702150602752/stats")
-                                            .post(RequestBody.create(MediaType.parse("application/json"),
-                                                    new JSONObject().put("server_count", jda.getGuilds().size()).toString()))
-                                            .addHeader("User-Agent", "DiscordBot " + jda.getSelfUser().getName())
-                                            .addHeader("Authorization", dbotsToken)
-                                            .build(), r -> r.body().string()).async(
-                                    empty -> logger.info("Posted stats to dbots (" + empty + ")"),
-                                    nothing -> {
-                                        logger.info("something borked");
-                                        logger.info(nothing.getMessage());
-                                    })
-                    , 0L, 1L, TimeUnit.DAYS);
+        if (!dbotsToken.isEmpty() && !dblToken.isEmpty()) {
+            service.scheduleWithFixedDelay(() -> {
+                WebUtils.ins.prepareRaw(
+                        WebUtils.defaultRequest()
+                                .url("https://bots.discord.pw/api/bots/397297702150602752/stats")
+                                .post(RequestBody.create(APPLICATION_JSON.toMediaType(),
+                                        new JSONObject().put("server_count", jda.getGuilds().size()).toString()))
+                                .addHeader("Authorization", dbotsToken)
+                                .build(), r -> r.body().string()).async(
+                        empty -> logger.info("Posted stats to dbots (" + empty + ")"),
+                        nothing -> {
+                            logger.info("something borked");
+                            logger.info(nothing.getMessage());
+                        });
+
+                WebUtils.ins.prepareRaw(
+                        WebUtils.defaultRequest()
+                                .url("https://discordbots.org/api/bots/397297702150602752/stats")
+                                .post(RequestBody.create(APPLICATION_JSON.toMediaType(),
+                                        new JSONObject().put("server_count", jda.getGuilds().size()).toString()))
+                                .addHeader("Authorization", dblToken)
+                                .build(), r -> r.body().string()).async(
+                        empty -> logger.info("Posted stats to dbots (" + empty + ")"),
+                        nothing -> {
+                            logger.info("something borked");
+                            logger.info(nothing.getMessage());
+                        });
+            }, 0L, 1L, TimeUnit.DAYS);
         }
 
     }
