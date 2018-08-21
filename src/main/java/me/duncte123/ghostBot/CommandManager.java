@@ -122,8 +122,11 @@ public class CommandManager {
 
     void handleCommand(GuildMessageReceivedEvent event) {
         final String rw = event.getMessage().getContentRaw();
-        final String[] split = rw.replaceFirst("(?i)" + Pattern.quote(Variables.PREFIX), "")
+        final String[] split = rw.replaceFirst("(?i)" +
+                Pattern.quote(Variables.PREFIX) + "|" +
+                Pattern.quote(Variables.OTHER_PREFIX), "")
                 .split("\\s+");
+        System.out.println(Arrays.toString(split));
         final String invoke = split[0].toLowerCase();
         final String[] args = Arrays.copyOfRange(split, 1, split.length);
 

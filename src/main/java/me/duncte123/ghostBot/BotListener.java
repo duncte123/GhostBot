@@ -64,8 +64,9 @@ public class BotListener extends ListenerAdapter {
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         if (event.getAuthor().isBot() || event.getAuthor().isFake()) return;
-        if (!event.getMessage().getContentRaw().toLowerCase()
-                .startsWith(Variables.PREFIX.toLowerCase())) return;
+        String content = event.getMessage().getContentRaw().toLowerCase();
+        if (!content.startsWith(Variables.PREFIX.toLowerCase())
+                && !content.startsWith(Variables.OTHER_PREFIX.toLowerCase())) return;
 
         if (event.getMessage().getContentRaw().equals(Variables.PREFIX + "shutdown") && event.getAuthor().getId().equals(Variables.OWNER_ID)) {
             logger.info("Shutting down!!");
