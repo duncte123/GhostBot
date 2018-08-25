@@ -58,6 +58,11 @@
 # GhostBot
 GhostBot is a discord bot made for Danny Phantom fans.
 
+This bot will fill your voice channel with ghostly sounds and your text channels with ghostly images.
+
+The best part of this bot is that it allows you to read fan comics within discord, 
+the curent comics that you can read in discord with this bot are [5 years later](https://www.kurothewebsite.com/5yearslater) and [Doppelgänger](http://doppelgangercomic.tumblr.com/)
+
 Current Command list:
 ```yaml
     gb.wail: Gives you a nice ghostly wail
@@ -76,8 +81,5 @@ Current Command list:
     gb.5yl: Allows you to read the 5 years later comic within discord
     gb.5ylwiki: Search the 5 years later wiki
 ```
-
-It currently only includes voice commands and more commands will be added soon.
-If you have any ideas for commands to add contact _duncte123#1245_ or join the support guild.
 
 https://im.going-g.host/xQ6rB6KwtJ.png
