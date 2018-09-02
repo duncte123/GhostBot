@@ -27,10 +27,12 @@ import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.Game;
+import net.dv8tion.jda.core.utils.cache.CacheFlag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.security.auth.login.LoginException;
+import java.util.EnumSet;
 
 public class GhostBot {
 
@@ -48,6 +50,7 @@ public class GhostBot {
             JDABuilder builder = new JDABuilder(AccountType.BOT)
                     .setAudioEnabled(true)
                     .setGame(Game.playing(Variables.PREFIX + "help | Going Ghost"))
+                    .setDisabledCacheFlags(EnumSet.of(CacheFlag.EMOTE, CacheFlag.GAME))
                     .setToken(token)
                     .addEventListener(new BotListener(), new FilterLogs());
 

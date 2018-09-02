@@ -29,15 +29,14 @@ import me.duncte123.ghostBot.commands.dannyPhantom.wiki.WikiCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.wiki.WikiUserCommand;
 import me.duncte123.ghostBot.commands.fiveYearsLater.FylCommicCommand;
 import me.duncte123.ghostBot.commands.fiveYearsLater.FylWikiCommand;
-import me.duncte123.ghostBot.commands.main.AboutCommand;
-import me.duncte123.ghostBot.commands.main.EvalCommand;
-import me.duncte123.ghostBot.commands.main.HelpCommand;
-import me.duncte123.ghostBot.commands.main.ReloadAudioCommand;
+import me.duncte123.ghostBot.commands.main.*;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 import org.apache.commons.collections4.set.UnmodifiableSet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -49,6 +48,8 @@ public class CommandManager {
 
     private final Set<Command> commands = ConcurrentHashMap.newKeySet();
     final ExecutorService commandService = Executors.newCachedThreadPool((r) -> new Thread(r, "Command-Thread"));
+
+    private static final Logger logger = LoggerFactory.getLogger(CommandManager.class);
 
     final ReactionListenerRegistry reactListReg = new ReactionListenerRegistry();
 
@@ -80,6 +81,7 @@ public class CommandManager {
 
         this.addCommand(new ReloadAudioCommand());
         this.addCommand(new EvalCommand());
+        this.addCommand(new PingCommand());
     }
 
     public Set<Command> getCommands() {
@@ -126,13 +128,14 @@ public class CommandManager {
                 Pattern.quote(Variables.PREFIX) + "|" +
                 Pattern.quote(Variables.OTHER_PREFIX), "")
                 .split("\\s+");
-        System.out.println(Arrays.toString(split));
+
         final String invoke = split[0].toLowerCase();
         final String[] args = Arrays.copyOfRange(split, 1, split.length);
 
         Command cmd = getCommand(invoke);
 
         if (cmd != null) {
+            logger.info("Dispatching command \"{}\" in \"{}\" with {}", invoke, event.getGuild(), Arrays.toString(args));
             event.getChannel().sendTyping().queue();
             commandService.submit(() -> {
                 try {
@@ -142,6 +145,8 @@ public class CommandManager {
                 }
             });
             /*cmd.execute(invoke, args, event);*/
+        } else {
+            logger.info("Unknown command: \"{}\" in \"{}\" with {}", invoke, event.getGuild(), Arrays.toString(args));
         }
 
     }
