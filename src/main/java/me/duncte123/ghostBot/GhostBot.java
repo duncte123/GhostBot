@@ -49,7 +49,7 @@ public class GhostBot {
         try {
             JDABuilder builder = new JDABuilder(AccountType.BOT)
                     .setAudioEnabled(true)
-                    .setGame(Game.playing(Variables.PREFIX + "help | Going Ghost"))
+                    .setGame(Game.watching(Variables.PREFIX + "help | Going Ghost"))
                     .setDisabledCacheFlags(EnumSet.of(CacheFlag.EMOTE, CacheFlag.GAME))
                     .setToken(token)
                     .addEventListener(new BotListener(), new FilterLogs());
