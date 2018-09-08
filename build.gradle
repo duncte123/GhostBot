@@ -43,7 +43,7 @@ dependencies {
     //My little utils
     compile 'com.github.duncte123:botCommons:4df5e29'
     //JDA
-    compile (group: 'net.dv8tion', name: 'JDA', version: '3.7.1_412') {
+    compile (group: 'net.dv8tion', name: 'JDA', version: '3.7.1_419') {
         exclude module: 'opus-java'
     }
     //LavaPlayer/Lavalink
@@ -53,7 +53,7 @@ dependencies {
     // Logback classic
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
 
-    runtime group: 'org.codehaus.groovy', name: 'groovy-jsr223', version: '3.0.0-alpha-2'
+    runtime group: 'org.codehaus.groovy', name: 'groovy-jsr223', version: '3.0.0-alpha-3'
 }
 
 compileJava.options.encoding = 'UTF-8'
