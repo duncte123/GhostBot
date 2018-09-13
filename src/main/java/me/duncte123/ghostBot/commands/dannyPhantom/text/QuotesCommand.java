@@ -113,7 +113,7 @@ public class QuotesCommand extends Command {
 
             } else if ("reload".equals(args[0])) {
 
-                if (event.getAuthor().getId().equals(Variables.OWNER_ID)) {
+                if (event.getAuthor().getIdLong() != Variables.OWNER_ID) {
                     reloadQuotes();
                     MessageUtils.sendMsg(event, messages[0], success ->
                            BotListener.service.execute(() -> {

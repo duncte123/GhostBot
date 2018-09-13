@@ -58,7 +58,7 @@ public class ImageCommand extends ImageBase {
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
 
-        if(args.length > 0 && args[0].equals("reload") && event.getAuthor().getId().equals(Variables.OWNER_ID) && !isReloading) {
+        if(args.length > 0 && args[0].equals("reload") && event.getAuthor().getIdLong() != Variables.OWNER_ID && !isReloading) {
             isReloading = true;
             new Thread(() -> {
                 File jarFile = new File("ghostBotImages.jar");

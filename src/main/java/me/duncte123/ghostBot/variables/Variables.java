@@ -25,6 +25,6 @@ public class Variables {
 
     public static final String PREFIX = SpoopyUtils.config.discord.prefix;
     public static final String OTHER_PREFIX = "gb!";
-    public static final String OWNER_ID = "191231307290771456";
+    public static final long OWNER_ID = 191231307290771456L;
     public static final String VERSION = BuildConfig.VERSION;
 }

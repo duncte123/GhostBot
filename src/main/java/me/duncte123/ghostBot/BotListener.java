@@ -68,7 +68,7 @@ public class BotListener extends ListenerAdapter {
         if (!content.startsWith(Variables.PREFIX.toLowerCase())
                 && !content.startsWith(Variables.OTHER_PREFIX.toLowerCase())) return;
 
-        if (event.getMessage().getContentRaw().equals(Variables.PREFIX + "shutdown") && event.getAuthor().getId().equals(Variables.OWNER_ID)) {
+        if (event.getMessage().getContentRaw().equals(Variables.PREFIX + "shutdown") && event.getAuthor().getIdLong() != Variables.OWNER_ID) {
             logger.info("Shutting down!!");
             service.shutdownNow();
             SpoopyUtils.commandManager.commandService.shutdown();

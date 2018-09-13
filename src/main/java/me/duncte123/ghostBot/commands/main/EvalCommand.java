@@ -37,7 +37,7 @@ import static me.duncte123.ghostBot.utils.MessageUtils.*;
 public class EvalCommand extends Command {
 
     private final ScriptEngine engine = new ScriptEngineManager().getEngineByName("groovy");
-    private final ExecutorService service = Executors.newCachedThreadPool( (it) -> new Thread(it, "Eval-Thread") );
+    private final ExecutorService service = Executors.newCachedThreadPool((it) -> new Thread(it, "Eval-Thread"));
     private final List<String> packageImports = Arrays.asList(
             "java.io",
             "java.lang",
@@ -56,36 +56,38 @@ public class EvalCommand extends Command {
 
     @Override
     public void execute(String invoke, final String[] args, GuildMessageReceivedEvent event) {
-        if (event.getAuthor().getId().equals(Variables.OWNER_ID)) {
-            engine.put("event", event);
-            engine.put("jda", event.getJDA());
-            engine.put("channel", event.getChannel());
-            engine.put("member", event.getMember());
-            engine.put("author", event.getAuthor());
-            engine.put("guild", event.getGuild());
-            engine.put("args", args);
 
-            final String script = "import " + String.join(".*\nimport ", packageImports) + ".*\n\n" + 
-								event.getMessage().getContentRaw().split("\\s+", 2)[1];
-
-            try {
-                Future<Object> task = service.submit(() -> engine.eval(script));
-
-                Object result = task.get(1, TimeUnit.MINUTES);
-
-                if (result != null) sendMsg(event, result.toString());
-
-                sendSuccess(event.getMessage());
-            } catch (Exception e) {
-                try {
-                    sendErrorWithMessage(event.getMessage(), e.getCause().toString());
-                } catch (NullPointerException ignored) {
-                    sendErrorWithMessage(event.getMessage(), e.toString());
-                }
-
-            }
+        if (event.getAuthor().getIdLong() != Variables.OWNER_ID) {
+            return;
         }
 
+        engine.put("event", event);
+        engine.put("jda", event.getJDA());
+        engine.put("channel", event.getChannel());
+        engine.put("member", event.getMember());
+        engine.put("author", event.getAuthor());
+        engine.put("guild", event.getGuild());
+        engine.put("args", args);
+
+        final String script = "import " + String.join(".*\nimport ", packageImports) + ".*\n\n" +
+                event.getMessage().getContentRaw().split("\\s+", 2)[1];
+
+        try {
+            Future<Object> task = service.submit(() -> engine.eval(script));
+
+            Object result = task.get(1, TimeUnit.MINUTES);
+
+            if (result != null) sendMsg(event, result.toString());
+
+            sendSuccess(event.getMessage());
+        } catch (Exception e) {
+            try {
+                sendErrorWithMessage(event.getMessage(), e.getCause().toString());
+            } catch (NullPointerException ignored) {
+                sendErrorWithMessage(event.getMessage(), e.toString());
+            }
+
+        }
     }
 
     @Override
