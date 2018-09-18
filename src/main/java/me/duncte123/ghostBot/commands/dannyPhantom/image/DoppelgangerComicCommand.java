@@ -71,7 +71,7 @@ public class DoppelgangerComicCommand extends ReactionCommand {
 
         int page = pages.size();
         if (args.length > 0) {
-            if (args[0].equals("update") && event.getAuthor().getIdLong() != Variables.OWNER_ID) {
+            if (args[0].equals("update") && event.getAuthor().getIdLong() == Variables.OWNER_ID) {
                 TumblrUtils.fetchLatestPost(BLOG_URL, post -> {
                     pages.add(post);
                     sendMsg(event, "fetched latest page");
