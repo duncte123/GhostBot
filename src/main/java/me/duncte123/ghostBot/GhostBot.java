@@ -39,10 +39,10 @@ public class GhostBot {
     private static GhostBot ins;
     private JDA jda;
 
-   private GhostBot() {
-       final Logger logger = LoggerFactory.getLogger(GhostBot.class);
+    private GhostBot() {
+        final Logger logger = LoggerFactory.getLogger(GhostBot.class);
 
-       logger.info("Booting GhostBot");
+        logger.info("Booting GhostBot");
         String token = SpoopyUtils.config.discord.token;
         WebUtils.setUserAgent("Mozilla/5.0 (compatible; GhostBot/v" + Variables.VERSION + "; +https://github.com/duncte123/GhostBot)");
         LavalinkManager.ins.start();

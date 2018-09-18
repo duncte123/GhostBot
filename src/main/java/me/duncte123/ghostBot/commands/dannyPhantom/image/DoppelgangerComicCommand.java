@@ -45,15 +45,10 @@ import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
 
 public class DoppelgangerComicCommand extends ReactionCommand {
 
-    public DoppelgangerComicCommand(CommandManager.ReactionListenerRegistry registry) {
-        super(registry);
-        loadPages();
-    }
-
-
     private static final String PAGE_SELECTOR = "page:";
     private static final String CHAPTER_SELECTOR = "chapter:";
-
+    private static final String BLOG_URL = "doppelgangercomic.tumblr.com";
+    private static final String PROFILE_PICTURE = "https://api.tumblr.com/v2/blog/" + BLOG_URL + "/avatar/48";
     private final List<TumblrPost> pages = new ArrayList<>();
     // The numbers in this list represent the page numbers of where the chapters start
     private final int[] chapters = {
@@ -66,15 +61,17 @@ public class DoppelgangerComicCommand extends ReactionCommand {
     };
     private final long comicCover = 167255413598L;
     private final List<Long> filters = Collections.singletonList(comicCover);
-    private static final String BLOG_URL = "doppelgangercomic.tumblr.com";
-    private static final String PROFILE_PICTURE = "https://api.tumblr.com/v2/blog/" + BLOG_URL + "/avatar/48";
+    public DoppelgangerComicCommand(CommandManager.ReactionListenerRegistry registry) {
+        super(registry);
+        loadPages();
+    }
 
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
 
         int page = pages.size();
         if (args.length > 0) {
-            if(args[0].equals("update") && event.getAuthor().getIdLong() != Variables.OWNER_ID) {
+            if (args[0].equals("update") && event.getAuthor().getIdLong() != Variables.OWNER_ID) {
                 TumblrUtils.fetchLatestPost(BLOG_URL, post -> {
                     pages.add(post);
                     sendMsg(event, "fetched latest page");
@@ -167,7 +164,7 @@ public class DoppelgangerComicCommand extends ReactionCommand {
         logger.info("Loading doppelganger pages");
         TumblrUtils.fetchAllFromAccount(BLOG_URL, "photo", posts -> {
             //noinspection ConstantConditions
-            TumblrPost cover = posts.stream().filter( p -> p.id == comicCover ).findFirst().get();
+            TumblrPost cover = posts.stream().filter(p -> p.id == comicCover).findFirst().get();
             List<TumblrPost> posts1 = posts.stream().filter(p -> !filters.contains(p.id)).collect(Collectors.toList());
             posts1.set(posts1.size() - 1, cover);
             pages.addAll(posts1);
@@ -183,7 +180,6 @@ public class DoppelgangerComicCommand extends ReactionCommand {
             });*/
         });
     }
-
 
 
     @Override

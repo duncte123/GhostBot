@@ -18,8 +18,8 @@
 
 package me.duncte123.ghostBot.commands.main;
 
-import me.duncte123.ghostBot.objects.CommandCategory;
 import me.duncte123.ghostBot.objects.Command;
+import me.duncte123.ghostBot.objects.CommandCategory;
 import me.duncte123.ghostBot.utils.EmbedUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import me.duncte123.ghostBot.variables.Variables;
@@ -64,20 +64,20 @@ public class HelpCommand extends Command {
             return;
         }
 
-        List<String> audioCommands =     getCommandsForCategory(CommandCategory.AUDIO);
-        List<String> imageCommands =     getCommandsForCategory(CommandCategory.IMAGE);
-        List<String> wikiCommands =      getCommandsForCategory(CommandCategory.WIKI);
-        List<String> textCommands =      getCommandsForCategory(CommandCategory.TEXT);
-        List<String> otherCommands =     getCommandsForCategory(CommandCategory.NONE);
+        List<String> audioCommands = getCommandsForCategory(CommandCategory.AUDIO);
+        List<String> imageCommands = getCommandsForCategory(CommandCategory.IMAGE);
+        List<String> wikiCommands = getCommandsForCategory(CommandCategory.WIKI);
+        List<String> textCommands = getCommandsForCategory(CommandCategory.TEXT);
+        List<String> otherCommands = getCommandsForCategory(CommandCategory.NONE);
         List<String> characterCommands = getCommandsForCategory(CommandCategory.CHARACTERS);
 
         MessageEmbed helpEmbed = EmbedUtils.defaultEmbed()
                 .setDescription("Use `" + Variables.PREFIX + "help [command]` for more info about a command")
-                .addField("Audio commands",     buildCcmmands(audioCommands), false)
-                .addField("Image commands",     buildCcmmands(imageCommands), false)
-                .addField("Text commands",      buildCcmmands(textCommands), false)
-                .addField("Wiki commands",      buildCcmmands(wikiCommands), false)
-                .addField("Other commands",     buildCcmmands(otherCommands), false)
+                .addField("Audio commands", buildCcmmands(audioCommands), false)
+                .addField("Image commands", buildCcmmands(imageCommands), false)
+                .addField("Text commands", buildCcmmands(textCommands), false)
+                .addField("Wiki commands", buildCcmmands(wikiCommands), false)
+                .addField("Other commands", buildCcmmands(otherCommands), false)
                 .addField("Character commands", buildCcmmands(characterCommands), false)
                 .build();
 

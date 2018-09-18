@@ -28,7 +28,6 @@ import java.io.File;
 public class ConfigUtils {
     private static final Logger logger = LoggerFactory.getLogger(ConfigUtils.class);
 
-    private Config config;
     private Config images;
 
     /**
@@ -36,23 +35,13 @@ public class ConfigUtils {
      */
     public ConfigUtils() {
         try {
-            logger.info("Loading config.json");
-            this.config = ConfigLoader.getConfig(new File("config.json"));
+            logger.info("Loading images.json");
             this.images = ConfigLoader.getConfig(new File("images.json"));
-            logger.info("Loaded config.json");
+            logger.info("Loaded images.json");
         } catch (Exception e) {
             logger.error("Could not load config, aborting", e);
             System.exit(-1);
         }
-    }
-
-    /**
-     * This will return the config that we have
-     *
-     * @return the config for the bot
-     */
-    Config loadConfig() {
-        return config;
     }
 
     public Config loadImages() {

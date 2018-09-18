@@ -18,7 +18,6 @@
 
 package me.duncte123.ghostBot.commands.dannyPhantom.wiki;
 
-import com.afollestad.ason.Ason;
 import me.duncte123.botCommons.web.WebUtils;
 import me.duncte123.fandomApi.models.user.UserElement;
 import me.duncte123.fandomApi.models.user.UserResultSet;
@@ -43,18 +42,17 @@ public class WikiUserCommand extends WikiBaseCommand {
         }
         String searchQuery = StringUtils.join(args, " ");
 
-        WebUtils.ins.getAson(String.format(
+        WebUtils.ins.getJSONObject(String.format(
                 "%s?ids=%s",
                 wiki.getUserDetailsEndpoint(),
                 SpoopyUtils.encodeUrl(searchQuery)
-        )).async(
-                ason -> {
-                    if (ason.has("exception")) {
-                        sendMsg(event, "An error occurred: " + toEx(ason));
+        )).async(json -> {
+                    if (json.has("exception")) {
+                        sendMsg(event, "An error occurred: " + toEx(json));
                         return;
                     }
 
-                    UserResultSet userResultSet = Ason.deserialize(ason, UserResultSet.class, true);
+                    UserResultSet userResultSet = gson.fromJson(json.toString(), UserResultSet.class);
 
                     if (userResultSet.getItems().size() == 1) {
                         UserElement user = userResultSet.getItems().get(0);

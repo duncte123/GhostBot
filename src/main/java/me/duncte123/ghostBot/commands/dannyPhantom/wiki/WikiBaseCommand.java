@@ -18,7 +18,7 @@
 
 package me.duncte123.ghostBot.commands.dannyPhantom.wiki;
 
-import com.afollestad.ason.Ason;
+import com.google.gson.Gson;
 import me.duncte123.botCommons.web.WebUtils;
 import me.duncte123.fandomApi.models.FandomException;
 import me.duncte123.fandomApi.models.search.LocalWikiSearchResult;
@@ -30,6 +30,7 @@ import me.duncte123.ghostBot.utils.WikiHolder;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,19 +43,20 @@ import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
  */
 public abstract class WikiBaseCommand extends Command {
 
+    Gson gson = new Gson();
+
     //shortcut to the wiki
     WikiHolder wiki = new WikiHolder("https://dannyphantom.wikia.com");
 
     protected void handleWikiSearch(WikiHolder wiki, String searchQuery, GuildMessageReceivedEvent event) {
-        WebUtils.ins.getAson(String.format(
+        WebUtils.ins.getJSONObject(String.format(
                 "%s?query=%s",
                 wiki.getSearchListEndpoint(),
                 SpoopyUtils.encodeUrl(searchQuery))
-        ).async(
-                ason -> {
-                    if (ason.has("exception")) {
-                        FandomException ex = toEx(ason);
-                        if(ex.getType().equalsIgnoreCase("NotFoundApiException")) {
+        ).async(json -> {
+                    if (json.has("exception")) {
+                        FandomException ex = toEx(json);
+                        if (ex.getType().equalsIgnoreCase("NotFoundApiException")) {
                             sendMsg(event, "Your search returned no results.");
                         } else {
                             sendMsg(event, "An error occurred: " + ex);
@@ -62,7 +64,7 @@ public abstract class WikiBaseCommand extends Command {
                         return;
                     }
 
-                    LocalWikiSearchResultSet wikiSearchResultSet = Ason.deserialize(ason, LocalWikiSearchResultSet.class, true);
+                    LocalWikiSearchResultSet wikiSearchResultSet = gson.fromJson(json.toString(), LocalWikiSearchResultSet.class);
 
                     List<LocalWikiSearchResult> items = wikiSearchResultSet.getItems();
                     if (items.size() > 10) {
@@ -101,13 +103,14 @@ public abstract class WikiBaseCommand extends Command {
         );
     }
 
-    FandomException toEx(Ason ason) {
+    FandomException toEx(JSONObject json) {
+        JSONObject ex = json.getJSONObject("exception");
         return new FandomException(
-                ason.getString("exception.type"),
-                ason.getString("exception.message"),
-                ason.getInt("exception.code"),
-                ason.getString("exception.details"),
-                ason.getString("trace_id")
+                ex.getString("type"),
+                ex.getString("message"),
+                ex.getInt("code"),
+                ex.getString("details"),
+                json.getString("trace_id")
         );
     }
 

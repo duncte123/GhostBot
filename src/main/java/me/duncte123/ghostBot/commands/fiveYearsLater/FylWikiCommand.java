@@ -19,7 +19,6 @@
 package me.duncte123.ghostBot.commands.fiveYearsLater;
 
 import me.duncte123.ghostBot.commands.dannyPhantom.wiki.WikiBaseCommand;
-import me.duncte123.ghostBot.utils.SpoopyUtils;
 import me.duncte123.ghostBot.utils.WikiHolder;
 import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;

@@ -46,12 +46,10 @@ import java.util.regex.Pattern;
 
 public class CommandManager {
 
-    private final Set<Command> commands = ConcurrentHashMap.newKeySet();
-    final ExecutorService commandService = Executors.newCachedThreadPool((r) -> new Thread(r, "Command-Thread"));
-
     private static final Logger logger = LoggerFactory.getLogger(CommandManager.class);
-
+    final ExecutorService commandService = Executors.newCachedThreadPool((r) -> new Thread(r, "Command-Thread"));
     final ReactionListenerRegistry reactListReg = new ReactionListenerRegistry();
+    private final Set<Command> commands = ConcurrentHashMap.newKeySet();
 
     public CommandManager() {
         this.addCommand(new GoingGhostCommand());

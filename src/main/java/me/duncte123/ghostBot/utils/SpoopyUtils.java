@@ -18,6 +18,7 @@
 
 package me.duncte123.ghostBot.utils;
 
+import me.duncte123.botCommons.config.ConfigUtils;
 import me.duncte123.ghostBot.CommandManager;
 import me.duncte123.ghostBot.objects.config.GhostBotConfig;
 import net.dv8tion.jda.core.entities.Guild;
@@ -29,19 +30,21 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 public class SpoopyUtils {
-    public static final AudioUtils audio = AudioUtils.ins;
+
+    //Load the config first
     public static GhostBotConfig config;
 
     static {
         try {
-            config = me.duncte123.botCommons.config.ConfigUtils.loadFromFile("config.json", GhostBotConfig.class);
+            config = ConfigUtils.loadFromFile("config.json", GhostBotConfig.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static final CommandManager commandManager = new CommandManager();
 
+    public static final AudioUtils audio = AudioUtils.ins;
+    public static final CommandManager commandManager = new CommandManager();
     private static final String GOOGLE_URL = "https://www.googleapis.com/customsearch/v1" +
             "?q=%s" +
             "&prettyPrint=false" +

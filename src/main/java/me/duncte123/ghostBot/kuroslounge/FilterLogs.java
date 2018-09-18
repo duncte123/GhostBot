@@ -39,22 +39,22 @@ public class FilterLogs extends ListenerAdapter {
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-        if( event.getChannel().getIdLong() != logsBotspam || event.getAuthor().getIdLong() != loggerBot) return;
+        if (event.getChannel().getIdLong() != logsBotspam || event.getAuthor().getIdLong() != loggerBot) return;
 
         logger.debug(event.getAuthor().toString());
 
         List<MessageEmbed> embeds = event.getMessage().getEmbeds();
         boolean[] shouldDelete = {false};
 
-        embeds.forEach( (embed) -> {
+        embeds.forEach((embed) -> {
             List<Field> fields = embed.getFields();
 
-            fields.forEach( (field) -> {
+            fields.forEach((field) -> {
 
                 Matcher matcher = DISCORD_INVITE_PATTERN.matcher(field.getValue());
 
                 logger.debug(field.getValue());
-                if( matcher.find() ) {
+                if (matcher.find()) {
                     logger.debug("deleting");
                     shouldDelete[0] = true;
                 }
@@ -63,7 +63,7 @@ public class FilterLogs extends ListenerAdapter {
 
         });
 
-        if(shouldDelete[0]) {
+        if (shouldDelete[0]) {
             logger.debug("deleting for real");
             event.getMessage().delete().reason("Log contains discord invite").queue();
         }

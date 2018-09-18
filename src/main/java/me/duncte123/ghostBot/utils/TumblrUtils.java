@@ -65,7 +65,7 @@ public class TumblrUtils {
     public static void fetchSinglePost(String domain, long id, @NotNull Consumer<TumblrPost> cb, Consumer<RequestException> error) {
         String url = String.format(API_URL, domain, "") + "&id=" + id;
         WebUtils.ins.getAson(url).async(json ->
-                cb.accept(Ason.deserialize(json.getJsonArray("response.posts").getJsonObject(0), TumblrPost.class)),
+                        cb.accept(Ason.deserialize(json.getJsonArray("response.posts").getJsonObject(0), TumblrPost.class)),
                 error
         );
     }

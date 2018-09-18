@@ -18,14 +18,12 @@
 
 package fredboat.audio.player;
 
-import com.afollestad.ason.Ason;
 import lavalink.client.io.Lavalink;
 import lavalink.client.io.Link;
 import lavalink.client.io.jda.JdaLavalink;
 import lavalink.client.player.IPlayer;
 import lavalink.client.player.LavaplayerPlayerWrapper;
 import me.duncte123.ghostBot.GhostBot;
-import me.duncte123.ghostBot.audio.LavalinkNode;
 import me.duncte123.ghostBot.objects.config.GhostBotConfig;
 import me.duncte123.ghostBot.utils.AudioUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
@@ -35,10 +33,7 @@ import net.dv8tion.jda.core.entities.VoiceChannel;
 import javax.annotation.Nonnull;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Collections;
-import java.util.List;
 
 
 /**
@@ -65,7 +60,7 @@ public class LavalinkManager {
                     shardId -> GhostBot.getInstance().getFakeShard(shardId)
             );
 
-            for(GhostBotConfig.Lavalink.Node it : SpoopyUtils.config.lavalink.nodes) {
+            for (GhostBotConfig.Lavalink.Node it : SpoopyUtils.config.lavalink.nodes) {
                 try {
                     lavalink.addNode(new URI(it.wsUrl), it.pass);
                 } catch (URISyntaxException e) {

@@ -20,7 +20,6 @@ package me.duncte123.ghostBot;
 
 import fredboat.audio.player.LavalinkManager;
 import me.duncte123.botCommons.web.WebUtils;
-import me.duncte123.botCommons.web.WebUtilsErrorUtils;
 import me.duncte123.ghostBot.audio.GuildMusicManager;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import me.duncte123.ghostBot.variables.Variables;
@@ -35,8 +34,6 @@ import net.dv8tion.jda.core.events.guild.voice.GuildVoiceMoveEvent;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import okhttp3.MediaType;
-import okhttp3.Request;
 import okhttp3.RequestBody;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -50,10 +47,10 @@ import static me.duncte123.botCommons.web.WebUtils.EncodingType.APPLICATION_JSON
 
 public class BotListener extends ListenerAdapter {
 
+    public static final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
     private final Logger logger = LoggerFactory.getLogger(BotListener.class);
     private final String dbotsToken = SpoopyUtils.config.api.dbots;
     private final String dblToken = SpoopyUtils.config.api.dbl;
-    public static final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
 
     @Override
     public void onReady(ReadyEvent event) {
@@ -68,18 +65,14 @@ public class BotListener extends ListenerAdapter {
         if (!content.startsWith(Variables.PREFIX.toLowerCase())
                 && !content.startsWith(Variables.OTHER_PREFIX.toLowerCase())) return;
 
-        if (event.getMessage().getContentRaw().equals(Variables.PREFIX + "shutdown") && event.getAuthor().getIdLong() != Variables.OWNER_ID) {
+        if (event.getMessage().getContentRaw().equals(Variables.PREFIX + "shutdown") && event.getAuthor().getIdLong() == Variables.OWNER_ID) {
             logger.info("Shutting down!!");
             service.shutdownNow();
             SpoopyUtils.commandManager.commandService.shutdown();
-            if(LavalinkManager.ins.getLavalink() != null)
+            if (LavalinkManager.ins.getLavalink() != null)
                 LavalinkManager.ins.getLavalink().shutdown();
             event.getJDA().shutdown();
-            /*event.getMessage().addReaction("✅").queue(
-                    //Shutdown on both success and failure
-                    success -> event.getJDA().shutdownNow(),
-                    failure -> event.getJDA().shutdownNow()
-            );*/
+            System.exit(0);
 
             return;
         }

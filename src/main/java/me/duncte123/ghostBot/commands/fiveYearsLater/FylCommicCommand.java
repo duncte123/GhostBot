@@ -18,9 +18,9 @@
 
 package me.duncte123.ghostBot.commands.fiveYearsLater;
 
-import com.afollestad.ason.Ason;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
+import com.google.gson.Gson;
 import me.duncte123.ghostBot.CommandManager;
 import me.duncte123.ghostBot.commands.ReactionCommand;
 import me.duncte123.ghostBot.objects.fyl.FylChapter;
@@ -44,16 +44,17 @@ import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
 
 public class FylCommicCommand extends ReactionCommand {
 
-    private FylComic comic;
     private static final String PAGE_SELECTOR = "page:";
     private static final String CHAPTER_SELECTOR = "chapter:";
     private static final String FYL_ICON = "https://cdn.discordapp.com/emojis/374708234772283403.png?v=1";
+    private FylComic comic;
 
     public FylCommicCommand(CommandManager.ReactionListenerRegistry registry) {
         super(registry);
         File conf = new File("5yearslater.json");
         try {
-            this.comic = new Ason(Files.asCharSource(conf, Charsets.UTF_8).read()).deserialize(FylComic.class);
+            String file = Files.asCharSource(conf, Charsets.UTF_8).read();
+            this.comic = new Gson().fromJson(file, FylComic.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -81,8 +82,8 @@ public class FylCommicCommand extends ReactionCommand {
 
         List<FylChapter> chapterList = comic.chapters;
 
-        if (chapter > chapterList.size()) {
-            sendMsg(event, "Chapter  " + chapter + " is not known");
+        if (chapter >= chapterList.size()) {
+            sendMsg(event, "Chapter " + (chapter + 1) + " is not known");
             return;
         }
 
@@ -111,20 +112,20 @@ public class FylCommicCommand extends ReactionCommand {
                             }
                             FylChapter chap = chapterRef.get();
                             int nextPage = pageIndex.updateAndGet(current -> index == 1 ? Math.min(current + 1, chap.pages) : Math.max(current - 1, -1));
-                            if((nextPage + 1) > chap.pages) {
-                                nextPage = pageIndex.updateAndGet( c -> 0 );
+                            if ((nextPage + 1) > chap.pages) {
+                                nextPage = pageIndex.updateAndGet(c -> 0);
                                 int i = chapterIndex.incrementAndGet();
-                                chapterRef.updateAndGet( c -> chapterList.get(i));
-                            } else if( nextPage == -1 ) {
+                                chapterRef.updateAndGet(c -> chapterList.get(i));
+                            } else if (nextPage == -1) {
                                 int i = chapterIndex.decrementAndGet();
-                                if(i > -1) {
+                                if (i > -1) {
                                     FylChapter captt = chapterRef.updateAndGet(c -> chapterList.get(i));
                                     nextPage = pageIndex.updateAndGet(c -> captt.pages - 1);
                                 } else {
                                     chapterIndex.updateAndGet(c -> 0);
                                 }
                             }
-                            if(nextPage >= 0 && nextPage <= chap.pages)
+                            if (nextPage >= 0 && nextPage <= chap.pages)
                                 m.editMessage(getEmbed(chapterIndex.get(), nextPage)).queue();
                         }
                 )

@@ -19,8 +19,8 @@
 package me.duncte123.ghostBot.commands.dannyPhantom.text;
 
 import me.duncte123.ghostBot.BotListener;
-import me.duncte123.ghostBot.objects.CommandCategory;
 import me.duncte123.ghostBot.objects.Command;
+import me.duncte123.ghostBot.objects.CommandCategory;
 import me.duncte123.ghostBot.objects.tumblr.TumblrDialogue;
 import me.duncte123.ghostBot.objects.tumblr.TumblrPost;
 import me.duncte123.ghostBot.utils.EmbedUtils;
@@ -43,6 +43,7 @@ import static me.duncte123.botCommons.messaging.MessageUtils.sendMsg;
 
 public class QuotesCommand extends Command {
 
+    private static final String DOMAIN = "totallycorrectdannyphantomquotes.tumblr.com";
     private final String[] types = {"chat", "text", "quote"};
     private final String[] messages = {
             "Starting to reload quotes",
@@ -54,10 +55,6 @@ public class QuotesCommand extends Command {
             "Going Ghost <a:DPTransform8bit:425714608406528012>",
             "Finished <:DPJoy:425714609702305804> ({TOTAL} quotes in the system and {COUNT_NEW) new)"
     };
-
-
-    private static final String DOMAIN = "totallycorrectdannyphantomquotes.tumblr.com";
-
     private final List<TumblrPost> allQuotes = new ArrayList<>();
     private final Map<String, List<TumblrPost>> guildQuotes = new HashMap<>();
     private final List<Long> badPostIds = Arrays.asList(
@@ -96,6 +93,37 @@ public class QuotesCommand extends Command {
 
     public QuotesCommand() {
         reloadQuotes();
+    }
+
+    public static String parseText(String raw) {
+        if (raw == null || raw.isEmpty())
+            return "";
+
+        raw = StringEscapeUtils.unescapeHtml4(raw);
+        String input = raw.replaceAll(Pattern.quote("<br/>"), "\n");
+        String replacePWith = input.contains("</p>\n") ? "" : "\n";
+
+        return input
+                //show the stars and remove the ps
+                .replaceAll("\\*", "\\\\*")
+                .replaceAll(Pattern.quote("<p>"), "")
+                .replaceAll(Pattern.quote("</p>"), replacePWith)
+                .replaceAll(Pattern.quote("<p/>"), replacePWith) //because some posts are fucked
+                //Italics
+                .replaceAll(Pattern.quote("<i>"), "*")
+                .replaceAll(Pattern.quote("</i>"), "*")
+                .replaceAll(Pattern.quote("<em>"), "*")
+                .replaceAll(Pattern.quote("</em>"), "*")
+                //bold
+                .replaceAll(Pattern.quote("<b>"), "**")
+                .replaceAll(Pattern.quote("</b>"), "**")
+                .replaceAll(Pattern.quote("<strong>"), "**")
+                .replaceAll(Pattern.quote("</strong>"), "**")
+                //useless crap that we don't need
+                .replaceAll(Pattern.quote("<small>"), "")
+                .replaceAll(Pattern.quote("</small>"), "")
+                //links
+                .replaceAll("<a(?:.*)href=\"(\\S+)\"(?:.*)>(.*)</a>", "[$2]($1)");
     }
 
     @Override
@@ -240,36 +268,5 @@ public class QuotesCommand extends Command {
                 logger.info("Fetched " + filteredPosts.size() + " quotes from type " + type);
             });
         }
-    }
-
-    public static String parseText(String raw) {
-        if (raw == null || raw.isEmpty())
-            return "";
-
-        raw = StringEscapeUtils.unescapeHtml4(raw);
-        String input = raw.replaceAll(Pattern.quote("<br/>"), "\n");
-        String replacePWith = input.contains("</p>\n") ? "" : "\n";
-
-        return input
-                //show the stars and remove the ps
-                .replaceAll("\\*", "\\\\*")
-                .replaceAll(Pattern.quote("<p>"), "")
-                .replaceAll(Pattern.quote("</p>"), replacePWith)
-                .replaceAll(Pattern.quote("<p/>"), replacePWith) //because some posts are fucked
-                //Italics
-                .replaceAll(Pattern.quote("<i>"), "*")
-                .replaceAll(Pattern.quote("</i>"), "*")
-                .replaceAll(Pattern.quote("<em>"), "*")
-                .replaceAll(Pattern.quote("</em>"), "*")
-                //bold
-                .replaceAll(Pattern.quote("<b>"), "**")
-                .replaceAll(Pattern.quote("</b>"), "**")
-                .replaceAll(Pattern.quote("<strong>"), "**")
-                .replaceAll(Pattern.quote("</strong>"), "**")
-                //useless crap that we don't need
-                .replaceAll(Pattern.quote("<small>"), "")
-                .replaceAll(Pattern.quote("</small>"), "")
-                //links
-                .replaceAll("<a(?:.*)href=\"(\\S+)\"(?:.*)>(.*)</a>", "[$2]($1)");
     }
 }

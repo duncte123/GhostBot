@@ -22,8 +22,8 @@ import com.afollestad.ason.Ason;
 import com.github.natanbc.reliqua.request.RequestException;
 import me.duncte123.botCommons.config.Config;
 import me.duncte123.botCommons.web.WebUtils;
-import me.duncte123.ghostBot.objects.CommandCategory;
 import me.duncte123.ghostBot.objects.Command;
+import me.duncte123.ghostBot.objects.CommandCategory;
 import me.duncte123.ghostBot.objects.googleSearch.GoogleSearchResults;
 import me.duncte123.ghostBot.objects.googleSearch.GoogleSearchResults.SearchItem;
 import me.duncte123.ghostBot.utils.ConfigUtils;
@@ -45,13 +45,12 @@ import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
 
 abstract class ImageBase extends Command {
 
-    private final Map<String, GoogleSearchResults> searchCache = new HashMap<>();
+    private static final Map<String, GoogleSearchResults> searchCache = new HashMap<>();
+    private static final Logger logger = LoggerFactory.getLogger(ImageBase.class);
+    private static final ConfigUtils CU = new ConfigUtils();
+    private static final Config IMAGES = CU.loadImages();
 
-    private final Logger logger = LoggerFactory.getLogger(ImageBase.class);
 
-
-    private final ConfigUtils CU = new ConfigUtils();
-    private final Config IMAGES = CU.loadImages();
 
     void requestSearch(String query, Consumer<GoogleSearchResults> success, Consumer<RequestException> error) {
         if (searchCache.containsKey(query)) {

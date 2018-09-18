@@ -64,8 +64,8 @@ public class MessageUtils {
     /**
      * This method uses the sendError and sendMsg methods
      *
-     * @param message     the {@link Message} for the sendError method
-     * @param text        the {@link String} for the sendMsg method
+     * @param message the {@link Message} for the sendError method
+     * @param text    the {@link String} for the sendMsg method
      */
     public static void sendErrorWithMessage(Message message, String text) {
         sendError(message);
