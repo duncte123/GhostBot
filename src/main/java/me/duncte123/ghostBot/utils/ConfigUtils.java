@@ -18,8 +18,9 @@
 
 package me.duncte123.ghostBot.utils;
 
-import me.duncte123.botCommons.config.Config;
-import me.duncte123.botCommons.config.ConfigLoader;
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +29,7 @@ import java.io.File;
 public class ConfigUtils {
     private static final Logger logger = LoggerFactory.getLogger(ConfigUtils.class);
 
-    private Config images;
+    private JSONObject images;
 
     /**
      * This will try to load the bot config and kill the program if it fails
@@ -36,7 +37,8 @@ public class ConfigUtils {
     public ConfigUtils() {
         try {
             logger.info("Loading images.json");
-            this.images = ConfigLoader.getConfig(new File("images.json"));
+            String file = Files.asCharSource(new File("images.json"), Charsets.UTF_8).read();
+            this.images = new JSONObject(file);
             logger.info("Loaded images.json");
         } catch (Exception e) {
             logger.error("Could not load config, aborting", e);
@@ -44,7 +46,7 @@ public class ConfigUtils {
         }
     }
 
-    public Config loadImages() {
+    public JSONObject loadImages() {
         return images;
     }
 }

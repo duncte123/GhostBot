@@ -18,7 +18,6 @@
 
 package me.duncte123.ghostBot.commands.dannyPhantom.image;
 
-import com.afollestad.ason.Ason;
 import me.duncte123.botCommons.web.WebUtils;
 import me.duncte123.ghostBot.commands.dannyPhantom.text.QuotesCommand;
 import me.duncte123.ghostBot.objects.tumblr.TumblrPost;
@@ -190,8 +189,12 @@ public class DPArtistsCommand extends ImageCommand {
                 username,
                 SpoopyUtils.config.api.tumblr
         );
-        WebUtils.ins.getAson(url).async(ason ->
-                cb.accept(Ason.deserializeList(ason.getJsonArray("response.posts"), TumblrPost.class).get(0)));
+        WebUtils.ins.getJSONObject(url).async(jsonObject ->
+                cb.accept(
+                        gson.fromJson(jsonObject.getJSONObject("response")
+                                .getJSONArray("posts").getJSONObject(0).toString(), TumblrPost.class)
+                        )
+        );
 
     }
 

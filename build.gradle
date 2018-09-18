@@ -42,7 +42,7 @@ repositories {
 
 dependencies {
     //My little utils
-    compile 'com.github.duncte123:botCommons:4df5e29'
+    compile 'com.github.duncte123:botCommons:85c8544'
     //JDA
     compile(group: 'net.dv8tion', name: 'JDA', version: '3.8.0_424') {
         exclude module: 'opus-java'

@@ -18,9 +18,8 @@
 
 package me.duncte123.ghostBot.commands.dannyPhantom.image;
 
-import com.afollestad.ason.Ason;
 import com.github.natanbc.reliqua.request.RequestException;
-import me.duncte123.botCommons.config.Config;
+import com.google.gson.Gson;
 import me.duncte123.botCommons.web.WebUtils;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.objects.CommandCategory;
@@ -31,6 +30,8 @@ import me.duncte123.ghostBot.utils.EmbedUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +49,8 @@ abstract class ImageBase extends Command {
     private static final Map<String, GoogleSearchResults> searchCache = new HashMap<>();
     private static final Logger logger = LoggerFactory.getLogger(ImageBase.class);
     private static final ConfigUtils CU = new ConfigUtils();
-    private static final Config IMAGES = CU.loadImages();
+    private static final JSONObject IMAGES = CU.loadImages();
+    final Gson gson = new Gson();
 
 
 
@@ -57,9 +59,9 @@ abstract class ImageBase extends Command {
             success.accept(searchCache.get(query));
         } else {
             logger.info("MAKING IMAGE REQUEST: " + query);
-            WebUtils.ins.getAson(SpoopyUtils.getGoogleSearchUrl(query)).async(
-                    ason -> {
-                        GoogleSearchResults data = Ason.deserialize(ason, GoogleSearchResults.class, true);
+            WebUtils.ins.getJSONObject(SpoopyUtils.getGoogleSearchUrl(query)).async(
+                    jsonObject -> {
+                        GoogleSearchResults data = gson.fromJson(jsonObject.toString(), GoogleSearchResults.class);
                         success.accept(data);
                         searchCache.put(query, data);
                     }, error);
@@ -68,9 +70,9 @@ abstract class ImageBase extends Command {
 
     ImageData requestImage(String query) {
         logger.debug("Getting image for '" + query + "'");
-        List<Ason> items = IMAGES.getArray(query);
-        Ason item = items.get(ThreadLocalRandom.current().nextInt(items.size()));
-        return Ason.deserialize(item, ImageData.class);
+        JSONArray items = IMAGES.getJSONArray(query);
+        JSONObject item = items.getJSONObject(ThreadLocalRandom.current().nextInt(items.length()));
+        return gson.fromJson(item.toString(), ImageData.class);
     }
 
     void sendMessageFromName(GuildMessageReceivedEvent event, @NotNull ImageData i) {
