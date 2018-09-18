@@ -18,7 +18,6 @@
 
 package me.duncte123.ghostBot.variables;
 
-import me.duncte123.ghostBot.BuildConfig;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 
 public class Variables {
@@ -26,5 +25,5 @@ public class Variables {
     public static final String PREFIX = SpoopyUtils.config.discord.prefix;
     public static final String OTHER_PREFIX = "gb!";
     public static final long OWNER_ID = 191231307290771456L;
-    public static final String VERSION = BuildConfig.VERSION;
+    public static final String VERSION = "@ghostBotVersion@";
 }

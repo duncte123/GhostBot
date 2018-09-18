@@ -16,16 +16,17 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import org.apache.tools.ant.filters.ReplaceTokens
+
 plugins {
     id 'java'
     id 'application'
     id 'idea'
     id 'com.github.johnrengelman.shadow' version '2.0.4'
-    id 'de.fuerstenau.buildconfig' version '1.1.8'
 }
 
 group 'me.duncte123.ghostBot'
-version "1.12.0_${getGitHash()}"
+version "1.12.1_${getGitHash()}"
 mainClassName = "${group}.GhostBot"
 
 sourceCompatibility = JavaVersion.VERSION_1_10
@@ -43,7 +44,7 @@ dependencies {
     //My little utils
     compile 'com.github.duncte123:botCommons:4df5e29'
     //JDA
-    compile (group: 'net.dv8tion', name: 'JDA', version: '3.8.0_424') {
+    compile(group: 'net.dv8tion', name: 'JDA', version: '3.8.0_424') {
         exclude module: 'opus-java'
     }
     //LavaPlayer/Lavalink
@@ -54,7 +55,34 @@ dependencies {
     runtime group: 'org.codehaus.groovy', name: 'groovy-jsr223', version: '3.0.0-alpha-3'
 }
 
-compileJava.options.encoding = 'UTF-8'
+task sourcesForRelease(type: Copy) {
+    from('src/main/java') {
+        include '**/Variables.java'
+        filter(ReplaceTokens, tokens: [
+                ghostBotVersion: project.version.toString()
+        ])
+    }
+    into 'build/filteredSrc'
+
+    includeEmptyDirs = false
+}
+
+task generateJavaSources(type: SourceTask) {
+    def javaSources = sourceSets.main.allJava.filter {
+        it.name != 'Variables.java'
+    }
+    source = javaSources + sourcesForRelease.destinationDir
+
+    dependsOn sourcesForRelease
+}
+
+compileJava {
+    source = generateJavaSources.source
+
+    options.encoding = 'UTF-8'
+
+    dependsOn generateJavaSources
+}
 
 def getGitHash() {
     def stdout = new ByteArrayOutputStream()
@@ -65,18 +93,11 @@ def getGitHash() {
     return stdout.toString().trim()
 }
 
-buildConfig {
-    appName = project.name
-    version = project.version
-    packageName = project.group
-    charset = 'UTF-8'
-
-    clsName = 'BuildConfig'
-}
 shadowJar {
     version = null
     classifier = null
 }
+
 build {
     dependsOn clean
     dependsOn jar
