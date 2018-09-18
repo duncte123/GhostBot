@@ -18,7 +18,7 @@
 
 package me.duncte123.ghostBot.commands.dannyPhantom.audio;
 
-import me.duncte123.ghostBot.objects.Category;
+import me.duncte123.ghostBot.objects.CommandCategory;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
@@ -46,7 +46,7 @@ public class BoxGhostCommand extends Command {
     }
 
     @Override
-    public Category getCategory() {
-        return Category.AUDIO;
+    public CommandCategory getCategory() {
+        return CommandCategory.AUDIO;
     }
 }

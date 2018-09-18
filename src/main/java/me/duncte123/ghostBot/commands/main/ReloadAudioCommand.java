@@ -18,7 +18,7 @@
 
 package me.duncte123.ghostBot.commands.main;
 
-import me.duncte123.ghostBot.objects.Category;
+import me.duncte123.ghostBot.objects.CommandCategory;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import me.duncte123.ghostBot.variables.Variables;
@@ -65,7 +65,7 @@ public class ReloadAudioCommand extends Command {
     }
 
     @Override
-    public Category getCategory() {
-        return Category.HIDDEN;
+    public CommandCategory getCategory() {
+        return CommandCategory.HIDDEN;
     }
 }

@@ -18,7 +18,7 @@
 
 package me.duncte123.ghostBot.commands.dannyPhantom.wiki;
 
-import me.duncte123.ghostBot.objects.Category;
+import me.duncte123.ghostBot.objects.CommandCategory;
 import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
@@ -43,8 +43,8 @@ public class WikiCommand extends WikiBaseCommand {
     }
 
     @Override
-    public Category getCategory() {
-        return Category.WIKI;
+    public CommandCategory getCategory() {
+        return CommandCategory.WIKI;
     }
 
     @Override

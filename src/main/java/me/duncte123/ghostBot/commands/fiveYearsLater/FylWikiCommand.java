@@ -20,6 +20,7 @@ package me.duncte123.ghostBot.commands.fiveYearsLater;
 
 import me.duncte123.ghostBot.commands.dannyPhantom.wiki.WikiBaseCommand;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
+import me.duncte123.ghostBot.utils.WikiHolder;
 import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
@@ -27,6 +28,9 @@ import org.apache.commons.lang3.StringUtils;
 import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
 
 public class FylWikiCommand extends WikiBaseCommand {
+
+    private final WikiHolder FYL_WIKI_HOLDER = new WikiHolder("https://5yl.wikia.com");
+
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
         if (args.length == 0) {
@@ -34,7 +38,7 @@ public class FylWikiCommand extends WikiBaseCommand {
             return;
         }
 
-        handleWikiSearch(SpoopyUtils.FYL_WIKI_HOLDER, StringUtils.join(args, " "), event);
+        handleWikiSearch(FYL_WIKI_HOLDER, StringUtils.join(args, " "), event);
     }
 
     @Override

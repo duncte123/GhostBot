@@ -21,7 +21,7 @@ package me.duncte123.ghostBot.commands.dannyPhantom.image;
 import me.duncte123.ghostBot.CommandManager;
 import me.duncte123.ghostBot.commands.ReactionCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.text.QuotesCommand;
-import me.duncte123.ghostBot.objects.Category;
+import me.duncte123.ghostBot.objects.CommandCategory;
 import me.duncte123.ghostBot.objects.tumblr.TumblrPost;
 import me.duncte123.ghostBot.utils.EmbedUtils;
 import me.duncte123.ghostBot.utils.MessageUtils;
@@ -187,7 +187,7 @@ public class DoppelgangerComicCommand extends ReactionCommand {
 
 
     @Override
-    public Category getCategory() {
-        return Category.IMAGE;
+    public CommandCategory getCategory() {
+        return CommandCategory.IMAGE;
     }
 }

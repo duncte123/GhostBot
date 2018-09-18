@@ -18,7 +18,7 @@
 
 package me.duncte123.ghostBot.commands.dannyPhantom.image;
 
-import me.duncte123.ghostBot.objects.Category;
+import me.duncte123.ghostBot.objects.CommandCategory;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
@@ -45,7 +45,7 @@ public class GifCommand extends ImageBase {
     }
 
     @Override
-    public Category getCategory() {
-        return Category.IMAGE;
+    public CommandCategory getCategory() {
+        return CommandCategory.IMAGE;
     }
 }

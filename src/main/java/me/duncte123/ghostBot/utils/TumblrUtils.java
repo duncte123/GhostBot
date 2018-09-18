@@ -20,6 +20,7 @@ package me.duncte123.ghostBot.utils;
 
 import com.afollestad.ason.Ason;
 import com.afollestad.ason.AsonArray;
+import com.github.natanbc.reliqua.request.RequestException;
 import me.duncte123.botCommons.web.WebUtils;
 import me.duncte123.ghostBot.objects.tumblr.TumblrPost;
 import org.jetbrains.annotations.NotNull;
@@ -58,9 +59,14 @@ public class TumblrUtils {
     }
 
     public static void fetchSinglePost(String domain, long id, @NotNull Consumer<TumblrPost> cb) {
+        fetchSinglePost(domain, id, cb, null);
+    }
+
+    public static void fetchSinglePost(String domain, long id, @NotNull Consumer<TumblrPost> cb, Consumer<RequestException> error) {
         String url = String.format(API_URL, domain, "") + "&id=" + id;
         WebUtils.ins.getAson(url).async(json ->
-                cb.accept(Ason.deserialize(json.getJsonArray("response.posts").getJsonObject(0), TumblrPost.class))
+                cb.accept(Ason.deserialize(json.getJsonArray("response.posts").getJsonObject(0), TumblrPost.class)),
+                error
         );
     }
 

@@ -20,11 +20,13 @@ package me.duncte123.ghostBot.commands.dannyPhantom.image;
 
 import com.afollestad.ason.Ason;
 import com.github.natanbc.reliqua.request.RequestException;
+import me.duncte123.botCommons.config.Config;
 import me.duncte123.botCommons.web.WebUtils;
-import me.duncte123.ghostBot.objects.Category;
+import me.duncte123.ghostBot.objects.CommandCategory;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.objects.googleSearch.GoogleSearchResults;
 import me.duncte123.ghostBot.objects.googleSearch.GoogleSearchResults.SearchItem;
+import me.duncte123.ghostBot.utils.ConfigUtils;
 import me.duncte123.ghostBot.utils.EmbedUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
@@ -35,6 +37,7 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 
 import static me.duncte123.ghostBot.utils.MessageUtils.sendEmbed;
@@ -42,14 +45,13 @@ import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
 
 abstract class ImageBase extends Command {
 
-    /**
-     * This holds the search queries that we have performed so we won't go over quota
-     * <p>
-     * The key is the query and the values is the response
-     */
-    static final Map<String, GoogleSearchResults> searchCache = new HashMap<>();
+    private final Map<String, GoogleSearchResults> searchCache = new HashMap<>();
 
-    static final Logger logger = LoggerFactory.getLogger(ImageBase.class);
+    private final Logger logger = LoggerFactory.getLogger(ImageBase.class);
+
+
+    private final ConfigUtils CU = new ConfigUtils();
+    private final Config IMAGES = CU.loadImages();
 
     void requestSearch(String query, Consumer<GoogleSearchResults> success, Consumer<RequestException> error) {
         if (searchCache.containsKey(query)) {
@@ -65,12 +67,10 @@ abstract class ImageBase extends Command {
         }
     }
 
-    static boolean isReloading = false;
-
     ImageData requestImage(String query) {
         logger.debug("Getting image for '" + query + "'");
-        List<Ason> items = SpoopyUtils.IMAGES.getArray(query);
-        Ason item = items.get(SpoopyUtils.random.nextInt(items.size()));
+        List<Ason> items = IMAGES.getArray(query);
+        Ason item = items.get(ThreadLocalRandom.current().nextInt(items.size()));
         return Ason.deserialize(item, ImageData.class);
     }
 
@@ -94,7 +94,7 @@ abstract class ImageBase extends Command {
             sendMsg(event, "Nothing was found for the search query: `" + key + "`");
             return;
         }
-        SearchItem randomItem = arr.get(SpoopyUtils.random.nextInt(arr.size()));
+        SearchItem randomItem = arr.get(ThreadLocalRandom.current().nextInt(arr.size()));
 
         assert randomItem != null;
         sendEmbed(event, EmbedUtils.defaultEmbed()
@@ -102,13 +102,9 @@ abstract class ImageBase extends Command {
                 .setImage(randomItem.getLink()).build());
     }
 
-    /*private String replaceSpaces(String in) {
-        return in.replaceAll(" ", "%20");
-    }*/
-
     @Override
-    public Category getCategory() {
-        return Category.IMAGE;
+    public CommandCategory getCategory() {
+        return CommandCategory.IMAGE;
     }
 
     static class ImageData {

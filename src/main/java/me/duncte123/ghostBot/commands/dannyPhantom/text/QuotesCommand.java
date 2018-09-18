@@ -19,7 +19,7 @@
 package me.duncte123.ghostBot.commands.dannyPhantom.text;
 
 import me.duncte123.ghostBot.BotListener;
-import me.duncte123.ghostBot.objects.Category;
+import me.duncte123.ghostBot.objects.CommandCategory;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.objects.tumblr.TumblrDialogue;
 import me.duncte123.ghostBot.objects.tumblr.TumblrPost;
@@ -34,9 +34,12 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import static me.duncte123.botCommons.messaging.MessageUtils.sendMsg;
 
 public class QuotesCommand extends Command {
 
@@ -100,13 +103,13 @@ public class QuotesCommand extends Command {
 
         if (args.length > 0) {
             String joined = StringUtils.join(args);
-            if(joined.startsWith("id:")) {
+            if (joined.startsWith("id:")) {
 
                 String id = joined.substring("id:".length());
 
-                if(!id.isEmpty()) {
+                if (!id.isEmpty()) {
                     long idLong = Long.parseLong(id);
-                    getPostFromId(idLong, (post) -> sendQuote(event, post));
+                    getPostFromId(idLong, (post) -> sendQuote(event, post), (error) -> sendMsg(event, error));
                 }
 
                 return;
@@ -116,24 +119,24 @@ public class QuotesCommand extends Command {
                 if (event.getAuthor().getIdLong() != Variables.OWNER_ID) {
                     reloadQuotes();
                     MessageUtils.sendMsg(event, messages[0], success ->
-                           BotListener.service.execute(() -> {
-                               for (String m : Arrays.copyOfRange(messages, 1, messages.length)) {
-                                   try {
-                                       Thread.sleep(3500);
-                                   } catch (InterruptedException ignored) {
-                                   }
-                                   String mf = m;
-                                   if (m.contains("{COUNT_NEW)")) {
-                                       mf = mf.replaceAll(Pattern.quote("{COUNT_NEW)"), String.valueOf(allQuotes.size() - oldCount));
-                                   }
-                                   if (m.contains("{TOTAL}")) {
-                                       mf = mf.replaceAll(Pattern.quote("{TOTAL}"), String.valueOf(allQuotes.size()));
-                                   }
-                                   logger.debug(mf);
-                                   success.editMessage(mf).queue();
-                               }
-                               Thread.currentThread().interrupt();
-                           })
+                            BotListener.service.execute(() -> {
+                                for (String m : Arrays.copyOfRange(messages, 1, messages.length)) {
+                                    try {
+                                        Thread.sleep(3500);
+                                    } catch (InterruptedException ignored) {
+                                    }
+                                    String mf = m;
+                                    if (m.contains("{COUNT_NEW)")) {
+                                        mf = mf.replaceAll(Pattern.quote("{COUNT_NEW)"), String.valueOf(allQuotes.size() - oldCount));
+                                    }
+                                    if (m.contains("{TOTAL}")) {
+                                        mf = mf.replaceAll(Pattern.quote("{TOTAL}"), String.valueOf(allQuotes.size()));
+                                    }
+                                    logger.debug(mf);
+                                    success.editMessage(mf).queue();
+                                }
+                                Thread.currentThread().interrupt();
+                            })
                     );
                     return;
                 } else {
@@ -154,7 +157,7 @@ public class QuotesCommand extends Command {
         /*int index = guildQuotes.get(gid);
         TumblrPost post = allQuotes.get(index);*/
         List<TumblrPost> posts = guildQuotes.get(gid);
-        TumblrPost post = posts.get(SpoopyUtils.random.nextInt(posts.size()));
+        TumblrPost post = posts.get(ThreadLocalRandom.current().nextInt(posts.size()));
         posts.remove(post);
 
         sendQuote(event, post);
@@ -188,17 +191,17 @@ public class QuotesCommand extends Command {
         MessageUtils.sendEmbed(event, eb.build());
     }
 
-    private void getPostFromId(long id, Consumer<TumblrPost> cb) {
+    private void getPostFromId(long id, Consumer<TumblrPost> cb, Consumer<String> fail) {
 
-        var opt = allQuotes.stream().filter( (post) -> post.id == id ).findFirst();
+        var opt = allQuotes.stream().filter((post) -> post.id == id).findFirst();
 
-        if(opt.isPresent()) {
+        if (opt.isPresent()) {
             cb.accept(opt.get());
         } else {
             TumblrUtils.fetchSinglePost(DOMAIN, id, (post) -> {
                 allQuotes.add(post);
                 cb.accept(post);
-            });
+            }, (error) -> fail.accept("Something went wrong: " + error.getMessage()));
         }
     }
 
@@ -218,8 +221,8 @@ public class QuotesCommand extends Command {
     }
 
     @Override
-    public Category getCategory() {
-        return Category.TEXT;
+    public CommandCategory getCategory() {
+        return CommandCategory.TEXT;
     }
 
     private void reloadQuotes() {

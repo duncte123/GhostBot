@@ -22,7 +22,7 @@ import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.utils.MessageUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
-import static me.duncte123.ghostBot.utils.SpoopyUtils.random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class PetitionCommand extends Command {
 
@@ -34,17 +34,17 @@ public class PetitionCommand extends Command {
             "SIGN THE PETITION %1$s %2$s",
             "%2$s! %1$s",
             "https://ghostbot.duncte123.me/img/GoGhostAgainBanner.png%n" +
-            "Click the link to sign the petition <%1$s>",
+                    "Click the link to sign the petition <%1$s>",
             //Lol a haiku by Lady Phantom
             "Let's go ghost again!%n" +
-            "Common; sign the petition!%n" +
-            "Team Phantom needs you!%n%1$s"
+                    "Come on; sign the petition!%n" +
+                    "Team Phantom needs you!%n%1$s"
     };
 
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
         MessageUtils.sendMsg(event,
-                String.format(messages[random.nextInt(messages.length)], "http://bit.ly/dp-petition", "#GoGhostAgain")
+                String.format(messages[ThreadLocalRandom.current().nextInt(messages.length)], "http://bit.ly/dp-petition", "#GoGhostAgain")
         );
     }
 

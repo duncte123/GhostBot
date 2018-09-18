@@ -18,7 +18,7 @@
 
 package me.duncte123.ghostBot.commands.main;
 
-import me.duncte123.ghostBot.objects.Category;
+import me.duncte123.ghostBot.objects.CommandCategory;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.utils.EmbedUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
@@ -64,12 +64,12 @@ public class HelpCommand extends Command {
             return;
         }
 
-        List<String> audioCommands =     getCommandsForCategory(Category.AUDIO);
-        List<String> imageCommands =     getCommandsForCategory(Category.IMAGE);
-        List<String> wikiCommands =      getCommandsForCategory(Category.WIKI);
-        List<String> textCommands =      getCommandsForCategory(Category.TEXT);
-        List<String> otherCommands =     getCommandsForCategory(Category.NONE);
-        List<String> characterCommands = getCommandsForCategory(Category.CHARACTERS);
+        List<String> audioCommands =     getCommandsForCategory(CommandCategory.AUDIO);
+        List<String> imageCommands =     getCommandsForCategory(CommandCategory.IMAGE);
+        List<String> wikiCommands =      getCommandsForCategory(CommandCategory.WIKI);
+        List<String> textCommands =      getCommandsForCategory(CommandCategory.TEXT);
+        List<String> otherCommands =     getCommandsForCategory(CommandCategory.NONE);
+        List<String> characterCommands = getCommandsForCategory(CommandCategory.CHARACTERS);
 
         MessageEmbed helpEmbed = EmbedUtils.defaultEmbed()
                 .setDescription("Use `" + Variables.PREFIX + "help [command]` for more info about a command")
@@ -108,12 +108,12 @@ public class HelpCommand extends Command {
         return "`" + Variables.PREFIX + StringUtils.join(commands, "`, `" + Variables.PREFIX) + "`";
     }
 
-    private List<String> getCommandsForCategory(Category category) {
+    private List<String> getCommandsForCategory(CommandCategory commandCategory) {
 
         List<String> temp = SpoopyUtils.commandManager.getCommands()
-                .stream().filter(c -> c.getCategory().equals(category)).map(Command::getName).collect(Collectors.toList());
+                .stream().filter(c -> c.getCategory().equals(commandCategory)).map(Command::getName).collect(Collectors.toList());
         SpoopyUtils.commandManager.getCommands()
-                .stream().filter(c -> c.getCategory().equals(category))
+                .stream().filter(c -> c.getCategory().equals(commandCategory))
                 .map(cmd -> Arrays.asList(cmd.getAliases())).forEach(temp::addAll);
 
         return temp;

@@ -18,21 +18,14 @@
 
 package me.duncte123.ghostBot.commands.dannyPhantom.image;
 
-import me.duncte123.ghostBot.objects.Category;
-import me.duncte123.ghostBot.utils.MessageUtils;
-import me.duncte123.ghostBot.utils.SpoopyUtils;
+import me.duncte123.ghostBot.objects.CommandCategory;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
-import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class OtherGhostCommands extends ImageBase {
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
-
-        if(isReloading) {
-            sendMsg(event, "I'm looking for new images on the internet, please be patient.");
-            return;
-        }
 
         switch (invoke) {
             case "cujo":
@@ -100,11 +93,11 @@ public class OtherGhostCommands extends ImageBase {
     }
 
     private void sendFromKeywords(GuildMessageReceivedEvent event, String... words) {
-        sendMessageFromName(event, requestImage(words[SpoopyUtils.random.nextInt(words.length)]));
+        sendMessageFromName(event, requestImage(words[ThreadLocalRandom.current().nextInt(words.length)]));
     }
 
     @Override
-    public Category getCategory() {
-        return Category.CHARACTERS;
+    public CommandCategory getCategory() {
+        return CommandCategory.CHARACTERS;
     }
 }

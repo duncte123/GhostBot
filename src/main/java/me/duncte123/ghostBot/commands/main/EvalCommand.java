@@ -18,7 +18,7 @@
 
 package me.duncte123.ghostBot.commands.main;
 
-import me.duncte123.ghostBot.objects.Category;
+import me.duncte123.ghostBot.objects.CommandCategory;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
@@ -101,7 +101,7 @@ public class EvalCommand extends Command {
     }
 
     @Override
-    public Category getCategory() {
-        return Category.HIDDEN;
+    public CommandCategory getCategory() {
+        return CommandCategory.HIDDEN;
     }
 }

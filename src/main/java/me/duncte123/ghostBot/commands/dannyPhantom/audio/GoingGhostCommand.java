@@ -18,10 +18,12 @@
 
 package me.duncte123.ghostBot.commands.dannyPhantom.audio;
 
-import me.duncte123.ghostBot.objects.Category;
+import me.duncte123.ghostBot.objects.CommandCategory;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
+
+import java.util.concurrent.ThreadLocalRandom;
 
 import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
 
@@ -36,7 +38,7 @@ public class GoingGhostCommand extends Command {
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
         if (preAudioChecks(event)) {
             String selectedTrack = getRandomTrack();
-            int p = SpoopyUtils.random.nextInt(100);
+            int p = ThreadLocalRandom.current().nextInt(100);
             if (p >= 50 && p <= 55) {
                 selectedTrack = "extra/its going ghost.mp3";
             }
@@ -52,8 +54,8 @@ public class GoingGhostCommand extends Command {
     }
 
     @Override
-    public Category getCategory() {
-        return Category.AUDIO;
+    public CommandCategory getCategory() {
+        return CommandCategory.AUDIO;
     }
 
     @Override

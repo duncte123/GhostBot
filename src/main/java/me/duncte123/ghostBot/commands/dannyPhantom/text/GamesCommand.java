@@ -18,11 +18,12 @@
 
 package me.duncte123.ghostBot.commands.dannyPhantom.text;
 
-import me.duncte123.ghostBot.objects.Category;
+import me.duncte123.ghostBot.objects.CommandCategory;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.utils.MessageUtils;
-import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
+
+import java.util.concurrent.ThreadLocalRandom;
 
 public class GamesCommand extends Command {
 
@@ -45,7 +46,7 @@ public class GamesCommand extends Command {
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
 
-        String game = games[SpoopyUtils.random.nextInt(games.length)];
+        String game = games[ThreadLocalRandom.current().nextInt(games.length)];
         MessageUtils.sendMsg(event, game);
     }
 
@@ -60,7 +61,7 @@ public class GamesCommand extends Command {
     }
 
     @Override
-    public Category getCategory() {
-        return Category.TEXT;
+    public CommandCategory getCategory() {
+        return CommandCategory.TEXT;
     }
 }

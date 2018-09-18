@@ -19,7 +19,7 @@
 package me.duncte123.ghostBot.commands.dannyPhantom.text;
 
 import me.duncte123.botCommons.web.WebUtils;
-import me.duncte123.ghostBot.objects.Category;
+import me.duncte123.ghostBot.objects.CommandCategory;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.utils.MessageUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
@@ -29,6 +29,7 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class RandomGhostCommand extends Command {
 
@@ -71,7 +72,7 @@ public class RandomGhostCommand extends Command {
 
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
-        String ghost = ghosts.get(SpoopyUtils.random.nextInt(ghosts.size()));
+        String ghost = ghosts.get(ThreadLocalRandom.current().nextInt(ghosts.size()));
         MessageUtils.sendMsg(event, ghost);
     }
 
@@ -81,8 +82,8 @@ public class RandomGhostCommand extends Command {
     }
 
     @Override
-    public Category getCategory() {
-        return Category.TEXT;
+    public CommandCategory getCategory() {
+        return CommandCategory.TEXT;
     }
 
     @Override

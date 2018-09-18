@@ -43,7 +43,7 @@ import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
 public abstract class WikiBaseCommand extends Command {
 
     //shortcut to the wiki
-    WikiHolder wiki = SpoopyUtils.WIKI_HOLDER;
+    WikiHolder wiki = new WikiHolder("https://dannyphantom.wikia.com");
 
     protected void handleWikiSearch(WikiHolder wiki, String searchQuery, GuildMessageReceivedEvent event) {
         WebUtils.ins.getAson(String.format(

@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static me.duncte123.ghostBot.utils.MessageUtils.sendEmbed;
 import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
@@ -41,6 +42,7 @@ public abstract class Command {
     protected final Logger logger;
     protected String audioPath = "";
     private String[] audioFiles = {};
+
     public Command() {
         logger = LoggerFactory.getLogger(getClass());
     }
@@ -49,8 +51,8 @@ public abstract class Command {
 
     public abstract String getName();
 
-    public Category getCategory() {
-        return Category.NONE;
+    public CommandCategory getCategory() {
+        return CommandCategory.NONE;
     }
 
     public String[] getAliases() {
@@ -60,7 +62,7 @@ public abstract class Command {
     public abstract String getHelp();
 
     public void reloadAudioFiles() {
-        if (!getCategory().equals(Category.AUDIO)) return;
+        if (!getCategory().equals(CommandCategory.AUDIO)) return;
 
         logger.info("Path: " + audioPath);
         File folder = new File(audioPath);
@@ -80,12 +82,12 @@ public abstract class Command {
     }
 
     protected String getRandomTrack() {
-        if (!getCategory().equals(Category.AUDIO)) return null;
-        return audioFiles[SpoopyUtils.random.nextInt(audioFiles.length)];
+        if (!getCategory().equals(CommandCategory.AUDIO)) return null;
+        return audioFiles[ThreadLocalRandom.current().nextInt(audioFiles.length)];
     }
 
     protected void doAudioStuff(GuildMessageReceivedEvent event) {
-        if (!getCategory().equals(Category.AUDIO)) return;
+        if (!getCategory().equals(CommandCategory.AUDIO)) return;
 
         if (preAudioChecks(event)) {
             String selectedTrack = getRandomTrack();

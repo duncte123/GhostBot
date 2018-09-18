@@ -22,7 +22,7 @@ import com.afollestad.ason.Ason;
 import me.duncte123.botCommons.web.WebUtils;
 import me.duncte123.fandomApi.models.user.UserElement;
 import me.duncte123.fandomApi.models.user.UserResultSet;
-import me.duncte123.ghostBot.objects.Category;
+import me.duncte123.ghostBot.objects.CommandCategory;
 import me.duncte123.ghostBot.utils.EmbedUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import me.duncte123.ghostBot.variables.Variables;
@@ -96,8 +96,8 @@ public class WikiUserCommand extends WikiBaseCommand {
     }
 
     @Override
-    public Category getCategory() {
-        return Category.WIKI;
+    public CommandCategory getCategory() {
+        return CommandCategory.WIKI;
     }
 
     @Override

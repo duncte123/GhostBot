@@ -18,7 +18,7 @@
 
 package me.duncte123.ghostBot.objects;
 
-public enum Category {
+public enum CommandCategory {
     AUDIO,
     IMAGE,
     WIKI,
