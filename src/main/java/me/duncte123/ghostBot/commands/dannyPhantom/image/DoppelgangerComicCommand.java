@@ -61,6 +61,7 @@ public class DoppelgangerComicCommand extends ReactionCommand {
     };
     private final long comicCover = 167255413598L;
     private final List<Long> filters = Collections.singletonList(comicCover);
+
     public DoppelgangerComicCommand(CommandManager.ReactionListenerRegistry registry) {
         super(registry);
         loadPages();

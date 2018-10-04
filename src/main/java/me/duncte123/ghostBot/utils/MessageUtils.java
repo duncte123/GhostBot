@@ -49,7 +49,8 @@ public class MessageUtils {
     /**
      * This will react with a ❌ if the user doesn't have permission to run the command
      *
-     * @param message the message to add the reaction to
+     * @param message
+     *         the message to add the reaction to
      */
     public static void sendError(Message message) {
         if (message.getChannelType() == ChannelType.TEXT) {
@@ -64,8 +65,10 @@ public class MessageUtils {
     /**
      * This method uses the sendError and sendMsg methods
      *
-     * @param message the {@link Message} for the sendError method
-     * @param text    the {@link String} for the sendMsg method
+     * @param message
+     *         the {@link Message} for the sendError method
+     * @param text
+     *         the {@link String} for the sendMsg method
      */
     public static void sendErrorWithMessage(Message message, String text) {
         sendError(message);
@@ -75,7 +78,8 @@ public class MessageUtils {
     /**
      * This will react with a ✅ if the user doesn't have permission to run the command
      *
-     * @param message the message to add the reaction to
+     * @param message
+     *         the message to add the reaction to
      */
     public static void sendSuccess(Message message) {
         if (message.getChannelType() == ChannelType.TEXT) {
@@ -90,9 +94,12 @@ public class MessageUtils {
     /**
      * This method uses the sendSuccess and sendMsg methods
      *
-     * @param message the {@link Message} for the sendSuccess method
-     * @param channel the {@link TextChannel} for the sendMsg method
-     * @param text    the {@link String} for the sendMsg method
+     * @param message
+     *         the {@link Message} for the sendSuccess method
+     * @param channel
+     *         the {@link TextChannel} for the sendMsg method
+     * @param text
+     *         the {@link String} for the sendMsg method
      */
     public static void sendSuccessWithMessage(Message message, TextChannel channel, String text) {
         sendSuccess(message);
@@ -102,9 +109,12 @@ public class MessageUtils {
     /**
      * This method uses the sendSuccess and sendMsg methods
      *
-     * @param message the {@link Message} for the sendSuccess method
-     * @param event   the {@link GuildMessageReceivedEvent} for the sendMsg method
-     * @param text    the {@link String} for the sendMsg method
+     * @param message
+     *         the {@link Message} for the sendSuccess method
+     * @param event
+     *         the {@link GuildMessageReceivedEvent} for the sendMsg method
+     * @param text
+     *         the {@link String} for the sendMsg method
      */
     public static void sendSuccessWithMessage(Message message, GuildMessageReceivedEvent event, String text) {
         sendSuccess(message);
@@ -114,8 +124,10 @@ public class MessageUtils {
     /**
      * This will check if we can send a embed and convert it to a message if we can't send embeds
      *
-     * @param event a instance of {@link GuildMessageReceivedEvent GuildMessageReceivedEvent}
-     * @param embed The embed to send
+     * @param event
+     *         a instance of {@link GuildMessageReceivedEvent GuildMessageReceivedEvent}
+     * @param embed
+     *         The embed to send
      */
     public static void sendEmbed(GuildMessageReceivedEvent event, MessageEmbed embed) {
         sendEmbed(event.getChannel(), embed);
@@ -132,8 +144,10 @@ public class MessageUtils {
     /**
      * This will check if we can send a embed and convert it to a message if we can't send embeds
      *
-     * @param channel the {@link TextChannel TextChannel} that we want to send the embed to
-     * @param embed   The embed to send
+     * @param channel
+     *         the {@link TextChannel TextChannel} that we want to send the embed to
+     * @param embed
+     *         The embed to send
      */
     @SuppressWarnings("deprecation")
     public static void sendEmbed(TextChannel channel, MessageEmbed embed, Consumer<Message> success) {
@@ -149,10 +163,14 @@ public class MessageUtils {
     /**
      * This is a shortcut for sending formatted messages to a channel which also deletes it after delay unit
      *
-     * @param event an instance of {@link GuildMessageReceivedEvent GuildMessageReceivedEvent}
-     * @param delay the {@link Long} that is our delay
-     * @param unit  the {@link TimeUnit} that is our unit that uses the delay parameter
-     * @param msg   the message format to send
+     * @param event
+     *         an instance of {@link GuildMessageReceivedEvent GuildMessageReceivedEvent}
+     * @param delay
+     *         the {@link Long} that is our delay
+     * @param unit
+     *         the {@link TimeUnit} that is our unit that uses the delay parameter
+     * @param msg
+     *         the message format to send
      */
     public static void sendMsgAndDeleteAfter(GuildMessageReceivedEvent event, long delay, TimeUnit unit, String msg) {
         sendMsgFormatAndDeleteAfter(event.getChannel(), delay, unit, msg, "");
@@ -161,10 +179,14 @@ public class MessageUtils {
     /**
      * This is a shortcut for sending formatted messages to a channel which also deletes it after delay unit
      *
-     * @param tc    an instance of {@link TextChannel TextChannel}
-     * @param delay the {@link Long} that is our delay
-     * @param unit  the {@link TimeUnit} that is our unit that uses the delay parameter
-     * @param msg   the message format to send
+     * @param tc
+     *         an instance of {@link TextChannel TextChannel}
+     * @param delay
+     *         the {@link Long} that is our delay
+     * @param unit
+     *         the {@link TimeUnit} that is our unit that uses the delay parameter
+     * @param msg
+     *         the message format to send
      */
     public static void sendMsgAndDeleteAfter(TextChannel tc, long delay, TimeUnit unit, String msg) {
         sendMsgFormatAndDeleteAfter(tc, delay, unit, msg, "");
@@ -173,11 +195,16 @@ public class MessageUtils {
     /**
      * This is a shortcut for sending formatted messages to a channel which also deletes it after delay unit
      *
-     * @param event an instance of {@link GuildMessageReceivedEvent GuildMessageReceivedEvent}
-     * @param delay the {@link Long} that is our delay
-     * @param unit  the {@link TimeUnit} that is our unit that uses the delay parameter
-     * @param msg   the message format to send
-     * @param args  the arguments that should be used in the msg parameter
+     * @param event
+     *         an instance of {@link GuildMessageReceivedEvent GuildMessageReceivedEvent}
+     * @param delay
+     *         the {@link Long} that is our delay
+     * @param unit
+     *         the {@link TimeUnit} that is our unit that uses the delay parameter
+     * @param msg
+     *         the message format to send
+     * @param args
+     *         the arguments that should be used in the msg parameter
      */
     public static void sendMsgFormatAndDeleteAfter(GuildMessageReceivedEvent event, long delay, TimeUnit unit, String msg, Object... args) {
         sendMsgFormatAndDeleteAfter(event.getChannel(), delay, unit, msg, args);
@@ -186,11 +213,16 @@ public class MessageUtils {
     /**
      * This is a shortcut for sending formatted messages to a channel which also deletes it after delay unit
      *
-     * @param channel the {@link TextChannel TextChannel} that we want to send our message to
-     * @param delay   the {@link Long} that is our delay
-     * @param unit    the {@link TimeUnit} that is our unit that uses the delay parameter
-     * @param msg     the message format to send
-     * @param args    the arguments that should be used in the msg parameter
+     * @param channel
+     *         the {@link TextChannel TextChannel} that we want to send our message to
+     * @param delay
+     *         the {@link Long} that is our delay
+     * @param unit
+     *         the {@link TimeUnit} that is our unit that uses the delay parameter
+     * @param msg
+     *         the message format to send
+     * @param args
+     *         the arguments that should be used in the msg parameter
      */
     public static void sendMsgFormatAndDeleteAfter(TextChannel channel, long delay, TimeUnit unit, String msg, Object... args) {
 
@@ -202,9 +234,12 @@ public class MessageUtils {
     /**
      * This is a shortcut for sending formatted messages to a channel
      *
-     * @param event an instance of {@link GuildMessageReceivedEvent GuildMessageReceivedEvent}
-     * @param msg   the message format to send
-     * @param args  the arguments that should be used in the msg parameter
+     * @param event
+     *         an instance of {@link GuildMessageReceivedEvent GuildMessageReceivedEvent}
+     * @param msg
+     *         the message format to send
+     * @param args
+     *         the arguments that should be used in the msg parameter
      */
     public static void sendMsgFormat(GuildMessageReceivedEvent event, String msg, Object... args) {
         sendMsg(event.getChannel(), (new MessageBuilder().append(String.format(msg, args)).build()), null, CUSTOM_QUEUE_ERROR);
@@ -213,9 +248,12 @@ public class MessageUtils {
     /**
      * This is a shortcut for sending formatted messages to a channel
      *
-     * @param channel the {@link TextChannel TextChannel} that we want to send our message to
-     * @param msg     the message format to send
-     * @param args    the arguments that should be used in the msg parameter
+     * @param channel
+     *         the {@link TextChannel TextChannel} that we want to send our message to
+     * @param msg
+     *         the message format to send
+     * @param args
+     *         the arguments that should be used in the msg parameter
      */
     public static void sendMsgFormat(TextChannel channel, String msg, Object... args) {
         sendMsg(channel, (new MessageBuilder().append(String.format(msg, args)).build()), null, CUSTOM_QUEUE_ERROR);
@@ -224,8 +262,10 @@ public class MessageUtils {
     /**
      * This is a shortcut for sending messages to a channel
      *
-     * @param event a instance of {@link GuildMessageReceivedEvent GuildMessageReceivedEvent}
-     * @param msg   the message to send
+     * @param event
+     *         a instance of {@link GuildMessageReceivedEvent GuildMessageReceivedEvent}
+     * @param msg
+     *         the message to send
      */
     public static void sendMsg(GuildMessageReceivedEvent event, String msg) {
         sendMsg(event.getChannel(), (new MessageBuilder()).append(msg).build(), null, CUSTOM_QUEUE_ERROR);
@@ -234,9 +274,12 @@ public class MessageUtils {
     /**
      * This is a shortcut for sending messages to a channel
      *
-     * @param event   a instance of {@link GuildMessageReceivedEvent GuildMessageReceivedEvent}
-     * @param msg     the message to send
-     * @param success The success consumer
+     * @param event
+     *         a instance of {@link GuildMessageReceivedEvent GuildMessageReceivedEvent}
+     * @param msg
+     *         the message to send
+     * @param success
+     *         The success consumer
      */
     public static void sendMsg(GuildMessageReceivedEvent event, String msg, Consumer<Message> success) {
         sendMsg(event.getChannel(), (new MessageBuilder()).append(msg).build(), success, CUSTOM_QUEUE_ERROR);
@@ -245,10 +288,14 @@ public class MessageUtils {
     /**
      * This is a shortcut for sending messages to a channel
      *
-     * @param event   a instance of {@link GuildMessageReceivedEvent GuildMessageReceivedEvent}
-     * @param msg     the message to send
-     * @param success The success consumer
-     * @param failure the failure consumer
+     * @param event
+     *         a instance of {@link GuildMessageReceivedEvent GuildMessageReceivedEvent}
+     * @param msg
+     *         the message to send
+     * @param success
+     *         The success consumer
+     * @param failure
+     *         the failure consumer
      */
     public static void sendMsg(GuildMessageReceivedEvent event, String msg, Consumer<Message> success, Consumer<Throwable> failure) {
         sendMsg(event.getChannel(), (new MessageBuilder()).append(msg).build(), success, failure);
@@ -257,8 +304,10 @@ public class MessageUtils {
     /**
      * This is a shortcut for sending messages to a channel
      *
-     * @param channel he {@link TextChannel TextChannel} that we want to send our message to
-     * @param msg     the message to send
+     * @param channel
+     *         he {@link TextChannel TextChannel} that we want to send our message to
+     * @param msg
+     *         the message to send
      */
     public static void sendMsg(TextChannel channel, String msg) {
         sendMsg(channel, (new MessageBuilder()).append(msg).build(), null, CUSTOM_QUEUE_ERROR);
@@ -267,9 +316,12 @@ public class MessageUtils {
     /**
      * This is a shortcut for sending messages to a channel
      *
-     * @param channel he {@link TextChannel TextChannel} that we want to send our message to
-     * @param msg     the message to send
-     * @param success The success consumer
+     * @param channel
+     *         he {@link TextChannel TextChannel} that we want to send our message to
+     * @param msg
+     *         the message to send
+     * @param success
+     *         The success consumer
      */
     public static void sendMsg(TextChannel channel, String msg, Consumer<Message> success) {
         sendMsg(channel, (new MessageBuilder()).append(msg).build(), success, CUSTOM_QUEUE_ERROR);
@@ -278,10 +330,14 @@ public class MessageUtils {
     /**
      * This is a shortcut for sending messages to a channel
      *
-     * @param channel he {@link TextChannel TextChannel} that we want to send our message to
-     * @param msg     the message to send
-     * @param success The success consumer
-     * @param failure the failure consumer
+     * @param channel
+     *         he {@link TextChannel TextChannel} that we want to send our message to
+     * @param msg
+     *         the message to send
+     * @param success
+     *         The success consumer
+     * @param failure
+     *         the failure consumer
      */
     public static void sendMsg(TextChannel channel, String msg, Consumer<Message> success, Consumer<Throwable> failure) {
         sendMsg(channel, (new MessageBuilder()).append(msg).build(), success, failure);
@@ -290,8 +346,10 @@ public class MessageUtils {
     /**
      * This is a shortcut for sending messages to a channel
      *
-     * @param event a instance of {@link GuildMessageReceivedEvent GuildMessageReceivedEvent}
-     * @param msg   the message to send
+     * @param event
+     *         a instance of {@link GuildMessageReceivedEvent GuildMessageReceivedEvent}
+     * @param msg
+     *         the message to send
      */
     public static void sendMsg(GuildMessageReceivedEvent event, MessageEmbed msg) {
         sendMsg(event.getChannel(), (new MessageBuilder()).setEmbed(msg).build(), null, CUSTOM_QUEUE_ERROR);
@@ -300,8 +358,10 @@ public class MessageUtils {
     /**
      * This is a shortcut for sending messages to a channel
      *
-     * @param channel he {@link TextChannel TextChannel} that we want to send our message to
-     * @param msg     the message to send
+     * @param channel
+     *         he {@link TextChannel TextChannel} that we want to send our message to
+     * @param msg
+     *         the message to send
      */
     @Deprecated
     public static void sendMsg(TextChannel channel, MessageEmbed msg) {
@@ -316,8 +376,10 @@ public class MessageUtils {
     /**
      * This is a shortcut for sending messages to a channel
      *
-     * @param event a instance of {@link GuildMessageReceivedEvent GuildMessageReceivedEvent}
-     * @param msg   the message to send
+     * @param event
+     *         a instance of {@link GuildMessageReceivedEvent GuildMessageReceivedEvent}
+     * @param msg
+     *         the message to send
      */
     public static void sendMsg(GuildMessageReceivedEvent event, Message msg) {
         sendMsg(event.getChannel(), msg, null, CUSTOM_QUEUE_ERROR);
@@ -326,9 +388,12 @@ public class MessageUtils {
     /**
      * This is a shortcut for sending messages to a channel
      *
-     * @param event   a instance of {@link GuildMessageReceivedEvent GuildMessageReceivedEvent}
-     * @param msg     the message to send
-     * @param success The success consumer
+     * @param event
+     *         a instance of {@link GuildMessageReceivedEvent GuildMessageReceivedEvent}
+     * @param msg
+     *         the message to send
+     * @param success
+     *         The success consumer
      */
     public static void sendMsg(GuildMessageReceivedEvent event, Message msg, Consumer<Message> success) {
         sendMsg(event.getChannel(), msg, success, CUSTOM_QUEUE_ERROR);
@@ -337,10 +402,14 @@ public class MessageUtils {
     /**
      * This is a shortcut for sending messages to a channel
      *
-     * @param event   a instance of {@link GuildMessageReceivedEvent GuildMessageReceivedEvent}
-     * @param msg     the message to send
-     * @param success The success consumer
-     * @param failure the failure consumer
+     * @param event
+     *         a instance of {@link GuildMessageReceivedEvent GuildMessageReceivedEvent}
+     * @param msg
+     *         the message to send
+     * @param success
+     *         The success consumer
+     * @param failure
+     *         the failure consumer
      */
     public static void sendMsg(GuildMessageReceivedEvent event, Message msg, Consumer<Message> success, Consumer<Throwable> failure) {
         sendMsg(event.getChannel(), msg, success, failure);
@@ -349,8 +418,10 @@ public class MessageUtils {
     /**
      * This is a shortcut for sending messages to a channel
      *
-     * @param channel he {@link TextChannel TextChannel} that we want to send our message to
-     * @param msg     the message to send
+     * @param channel
+     *         he {@link TextChannel TextChannel} that we want to send our message to
+     * @param msg
+     *         the message to send
      */
     public static void sendMsg(TextChannel channel, Message msg) {
         sendMsg(channel, msg, null, CUSTOM_QUEUE_ERROR);
@@ -359,9 +430,12 @@ public class MessageUtils {
     /**
      * This is a shortcut for sending messages to a channel
      *
-     * @param channel he {@link TextChannel TextChannel} that we want to send our message to
-     * @param msg     the message to send
-     * @param success The success consumer
+     * @param channel
+     *         he {@link TextChannel TextChannel} that we want to send our message to
+     * @param msg
+     *         the message to send
+     * @param success
+     *         The success consumer
      */
     public static void sendMsg(TextChannel channel, Message msg, Consumer<Message> success) {
         sendMsg(channel, msg, success, null);
@@ -370,10 +444,14 @@ public class MessageUtils {
     /**
      * This is a shortcut for sending messages to a channel
      *
-     * @param channel he {@link TextChannel TextChannel} that we want to send our message to
-     * @param msg     the message to send
-     * @param success The success consumer
-     * @param failure the failure consumer
+     * @param channel
+     *         he {@link TextChannel TextChannel} that we want to send our message to
+     * @param msg
+     *         the message to send
+     * @param success
+     *         The success consumer
+     * @param failure
+     *         the failure consumer
      */
     public static void sendMsg(TextChannel channel, Message msg, Consumer<Message> success, Consumer<Throwable> failure) {
         //Only send a message if we can talk

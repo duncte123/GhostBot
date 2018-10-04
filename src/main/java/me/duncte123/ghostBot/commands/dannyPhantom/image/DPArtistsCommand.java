@@ -193,7 +193,7 @@ public class DPArtistsCommand extends ImageCommand {
                 cb.accept(
                         gson.fromJson(jsonObject.getJSONObject("response")
                                 .getJSONArray("posts").getJSONObject(0).toString(), TumblrPost.class)
-                        )
+                )
         );
 
     }

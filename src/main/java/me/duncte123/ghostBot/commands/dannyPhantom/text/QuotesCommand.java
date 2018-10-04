@@ -95,37 +95,6 @@ public class QuotesCommand extends Command {
         reloadQuotes();
     }
 
-    public static String parseText(String raw) {
-        if (raw == null || raw.isEmpty())
-            return "";
-
-        raw = StringEscapeUtils.unescapeHtml4(raw);
-        String input = raw.replaceAll(Pattern.quote("<br/>"), "\n");
-        String replacePWith = input.contains("</p>\n") ? "" : "\n";
-
-        return input
-                //show the stars and remove the ps
-                .replaceAll("\\*", "\\\\*")
-                .replaceAll(Pattern.quote("<p>"), "")
-                .replaceAll(Pattern.quote("</p>"), replacePWith)
-                .replaceAll(Pattern.quote("<p/>"), replacePWith) //because some posts are fucked
-                //Italics
-                .replaceAll(Pattern.quote("<i>"), "*")
-                .replaceAll(Pattern.quote("</i>"), "*")
-                .replaceAll(Pattern.quote("<em>"), "*")
-                .replaceAll(Pattern.quote("</em>"), "*")
-                //bold
-                .replaceAll(Pattern.quote("<b>"), "**")
-                .replaceAll(Pattern.quote("</b>"), "**")
-                .replaceAll(Pattern.quote("<strong>"), "**")
-                .replaceAll(Pattern.quote("</strong>"), "**")
-                //useless crap that we don't need
-                .replaceAll(Pattern.quote("<small>"), "")
-                .replaceAll(Pattern.quote("</small>"), "")
-                //links
-                .replaceAll("<a(?:.*)href=\"(\\S+)\"(?:.*)>(.*)</a>", "[$2]($1)");
-    }
-
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
 
@@ -268,5 +237,36 @@ public class QuotesCommand extends Command {
                 logger.info("Fetched " + filteredPosts.size() + " quotes from type " + type);
             });
         }
+    }
+
+    public static String parseText(String raw) {
+        if (raw == null || raw.isEmpty())
+            return "";
+
+        raw = StringEscapeUtils.unescapeHtml4(raw);
+        String input = raw.replaceAll(Pattern.quote("<br/>"), "\n");
+        String replacePWith = input.contains("</p>\n") ? "" : "\n";
+
+        return input
+                //show the stars and remove the ps
+                .replaceAll("\\*", "\\\\*")
+                .replaceAll(Pattern.quote("<p>"), "")
+                .replaceAll(Pattern.quote("</p>"), replacePWith)
+                .replaceAll(Pattern.quote("<p/>"), replacePWith) //because some posts are fucked
+                //Italics
+                .replaceAll(Pattern.quote("<i>"), "*")
+                .replaceAll(Pattern.quote("</i>"), "*")
+                .replaceAll(Pattern.quote("<em>"), "*")
+                .replaceAll(Pattern.quote("</em>"), "*")
+                //bold
+                .replaceAll(Pattern.quote("<b>"), "**")
+                .replaceAll(Pattern.quote("</b>"), "**")
+                .replaceAll(Pattern.quote("<strong>"), "**")
+                .replaceAll(Pattern.quote("</strong>"), "**")
+                //useless crap that we don't need
+                .replaceAll(Pattern.quote("<small>"), "")
+                .replaceAll(Pattern.quote("</small>"), "")
+                //links
+                .replaceAll("<a(?:.*)href=\"(\\S+)\"(?:.*)>(.*)</a>", "[$2]($1)");
     }
 }
