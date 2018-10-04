@@ -37,9 +37,9 @@ import java.util.logging.Level;
 
 public class AudioUtils {
 
-    private static final int DEFAULT_VOLUME = 35; //(0-150, where 100 is the default max volume)
     public static AudioUtils ins = new AudioUtils();
     public final String BASE_AUDIO_DIR = "../GhostBot/audioFiles/";
+    private static final int DEFAULT_VOLUME = 35; //(0-150, where 100 is the default max volume)
     private final String embedTitle = "Spoopy-Luma-Player";
     private final Map<String, GuildMusicManager> musicManagers;
     private AudioPlayerManager playerManager;
@@ -68,10 +68,15 @@ public class AudioUtils {
     /**
      * Loads a track and plays it if the bot isn't playing
      *
-     * @param mng         The {@link GuildMusicManager MusicManager} for the guild
-     * @param channel     The {@link net.dv8tion.jda.core.entities.MessageChannel channel} that the bot needs to send the messages to
-     * @param trackUrlRaw The url from the track to play
-     * @param addPlayList If the url is a playlist
+     * @param mng
+     *         The {@link GuildMusicManager MusicManager} for the guild
+     * @param channel
+     *         The {@link net.dv8tion.jda.core.entities.MessageChannel channel} that the bot needs to send the messages
+     *         to
+     * @param trackUrlRaw
+     *         The url from the track to play
+     * @param addPlayList
+     *         If the url is a playlist
      */
     public void loadAndPlay(GuildMusicManager mng, final TextChannel channel, final String trackUrlRaw, final boolean addPlayList) {
         final String trackUrl;
@@ -142,7 +147,9 @@ public class AudioUtils {
     /**
      * This will get the music manager for the guild or register it if we don't have it yet
      *
-     * @param guild The guild that we need the manager for
+     * @param guild
+     *         The guild that we need the manager for
+     *
      * @return The music manager for that guild
      */
     public GuildMusicManager getMusicManager(Guild guild) {

@@ -53,7 +53,6 @@ abstract class ImageBase extends Command {
     final Gson gson = new Gson();
 
 
-
     void requestSearch(String query, Consumer<GoogleSearchResults> success, Consumer<RequestException> error) {
         if (searchCache.containsKey(query)) {
             success.accept(searchCache.get(query));

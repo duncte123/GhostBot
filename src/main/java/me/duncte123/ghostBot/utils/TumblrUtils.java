@@ -51,12 +51,14 @@ public class TumblrUtils {
             JSONObject res = json.getJSONObject("response");
             int total = res.getInt("total_posts");
             JSONArray postsJson = res.getJSONArray("posts");
-            List<TumblrPost> firstPosts = gson.fromJson(postsJson.toString(), new TypeToken<List<TumblrPost>>(){}.getType());
+            List<TumblrPost> firstPosts = gson.fromJson(postsJson.toString(), new TypeToken<List<TumblrPost>>() {
+            }.getType());
             response.addAll(firstPosts);
             for (int i = 20; i <= total; i += 20) {
                 JSONObject j = WebUtils.ins.getJSONObject(url + "&offset=" + i).execute();
                 JSONArray fetched = j.getJSONObject("response").getJSONArray("posts");
-                List<TumblrPost> posts = gson.fromJson(fetched.toString(), new TypeToken<List<TumblrPost>>(){}.getType());
+                List<TumblrPost> posts = gson.fromJson(fetched.toString(), new TypeToken<List<TumblrPost>>() {
+                }.getType());
                 response.addAll(posts);
             }
             cb.accept(response);

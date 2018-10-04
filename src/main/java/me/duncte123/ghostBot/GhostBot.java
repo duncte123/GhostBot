@@ -64,16 +64,16 @@ public class GhostBot {
         }
     }
 
+    @SuppressWarnings("unused")
+    public JDA getFakeShard(int shardId) {
+        return jda;
+    }
+
     public static void main(String[] args) {
         ins = new GhostBot();
     }
 
     public static GhostBot getInstance() {
         return ins;
-    }
-
-    @SuppressWarnings("unused")
-    public JDA getFakeShard(int shardId) {
-        return jda;
     }
 }
