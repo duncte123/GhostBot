@@ -44,11 +44,11 @@ dependencies {
     //My little utils
     compile 'com.github.duncte123:botCommons:85c8544'
     //JDA
-    compile(group: 'net.dv8tion', name: 'JDA', version: '3.8.0_424') {
+    compile(group: 'net.dv8tion', name: 'JDA', version: '3.8.0_433') {
         exclude module: 'opus-java'
     }
     //LavaPlayer/Lavalink
-    compile group: 'com.github.FredBoat', name: 'Lavalink-Client', version: '125b074'
+    compile group: 'com.github.FredBoat', name: 'Lavalink-Client', version: 'edd76a0ae8'
     // Logback classic
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
 
