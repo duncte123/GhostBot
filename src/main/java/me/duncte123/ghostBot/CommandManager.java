@@ -44,7 +44,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Pattern;
 
-public class CommandManager {
+public class
+CommandManager {
 
     private static final Logger logger = LoggerFactory.getLogger(CommandManager.class);
     private final Set<Command> commands = ConcurrentHashMap.newKeySet();
@@ -79,6 +80,8 @@ public class CommandManager {
 
         this.addCommand(new ReloadAudioCommand());
         this.addCommand(new EvalCommand());
+        this.addCommand(new ShardInfoCommand());
+        this.addCommand(new RestartCommand());
         this.addCommand(new PingCommand());
     }
 

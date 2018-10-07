@@ -24,10 +24,10 @@ import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.ghostBot.kuroslounge.FilterLogs;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import me.duncte123.ghostBot.variables.Variables;
-import net.dv8tion.jda.core.AccountType;
+import net.dv8tion.jda.bot.sharding.DefaultShardManagerBuilder;
+import net.dv8tion.jda.bot.sharding.ShardManager;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.utils.cache.CacheFlag;
 import org.slf4j.Logger;
@@ -41,7 +41,7 @@ import java.util.EnumSet;
 public class GhostBot {
 
     private static GhostBot ins;
-    private JDA jda;
+    private ShardManager shardManager;
 
     private GhostBot() {
         final Logger logger = LoggerFactory.getLogger(GhostBot.class);
@@ -56,27 +56,29 @@ public class GhostBot {
                         .setTimestamp(Instant.now())
         );
         LavalinkManager.ins.start();
+        BotListener botListener = new BotListener();
+        FilterLogs filterLogs = new FilterLogs();
         try {
-            JDABuilder builder = new JDABuilder(AccountType.BOT)
+            DefaultShardManagerBuilder builder = new DefaultShardManagerBuilder()
                     .setAudioEnabled(true)
+                    .setShardsTotal(SpoopyUtils.config.discord.totalShards)
                     .setGame(Game.watching(Variables.PREFIX + "help | #GoGhostAgain"))
                     .setDisabledCacheFlags(EnumSet.of(CacheFlag.EMOTE, CacheFlag.GAME))
                     .setToken(token)
-                    .addEventListener(new BotListener(), new FilterLogs());
+                    .addEventListeners(botListener, filterLogs);
 
             if (LavalinkManager.ins.isEnabled())
-                builder.addEventListener(LavalinkManager.ins.getLavalink());
+                builder.addEventListeners(LavalinkManager.ins.getLavalink());
 
-            jda = builder.build();
+            shardManager = builder.build();
         } catch (LoginException e) {
             e.printStackTrace();
             System.exit(-1);
         }
     }
 
-    @SuppressWarnings("unused")
-    public JDA getFakeShard(int shardId) {
-        return jda;
+    public JDA getShard(int shardId) {
+        return shardManager.getShardById(shardId);
     }
 
     public static void main(String[] args) {

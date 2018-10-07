@@ -57,7 +57,7 @@ public class LavalinkManager {
             lavalink = new JdaLavalink(
                     userId,
                     SpoopyUtils.config.discord.totalShards,
-                    shardId -> GhostBot.getInstance().getFakeShard(shardId)
+                    shardId -> GhostBot.getInstance().getShard(shardId)
             );
 
             for (GhostBotConfig.Lavalink.Node it : SpoopyUtils.config.lavalink.nodes) {
