@@ -54,7 +54,8 @@ public class BotListener extends ListenerAdapter {
 
     @Override
     public void onReady(ReadyEvent event) {
-        logger.info("Logged in as " + String.format("%#s", event.getJDA().getSelfUser()));
+        JDA jda = event.getJDA();
+        logger.info("Logged in as " + String.format("%#s (%s)", jda.getSelfUser(), jda.getShardInfo()));
         postServerCount(event.getJDA());
     }
 

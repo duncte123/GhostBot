@@ -79,6 +79,8 @@ public class CommandManager {
 
         this.addCommand(new ReloadAudioCommand());
         this.addCommand(new EvalCommand());
+        this.addCommand(new ShardInfoCommand());
+        this.addCommand(new RestartCommand());
         this.addCommand(new PingCommand());
     }
 
