@@ -23,7 +23,7 @@ import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 import java.time.temporal.ChronoUnit;
 
-import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
+import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
 public class PingCommand extends Command {
     @Override

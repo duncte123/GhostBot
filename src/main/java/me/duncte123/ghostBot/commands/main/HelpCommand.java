@@ -20,7 +20,7 @@ package me.duncte123.ghostBot.commands.main;
 
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.objects.CommandCategory;
-import me.duncte123.ghostBot.utils.EmbedUtils;
+import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.entities.MessageEmbed;
@@ -32,8 +32,8 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static me.duncte123.ghostBot.utils.MessageUtils.sendEmbed;
-import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
+import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed;
+import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
 public class HelpCommand extends Command {
     @Override

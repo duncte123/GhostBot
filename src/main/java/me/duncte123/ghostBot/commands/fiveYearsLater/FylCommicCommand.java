@@ -25,8 +25,9 @@ import me.duncte123.ghostBot.CommandManager;
 import me.duncte123.ghostBot.commands.ReactionCommand;
 import me.duncte123.ghostBot.objects.fyl.FylChapter;
 import me.duncte123.ghostBot.objects.fyl.FylComic;
-import me.duncte123.ghostBot.utils.EmbedUtils;
-import me.duncte123.ghostBot.utils.MessageUtils;
+import me.duncte123.botcommons.messaging.EmbedUtils;
+import me.duncte123.botcommons.messaging.MessageUtils;
+import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
@@ -40,7 +41,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
+import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
 public class FylCommicCommand extends ReactionCommand {
 
@@ -149,7 +150,7 @@ public class FylCommicCommand extends ReactionCommand {
                 .setThumbnail(FYL_ICON)
                 .setTitle("Chapter: " + chapter.name, chapter.chapter_url)
                 .setTimestamp(null)
-                .setFooter(String.format("Chapter: %s, Page: %s/%s", numChapter + 1, numPage + 1, chapter.pages), EmbedUtils.FOOTER_ICON)
+                .setFooter(String.format("Chapter: %s, Page: %s/%s", numChapter + 1, numPage + 1, chapter.pages), Variables.FOOTER_ICON)
                 .build();
     }
 

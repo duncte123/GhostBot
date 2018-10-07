@@ -23,15 +23,15 @@ import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.objects.CommandCategory;
 import me.duncte123.ghostBot.objects.tumblr.TumblrDialogue;
 import me.duncte123.ghostBot.objects.tumblr.TumblrPost;
-import me.duncte123.ghostBot.utils.EmbedUtils;
-import me.duncte123.ghostBot.utils.MessageUtils;
+import me.duncte123.botcommons.messaging.EmbedUtils;
+import me.duncte123.botcommons.messaging.MessageUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import me.duncte123.ghostBot.utils.TumblrUtils;
 import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.StringEscapeUtils;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -39,7 +39,7 @@ import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static me.duncte123.botCommons.messaging.MessageUtils.sendMsg;
+import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
 public class QuotesCommand extends Command {
 
@@ -163,7 +163,7 @@ public class QuotesCommand extends Command {
     private void sendQuote(GuildMessageReceivedEvent event, TumblrPost post) {
         EmbedBuilder eb = EmbedUtils.defaultEmbed()
                 .setTitle("Link to Post", post.post_url)
-                .setFooter("Quote id: " + post.id, EmbedUtils.FOOTER_ICON);
+                .setFooter("Quote id: " + post.id, Variables.FOOTER_ICON);
 
         switch (post.type) {
             case "chat":

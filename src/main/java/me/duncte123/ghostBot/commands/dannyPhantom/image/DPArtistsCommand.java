@@ -18,22 +18,19 @@
 
 package me.duncte123.ghostBot.commands.dannyPhantom.image;
 
-import me.duncte123.botCommons.web.WebUtils;
+import me.duncte123.botcommons.messaging.EmbedUtils;
+import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.ghostBot.commands.dannyPhantom.text.QuotesCommand;
 import me.duncte123.ghostBot.objects.tumblr.TumblrPost;
-import me.duncte123.ghostBot.utils.EmbedUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.parser.Parser;
 
 import java.util.function.Consumer;
 
-import static me.duncte123.ghostBot.utils.MessageUtils.sendEmbed;
-import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
+import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed;
+import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
 public class DPArtistsCommand extends ImageCommand {
     /*
@@ -139,18 +136,27 @@ public class DPArtistsCommand extends ImageCommand {
         String[] i = extractInfo(url);
         String usn = i[0];
         String type = i[1];
+        System.out.println(type);
         if (type.equalsIgnoreCase("tumblr")) {
             String profilePicture = getTumblrProfilePictureUrl(url);
-            extractPictureFromTumblr(usn, post ->
-                    sendEmbed(event,
-                            EmbedUtils.defaultEmbed()
-                                    .setAuthor(usn, post.post_url, profilePicture)
-                                    .setTitle("Link to post", post.post_url)
-                                    .setDescription(QuotesCommand.parseText(post.caption))
-                                    .setThumbnail(profilePicture)
-                                    .setImage(post.photos.get(0).original_size.url)
-                                    .build()
-                    )
+            extractPictureFromTumblr(usn, post -> {
+
+                        if (!post.type.equalsIgnoreCase("photo")) {
+                            sendMsg(event, String.format("Got a post of type `%s` for the type `photo`\n" +
+                                    "WTF tumblr?", post.type));
+                            return;
+                        }
+
+                        sendEmbed(event,
+                                EmbedUtils.defaultEmbed()
+                                        .setAuthor(usn, post.post_url, profilePicture)
+                                        .setTitle("Link to post", post.post_url)
+                                        .setDescription(QuotesCommand.parseText(post.caption))
+                                        .setThumbnail(profilePicture)
+                                        .setImage(post.photos.get(0).original_size.url)
+                                        .build()
+                        );
+                    }
             );
         } else if (type.equalsIgnoreCase("deviantart")) {
 
@@ -164,18 +170,6 @@ public class DPArtistsCommand extends ImageCommand {
                                     .build()
                     )
             );
-            //Old junk that I might remove soon
-            /*getDeviantartData(usn, data -> {
-                Oembed embed = data.getRight();
-                sendEmbed(event,
-                        EmbedUtils.defaultEmbed()
-                                .setAuthor(usn, embed.author_url, data.getLeft())
-                                .setTitle(embed.title, data.getMiddle())
-                                .setThumbnail(data.getLeft())
-                                .setImage(embed.thumbnail_url)
-                                .build()
-                );
-            });*/
         }
     }
 
@@ -185,7 +179,7 @@ public class DPArtistsCommand extends ImageCommand {
 
     private void extractPictureFromTumblr(String username, @NotNull Consumer<TumblrPost> cb) {
         String url = String.format(
-                "https://api.tumblr.com/v2/blog/%s.tumblr.com/posts?api_key=%s&type=photo&limit=1",
+                "https://api.tumblr.com/v2/blog/%s.tumblr.com/posts/photo?api_key=%s&type=photo&limit=1",
                 username,
                 SpoopyUtils.config.api.tumblr
         );
@@ -202,26 +196,9 @@ public class DPArtistsCommand extends ImageCommand {
         return "https://api.tumblr.com/v2/blog/" + domain + "/avatar/48";
     }
 
-    //Old junk that I might remove soon
-    /*private void getDeviantartData(String usn, Consumer<Triple<String, String, Oembed>> cb) {
-        WebUtils.ins.getText("https://backend.deviantart.com/rss.xml?type=deviation&q=by%3A" +
-                usn + "+sort%3Atime+meta%3Aall").async(txt -> {
-            Document doc = Jsoup.parse(txt, "", Parser.xmlParser());
-            Element item = doc.select("item").get(0);
-            String link = item.selectFirst("link").text();
-            String avatarUrl = item.select("[role=\"author\"]").get(1).text();
-            //Use https://backend.deviantart.com/oembed?url= on the returned url
-            WebUtils.ins.getAson("https://backend.deviantart.com/oembed?url=" + link).async(ason -> {
-                Oembed oembed = Ason.deserialize(ason, Oembed.class);
-                cb.accept(Triple.of(avatarUrl, link, oembed));
-            });
-        });
-    }*/
-
     private void getDeviantartDataXmlOnly(String usn, Consumer<LocalDeviantData> cb) {
-        WebUtils.ins.getText("https://backend.deviantart.com/rss.xml?type=deviation&q=by%3A" +
-                usn + "+sort%3Atime+meta%3Aall").async(txt -> {
-            Document doc = Jsoup.parse(txt, "", Parser.xmlParser());
+        WebUtils.ins.scrapeWebPage("https://backend.deviantart.com/rss.xml?type=deviation&q=by%3A" +
+                usn + "+sort%3Atime+meta%3Aall").async(doc -> {
             //get an item
             Element item = doc.selectFirst("item");
             cb.accept(new LocalDeviantData(

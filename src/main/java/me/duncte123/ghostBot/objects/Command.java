@@ -20,7 +20,7 @@ package me.duncte123.ghostBot.objects;
 
 import fredboat.audio.player.LavalinkManager;
 import me.duncte123.ghostBot.audio.GuildMusicManager;
-import me.duncte123.ghostBot.utils.EmbedUtils;
+import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Guild;
@@ -34,8 +34,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static me.duncte123.ghostBot.utils.MessageUtils.sendEmbed;
-import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
+import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed;
+import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
 public abstract class Command {
 

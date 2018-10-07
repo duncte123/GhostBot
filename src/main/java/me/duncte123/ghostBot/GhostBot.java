@@ -19,11 +19,13 @@
 package me.duncte123.ghostBot;
 
 import fredboat.audio.player.LavalinkManager;
-import me.duncte123.botCommons.web.WebUtils;
+import me.duncte123.botcommons.messaging.EmbedUtils;
+import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.ghostBot.kuroslounge.FilterLogs;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.AccountType;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.Game;
@@ -32,6 +34,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.security.auth.login.LoginException;
+import java.awt.*;
+import java.time.Instant;
 import java.util.EnumSet;
 
 public class GhostBot {
@@ -45,6 +49,12 @@ public class GhostBot {
         logger.info("Booting GhostBot");
         String token = SpoopyUtils.config.discord.token;
         WebUtils.setUserAgent("Mozilla/5.0 (compatible; GhostBot/v" + Variables.VERSION + "; +https://github.com/duncte123/GhostBot)");
+        EmbedUtils.setEmbedBuilder(
+                () -> new EmbedBuilder()
+                        .setColor(Color.decode("#6ffe32"))
+                        .setFooter("GhostBot", Variables.FOOTER_ICON)
+                        .setTimestamp(Instant.now())
+        );
         LavalinkManager.ins.start();
         try {
             JDABuilder builder = new JDABuilder(AccountType.BOT)

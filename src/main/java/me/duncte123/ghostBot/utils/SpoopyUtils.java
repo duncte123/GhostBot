@@ -18,7 +18,7 @@
 
 package me.duncte123.ghostBot.utils;
 
-import me.duncte123.botCommons.config.ConfigUtils;
+import me.duncte123.botcommons.config.ConfigUtils;
 import me.duncte123.ghostBot.CommandManager;
 import me.duncte123.ghostBot.objects.config.GhostBotConfig;
 import net.dv8tion.jda.core.entities.Guild;
@@ -33,6 +33,15 @@ public class SpoopyUtils {
 
     //Load the config first
     public static GhostBotConfig config;
+
+    static {
+        try {
+            config = ConfigUtils.loadFromFile("config.json", GhostBotConfig.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static final AudioUtils audio = AudioUtils.ins;
     public static final CommandManager commandManager = new CommandManager();
     private static final String GOOGLE_URL = "https://www.googleapis.com/customsearch/v1" +
@@ -45,14 +54,6 @@ public class SpoopyUtils {
             "&filter=1" +
             "&safe=medium" +
             "&key=" + config.api.google;
-
-    static {
-        try {
-            config = ConfigUtils.loadFromFile("config.json", GhostBotConfig.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     // [0] = users, [1] = bots
     public static double[] getBotRatio(Guild g) {

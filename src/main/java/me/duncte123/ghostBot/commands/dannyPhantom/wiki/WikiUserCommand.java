@@ -18,19 +18,19 @@
 
 package me.duncte123.ghostBot.commands.dannyPhantom.wiki;
 
-import me.duncte123.botCommons.web.WebUtils;
+import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.fandomApi.models.user.UserElement;
 import me.duncte123.fandomApi.models.user.UserResultSet;
 import me.duncte123.ghostBot.objects.CommandCategory;
-import me.duncte123.ghostBot.utils.EmbedUtils;
+import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
 
-import static me.duncte123.ghostBot.utils.MessageUtils.sendEmbed;
-import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
+import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed;
+import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
 public class WikiUserCommand extends WikiBaseCommand {
 

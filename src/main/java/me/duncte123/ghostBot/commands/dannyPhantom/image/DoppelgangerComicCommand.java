@@ -23,8 +23,8 @@ import me.duncte123.ghostBot.commands.ReactionCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.text.QuotesCommand;
 import me.duncte123.ghostBot.objects.CommandCategory;
 import me.duncte123.ghostBot.objects.tumblr.TumblrPost;
-import me.duncte123.ghostBot.utils.EmbedUtils;
-import me.duncte123.ghostBot.utils.MessageUtils;
+import me.duncte123.botcommons.messaging.EmbedUtils;
+import me.duncte123.botcommons.messaging.MessageUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import me.duncte123.ghostBot.utils.TumblrUtils;
 import me.duncte123.ghostBot.variables.Variables;
@@ -41,7 +41,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
+import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
 public class DoppelgangerComicCommand extends ReactionCommand {
 
@@ -155,7 +155,7 @@ public class DoppelgangerComicCommand extends ReactionCommand {
                 .setThumbnail(PROFILE_PICTURE)
                 .setImage(post.photos.get(0).original_size.url)
                 .setTimestamp(null)
-                .setFooter(String.format("Page: %s/%s", page + 1, pages.size()), EmbedUtils.FOOTER_ICON)
+                .setFooter(String.format("Page: %s/%s", page + 1, pages.size()), Variables.FOOTER_ICON)
                 .build();
     }
 

@@ -24,7 +24,7 @@ import me.duncte123.ghostBot.utils.SpoopyUtils;
 import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
-import static me.duncte123.ghostBot.utils.MessageUtils.sendSuccess;
+import static me.duncte123.botcommons.messaging.MessageUtils.sendSuccess;
 
 public class ReloadAudioCommand extends Command {
     @Override

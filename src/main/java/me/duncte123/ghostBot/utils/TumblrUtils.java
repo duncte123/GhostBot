@@ -21,7 +21,7 @@ package me.duncte123.ghostBot.utils;
 import com.github.natanbc.reliqua.request.RequestException;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import me.duncte123.botCommons.web.WebUtils;
+import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.ghostBot.objects.tumblr.TumblrPost;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;

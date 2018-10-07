@@ -19,7 +19,7 @@
 package me.duncte123.ghostBot;
 
 import fredboat.audio.player.LavalinkManager;
-import me.duncte123.botCommons.web.WebUtils;
+import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.ghostBot.audio.GuildMusicManager;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import me.duncte123.ghostBot.variables.Variables;
@@ -43,7 +43,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import static me.duncte123.botCommons.web.WebUtils.EncodingType.APPLICATION_JSON;
+import static me.duncte123.botcommons.web.WebUtils.EncodingType.APPLICATION_JSON;
 
 public class BotListener extends ListenerAdapter {
 

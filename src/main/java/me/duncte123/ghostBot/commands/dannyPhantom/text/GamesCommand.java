@@ -20,7 +20,7 @@ package me.duncte123.ghostBot.commands.dannyPhantom.text;
 
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.objects.CommandCategory;
-import me.duncte123.ghostBot.utils.MessageUtils;
+import me.duncte123.botcommons.messaging.MessageUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.concurrent.ThreadLocalRandom;

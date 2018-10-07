@@ -19,12 +19,12 @@
 package me.duncte123.ghostBot.commands.main;
 
 import me.duncte123.ghostBot.objects.Command;
-import me.duncte123.ghostBot.utils.EmbedUtils;
+import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
-import static me.duncte123.ghostBot.utils.MessageUtils.sendEmbed;
+import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed;
 
 public class AboutCommand extends Command {
     @Override

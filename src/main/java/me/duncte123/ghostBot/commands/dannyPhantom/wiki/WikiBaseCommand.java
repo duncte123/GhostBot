@@ -19,12 +19,12 @@
 package me.duncte123.ghostBot.commands.dannyPhantom.wiki;
 
 import com.google.gson.Gson;
-import me.duncte123.botCommons.web.WebUtils;
+import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.fandomApi.models.FandomException;
 import me.duncte123.fandomApi.models.search.LocalWikiSearchResult;
 import me.duncte123.fandomApi.models.search.LocalWikiSearchResultSet;
 import me.duncte123.ghostBot.objects.Command;
-import me.duncte123.ghostBot.utils.EmbedUtils;
+import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import me.duncte123.ghostBot.utils.WikiHolder;
 import net.dv8tion.jda.core.EmbedBuilder;
@@ -35,8 +35,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import static me.duncte123.ghostBot.utils.MessageUtils.sendEmbed;
-import static me.duncte123.ghostBot.utils.MessageUtils.sendMsg;
+import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed;
+import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
 /**
  * This class stores objects that are useful to the wiki commands

@@ -32,7 +32,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
-import static me.duncte123.ghostBot.utils.MessageUtils.*;
+import static me.duncte123.botcommons.messaging.MessageUtils.*;
 
 public class EvalCommand extends Command {
 

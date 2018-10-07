@@ -26,4 +26,5 @@ public class Variables {
     public static final String OTHER_PREFIX = "gb!";
     public static final long OWNER_ID = 191231307290771456L;
     public static final String VERSION = "@ghostBotVersion@";
+    public static final String FOOTER_ICON = "https://cdn.discordapp.com/emojis/394148311835344896.png";
 }
