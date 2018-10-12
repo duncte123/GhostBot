@@ -70,7 +70,7 @@ public class DoppelgangerComicCommand extends ReactionCommand {
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
 
         if (pages.isEmpty()) {
-            sendMsg(event, "Something went wrong with loading the pages, please notify duncte123#1234");
+            sendMsg(event, "Something went wrong with loading the pages, please notify duncte123#1245");
             return;
         }
 
