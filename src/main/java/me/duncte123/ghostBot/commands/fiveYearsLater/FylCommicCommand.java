@@ -18,7 +18,6 @@
 
 package me.duncte123.ghostBot.commands.fiveYearsLater;
 
-import com.google.common.base.Charsets;
 import com.google.gson.Gson;
 import gnu.trove.set.hash.TLongHashSet;
 import me.duncte123.botcommons.messaging.EmbedUtils;
@@ -50,7 +49,6 @@ public class FylCommicCommand extends ReactionCommand {
     private static final String CHAPTER_SELECTOR = "chapter:";
     private static final String FYL_ICON = "https://cdn.discordapp.com/emojis/374708234772283403.png?v=1";
     private FylComic comic;
-    private boolean useWix = false;
 
     public FylCommicCommand(CommandManager.ReactionListenerRegistry registry) {
         super(registry);
@@ -58,7 +56,6 @@ public class FylCommicCommand extends ReactionCommand {
         try {
             FileReader file = new FileReader(conf);
             this.comic = new Gson().fromJson(file, FylComic.class);
-            this.useWix = this.comic.useWixUrl;
         } catch (IOException e) {
             e.printStackTrace();
         }
