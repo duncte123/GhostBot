@@ -21,6 +21,7 @@ package me.duncte123.ghostBot.objects.fyl;
 import java.util.List;
 
 public class FylChapter {
+    public String page_id;
     public int pages;
     public String name;
     public String chapter_url;
