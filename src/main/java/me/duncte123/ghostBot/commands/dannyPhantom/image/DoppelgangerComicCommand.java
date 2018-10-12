@@ -18,28 +18,29 @@
 
 package me.duncte123.ghostBot.commands.dannyPhantom.image;
 
+import com.google.gson.reflect.TypeToken;
+import gnu.trove.set.hash.TLongHashSet;
+import me.duncte123.botcommons.messaging.EmbedUtils;
+import me.duncte123.botcommons.messaging.MessageUtils;
 import me.duncte123.ghostBot.CommandManager;
 import me.duncte123.ghostBot.commands.ReactionCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.text.QuotesCommand;
 import me.duncte123.ghostBot.objects.CommandCategory;
 import me.duncte123.ghostBot.objects.tumblr.TumblrPost;
-import me.duncte123.botcommons.messaging.EmbedUtils;
-import me.duncte123.botcommons.messaging.MessageUtils;
-import me.duncte123.ghostBot.utils.SpoopyUtils;
 import me.duncte123.ghostBot.utils.TumblrUtils;
 import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
-import org.apache.commons.lang3.StringUtils;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
@@ -59,8 +60,6 @@ public class DoppelgangerComicCommand extends ReactionCommand {
             104, // Chapter 5
             127  // Chapter 6
     };
-    private final long comicCover = 167255413598L;
-    private final List<Long> filters = Collections.singletonList(comicCover);
 
     public DoppelgangerComicCommand(CommandManager.ReactionListenerRegistry registry) {
         super(registry);
@@ -70,16 +69,14 @@ public class DoppelgangerComicCommand extends ReactionCommand {
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
 
-        int page = pages.size();
+        if (pages.isEmpty()) {
+            sendMsg(event, "Something went wrong with loading the pages, please notify duncte123#1234");
+            return;
+        }
+
+        int page = 0;
         if (args.length > 0) {
-            if (args[0].equals("update") && event.getAuthor().getIdLong() == Variables.OWNER_ID) {
-                TumblrUtils.fetchLatestPost(BLOG_URL, post -> {
-                    pages.add(post);
-                    sendMsg(event, "fetched latest page");
-                });
-                return;
-            }
-            String arg = StringUtils.join(args).toLowerCase();
+            String arg = String.join("", args).toLowerCase();
             if (arg.startsWith(PAGE_SELECTOR)) {
                 page = getNumberFromArg(arg.substring(PAGE_SELECTOR.length()));
             } else if (arg.startsWith(CHAPTER_SELECTOR)) {
@@ -109,7 +106,7 @@ public class DoppelgangerComicCommand extends ReactionCommand {
                         .setEmbed(getEmbed(pa.get()))
                         .build(),
                 m -> this.addReactions(m, Arrays.asList(ReactionCommand.LEFT_ARROW, ReactionCommand.RIGHT_ARROW,
-                        ReactionCommand.CANCEL), Collections.singleton(event.getAuthor()), 30, TimeUnit.MINUTES, index -> {
+                        ReactionCommand.CANCEL), new TLongHashSet(Collections.singleton(event.getAuthor().getIdLong())), 30, TimeUnit.MINUTES, index -> {
                             if (index >= 2) { //cancel button or other error
                                 stopReactions(m);
                                 return;
@@ -160,26 +157,22 @@ public class DoppelgangerComicCommand extends ReactionCommand {
     }
 
     private void loadPages() {
-        if (SpoopyUtils.config.running_local) return;
         pages.clear();
         logger.info("Loading doppelganger pages");
-        TumblrUtils.fetchAllFromAccount(BLOG_URL, "photo", posts -> {
-            //noinspection ConstantConditions
-            TumblrPost cover = posts.stream().filter(p -> p.id == comicCover).findFirst().get();
-            List<TumblrPost> posts1 = posts.stream().filter(p -> !filters.contains(p.id)).collect(Collectors.toList());
-            posts1.set(posts1.size() - 1, cover);
-            pages.addAll(posts1);
-            Collections.reverse(pages);
-            logger.info("Loaded " + pages.size() + " pages from the doppelganger comic.");
 
-            //This fetches the new front page that looks better than the old one
-            /*TumblrUtils.fetchSinglePost(BLOG_URL, comicCover, post -> {
-                posts1.set(posts1.size() - 1, post);
-                pages.addAll(posts1);
-                Collections.reverse(pages);
-                logger.info("Loaded " + pages.size() + " pages from the doppelganger comic.");
-            });*/
-        });
+        try {
+            List<TumblrPost> posts = TumblrUtils.getInstance()
+                    .getGson().fromJson(
+                            new FileReader("doppelganger.json"),
+                            new TypeToken<List<TumblrPost>>() {
+                            }.getType());
+
+            pages.addAll(posts);
+            logger.info("Loaded " + pages.size() + " pages from the doppelganger comic.");
+        } catch (FileNotFoundException e) {
+            logger.error("Failed to load doppelganer pages", e);
+        }
+
     }
 
 

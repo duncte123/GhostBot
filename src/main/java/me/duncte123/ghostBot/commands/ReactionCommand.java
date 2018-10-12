@@ -19,6 +19,7 @@
 package me.duncte123.ghostBot.commands;
 
 import gnu.trove.map.TLongObjectMap;
+import gnu.trove.set.TLongSet;
 import me.duncte123.ghostBot.CommandManager;
 import me.duncte123.ghostBot.objects.Command;
 import net.dv8tion.jda.core.Permission;
@@ -52,7 +53,7 @@ public abstract class ReactionCommand extends Command {
         this.listenerRegistry = registry;
     }
 
-    protected final void addReactions(Message message, List<String> reactions, Set<User> allowedUsers,
+    protected final void addReactions(Message message, List<String> reactions, TLongSet allowedUsers,
                                       int timeout, TimeUnit timeUnit, Consumer<Integer> callback) {
         if (!ReactionListener.instances.containsKey(message.getIdLong()))
             new ReactionListener(message, reactions, allowedUsers, listenerRegistry, timeout, timeUnit, callback);
@@ -72,14 +73,14 @@ public abstract class ReactionCommand extends Command {
         private static final TLongObjectMap<ReactionListener> instances = MiscUtil.newLongMap();
         private final Message message;
         private final List<String> allowedReactions;
-        private final Set<User> allowedUsers;
+        private final TLongSet allowedUsers;
         private final CommandManager.ReactionListenerRegistry registry;
         private final Consumer<Integer> callback;
         private final Thread timeoutThread;
 
         private boolean shouldDeleteReactions = true;
 
-        public ReactionListener(Message message, List<String> allowedReactions, Set<User> allowedUsers,
+        public ReactionListener(Message message, List<String> allowedReactions, TLongSet allowedUsers,
                                 CommandManager.ReactionListenerRegistry registry, int timeout, TimeUnit timeUnit,
                                 Consumer<Integer> callback) {
             instances.put(message.getIdLong(), this);
@@ -100,16 +101,18 @@ public abstract class ReactionCommand extends Command {
             if (event.getUser() == event.getJDA().getSelfUser())
                 return;
 
+
             try {
                 event.getReaction().removeReaction(event.getUser()).queue();
             } catch (PermissionException ignored) {
             }
 
-            if (!allowedUsers.isEmpty() && !allowedUsers.contains(event.getUser()))
+            if (!allowedUsers.isEmpty() && !allowedUsers.contains(event.getUser().getIdLong()))
                 return;
 
             MessageReaction.ReactionEmote reactionEmote = event.getReactionEmote();
             String reaction = reactionEmote.isEmote() ? reactionEmote.getEmote().getId() : reactionEmote.getName();
+
             if (allowedReactions.contains(reaction))
                 callback.accept(allowedReactions.indexOf(reaction));
         }

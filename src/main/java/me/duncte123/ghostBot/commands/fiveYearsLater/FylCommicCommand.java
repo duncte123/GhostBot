@@ -21,12 +21,13 @@ package me.duncte123.ghostBot.commands.fiveYearsLater;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import com.google.gson.Gson;
+import gnu.trove.set.hash.TLongHashSet;
+import me.duncte123.botcommons.messaging.EmbedUtils;
+import me.duncte123.botcommons.messaging.MessageUtils;
 import me.duncte123.ghostBot.CommandManager;
 import me.duncte123.ghostBot.commands.ReactionCommand;
 import me.duncte123.ghostBot.objects.fyl.FylChapter;
 import me.duncte123.ghostBot.objects.fyl.FylComic;
-import me.duncte123.botcommons.messaging.EmbedUtils;
-import me.duncte123.botcommons.messaging.MessageUtils;
 import me.duncte123.ghostBot.variables.Variables;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
@@ -106,7 +107,7 @@ public class FylCommicCommand extends ReactionCommand {
                         .setEmbed(getEmbed(chapterIndex.get(), pageIndex.get()))
                         .build(),
                 m -> this.addReactions(m, Arrays.asList(ReactionCommand.LEFT_ARROW, ReactionCommand.RIGHT_ARROW,
-                        ReactionCommand.CANCEL), Collections.singleton(event.getAuthor()), 30, TimeUnit.MINUTES, index -> {
+                        ReactionCommand.CANCEL), new TLongHashSet(Collections.singleton(event.getAuthor().getIdLong())), 30, TimeUnit.MINUTES, index -> {
                             if (index >= 2) { //cancel button or other error
                                 stopReactions(m);
                                 return;

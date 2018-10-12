@@ -33,15 +33,17 @@ import java.util.function.Consumer;
 
 public class TumblrUtils {
 
-    private static final String API_URL = "https://api.tumblr.com/v2/blog/%s/posts%s?limit=20&api_key=" +
-            SpoopyUtils.config.api.tumblr;
-    private static final Gson gson = new Gson();
+    private static final TumblrUtils instance = new TumblrUtils();
 
-    /*public static void fetcheAllFromAccount(String domain, @NotNull Consumer<List<TumblrPost>> cb) {
+    private final String API_URL = "https://api.tumblr.com/v2/blog/%s/posts%s?limit=20&api_key=" +
+            SpoopyUtils.config.api.tumblr;
+    private final Gson gson = new Gson();
+
+    /*public void fetcheAllFromAccount(String domain, @NotNull Consumer<List<TumblrPost>> cb) {
         fetchAllFromAccount(domain, null, cb);
     }*/
 
-    public static void fetchAllFromAccount(String domain, String type, @NotNull Consumer<List<TumblrPost>> cb) {
+    public void fetchAllFromAccount(String domain, String type, @NotNull Consumer<List<TumblrPost>> cb) {
         List<TumblrPost> response = new ArrayList<>();
         String url = String.format(API_URL,
                 domain,
@@ -65,11 +67,11 @@ public class TumblrUtils {
         });
     }
 
-    /*public static void fetchSinglePost(String domain, long id, @NotNull Consumer<TumblrPost> cb) {
+    /*public void fetchSinglePost(String domain, long id, @NotNull Consumer<TumblrPost> cb) {
         fetchSinglePost(domain, id, cb, null);
     }*/
 
-    public static void fetchSinglePost(String domain, long id, @NotNull Consumer<TumblrPost> cb, Consumer<RequestException> error) {
+    public void fetchSinglePost(String domain, long id, @NotNull Consumer<TumblrPost> cb, Consumer<RequestException> error) {
         String url = String.format(API_URL, domain, "") + "&id=" + id;
         WebUtils.ins.getJSONObject(url).async(json ->
                         cb.accept(
@@ -80,7 +82,7 @@ public class TumblrUtils {
         );
     }
 
-    public static void fetchLatestPost(String domain, @NotNull Consumer<TumblrPost> cb) {
+    public void fetchLatestPost(String domain, @NotNull Consumer<TumblrPost> cb) {
         String url = String.format(API_URL, domain, "") + "&limit=1";
         WebUtils.ins.getJSONObject(url).async(json ->
                 cb.accept(
@@ -89,4 +91,14 @@ public class TumblrUtils {
                 )
         );
     }
+
+    public Gson getGson() {
+        return gson;
+    }
+
+    public static TumblrUtils getInstance() {
+        return instance;
+    }
+
+    private TumblrUtils() {}
 }

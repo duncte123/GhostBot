@@ -195,7 +195,7 @@ public class QuotesCommand extends Command {
         if (opt.isPresent()) {
             cb.accept(opt.get());
         } else {
-            TumblrUtils.fetchSinglePost(DOMAIN, id, (post) -> {
+            TumblrUtils.getInstance().fetchSinglePost(DOMAIN, id, (post) -> {
                 allQuotes.add(post);
                 cb.accept(post);
             }, (error) -> fail.accept("Something went wrong: " + error.getMessage()));
@@ -230,7 +230,7 @@ public class QuotesCommand extends Command {
         guildQuotes.clear();
         for (String type : types) {
             logger.info("Getting quotes from type " + type);
-            TumblrUtils.fetchAllFromAccount(DOMAIN, type, posts -> {
+            TumblrUtils.getInstance().fetchAllFromAccount(DOMAIN, type, posts -> {
                 List<TumblrPost> filteredPosts = posts.stream().filter(post -> !badPostIds.contains(post.id))
                         .collect(Collectors.toList());
                 allQuotes.addAll(filteredPosts);
