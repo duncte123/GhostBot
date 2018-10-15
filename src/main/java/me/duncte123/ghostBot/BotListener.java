@@ -70,9 +70,12 @@ public class BotListener extends ListenerAdapter {
             logger.info("Shutting down!!");
             service.shutdownNow();
             SpoopyUtils.commandManager.commandService.shutdown();
-            if (LavalinkManager.ins.getLavalink() != null)
-                LavalinkManager.ins.getLavalink().shutdown();
             event.getJDA().shutdown();
+
+            if (LavalinkManager.ins.getLavalink() != null) {
+                LavalinkManager.ins.getLavalink().shutdown();
+            }
+
             System.exit(0);
 
             return;

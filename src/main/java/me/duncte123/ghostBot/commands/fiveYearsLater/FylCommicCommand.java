@@ -107,7 +107,7 @@ public class FylCommicCommand extends ReactionCommand {
                 m -> this.addReactions(m, Arrays.asList(ReactionCommand.LEFT_ARROW, ReactionCommand.RIGHT_ARROW,
                         ReactionCommand.CANCEL), newLongSet(event.getAuthor().getIdLong()), 30, TimeUnit.MINUTES, index -> {
                             if (index >= 2) { //cancel button or other error
-                                stopReactions(m);
+                                stopReactions(m, false);
                                 return;
                             }
                             FylChapter chap = chapterRef.get();

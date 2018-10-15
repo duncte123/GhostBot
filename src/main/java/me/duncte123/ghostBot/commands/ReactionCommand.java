@@ -146,7 +146,7 @@ public abstract class ReactionCommand extends Command {
 
                 if (!SpoopyUtils.isLong(reaction)) {
                     message.addReaction(reaction).queue();
-                    return;
+                    continue;
                 }
 
                 Emote emote = message.getJDA().getEmoteById(reaction);

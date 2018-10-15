@@ -99,7 +99,8 @@ public class SpoopyUtils {
 
     public static boolean isLong(String input) {
         try {
-            return Long.parseUnsignedLong(input) != -1;
+            Long.parseUnsignedLong(input);
+            return true;
         } catch (NumberFormatException ignored) {
             return false;
         }
