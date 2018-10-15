@@ -19,7 +19,6 @@
 package me.duncte123.ghostBot.commands.dannyPhantom.image;
 
 import com.google.gson.reflect.TypeToken;
-import gnu.trove.set.hash.TLongHashSet;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.botcommons.messaging.MessageUtils;
 import me.duncte123.ghostBot.CommandManager;
@@ -37,12 +36,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
+import static me.duncte123.ghostBot.utils.SpoopyUtils.newLongSet;
 
 public class DoppelgangerComicCommand extends ReactionCommand {
 
@@ -77,9 +76,11 @@ public class DoppelgangerComicCommand extends ReactionCommand {
         int page = 0;
         if (args.length > 0) {
             String arg = String.join("", args).toLowerCase();
+
             if (arg.startsWith(PAGE_SELECTOR)) {
                 page = getNumberFromArg(arg.substring(PAGE_SELECTOR.length()));
             } else if (arg.startsWith(CHAPTER_SELECTOR)) {
+
                 try {
                     page = chapters[getNumberFromArg(arg.substring(CHAPTER_SELECTOR.length())) - 1];
                 } catch (IndexOutOfBoundsException ignored) {
@@ -106,7 +107,7 @@ public class DoppelgangerComicCommand extends ReactionCommand {
                         .setEmbed(getEmbed(pa.get()))
                         .build(),
                 m -> this.addReactions(m, Arrays.asList(ReactionCommand.LEFT_ARROW, ReactionCommand.RIGHT_ARROW,
-                        ReactionCommand.CANCEL), new TLongHashSet(Collections.singleton(event.getAuthor().getIdLong())), 30, TimeUnit.MINUTES, index -> {
+                        ReactionCommand.CANCEL), newLongSet(event.getAuthor().getIdLong()), 30, TimeUnit.MINUTES, index -> {
                             if (index >= 2) { //cancel button or other error
                                 stopReactions(m);
                                 return;

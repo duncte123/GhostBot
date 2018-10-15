@@ -18,10 +18,7 @@
 
 package me.duncte123.ghostBot.commands.fiveYearsLater;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.Files;
 import com.google.gson.Gson;
-import gnu.trove.set.hash.TLongHashSet;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.botcommons.messaging.MessageUtils;
 import me.duncte123.ghostBot.CommandManager;
@@ -34,15 +31,16 @@ import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
+import static me.duncte123.ghostBot.utils.SpoopyUtils.newLongSet;
 
 public class FylCommicCommand extends ReactionCommand {
 
@@ -53,9 +51,9 @@ public class FylCommicCommand extends ReactionCommand {
 
     public FylCommicCommand(CommandManager.ReactionListenerRegistry registry) {
         super(registry);
-        File conf = new File("5yearslater.json");
+        File conf = new File("5yearslater_NEW.json");
         try {
-            String file = Files.asCharSource(conf, Charsets.UTF_8).read();
+            FileReader file = new FileReader(conf);
             this.comic = new Gson().fromJson(file, FylComic.class);
         } catch (IOException e) {
             e.printStackTrace();
@@ -107,19 +105,21 @@ public class FylCommicCommand extends ReactionCommand {
                         .setEmbed(getEmbed(chapterIndex.get(), pageIndex.get()))
                         .build(),
                 m -> this.addReactions(m, Arrays.asList(ReactionCommand.LEFT_ARROW, ReactionCommand.RIGHT_ARROW,
-                        ReactionCommand.CANCEL), new TLongHashSet(Collections.singleton(event.getAuthor().getIdLong())), 30, TimeUnit.MINUTES, index -> {
+                        ReactionCommand.CANCEL), newLongSet(event.getAuthor().getIdLong()), 30, TimeUnit.MINUTES, index -> {
                             if (index >= 2) { //cancel button or other error
                                 stopReactions(m);
                                 return;
                             }
                             FylChapter chap = chapterRef.get();
                             int nextPage = pageIndex.updateAndGet(current -> index == 1 ? Math.min(current + 1, chap.pages) : Math.max(current - 1, -1));
+
                             if ((nextPage + 1) > chap.pages) {
                                 nextPage = pageIndex.updateAndGet(c -> 0);
                                 int i = chapterIndex.incrementAndGet();
                                 chapterRef.updateAndGet(c -> chapterList.get(i));
                             } else if (nextPage == -1) {
                                 int i = chapterIndex.decrementAndGet();
+
                                 if (i > -1) {
                                     FylChapter captt = chapterRef.updateAndGet(c -> chapterList.get(i));
                                     nextPage = pageIndex.updateAndGet(c -> captt.pages - 1);
@@ -127,6 +127,7 @@ public class FylCommicCommand extends ReactionCommand {
                                     chapterIndex.updateAndGet(c -> 0);
                                 }
                             }
+
                             if (nextPage >= 0 && nextPage <= chap.pages)
                                 m.editMessage(getEmbed(chapterIndex.get(), nextPage)).queue();
                         }
@@ -146,8 +147,14 @@ public class FylCommicCommand extends ReactionCommand {
     private MessageEmbed getEmbed(int numChapter, int numPage) {
         final FylChapter chapter = comic.chapters.get(numChapter);
         final String page = chapter.pages_url.get(numPage);
+        String url = comic.baseUrl + chapter.page_id + "/" + page;
+
+        if (comic.useWixUrl) {
+            url = comic.wixUrl + page.substring(2);
+        }
+
         return EmbedUtils.defaultEmbed()
-                .setImage(page)
+                .setImage(url)
                 .setThumbnail(FYL_ICON)
                 .setTitle("Chapter: " + chapter.name, chapter.chapter_url)
                 .setTimestamp(null)

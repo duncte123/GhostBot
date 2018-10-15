@@ -21,5 +21,8 @@ package me.duncte123.ghostBot.objects.fyl;
 import java.util.List;
 
 public class FylComic {
+    public String baseUrl;
     public List<FylChapter> chapters;
+    public boolean useWixUrl;
+    public String wixUrl;
 }
