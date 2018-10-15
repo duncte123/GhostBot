@@ -18,6 +18,8 @@
 
 package me.duncte123.ghostBot.utils;
 
+import gnu.trove.set.TLongSet;
+import gnu.trove.set.hash.TLongHashSet;
 import me.duncte123.botcommons.config.ConfigUtils;
 import me.duncte123.ghostBot.CommandManager;
 import me.duncte123.ghostBot.objects.config.GhostBotConfig;
@@ -89,6 +91,18 @@ public class SpoopyUtils {
 
     public static String encodeUrl(String in) {
         return URLEncoder.encode(in, StandardCharsets.UTF_8);
+    }
+
+    public static TLongSet newLongSet(long... ids) {
+        return new TLongHashSet(ids);
+    }
+
+    public static boolean isLong(String input) {
+        try {
+            return Long.parseUnsignedLong(input) != -1;
+        } catch (NumberFormatException ignored) {
+            return false;
+        }
     }
 }
 

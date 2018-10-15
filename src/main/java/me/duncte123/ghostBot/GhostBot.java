@@ -81,6 +81,10 @@ public class GhostBot {
         return shardManager.getShardById(shardId);
     }
 
+    public ShardManager getShardManager() {
+        return shardManager;
+    }
+
     public static void main(String[] args) {
         ins = new GhostBot();
     }
