@@ -46,7 +46,7 @@ public abstract class WikiBaseCommand extends Command {
     Gson gson = new Gson();
 
     //shortcut to the wiki
-    WikiHolder wiki = new WikiHolder("https://dannyphantom.wikia.com");
+    WikiHolder wiki = new WikiHolder("https://dannyphantom.fandom.com");
 
     protected void handleWikiSearch(WikiHolder wiki, String searchQuery, GuildMessageReceivedEvent event) {
         WebUtils.ins.getJSONObject(String.format(
@@ -82,7 +82,7 @@ public abstract class WikiBaseCommand extends Command {
                             .setAuthor("Requester: " + String.format("%#s", event.getAuthor()),
                                     "https://ghostbot.duncte123.me/", event.getAuthor().getEffectiveAvatarUrl())
                             .setDescription("Total results: " + wikiSearchResultSet.getTotal() + "\n" +
-                                    "Current Listed: " + items.size() + "\n\n");
+                                    "Currently Listed: " + items.size() + "\n\n");
 
 
                     for (LocalWikiSearchResult localWikiSearchResult : items) {
