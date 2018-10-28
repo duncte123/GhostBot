@@ -22,6 +22,7 @@ import gnu.trove.set.TLongSet;
 import gnu.trove.set.hash.TLongHashSet;
 import me.duncte123.botcommons.config.ConfigUtils;
 import me.duncte123.ghostbot.CommandManager;
+import me.duncte123.ghostbot.utils.AudioUtils;
 import me.duncte123.ghostBot.objects.config.GhostBotConfig;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.TextChannel;
@@ -44,7 +45,7 @@ public class SpoopyUtils {
         }
     }
 
-    public static final AudioUtils audio = AudioUtils.ins;
+    public static final AudioUtils audio = AudioUtils.getInstance();
     public static final CommandManager commandManager = new CommandManager();
     private static final String GOOGLE_URL = "https://www.googleapis.com/customsearch/v1" +
             "?q=%s" +

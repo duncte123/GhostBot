@@ -24,7 +24,7 @@ import lavalink.client.io.jda.JdaLavalink;
 import lavalink.client.player.IPlayer;
 import lavalink.client.player.LavaplayerPlayerWrapper;
 import me.duncte123.ghostBot.objects.config.GhostBotConfig;
-import me.duncte123.ghostBot.utils.AudioUtils;
+import me.duncte123.ghostbot.utils.AudioUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import me.duncte123.ghostbot.GhostBot;
 import net.dv8tion.jda.core.entities.Guild;
@@ -77,7 +77,7 @@ public class LavalinkManager {
     public IPlayer createPlayer(String guildId) {
         return isEnabled()
                 ? lavalink.getLink(guildId).getPlayer()
-                : new LavaplayerPlayerWrapper(AudioUtils.ins.getPlayerManager().createPlayer());
+                : new LavaplayerPlayerWrapper(AudioUtils.getInstance().getPlayerManager().createPlayer());
     }
 
     public void openConnection(VoiceChannel channel) {

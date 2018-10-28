@@ -26,7 +26,7 @@ import me.duncte123.ghostBot.commands.ReactionCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.text.QuotesCommand;
 import me.duncte123.ghostBot.objects.CommandCategory;
 import me.duncte123.ghostBot.objects.tumblr.TumblrPost;
-import me.duncte123.ghostBot.utils.TumblrUtils;
+import me.duncte123.ghostbot.utils.TumblrUtils;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;

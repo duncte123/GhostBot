@@ -26,7 +26,7 @@ import me.duncte123.fandomapi.search.LocalWikiSearchResultSet;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
-import me.duncte123.ghostBot.utils.WikiHolder;
+import me.duncte123.ghostbot.utils.WikiHolder;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
@@ -46,7 +46,7 @@ public abstract class WikiBaseCommand extends Command {
     Gson gson = new Gson();
 
     //shortcut to the wiki
-    WikiHolder wiki = new WikiHolder("https://dannyphantom.wikia.com");
+    WikiHolder wiki = new WikiHolder("https://dannyphantom.fandom.com");
 
     protected void handleWikiSearch(WikiHolder wiki, String searchQuery, GuildMessageReceivedEvent event) {
         WebUtils.ins.getJSONObject(String.format(

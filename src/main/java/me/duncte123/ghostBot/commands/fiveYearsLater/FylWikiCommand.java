@@ -19,7 +19,7 @@
 package me.duncte123.ghostBot.commands.fiveYearsLater;
 
 import me.duncte123.ghostBot.commands.dannyPhantom.wiki.WikiBaseCommand;
-import me.duncte123.ghostBot.utils.WikiHolder;
+import me.duncte123.ghostbot.utils.WikiHolder;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringUtils;

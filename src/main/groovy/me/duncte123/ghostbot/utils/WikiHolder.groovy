@@ -1,5 +1,5 @@
 /*
- * GhostBot, a Discord bot made for all your Danny Phantom needs
+ *     GhostBot, a Discord bot made for all your Danny Phantom needs
  *     Copyright (C) 2018  Duncan "duncte123" Sterken
  *
  *     This program is free software: you can redistribute it and/or modify
@@ -16,30 +16,20 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostBot.utils;
+package me.duncte123.ghostbot.utils
 
-public class WikiHolder {
+class WikiHolder {
 
-    private final String domain;
+    final String domain
+    final String apiBase
+    final String searchListEndpoint
+    final String userDetailsEndpoint
 
-    public WikiHolder(String domain) {
-        this.domain = domain;
-    }
-
-    public String getDomain() {
-        return domain;
-    }
-
-    public String getApiBase() {
-        return getDomain() + "/api/v1";
-    }
-
-    public String getSearchListEndpoint() {
-        return getApiBase() + "/Search/List";
-    }
-
-    public String getUserDetailsEndpoint() {
-        return getApiBase() + "/User/Details";
+    WikiHolder(String domain) {
+        this.domain = domain
+        this.apiBase = "$domain/api/v1"
+        this.searchListEndpoint = "$apiBase/Search/List"
+        this.userDetailsEndpoint = "$apiBase/User/Details"
     }
 
 }
