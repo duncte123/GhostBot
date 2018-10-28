@@ -22,7 +22,7 @@ import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.objects.CommandCategory;
 import me.duncte123.botcommons.messaging.MessageUtils;
-import me.duncte123.ghostBot.utils.SpoopyUtils;
+import me.duncte123.ghostbot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -36,7 +36,7 @@ public class RandomGhostCommand extends Command {
     private final List<String> ghosts = new ArrayList<>();
 
     public RandomGhostCommand() {
-        if (!SpoopyUtils.config.running_local) {
+        if (!SpoopyUtils.getConfig().running_local) {
             logger.info("Scraping ghosts async");
             WebUtils.ins.scrapeWebPage("http://dannyphantom.wikia.com/wiki/Category:Ghosts?display=page&sort=alphabetical").async((doc) -> {
                 try {

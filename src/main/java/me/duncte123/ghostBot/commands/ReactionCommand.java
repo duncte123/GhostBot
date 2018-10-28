@@ -23,7 +23,7 @@ import gnu.trove.set.TLongSet;
 import me.duncte123.ghostbot.CommandManager;
 import me.duncte123.ghostbot.GhostBot;
 import me.duncte123.ghostBot.objects.Command;
-import me.duncte123.ghostBot.utils.SpoopyUtils;
+import me.duncte123.ghostbot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Emote;
 import net.dv8tion.jda.core.entities.Message;

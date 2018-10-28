@@ -22,7 +22,7 @@ import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.ghostBot.commands.dannyPhantom.text.QuotesCommand;
 import me.duncte123.ghostBot.objects.tumblr.TumblrPost;
-import me.duncte123.ghostBot.utils.SpoopyUtils;
+import me.duncte123.ghostbot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jsoup.nodes.Element;
@@ -181,7 +181,7 @@ public class DPArtistsCommand extends ImageCommand {
         String url = String.format(
                 "https://api.tumblr.com/v2/blog/%s.tumblr.com/posts/photo?api_key=%s&type=photo&limit=1",
                 username,
-                SpoopyUtils.config.api.tumblr
+                SpoopyUtils.getConfig().api.tumblr
         );
         WebUtils.ins.getJSONObject(url).async(jsonObject ->
                 cb.accept(

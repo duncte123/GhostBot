@@ -25,7 +25,7 @@ import me.duncte123.fandomapi.search.LocalWikiSearchResult;
 import me.duncte123.fandomapi.search.LocalWikiSearchResultSet;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.botcommons.messaging.EmbedUtils;
-import me.duncte123.ghostBot.utils.SpoopyUtils;
+import me.duncte123.ghostbot.utils.SpoopyUtils;
 import me.duncte123.ghostbot.utils.WikiHolder;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;

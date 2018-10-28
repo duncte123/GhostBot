@@ -1,5 +1,5 @@
 /*
- * GhostBot, a Discord bot made for all your Danny Phantom needs
+ *     GhostBot, a Discord bot made for all your Danny Phantom needs
  *     Copyright (C) 2018  Duncan "duncte123" Sterken
  *
  *     This program is free software: you can redistribute it and/or modify
@@ -16,37 +16,30 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostBot.utils;
+package me.duncte123.ghostbot.utils
 
-import com.google.common.base.Charsets;
-import com.google.common.io.Files;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.json.JSONObject
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
-import java.io.File;
+class ConfigUtils {
 
-public class ConfigUtils {
-    private static final Logger logger = LoggerFactory.getLogger(ConfigUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(ConfigUtils.class)
 
-    private JSONObject images;
+    JSONObject images
 
     /**
      * This will try to load the bot config and kill the program if it fails
      */
-    public ConfigUtils() {
+    ConfigUtils() {
         try {
-            logger.info("Loading images.json");
-            String file = Files.asCharSource(new File("images.json"), Charsets.UTF_8).read();
-            this.images = new JSONObject(file);
-            logger.info("Loaded images.json");
+            logger.info("Loading images.json")
+            def file = new File("images.json").text
+            this.images = new JSONObject(file)
+            logger.info("Loaded images.json")
         } catch (Exception e) {
-            logger.error("Could not load config, aborting", e);
-            System.exit(-1);
+            logger.error("Could not load config, aborting", e)
+            System.exit(-1)
         }
-    }
-
-    public JSONObject loadImages() {
-        return images;
     }
 }

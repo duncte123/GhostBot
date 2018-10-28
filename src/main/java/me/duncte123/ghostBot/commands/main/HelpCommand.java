@@ -21,7 +21,8 @@ package me.duncte123.ghostBot.commands.main;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.objects.CommandCategory;
 import me.duncte123.botcommons.messaging.EmbedUtils;
-import me.duncte123.ghostBot.utils.SpoopyUtils;
+import me.duncte123.ghostbot.CommandManager;
+import me.duncte123.ghostbot.utils.SpoopyUtils;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
@@ -44,7 +45,7 @@ public class HelpCommand extends Command {
             if (toSearch.startsWith(Variables.PREFIX))
                 toSearch = toSearch.replaceFirst(Pattern.quote(Variables.PREFIX), "");
 
-            for (Command cmd : SpoopyUtils.commandManager.getCommands()) {
+            for (Command cmd : SpoopyUtils.getCommandManager().getCommands()) {
                 if (cmd.getName().equals(toSearch)) {
                     sendMsg(event, "Command help for `" + cmd.getName() + "` :\n" + cmd.getHelp() + (cmd.getAliases().length > 0 ? "\nAliases: " + StringUtils.join(cmd.getAliases(), ", ") : ""));
                     return;
@@ -110,9 +111,11 @@ public class HelpCommand extends Command {
 
     private List<String> getCommandsForCategory(CommandCategory commandCategory) {
 
-        List<String> temp = SpoopyUtils.commandManager.getCommands()
+        CommandManager manager = SpoopyUtils.getCommandManager();
+
+        List<String> temp = manager.getCommands()
                 .stream().filter(c -> c.getCategory().equals(commandCategory)).map(Command::getName).collect(Collectors.toList());
-        SpoopyUtils.commandManager.getCommands()
+        manager.getCommands()
                 .stream().filter(c -> c.getCategory().equals(commandCategory))
                 .map(cmd -> Arrays.asList(cmd.getAliases())).forEach(temp::addAll);
 

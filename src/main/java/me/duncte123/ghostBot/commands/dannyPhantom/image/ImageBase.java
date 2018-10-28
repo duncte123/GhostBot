@@ -25,9 +25,9 @@ import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.objects.CommandCategory;
 import me.duncte123.ghostBot.objects.googleSearch.GoogleSearchResults;
 import me.duncte123.ghostBot.objects.googleSearch.GoogleSearchResults.SearchItem;
-import me.duncte123.ghostBot.utils.ConfigUtils;
+import me.duncte123.ghostbot.utils.ConfigUtils;
 import me.duncte123.botcommons.messaging.EmbedUtils;
-import me.duncte123.ghostBot.utils.SpoopyUtils;
+import me.duncte123.ghostbot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -48,8 +48,7 @@ abstract class ImageBase extends Command {
 
     private static final Map<String, GoogleSearchResults> searchCache = new HashMap<>();
     private static final Logger logger = LoggerFactory.getLogger(ImageBase.class);
-    private static final ConfigUtils CU = new ConfigUtils();
-    private static final JSONObject IMAGES = CU.loadImages();
+    private static final JSONObject IMAGES = new ConfigUtils().getImages();
     final Gson gson = new Gson();
 
 

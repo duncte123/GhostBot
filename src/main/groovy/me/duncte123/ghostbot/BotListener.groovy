@@ -21,7 +21,7 @@ package me.duncte123.ghostbot
 import fredboat.audio.player.LavalinkManager
 import me.duncte123.botcommons.web.WebUtils
 import me.duncte123.ghostBot.audio.GuildMusicManager
-import me.duncte123.ghostBot.utils.SpoopyUtils
+import me.duncte123.ghostbot.utils.SpoopyUtils
 import me.duncte123.ghostbot.variables.Variables
 import net.dv8tion.jda.core.JDA
 import net.dv8tion.jda.core.entities.Guild

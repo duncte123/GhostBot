@@ -20,13 +20,13 @@ package me.duncte123.ghostBot.commands.dannyPhantom.audio;
 
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.objects.CommandCategory;
-import me.duncte123.ghostBot.utils.SpoopyUtils;
+import me.duncte123.ghostbot.utils.AudioUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 public class WailCommand extends Command {
 
     public WailCommand() {
-        this.audioPath = SpoopyUtils.audio.BASE_AUDIO_DIR + "wail/";
+        this.audioPath = AudioUtils.getInstance().BASE_AUDIO_DIR + "wail/";
         reloadAudioFiles();
     }
 

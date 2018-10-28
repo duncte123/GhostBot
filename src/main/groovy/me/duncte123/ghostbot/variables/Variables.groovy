@@ -18,7 +18,7 @@
 
 package me.duncte123.ghostbot.variables
 
-import me.duncte123.ghostBot.utils.SpoopyUtils
+import me.duncte123.ghostbot.utils.SpoopyUtils
 
 class Variables {
 

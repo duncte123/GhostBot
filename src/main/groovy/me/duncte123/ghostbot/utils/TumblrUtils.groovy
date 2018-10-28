@@ -23,7 +23,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import me.duncte123.botcommons.web.WebUtils
 import me.duncte123.ghostBot.objects.tumblr.TumblrPost
-import me.duncte123.ghostBot.utils.SpoopyUtils
 import org.jetbrains.annotations.NotNull
 
 import java.util.function.Consumer
@@ -80,7 +79,7 @@ class TumblrUtils {
         }, error)
     }
 
-    void fetchLatestPost(String domain, @NotNull Consumer<TumblrPost> cb) {
+    /*void fetchLatestPost(String domain, @NotNull Consumer<TumblrPost> cb) {
         def url = "${String.format(API_URL, domain, "")}&limit=1"
 
         WebUtils.ins.getJSONObject(url).async {
@@ -89,6 +88,6 @@ class TumblrUtils {
                             .getJSONArray("posts").getJSONObject(0).toString(), TumblrPost.class)
             )
         }
-    }
+    }*/
 
 }

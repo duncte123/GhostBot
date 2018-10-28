@@ -25,7 +25,7 @@ import me.duncte123.ghostBot.objects.tumblr.TumblrDialogue;
 import me.duncte123.ghostBot.objects.tumblr.TumblrPost;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.botcommons.messaging.MessageUtils;
-import me.duncte123.ghostBot.utils.SpoopyUtils;
+import me.duncte123.ghostbot.utils.SpoopyUtils;
 import me.duncte123.ghostbot.utils.TumblrUtils;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.core.EmbedBuilder;
@@ -223,7 +223,7 @@ public class QuotesCommand extends Command {
     }
 
     private void reloadQuotes() {
-        if (SpoopyUtils.config.running_local) return;
+        if (SpoopyUtils.getConfig().running_local) return;
 
         oldCount = allQuotes.size();
         allQuotes.clear();

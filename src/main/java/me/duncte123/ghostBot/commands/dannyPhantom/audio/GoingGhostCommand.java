@@ -20,7 +20,7 @@ package me.duncte123.ghostBot.commands.dannyPhantom.audio;
 
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.objects.CommandCategory;
-import me.duncte123.ghostBot.utils.SpoopyUtils;
+import me.duncte123.ghostbot.utils.AudioUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -30,7 +30,7 @@ import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 public class GoingGhostCommand extends Command {
 
     public GoingGhostCommand() {
-        this.audioPath = SpoopyUtils.audio.BASE_AUDIO_DIR + "goingghost/";
+        this.audioPath = AudioUtils.getInstance().BASE_AUDIO_DIR + "goingghost/";
         reloadAudioFiles();
     }
 
@@ -43,7 +43,7 @@ public class GoingGhostCommand extends Command {
                 selectedTrack = "extra/its going ghost.mp3";
             }
             sendMsg(event, "Selected track: _" + selectedTrack.replace("_", "\\_") + "_");
-            SpoopyUtils.audio.loadAndPlay(getMusicManager(event.getGuild()), event.getChannel(),
+            AudioUtils.getInstance().loadAndPlay(getMusicManager(event.getGuild()), event.getChannel(),
                     audioPath + selectedTrack, false);
         }
     }

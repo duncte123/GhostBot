@@ -39,7 +39,7 @@ import java.util.logging.Logger
 
 class AudioUtils {
 
-    static AudioUtils instance = new AudioUtils()
+    static final AudioUtils instance = new AudioUtils()
 
     public final String BASE_AUDIO_DIR = "../GhostBot/audioFiles/"
     private static final int DEFAULT_VOLUME = 35 //(0-150, where 100 is the default max volume)

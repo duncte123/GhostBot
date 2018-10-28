@@ -25,7 +25,7 @@ import lavalink.client.player.IPlayer;
 import lavalink.client.player.LavaplayerPlayerWrapper;
 import me.duncte123.ghostBot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.utils.AudioUtils;
-import me.duncte123.ghostBot.utils.SpoopyUtils;
+import me.duncte123.ghostbot.utils.SpoopyUtils;
 import me.duncte123.ghostbot.GhostBot;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.VoiceChannel;
@@ -52,15 +52,15 @@ public class LavalinkManager {
     public void start() {
         if (isEnabled()) {
 
-            String userId = getIdFromToken(SpoopyUtils.config.discord.token);
+            String userId = getIdFromToken(SpoopyUtils.getConfig().discord.token);
 
             lavalink = new JdaLavalink(
                     userId,
-                    SpoopyUtils.config.discord.totalShards,
+                    SpoopyUtils.getConfig().discord.totalShards,
                     shardId -> GhostBot.getInstance().getShard(shardId)
             );
 
-            for (GhostBotConfig.Lavalink.Node it : SpoopyUtils.config.lavalink.nodes) {
+            for (GhostBotConfig.Lavalink.Node it : SpoopyUtils.getConfig().lavalink.nodes) {
                 try {
                     lavalink.addNode(new URI(it.wsUrl), it.pass);
                 } catch (URISyntaxException e) {
@@ -71,7 +71,7 @@ public class LavalinkManager {
     }
 
     public boolean isEnabled() {
-        return SpoopyUtils.config.lavalink.enable;
+        return SpoopyUtils.getConfig().lavalink.enable;
     }
 
     public IPlayer createPlayer(String guildId) {

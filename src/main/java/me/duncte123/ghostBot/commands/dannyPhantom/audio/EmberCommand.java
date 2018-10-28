@@ -20,7 +20,7 @@ package me.duncte123.ghostBot.commands.dannyPhantom.audio;
 
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.objects.CommandCategory;
-import me.duncte123.ghostBot.utils.SpoopyUtils;
+import me.duncte123.ghostbot.utils.AudioUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
@@ -30,7 +30,7 @@ public class EmberCommand extends Command {
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
         if (preAudioChecks(event)) {
             sendMsg(event, "Selected track: _Ember McLain - Remember_");
-            SpoopyUtils.audio.loadAndPlay(getMusicManager(event.getGuild()), event.getChannel(), "wBMOc24_aIw", false);
+            AudioUtils.getInstance().loadAndPlay(getMusicManager(event.getGuild()), event.getChannel(), "wBMOc24_aIw", false);
         }
     }
 

@@ -19,9 +19,9 @@
 package me.duncte123.ghostBot.objects;
 
 import fredboat.audio.player.LavalinkManager;
-import me.duncte123.ghostBot.audio.GuildMusicManager;
 import me.duncte123.botcommons.messaging.EmbedUtils;
-import me.duncte123.ghostBot.utils.SpoopyUtils;
+import me.duncte123.ghostBot.audio.GuildMusicManager;
+import me.duncte123.ghostbot.utils.AudioUtils;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
@@ -92,14 +92,14 @@ public abstract class Command {
         if (preAudioChecks(event)) {
             String selectedTrack = getRandomTrack();
             sendMsg(event, "Selected track: _" + selectedTrack.replaceAll("_", "\\_") + "_");
-            SpoopyUtils.audio.loadAndPlay(getMusicManager(event.getGuild()), event.getChannel(),
+            AudioUtils.getInstance().loadAndPlay(getMusicManager(event.getGuild()), event.getChannel(),
                     audioPath + selectedTrack, false);
         }
 
     }
 
     protected GuildMusicManager getMusicManager(Guild guild) {
-        return SpoopyUtils.audio.getMusicManager(guild);
+        return AudioUtils.getInstance().getMusicManager(guild);
     }
 
     protected boolean preAudioChecks(GuildMessageReceivedEvent event) {

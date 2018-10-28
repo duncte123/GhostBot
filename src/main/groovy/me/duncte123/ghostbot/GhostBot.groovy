@@ -22,7 +22,7 @@ import fredboat.audio.player.LavalinkManager
 import me.duncte123.botcommons.messaging.EmbedUtils
 import me.duncte123.botcommons.web.WebUtils
 import me.duncte123.ghostBot.kuroslounge.FilterLogs
-import me.duncte123.ghostBot.utils.SpoopyUtils
+import me.duncte123.ghostbot.utils.SpoopyUtils
 import me.duncte123.ghostbot.variables.Variables
 import net.dv8tion.jda.bot.sharding.DefaultShardManagerBuilder
 import net.dv8tion.jda.bot.sharding.ShardManager
