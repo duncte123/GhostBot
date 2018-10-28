@@ -88,7 +88,7 @@ class AudioUtils {
 
             @Override
             void trackLoaded(AudioTrack track) {
-                if (mng.player.getPlayingTrack() != null) {
+                if (mng.player.playingTrack != null) {
                     mng.player.stopTrack()
                 }
 

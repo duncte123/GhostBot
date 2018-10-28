@@ -55,7 +55,7 @@ class TumblrUtils {
             response.addAll(firstPosts)
 
             for (int i = 20; i <= total; i += 20) {
-                def j = WebUtils.ins.getJSONObject(url + "&offset=" + i).execute()
+                def j = WebUtils.ins.getJSONObject("$url&offset=$i").execute()
                 def fetched = j.getJSONObject("response").getJSONArray("posts")
                 def posts = gson.fromJson(fetched.toString(), new TypeToken<List<TumblrPost>>() {}.getType())
                 response.addAll(posts)
