@@ -21,7 +21,7 @@ package me.duncte123.ghostBot.commands.dannyPhantom.image;
 import com.google.gson.reflect.TypeToken;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.botcommons.messaging.MessageUtils;
-import me.duncte123.ghostBot.CommandManager;
+import me.duncte123.ghostbot.CommandManager;
 import me.duncte123.ghostBot.commands.ReactionCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.text.QuotesCommand;
 import me.duncte123.ghostBot.objects.CommandCategory;

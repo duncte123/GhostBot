@@ -20,9 +20,9 @@ package me.duncte123.ghostBot.commands.dannyPhantom.wiki;
 
 import com.google.gson.Gson;
 import me.duncte123.botcommons.web.WebUtils;
-import me.duncte123.fandomApi.models.FandomException;
-import me.duncte123.fandomApi.models.search.LocalWikiSearchResult;
-import me.duncte123.fandomApi.models.search.LocalWikiSearchResultSet;
+import me.duncte123.fandomapi.FandomException;
+import me.duncte123.fandomapi.search.LocalWikiSearchResult;
+import me.duncte123.fandomapi.search.LocalWikiSearchResultSet;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;

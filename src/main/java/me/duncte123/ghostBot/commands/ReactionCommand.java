@@ -20,8 +20,8 @@ package me.duncte123.ghostBot.commands;
 
 import gnu.trove.map.TLongObjectMap;
 import gnu.trove.set.TLongSet;
-import me.duncte123.ghostBot.CommandManager;
-import me.duncte123.ghostBot.GhostBot;
+import me.duncte123.ghostbot.CommandManager;
+import me.duncte123.ghostbot.GhostBot;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.Permission;

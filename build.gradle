@@ -26,7 +26,7 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '2.0.4'
 }
 
-group 'me.duncte123.ghostBot'
+group 'me.duncte123.ghostbot'
 version "1.12.1_${getGitHash()}"
 mainClassName = "${group}.GhostBot"
 

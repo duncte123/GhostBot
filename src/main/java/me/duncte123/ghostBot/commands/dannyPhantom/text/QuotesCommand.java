@@ -18,7 +18,7 @@
 
 package me.duncte123.ghostBot.commands.dannyPhantom.text;
 
-import me.duncte123.ghostBot.BotListener;
+import me.duncte123.ghostbot.BotListener;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.objects.CommandCategory;
 import me.duncte123.ghostBot.objects.tumblr.TumblrDialogue;

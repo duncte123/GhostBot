@@ -23,10 +23,10 @@ import lavalink.client.io.Link;
 import lavalink.client.io.jda.JdaLavalink;
 import lavalink.client.player.IPlayer;
 import lavalink.client.player.LavaplayerPlayerWrapper;
-import me.duncte123.ghostBot.GhostBot;
 import me.duncte123.ghostBot.objects.config.GhostBotConfig;
 import me.duncte123.ghostBot.utils.AudioUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
+import me.duncte123.ghostbot.GhostBot;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 

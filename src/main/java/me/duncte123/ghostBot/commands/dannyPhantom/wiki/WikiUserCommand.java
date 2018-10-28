@@ -19,8 +19,8 @@
 package me.duncte123.ghostBot.commands.dannyPhantom.wiki;
 
 import me.duncte123.botcommons.web.WebUtils;
-import me.duncte123.fandomApi.models.user.UserElement;
-import me.duncte123.fandomApi.models.user.UserResultSet;
+import me.duncte123.fandomapi.user.UserElement;
+import me.duncte123.fandomapi.user.UserResultSet;
 import me.duncte123.ghostBot.objects.CommandCategory;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
@@ -57,6 +57,7 @@ public class WikiUserCommand extends WikiBaseCommand {
                     if (userResultSet.getItems().size() == 1) {
                         UserElement user = userResultSet.getItems().get(0);
                         user.setBasePath(userResultSet.getBasepath());
+
                         sendEmbed(event, EmbedUtils.defaultEmbed()
                                 .setThumbnail(user.getAvatar())
                                 .setTitle("Profile link", user.getAbsoluteUrl())
