@@ -16,16 +16,35 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostbot.variables
+package me.duncte123.ghostbot.commands.main
 
-import me.duncte123.ghostbot.utils.SpoopyUtils
+import me.duncte123.ghostbot.objects.Command
+import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 
-class Variables {
+import java.time.temporal.ChronoUnit
 
-    public static final String PREFIX = SpoopyUtils.config.discord.prefix
-    public static final String OTHER_PREFIX = "gb!"
-    public static final long OWNER_ID = 191231307290771456
-    public static final String VERSION = "@ghostBotVersion@"
-    public static final String FOOTER_ICON = "https://cdn.discordapp.com/emojis/394148311835344896.png"
+import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 
+class PingCommand implements Command {
+    @Override
+    void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
+
+        sendMsg(event, "PONG!") {
+
+            def rest = event.message.creationTime.until(it.creationTime, ChronoUnit.MILLIS)
+
+            it.editMessage(
+                    """"PONG!
+                    Rest Ping: $rest
+                    Websocket Ping: $event.JDA.ping
+                    """).queue()
+        }
+
+    }
+
+    @Override
+    String getName() { "ping" }
+
+    @Override
+    String getHelp() { "PONG" }
 }

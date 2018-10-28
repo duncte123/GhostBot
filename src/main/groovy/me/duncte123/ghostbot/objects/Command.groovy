@@ -36,7 +36,7 @@ import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 
 trait Command {
 
-    protected final Logger logger = LoggerFactory.getLogger(getClass())
+    protected final Logger logger = LoggerFactory.getLogger("${name}Command")
     protected String audioPath = ""
     private def audioFiles = []
 

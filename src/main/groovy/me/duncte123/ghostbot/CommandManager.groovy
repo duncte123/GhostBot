@@ -19,17 +19,13 @@
 package me.duncte123.ghostbot
 
 import me.duncte123.ghostbot.commands.ReactionCommand
-import me.duncte123.ghostBot.commands.dannyPhantom.audio.*
-import me.duncte123.ghostBot.commands.dannyPhantom.image.*
-import me.duncte123.ghostBot.commands.dannyPhantom.text.GamesCommand
-import me.duncte123.ghostBot.commands.dannyPhantom.text.PetitionCommand
-import me.duncte123.ghostBot.commands.dannyPhantom.text.QuotesCommand
-import me.duncte123.ghostBot.commands.dannyPhantom.text.RandomGhostCommand
-import me.duncte123.ghostBot.commands.dannyPhantom.wiki.WikiCommand
-import me.duncte123.ghostBot.commands.dannyPhantom.wiki.WikiUserCommand
-import me.duncte123.ghostBot.commands.fiveYearsLater.FylCommicCommand
-import me.duncte123.ghostBot.commands.fiveYearsLater.FylWikiCommand
-import me.duncte123.ghostBot.commands.main.*
+import me.duncte123.ghostbot.commands.main.AboutCommand
+import me.duncte123.ghostbot.commands.main.EvalCommand
+import me.duncte123.ghostbot.commands.main.HelpCommand
+import me.duncte123.ghostbot.commands.main.PingCommand
+import me.duncte123.ghostbot.commands.main.ReloadAudioCommand
+import me.duncte123.ghostbot.commands.main.RestartCommand
+import me.duncte123.ghostbot.commands.main.ShardInfoCommand
 import me.duncte123.ghostbot.objects.Command
 import me.duncte123.ghostbot.variables.Variables
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
@@ -51,27 +47,6 @@ class CommandManager {
     final ReactionListenerRegistry reactListReg = new ReactionListenerRegistry()
 
     CommandManager() {
-        this.addCommand(new GoingGhostCommand())
-        this.addCommand(new WailCommand())
-        this.addCommand(new FruitloopCommand())
-        this.addCommand(new EmberCommand())
-        this.addCommand(new BoxGhostCommand())
-
-        this.addCommand(new ImageCommand())
-        this.addCommand(new GifCommand())
-        this.addCommand(new OtherGhostCommands())
-        this.addCommand(new DoppelgangerComicCommand(this.reactListReg))
-        this.addCommand(new FylCommicCommand(this.reactListReg))
-        this.addCommand(new DPArtistsCommand())
-
-        this.addCommand(new WikiCommand())
-        this.addCommand(new WikiUserCommand())
-        this.addCommand(new FylWikiCommand())
-        this.addCommand(new PetitionCommand())
-
-        this.addCommand(new QuotesCommand())
-        this.addCommand(new RandomGhostCommand())
-        this.addCommand(new GamesCommand())
 
         this.addCommand(new HelpCommand())
         this.addCommand(new AboutCommand())
