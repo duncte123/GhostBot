@@ -22,7 +22,7 @@ import gnu.trove.map.TLongObjectMap;
 import gnu.trove.set.TLongSet;
 import me.duncte123.ghostbot.CommandManager;
 import me.duncte123.ghostbot.GhostBot;
-import me.duncte123.ghostBot.objects.Command;
+import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Emote;
@@ -41,7 +41,7 @@ import java.util.function.Consumer;
  * https://github.com/Almighty-Alpaca/JDA-Butler/blob/master/src/main/java/com/almightyalpaca/discord/jdabutler/commands/ReactionCommand.java
  */
 @SuppressWarnings("SameParameterValue")
-public abstract class ReactionCommand extends Command {
+public abstract class ReactionCommand implements Command {
 
     /* public final static String[] NUMBERS = new String[]{"1\u20E3", "2\u20E3", "3\u20E3",
              "4\u20E3", "5\u20E3", "6\u20E3", "7\u20E3", "8\u20E3", "9\u20E3", "\uD83D\uDD1F"};

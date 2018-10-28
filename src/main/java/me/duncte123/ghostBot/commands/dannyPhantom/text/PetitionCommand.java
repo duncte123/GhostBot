@@ -18,13 +18,13 @@
 
 package me.duncte123.ghostBot.commands.dannyPhantom.text;
 
-import me.duncte123.ghostBot.objects.Command;
+import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.botcommons.messaging.MessageUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class PetitionCommand extends Command {
+public class PetitionCommand implements Command {
 
     private final String[] messages = {
             // %1$s = "http://bit.ly/dp-petition"

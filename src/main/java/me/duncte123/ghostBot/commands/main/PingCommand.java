@@ -18,14 +18,14 @@
 
 package me.duncte123.ghostBot.commands.main;
 
-import me.duncte123.ghostBot.objects.Command;
+import me.duncte123.ghostbot.objects.Command;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 import java.time.temporal.ChronoUnit;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
-public class PingCommand extends Command {
+public class PingCommand implements Command {
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
 

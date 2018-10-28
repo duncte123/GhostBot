@@ -21,7 +21,7 @@ package me.duncte123.ghostBot.commands.dannyPhantom.image;
 import com.github.natanbc.reliqua.request.RequestException;
 import com.google.gson.Gson;
 import me.duncte123.botcommons.web.WebUtils;
-import me.duncte123.ghostBot.objects.Command;
+import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.CommandCategory;
 import me.duncte123.ghostbot.objects.googlesearch.GoogleSearchResults;
 import me.duncte123.ghostbot.objects.googlesearch.GoogleSearchResults.SearchItem;
@@ -44,7 +44,7 @@ import java.util.function.Consumer;
 import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed;
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
-abstract class ImageBase extends Command {
+abstract class ImageBase implements Command {
 
     private static final Map<String, GoogleSearchResults> searchCache = new HashMap<>();
     private static final Logger logger = LoggerFactory.getLogger(ImageBase.class);

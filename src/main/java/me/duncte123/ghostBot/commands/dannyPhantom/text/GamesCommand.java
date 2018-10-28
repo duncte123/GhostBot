@@ -18,14 +18,14 @@
 
 package me.duncte123.ghostBot.commands.dannyPhantom.text;
 
-import me.duncte123.ghostBot.objects.Command;
+import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.CommandCategory;
 import me.duncte123.botcommons.messaging.MessageUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class GamesCommand extends Command {
+public class GamesCommand implements Command {
 
     private final String[] games = {
             "https://paurachan.deviantart.com/art/Danny-Phantom-Dress-up-game-v0-1-435498005",

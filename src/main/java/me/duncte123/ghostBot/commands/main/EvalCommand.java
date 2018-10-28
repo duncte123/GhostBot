@@ -18,7 +18,7 @@
 
 package me.duncte123.ghostBot.commands.main;
 
-import me.duncte123.ghostBot.objects.Command;
+import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.CommandCategory;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
@@ -34,7 +34,7 @@ import java.util.concurrent.TimeUnit;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.*;
 
-public class EvalCommand extends Command {
+public class EvalCommand implements Command {
 
     private final ScriptEngine engine = new ScriptEngineManager().getEngineByName("groovy");
     private final ExecutorService service = Executors.newCachedThreadPool((it) -> new Thread(it, "Eval-Thread"));

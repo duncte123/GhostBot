@@ -25,7 +25,7 @@ import me.duncte123.ghostbot.CommandManager;
 import me.duncte123.ghostBot.commands.ReactionCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.text.QuotesCommand;
 import me.duncte123.ghostbot.objects.CommandCategory;
-import me.duncte123.ghostBot.objects.tumblr.TumblrPost;
+import me.duncte123.ghostbot.objects.tumblr.TumblrPost;
 import me.duncte123.ghostbot.utils.TumblrUtils;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.core.MessageBuilder;
@@ -147,11 +147,11 @@ public class DoppelgangerComicCommand extends ReactionCommand {
     private MessageEmbed getEmbed(int page) {
         final TumblrPost post = pages.get(page);
         return EmbedUtils.defaultEmbed()
-                .setAuthor("DOPPELGÄNGER", post.post_url, PROFILE_PICTURE)
-                .setTitle("Link to post", post.post_url)
-                .setDescription(QuotesCommand.parseText(post.caption))
+                .setAuthor("DOPPELGÄNGER", post.getPost_url(), PROFILE_PICTURE)
+                .setTitle("Link to post", post.getPost_url())
+                .setDescription(QuotesCommand.parseText(post.getCaption()))
                 .setThumbnail(PROFILE_PICTURE)
-                .setImage(post.photos.get(0).original_size.url)
+                .setImage(post.getPhotos().get(0).getOriginal_size().getUrl())
                 .setTimestamp(null)
                 .setFooter(String.format("Page: %s/%s", page + 1, pages.size()), Variables.FOOTER_ICON)
                 .build();

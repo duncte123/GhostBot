@@ -1,6 +1,6 @@
 package me.duncte123.ghostBot.commands.main;
 
-import me.duncte123.ghostBot.objects.Command;
+import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.CommandCategory;
 import net.dv8tion.jda.bot.sharding.ShardManager;
 import net.dv8tion.jda.core.JDA;
@@ -15,7 +15,7 @@ import java.util.List;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
-public class ShardInfoCommand extends Command {
+public class ShardInfoCommand implements Command {
 
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {

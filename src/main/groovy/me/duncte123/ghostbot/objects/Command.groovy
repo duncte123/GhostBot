@@ -40,9 +40,9 @@ trait Command {
     protected String audioPath = ""
     private def audioFiles = []
 
-    abstract void execute(String invoke, String[] args, GuildMessageReceivedEvent event);
+    abstract void execute(String invoke, String[] args, GuildMessageReceivedEvent event)
 
-    abstract String getName();
+    abstract String getName()
 
     CommandCategory getCategory() {
         return CommandCategory.NONE
@@ -52,7 +52,7 @@ trait Command {
         return []
     }
 
-    abstract String getHelp();
+    abstract String getHelp()
 
     void reloadAudioFiles() {
         if (category != CommandCategory.AUDIO) return

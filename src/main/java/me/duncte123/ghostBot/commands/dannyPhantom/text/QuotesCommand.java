@@ -19,10 +19,10 @@
 package me.duncte123.ghostBot.commands.dannyPhantom.text;
 
 import me.duncte123.ghostbot.BotListener;
-import me.duncte123.ghostBot.objects.Command;
+import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.CommandCategory;
-import me.duncte123.ghostBot.objects.tumblr.TumblrDialogue;
-import me.duncte123.ghostBot.objects.tumblr.TumblrPost;
+import me.duncte123.ghostbot.objects.tumblr.TumblrDialogue;
+import me.duncte123.ghostbot.objects.tumblr.TumblrPost;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.botcommons.messaging.MessageUtils;
 import me.duncte123.ghostbot.utils.SpoopyUtils;
@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
-public class QuotesCommand extends Command {
+public class QuotesCommand implements Command {
 
     private static final String DOMAIN = "totallycorrectdannyphantomquotes.tumblr.com";
     private final String[] types = {"chat", "text", "quote"};
@@ -162,25 +162,25 @@ public class QuotesCommand extends Command {
 
     private void sendQuote(GuildMessageReceivedEvent event, TumblrPost post) {
         EmbedBuilder eb = EmbedUtils.defaultEmbed()
-                .setTitle("Link to Post", post.post_url)
-                .setFooter("Quote id: " + post.id, Variables.FOOTER_ICON);
+                .setTitle("Link to Post", post.getPost_url())
+                .setFooter("Quote id: " + post.getId(), Variables.FOOTER_ICON);
 
-        switch (post.type) {
+        switch (post.getType()) {
             case "chat":
-                List<TumblrDialogue> dialogue = post.dialogue;
+                List<TumblrDialogue> dialogue = post.getDialogue();
                 dialogue.forEach(
-                        a -> eb.appendDescription("**").appendDescription(a.label)
+                        a -> eb.appendDescription("**").appendDescription(a.getLabel())
                                 .appendDescription("** ")
-                                .appendDescription(parseText(a.phrase))
+                                .appendDescription(parseText(a.getPhrase()))
                                 .appendDescription("\n")
                 );
                 break;
             case "text":
-                eb.setDescription(parseText(post.body));
+                eb.setDescription(parseText(post.getBody()));
                 break;
             case "quote":
-                eb.setDescription("\"" + parseText(post.text) + "\"");
-                eb.appendDescription("\n\n - _ " + parseText(post.source) + "_");
+                eb.setDescription("\"" + parseText(post.getText()) + "\"");
+                eb.appendDescription("\n\n - _ " + parseText(post.getSource()) + "_");
                 break;
         }
 
@@ -190,7 +190,7 @@ public class QuotesCommand extends Command {
 
     private void getPostFromId(long id, Consumer<TumblrPost> cb, Consumer<String> fail) {
 
-        var opt = allQuotes.stream().filter((post) -> post.id == id).findFirst();
+        var opt = allQuotes.stream().filter((post) -> post.getId() == id).findFirst();
 
         if (opt.isPresent()) {
             cb.accept(opt.get());
@@ -231,7 +231,7 @@ public class QuotesCommand extends Command {
         for (String type : types) {
             logger.info("Getting quotes from type " + type);
             TumblrUtils.getInstance().fetchAllFromAccount(DOMAIN, type, posts -> {
-                List<TumblrPost> filteredPosts = posts.stream().filter(post -> !badPostIds.contains(post.id))
+                List<TumblrPost> filteredPosts = posts.stream().filter(post -> !badPostIds.contains(post.getId()))
                         .collect(Collectors.toList());
                 allQuotes.addAll(filteredPosts);
                 logger.info("Fetched " + filteredPosts.size() + " quotes from type " + type);

@@ -22,7 +22,7 @@ import com.github.natanbc.reliqua.request.RequestException
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import me.duncte123.botcommons.web.WebUtils
-import me.duncte123.ghostBot.objects.tumblr.TumblrPost
+import me.duncte123.ghostbot.objects.tumblr.TumblrPost
 import org.jetbrains.annotations.NotNull
 
 import java.util.function.Consumer

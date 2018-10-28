@@ -18,7 +18,7 @@
 
 package me.duncte123.ghostBot.commands.dannyPhantom.audio;
 
-import me.duncte123.ghostBot.objects.Command;
+import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.CommandCategory;
 import me.duncte123.ghostbot.utils.AudioUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
@@ -27,7 +27,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
-public class GoingGhostCommand extends Command {
+public class GoingGhostCommand implements Command {
 
     public GoingGhostCommand() {
         this.audioPath = AudioUtils.getInstance().BASE_AUDIO_DIR + "goingghost/";

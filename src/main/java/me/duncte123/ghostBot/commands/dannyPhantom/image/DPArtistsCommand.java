@@ -21,7 +21,7 @@ package me.duncte123.ghostBot.commands.dannyPhantom.image;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.ghostBot.commands.dannyPhantom.text.QuotesCommand;
-import me.duncte123.ghostBot.objects.tumblr.TumblrPost;
+import me.duncte123.ghostbot.objects.tumblr.TumblrPost;
 import me.duncte123.ghostbot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
@@ -141,19 +141,19 @@ public class DPArtistsCommand extends ImageCommand {
             String profilePicture = getTumblrProfilePictureUrl(url);
             extractPictureFromTumblr(usn, post -> {
 
-                        if (!post.type.equalsIgnoreCase("photo")) {
+                        if (!post.getType().equalsIgnoreCase("photo")) {
                             sendMsg(event, String.format("Got a post of type `%s` for the type `photo`\n" +
-                                    "WTF tumblr?", post.type));
+                                    "WTF tumblr?", post.getType()));
                             return;
                         }
 
                         sendEmbed(event,
                                 EmbedUtils.defaultEmbed()
-                                        .setAuthor(usn, post.post_url, profilePicture)
-                                        .setTitle("Link to post", post.post_url)
-                                        .setDescription(QuotesCommand.parseText(post.caption))
+                                        .setAuthor(usn, post.getPost_url(), profilePicture)
+                                        .setTitle("Link to post", post.getPost_url())
+                                        .setDescription(QuotesCommand.parseText(post.getCaption()))
                                         .setThumbnail(profilePicture)
-                                        .setImage(post.photos.get(0).original_size.url)
+                                        .setImage(post.getPhotos().get(0).getOriginal_size().getUrl())
                                         .build()
                         );
                     }

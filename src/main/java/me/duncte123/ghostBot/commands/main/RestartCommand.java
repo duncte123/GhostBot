@@ -1,6 +1,6 @@
 package me.duncte123.ghostBot.commands.main;
 
-import me.duncte123.ghostBot.objects.Command;
+import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.CommandCategory;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.bot.sharding.ShardManager;
@@ -8,7 +8,7 @@ import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
-public class RestartCommand extends Command {
+public class RestartCommand implements Command {
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
 

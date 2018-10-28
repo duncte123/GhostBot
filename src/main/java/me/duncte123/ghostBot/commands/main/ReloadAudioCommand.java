@@ -18,7 +18,7 @@
 
 package me.duncte123.ghostBot.commands.main;
 
-import me.duncte123.ghostBot.objects.Command;
+import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.CommandCategory;
 import me.duncte123.ghostbot.utils.SpoopyUtils;
 import me.duncte123.ghostbot.variables.Variables;
@@ -26,7 +26,7 @@ import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendSuccess;
 
-public class ReloadAudioCommand extends Command {
+public class ReloadAudioCommand implements Command {
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
         if (event.getAuthor().getIdLong() != Variables.OWNER_ID) return;

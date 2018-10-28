@@ -18,7 +18,7 @@
 
 package me.duncte123.ghostBot.commands.main;
 
-import me.duncte123.ghostBot.objects.Command;
+import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.core.entities.Member;
@@ -26,7 +26,7 @@ import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed;
 
-public class AboutCommand extends Command {
+public class AboutCommand implements Command {
     @Override
     public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
         sendEmbed(event, EmbedUtils.embedMessage("Hey there I'm GhostBot, I'm here for all your <:DPEmblemInvertStroke:422022982450282496> Danny Phantom needs.\n" +

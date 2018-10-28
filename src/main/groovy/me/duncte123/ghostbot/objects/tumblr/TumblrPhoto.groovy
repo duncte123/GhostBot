@@ -1,5 +1,5 @@
 /*
- * GhostBot, a Discord bot made for all your Danny Phantom needs
+ *     GhostBot, a Discord bot made for all your Danny Phantom needs
  *     Copyright (C) 2018  Duncan "duncte123" Sterken
  *
  *     This program is free software: you can redistribute it and/or modify
@@ -16,14 +16,30 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostBot.objects.tumblr;
+package me.duncte123.ghostbot.objects.tumblr
 
-@SuppressWarnings("unused")
-public class TumblrDialogue {
-    public String name;
-    public String label;
-    public String phrase;
+class TumblrPhoto {
 
-    public TumblrDialogue() {
+    final String caption
+    final TumblrPhotoElement original_size
+    final List<TumblrPhotoElement> alt_sizes
+
+    TumblrPhoto(String caption, TumblrPhotoElement original_size, List<TumblrPhotoElement> alt_sizes) {
+        this.caption = caption
+        this.original_size = original_size
+        this.alt_sizes = alt_sizes
     }
+
+    final static class TumblrPhotoElement {
+        final String url
+        final int width
+        final int height
+
+        TumblrPhotoElement(String url, int width, int height) {
+            this.url = url
+            this.width = width
+            this.height = height
+        }
+    }
+    
 }
