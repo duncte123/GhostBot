@@ -58,9 +58,9 @@ trait Command {
         if (category != CommandCategory.AUDIO) return
 
         logger.info("Path: $audioPath")
-        File folder = new File(audioPath)
-        File[] listOfFiles = folder.listFiles()
-        List<String> filesFound = new ArrayList<>()
+        def folder = new File(audioPath)
+        def listOfFiles = folder.listFiles()
+        def filesFound = new ArrayList<String>()
 
         if (listOfFiles == null || listOfFiles.length == 0) return
 
@@ -84,7 +84,7 @@ trait Command {
         if (category != CommandCategory.AUDIO) return
 
         if (preAudioChecks(event)) {
-            String selectedTrack = randomTrack
+            def selectedTrack = randomTrack
             sendMsg(event, "Selected track: _${selectedTrack.replaceAll("_", "\\_")}_")
             AudioUtils.instance.loadAndPlay(getMusicManager(event.guild), event.channel,
                     audioPath + selectedTrack, false)

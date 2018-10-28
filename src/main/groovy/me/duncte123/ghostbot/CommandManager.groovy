@@ -63,7 +63,7 @@ class CommandManager {
     }
 
     private Command getCommand(String name) {
-        Optional<Command> cmd = commands.stream().filter { it.name.equalsIgnoreCase(name) }.findFirst()
+        def cmd = commands.stream().filter { it.name.equalsIgnoreCase(name) }.findFirst()
 
         if (cmd.isPresent()) {
             return cmd.get()
@@ -82,8 +82,9 @@ class CommandManager {
 
         //ParallelStream for less execution time
         if (this.commands.stream().anyMatch { it.name.equalsIgnoreCase(command.name) }) {
-            List<String> aliases = Arrays.asList(this.commands.stream().filter { it.name
+            def aliases = Arrays.asList(this.commands.stream().filter { it.name
                     .equalsIgnoreCase(command.name) }.findFirst().get().aliases)
+
             for (String alias : command.aliases) {
                 if (aliases.contains(alias)) {
                     return false
@@ -97,20 +98,21 @@ class CommandManager {
     }
 
     void handleCommand(GuildMessageReceivedEvent event) {
-        final String rw = event.message.contentRaw
-        final String[] split = rw.replaceFirst("(?i)" +
+        final def rw = event.message.contentRaw
+        final def split = rw.replaceFirst("(?i)" +
                 Pattern.quote(Variables.PREFIX) + "|" +
                 Pattern.quote(Variables.OTHER_PREFIX), "")
                 .split("\\s+")
 
-        final String invoke = split[0].toLowerCase()
-        final String[] args = Arrays.copyOfRange(split, 1, split.length)
+        final def invoke = split[0].toLowerCase()
+        final def args = Arrays.copyOfRange(split, 1, split.length)
 
-        Command cmd = getCommand(invoke)
+        def cmd = getCommand(invoke)
 
         if (cmd != null) {
             logger.info("Dispatching command \"{}\" in \"{}\" with {}", invoke, event.guild, Arrays.toString(args))
             event.channel.sendTyping().queue()
+
             commandService.submit {
                 try {
                     cmd.execute(invoke, args, event)

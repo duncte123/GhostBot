@@ -53,7 +53,7 @@ class BotListener extends ListenerAdapter {
 
     @Override
     void onReady(ReadyEvent event) {
-        JDA jda = event.JDA
+        def jda = event.JDA
         logger.info("Logged in as $jda.selfUser ($jda.shardInfo)")
         postServerCount(jda)
     }
@@ -62,7 +62,7 @@ class BotListener extends ListenerAdapter {
     void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         if (event.author.bot || event.author.fake) return
 
-        String content = event.message.contentRaw.toLowerCase()
+        def content = event.message.contentRaw.toLowerCase()
 
         if (!content.startsWith(Variables.PREFIX.toLowerCase())
                 && !content.startsWith(Variables.OTHER_PREFIX.toLowerCase())) return
