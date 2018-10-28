@@ -22,7 +22,7 @@ import com.google.gson.Gson;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.botcommons.messaging.MessageUtils;
 import me.duncte123.ghostbot.CommandManager;
-import me.duncte123.ghostBot.commands.ReactionCommand;
+import me.duncte123.ghostbot.commands.ReactionCommand;
 import me.duncte123.ghostbot.objects.fyl.FylChapter;
 import me.duncte123.ghostbot.objects.fyl.FylComic;
 import me.duncte123.ghostbot.variables.Variables;

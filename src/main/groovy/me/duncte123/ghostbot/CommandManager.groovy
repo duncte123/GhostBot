@@ -18,7 +18,7 @@
 
 package me.duncte123.ghostbot
 
-import me.duncte123.ghostBot.commands.ReactionCommand
+import me.duncte123.ghostbot.commands.ReactionCommand
 import me.duncte123.ghostBot.commands.dannyPhantom.audio.*
 import me.duncte123.ghostBot.commands.dannyPhantom.image.*
 import me.duncte123.ghostBot.commands.dannyPhantom.text.GamesCommand
