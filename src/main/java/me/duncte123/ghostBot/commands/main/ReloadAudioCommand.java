@@ -21,7 +21,7 @@ package me.duncte123.ghostBot.commands.main;
 import me.duncte123.ghostBot.objects.Command;
 import me.duncte123.ghostBot.objects.CommandCategory;
 import me.duncte123.ghostBot.utils.SpoopyUtils;
-import me.duncte123.ghostBot.variables.Variables;
+import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendSuccess;

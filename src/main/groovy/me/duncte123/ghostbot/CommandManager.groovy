@@ -31,7 +31,7 @@ import me.duncte123.ghostBot.commands.fiveYearsLater.FylCommicCommand
 import me.duncte123.ghostBot.commands.fiveYearsLater.FylWikiCommand
 import me.duncte123.ghostBot.commands.main.*
 import me.duncte123.ghostBot.objects.Command
-import me.duncte123.ghostBot.variables.Variables
+import me.duncte123.ghostbot.variables.Variables
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent
 import org.apache.commons.collections4.set.UnmodifiableSet

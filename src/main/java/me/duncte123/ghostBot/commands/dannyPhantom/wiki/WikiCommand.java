@@ -19,7 +19,7 @@
 package me.duncte123.ghostBot.commands.dannyPhantom.wiki;
 
 import me.duncte123.ghostBot.objects.CommandCategory;
-import me.duncte123.ghostBot.variables.Variables;
+import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
 

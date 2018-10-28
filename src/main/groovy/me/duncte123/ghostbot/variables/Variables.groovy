@@ -1,5 +1,5 @@
 /*
- * GhostBot, a Discord bot made for all your Danny Phantom needs
+ *     GhostBot, a Discord bot made for all your Danny Phantom needs
  *     Copyright (C) 2018  Duncan "duncte123" Sterken
  *
  *     This program is free software: you can redistribute it and/or modify
@@ -16,15 +16,16 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostBot.variables;
+package me.duncte123.ghostbot.variables
 
-import me.duncte123.ghostBot.utils.SpoopyUtils;
+import me.duncte123.ghostBot.utils.SpoopyUtils
 
-public class Variables {
+class Variables {
 
-    public static final String PREFIX = SpoopyUtils.config.discord.prefix;
-    public static final String OTHER_PREFIX = "gb!";
-    public static final long OWNER_ID = 191231307290771456L;
-    public static final String VERSION = "@ghostBotVersion@";
-    public static final String FOOTER_ICON = "https://cdn.discordapp.com/emojis/394148311835344896.png";
+    public static final String PREFIX = SpoopyUtils.config.discord.prefix
+    public static final String OTHER_PREFIX = "gb!"
+    public static final long OWNER_ID = 191231307290771456L
+    public static final String VERSION = "@ghostBotVersion@"
+    public static final String FOOTER_ICON = "https://cdn.discordapp.com/emojis/394148311835344896.png"
+
 }

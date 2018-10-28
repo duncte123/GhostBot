@@ -25,7 +25,7 @@ import me.duncte123.ghostbot.CommandManager;
 import me.duncte123.ghostBot.commands.ReactionCommand;
 import me.duncte123.ghostBot.objects.fyl.FylChapter;
 import me.duncte123.ghostBot.objects.fyl.FylComic;
-import me.duncte123.ghostBot.variables.Variables;
+import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;

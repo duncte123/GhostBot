@@ -23,7 +23,7 @@ import me.duncte123.botcommons.messaging.EmbedUtils
 import me.duncte123.botcommons.web.WebUtils
 import me.duncte123.ghostBot.kuroslounge.FilterLogs
 import me.duncte123.ghostBot.utils.SpoopyUtils
-import me.duncte123.ghostBot.variables.Variables
+import me.duncte123.ghostbot.variables.Variables
 import net.dv8tion.jda.bot.sharding.DefaultShardManagerBuilder
 import net.dv8tion.jda.bot.sharding.ShardManager
 import net.dv8tion.jda.core.EmbedBuilder
@@ -65,8 +65,8 @@ class GhostBot {
                 .addEventListeners(botListener, filterLogs)
 
 
-        if (LavalinkManager.ins.isEnabled()) {
-            builder.addEventListeners(LavalinkManager.ins.getLavalink())
+        if (LavalinkManager.ins.enabled) {
+            builder.addEventListeners(LavalinkManager.ins.lavalink)
         }
 
         shardManager = builder.build()
