@@ -24,7 +24,7 @@ import me.duncte123.botcommons.messaging.MessageUtils;
 import me.duncte123.ghostbot.CommandManager;
 import me.duncte123.ghostBot.commands.ReactionCommand;
 import me.duncte123.ghostBot.commands.dannyPhantom.text.QuotesCommand;
-import me.duncte123.ghostBot.objects.CommandCategory;
+import me.duncte123.ghostbot.objects.CommandCategory;
 import me.duncte123.ghostBot.objects.tumblr.TumblrPost;
 import me.duncte123.ghostbot.utils.TumblrUtils;
 import me.duncte123.ghostbot.variables.Variables;

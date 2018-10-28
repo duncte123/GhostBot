@@ -22,9 +22,9 @@ import com.github.natanbc.reliqua.request.RequestException;
 import com.google.gson.Gson;
 import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.ghostBot.objects.Command;
-import me.duncte123.ghostBot.objects.CommandCategory;
-import me.duncte123.ghostBot.objects.googleSearch.GoogleSearchResults;
-import me.duncte123.ghostBot.objects.googleSearch.GoogleSearchResults.SearchItem;
+import me.duncte123.ghostbot.objects.CommandCategory;
+import me.duncte123.ghostbot.objects.googlesearch.GoogleSearchResults;
+import me.duncte123.ghostbot.objects.googlesearch.GoogleSearchResults.SearchItem;
 import me.duncte123.ghostbot.utils.ConfigUtils;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.ghostbot.utils.SpoopyUtils;
@@ -88,7 +88,7 @@ abstract class ImageBase extends Command {
     }
 
     void sendMessageFromData(GuildMessageReceivedEvent event, GoogleSearchResults data, String key) {
-        List<SearchItem> arr = data.getItems();
+        List<SearchItem> arr = data.items;
         if (arr == null || arr.isEmpty()) {
             sendMsg(event, "Nothing was found for the search query: `" + key + "`");
             return;
@@ -97,8 +97,8 @@ abstract class ImageBase extends Command {
 
         assert randomItem != null;
         sendEmbed(event, EmbedUtils.defaultEmbed()
-                .setTitle(randomItem.getTitle(), randomItem.getImage().getContextLink())
-                .setImage(randomItem.getLink()).build());
+                .setTitle(randomItem.title, randomItem.image.contextLink)
+                .setImage(randomItem.link).build());
     }
 
     @Override

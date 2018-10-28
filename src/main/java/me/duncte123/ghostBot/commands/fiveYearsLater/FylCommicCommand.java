@@ -23,8 +23,8 @@ import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.botcommons.messaging.MessageUtils;
 import me.duncte123.ghostbot.CommandManager;
 import me.duncte123.ghostBot.commands.ReactionCommand;
-import me.duncte123.ghostBot.objects.fyl.FylChapter;
-import me.duncte123.ghostBot.objects.fyl.FylComic;
+import me.duncte123.ghostbot.objects.fyl.FylChapter;
+import me.duncte123.ghostbot.objects.fyl.FylComic;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
@@ -80,7 +80,7 @@ public class FylCommicCommand extends ReactionCommand {
             page--;
         }
 
-        List<FylChapter> chapterList = comic.chapters;
+        List<FylChapter> chapterList = comic.getChapters();
 
         if (chapter >= chapterList.size()) {
             sendMsg(event, "Chapter " + (chapter + 1) + " is not known");
@@ -89,7 +89,7 @@ public class FylCommicCommand extends ReactionCommand {
 
         FylChapter fylChapter = chapterList.get(chapter);
 
-        if (page > fylChapter.pages) {
+        if (page > fylChapter.getPages()) {
             sendMsg(event, "Page  " + page + " is not known in that chapter");
             return;
         }
@@ -111,9 +111,9 @@ public class FylCommicCommand extends ReactionCommand {
                                 return;
                             }
                             FylChapter chap = chapterRef.get();
-                            int nextPage = pageIndex.updateAndGet(current -> index == 1 ? Math.min(current + 1, chap.pages) : Math.max(current - 1, -1));
+                            int nextPage = pageIndex.updateAndGet(current -> index == 1 ? Math.min(current + 1, chap.getPages()) : Math.max(current - 1, -1));
 
-                            if ((nextPage + 1) > chap.pages) {
+                            if ((nextPage + 1) > chap.getPages()) {
                                 nextPage = pageIndex.updateAndGet(c -> 0);
                                 int i = chapterIndex.incrementAndGet();
                                 chapterRef.updateAndGet(c -> chapterList.get(i));
@@ -122,13 +122,13 @@ public class FylCommicCommand extends ReactionCommand {
 
                                 if (i > -1) {
                                     FylChapter captt = chapterRef.updateAndGet(c -> chapterList.get(i));
-                                    nextPage = pageIndex.updateAndGet(c -> captt.pages - 1);
+                                    nextPage = pageIndex.updateAndGet(c -> captt.getPages() - 1);
                                 } else {
                                     chapterIndex.updateAndGet(c -> 0);
                                 }
                             }
 
-                            if (nextPage >= 0 && nextPage <= chap.pages)
+                            if (nextPage >= 0 && nextPage <= chap.getPages())
                                 m.editMessage(getEmbed(chapterIndex.get(), nextPage)).queue();
                         }
                 )
@@ -145,20 +145,20 @@ public class FylCommicCommand extends ReactionCommand {
     }
 
     private MessageEmbed getEmbed(int numChapter, int numPage) {
-        final FylChapter chapter = comic.chapters.get(numChapter);
-        final String page = chapter.pages_url.get(numPage);
-        String url = comic.baseUrl + chapter.page_id + "/" + page;
+        final FylChapter chapter = comic.getChapters().get(numChapter);
+        final String page = chapter.getPagesUrl().get(numPage);
+        String url = comic.getBaseUrl() + chapter.getPageId() + "/" + page;
 
-        if (comic.useWixUrl) {
-            url = comic.wixUrl + page.substring(2);
+        if (comic.isUseWixUrl()) {
+            url = comic.getWixUrl() + page.substring(2);
         }
 
         return EmbedUtils.defaultEmbed()
                 .setImage(url)
                 .setThumbnail(FYL_ICON)
-                .setTitle("Chapter: " + chapter.name, chapter.chapter_url)
+                .setTitle("Chapter: " + chapter.getName(), chapter.getChapterUrl())
                 .setTimestamp(null)
-                .setFooter(String.format("Chapter: %s, Page: %s/%s", numChapter + 1, numPage + 1, chapter.pages), Variables.FOOTER_ICON)
+                .setFooter(String.format("Chapter: %s, Page: %s/%s", numChapter + 1, numPage + 1, chapter.getPages()), Variables.FOOTER_ICON)
                 .build();
     }
 

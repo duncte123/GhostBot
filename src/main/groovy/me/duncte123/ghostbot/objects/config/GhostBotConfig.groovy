@@ -1,5 +1,5 @@
 /*
- * GhostBot, a Discord bot made for all your Danny Phantom needs
+ *     GhostBot, a Discord bot made for all your Danny Phantom needs
  *     Copyright (C) 2018  Duncan "duncte123" Sterken
  *
  *     This program is free software: you can redistribute it and/or modify
@@ -16,36 +16,36 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostBot.objects.config;
+package me.duncte123.ghostbot.objects.config
 
-public class GhostBotConfig {
+class GhostBotConfig {
 
-    public Discord discord;
-    public Lavalink lavalink;
-    public Api api;
-    public boolean running_local;
+    public Discord discord
+    public Lavalink lavalink
+    public Api api
+    public boolean running_local
 
-    public static class Discord {
-        public String prefix;
-        public int totalShards;
-        public String token;
+    static class Discord {
+        public String prefix
+        public int totalShards
+        public String token
     }
 
-    public static class Lavalink {
-        public Node[] nodes;
-        public boolean enable;
+    static class Lavalink {
+        public Node[] nodes
+        public boolean enable
 
-        public static class Node {
-            public String wsUrl;
-            public String pass;
+        static class Node {
+            public String wsUrl
+            public String pass
         }
     }
 
-    public static class Api {
-        public String dbots;
-        public String dbl;
-        public String google;
-        public String tumblr;
+    static class Api {
+        public String dbots
+        public String dbl
+        public String google
+        public String tumblr
     }
 
 }

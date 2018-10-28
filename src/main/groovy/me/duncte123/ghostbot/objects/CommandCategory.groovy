@@ -1,5 +1,5 @@
 /*
- * GhostBot, a Discord bot made for all your Danny Phantom needs
+ *     GhostBot, a Discord bot made for all your Danny Phantom needs
  *     Copyright (C) 2018  Duncan "duncte123" Sterken
  *
  *     This program is free software: you can redistribute it and/or modify
@@ -16,9 +16,9 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostBot.objects;
+package me.duncte123.ghostbot.objects
 
-public enum CommandCategory {
+enum CommandCategory {
     AUDIO,
     IMAGE,
     WIKI,

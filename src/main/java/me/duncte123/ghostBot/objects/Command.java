@@ -28,6 +28,7 @@ import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.PermissionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import me.duncte123.ghostbot.objects.CommandCategory;
 
 import java.io.File;
 import java.util.ArrayList;

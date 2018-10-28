@@ -1,5 +1,5 @@
 /*
- * GhostBot, a Discord bot made for all your Danny Phantom needs
+ *     GhostBot, a Discord bot made for all your Danny Phantom needs
  *     Copyright (C) 2018  Duncan "duncte123" Sterken
  *
  *     This program is free software: you can redistribute it and/or modify
@@ -16,13 +16,21 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostBot.objects.fyl;
+package me.duncte123.ghostbot.objects.fyl
 
-import java.util.List;
+class FylChapter {
 
-public class FylComic {
-    public String baseUrl;
-    public List<FylChapter> chapters;
-    public boolean useWixUrl;
-    public String wixUrl;
+    final String pageId
+    final int pages
+    final String name
+    final String chapterUrl
+    final List<String> pagesUrl
+
+    FylChapter(String page_id, int pages, String name, String chapter_url, List<String> pages_url) {
+        this.pageId = page_id
+        this.pages = pages
+        this.name = name
+        this.chapterUrl = chapter_url
+        this.pagesUrl = pages_url
+    }
 }

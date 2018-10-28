@@ -20,7 +20,7 @@ package me.duncte123.ghostbot.utils
 
 import gnu.trove.set.TLongSet
 import gnu.trove.set.hash.TLongHashSet
-import me.duncte123.ghostBot.objects.config.GhostBotConfig
+import me.duncte123.ghostbot.objects.config.GhostBotConfig
 import me.duncte123.botcommons.config.ConfigUtils
 import me.duncte123.ghostbot.CommandManager
 import net.dv8tion.jda.core.entities.Guild

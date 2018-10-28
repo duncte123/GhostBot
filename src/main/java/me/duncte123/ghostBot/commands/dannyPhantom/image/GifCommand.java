@@ -18,7 +18,7 @@
 
 package me.duncte123.ghostBot.commands.dannyPhantom.image;
 
-import me.duncte123.ghostBot.objects.CommandCategory;
+import me.duncte123.ghostbot.objects.CommandCategory;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;

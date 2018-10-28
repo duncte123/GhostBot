@@ -21,7 +21,7 @@ package me.duncte123.ghostBot.commands.dannyPhantom.wiki;
 import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.fandomapi.user.UserElement;
 import me.duncte123.fandomapi.user.UserResultSet;
-import me.duncte123.ghostBot.objects.CommandCategory;
+import me.duncte123.ghostbot.objects.CommandCategory;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.ghostbot.utils.SpoopyUtils;
 import me.duncte123.ghostbot.variables.Variables;

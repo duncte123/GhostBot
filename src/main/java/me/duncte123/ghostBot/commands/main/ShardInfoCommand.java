@@ -1,7 +1,7 @@
 package me.duncte123.ghostBot.commands.main;
 
 import me.duncte123.ghostBot.objects.Command;
-import me.duncte123.ghostBot.objects.CommandCategory;
+import me.duncte123.ghostbot.objects.CommandCategory;
 import net.dv8tion.jda.bot.sharding.ShardManager;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;

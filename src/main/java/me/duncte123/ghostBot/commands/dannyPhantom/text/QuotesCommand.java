@@ -20,7 +20,7 @@ package me.duncte123.ghostBot.commands.dannyPhantom.text;
 
 import me.duncte123.ghostbot.BotListener;
 import me.duncte123.ghostBot.objects.Command;
-import me.duncte123.ghostBot.objects.CommandCategory;
+import me.duncte123.ghostbot.objects.CommandCategory;
 import me.duncte123.ghostBot.objects.tumblr.TumblrDialogue;
 import me.duncte123.ghostBot.objects.tumblr.TumblrPost;
 import me.duncte123.botcommons.messaging.EmbedUtils;
