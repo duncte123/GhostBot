@@ -21,7 +21,7 @@ package me.duncte123.ghostbot
 import fredboat.audio.player.LavalinkManager
 import me.duncte123.botcommons.messaging.EmbedUtils
 import me.duncte123.botcommons.web.WebUtils
-import me.duncte123.ghostBot.kuroslounge.FilterLogs
+import me.duncte123.ghostbot.kuroslounge.FilterLogs
 import me.duncte123.ghostbot.utils.SpoopyUtils
 import me.duncte123.ghostbot.variables.Variables
 import net.dv8tion.jda.bot.sharding.DefaultShardManagerBuilder
@@ -49,7 +49,7 @@ class GhostBot {
         WebUtils.setUserAgent("Mozilla/5.0 (compatible; GhostBot/v${Variables.VERSION}; +https://github.com/duncte123/GhostBot)")
         EmbedUtils.setEmbedBuilder {
             return new EmbedBuilder()
-                    .setColor(Color.decode("#6ffe32"))
+                    .setColor(0x6ffe32)
                     .setFooter("GhostBot", Variables.FOOTER_ICON)
                     .setTimestamp(Instant.now())
         }

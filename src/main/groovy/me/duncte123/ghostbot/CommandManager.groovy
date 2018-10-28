@@ -19,6 +19,8 @@
 package me.duncte123.ghostbot
 
 import me.duncte123.ghostbot.commands.ReactionCommand
+import me.duncte123.ghostbot.commands.fiveyearslater.FylCommicCommand
+import me.duncte123.ghostbot.commands.fiveyearslater.FylWikiCommand
 import me.duncte123.ghostbot.commands.main.AboutCommand
 import me.duncte123.ghostbot.commands.main.EvalCommand
 import me.duncte123.ghostbot.commands.main.HelpCommand
@@ -47,6 +49,10 @@ class CommandManager {
     final ReactionListenerRegistry reactListReg = new ReactionListenerRegistry()
 
     CommandManager() {
+
+        this.addCommand(new FylCommicCommand(this.reactListReg))
+
+        this.addCommand(new FylWikiCommand())
 
         this.addCommand(new HelpCommand())
         this.addCommand(new AboutCommand())
