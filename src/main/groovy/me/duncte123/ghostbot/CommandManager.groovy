@@ -20,7 +20,11 @@ package me.duncte123.ghostbot
 
 import me.duncte123.ghostbot.commands.ReactionCommand
 import me.duncte123.ghostbot.commands.dannyphantom.audio.*
+import me.duncte123.ghostbot.commands.dannyphantom.image.DPArtistsCommand
+import me.duncte123.ghostbot.commands.dannyphantom.image.DoppelgangerComicCommand
+import me.duncte123.ghostbot.commands.dannyphantom.image.GifCommand
 import me.duncte123.ghostbot.commands.dannyphantom.image.ImageCommand
+import me.duncte123.ghostbot.commands.dannyphantom.image.OtherGhostCommands
 import me.duncte123.ghostbot.commands.dannyphantom.text.GamesCommand
 import me.duncte123.ghostbot.commands.dannyphantom.text.PetitionCommand
 import me.duncte123.ghostbot.commands.dannyphantom.text.QuotesCommand
@@ -58,7 +62,11 @@ class CommandManager {
         this.addCommand(new BoxGhostCommand())
 
         this.addCommand(new ImageCommand())
+        this.addCommand(new GifCommand())
+        this.addCommand(new OtherGhostCommands())
+        this.addCommand(new DoppelgangerComicCommand(this.reactListReg))
         this.addCommand(new FylCommicCommand(this.reactListReg))
+        this.addCommand(new DPArtistsCommand())
 
         this.addCommand(new WikiCommand())
         this.addCommand(new WikiUserCommand())
