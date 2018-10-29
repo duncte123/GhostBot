@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class RandomGhostCommand implements Command {
+public class RandomGhostCommand extends Command {
 
     private final List<String> ghosts = new ArrayList<>();
 

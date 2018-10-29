@@ -24,7 +24,7 @@ import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class PetitionCommand implements Command {
+public class PetitionCommand extends Command {
 
     private final String[] messages = {
             // %1$s = "http://bit.ly/dp-petition"

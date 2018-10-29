@@ -30,7 +30,7 @@ import java.text.DecimalFormat
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 
-class ShardInfoCommand implements Command {
+class ShardInfoCommand extends Command {
     @Override
     void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
         def headers = new ArrayList<String>()

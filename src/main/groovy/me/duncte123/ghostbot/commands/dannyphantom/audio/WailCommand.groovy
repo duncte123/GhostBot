@@ -16,7 +16,12 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostbot.commands.dannyphantom
+package me.duncte123.ghostbot.commands.dannyphantom.audio
 
-class a {
+class WailCommand extends AudioBaseCommand {
+    @Override
+    String getHelp() { "Gives you a nice ghostly wail" }
+
+    @Override
+    String[] getAliases() { [ "ghostlywail" ] }
 }

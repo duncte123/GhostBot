@@ -25,6 +25,7 @@ import me.duncte123.fandomapi.FandomException
 import me.duncte123.fandomapi.search.LocalWikiSearchResult
 import me.duncte123.fandomapi.search.LocalWikiSearchResultSet
 import me.duncte123.ghostbot.objects.Command
+import me.duncte123.ghostbot.objects.CommandCategory
 import me.duncte123.ghostbot.utils.SpoopyUtils
 import me.duncte123.ghostbot.utils.WikiHolder
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
@@ -34,7 +35,7 @@ import org.json.JSONObject
 import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 
-abstract class WikiBaseCommand implements Command {
+abstract class WikiBaseCommand extends Command {
 
     Gson gson = new Gson()
 
@@ -45,18 +46,21 @@ abstract class WikiBaseCommand implements Command {
     protected void handleWikiSearch(WikiHolder wiki, String searchQuery, GuildMessageReceivedEvent event) {
         WebUtils.ins.getJSONObject(String.format(
                 "%s?query=%s",
-                wiki.getSearchListEndpoint(),
+                wiki.searchListEndpoint,
                 SpoopyUtils.encodeUrl(searchQuery))
 
         ).async({ json ->
 
             if (json.has("exception")) {
-                FandomException ex = toEx(json)
-                if (ex.getType().equalsIgnoreCase("NotFoundApiException")) {
+                def ex = toEx(json)
+
+                if (ex.type.equalsIgnoreCase("NotFoundApiException")) {
                     sendMsg(event, "Your search returned no results.")
-                } else {
-                    sendMsg(event, "An error occurred: " + ex)
+                    return
                 }
+
+                sendMsg(event, "An error occurred: " + ex)
+
                 return
             }
 
@@ -76,23 +80,23 @@ abstract class WikiBaseCommand implements Command {
             }
 
             def eb = EmbedUtils.defaultEmbed()
-                    .setTitle("Query: " + searchQuery, wiki.getDomain() +
+                    .setTitle("Query: " + searchQuery, wiki.domain +
                     "/wiki/Special:Search?query=" + searchQuery.replaceAll(" ", "%20"))
-                    .setAuthor("Requester: " + String.format("%#s", event.getAuthor()),
-                    "https://ghostbot.duncte123.me/", event.getAuthor().getEffectiveAvatarUrl())
-                    .setDescription("Total results: " + wikiSearchResultSet.getTotal() + "\n" +
+                    .setAuthor("Requester: " + String.format("%#s", event.author),
+                    "https://ghostbot.duncte123.me/", event.author.effectiveAvatarUrl)
+                    .setDescription("Total results: " + wikiSearchResultSet.total + "\n" +
                     "Current Listed: " + items.size() + "\n\n")
 
 
             for (LocalWikiSearchResult localWikiSearchResult : items) {
                 eb.appendDescription("[")
-                        .appendDescription(localWikiSearchResult.getTitle())
+                        .appendDescription(localWikiSearchResult.title)
                         .appendDescription(" - ")
                         .appendDescription(StringUtils.abbreviate(
-                             safeUrl(localWikiSearchResult.getSnippet()), 50)
+                             safeUrl(localWikiSearchResult.snippet), 50)
                         )
                         .appendDescription("](")
-                        .appendDescription(safeUrl(localWikiSearchResult.getUrl()))
+                        .appendDescription(safeUrl(localWikiSearchResult.url))
                         .appendDescription(")\n")
             }
 
@@ -124,4 +128,8 @@ abstract class WikiBaseCommand implements Command {
                 .replaceAll("\\)", "\\)")
     }
 
+    @Override
+    CommandCategory getCategory() {
+        return CommandCategory.WIKI
+    }
 }

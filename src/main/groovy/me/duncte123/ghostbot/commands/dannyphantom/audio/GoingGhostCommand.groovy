@@ -16,36 +16,39 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostbot.commands.main
+package me.duncte123.ghostbot.commands.dannyphantom.audio
 
-import me.duncte123.ghostbot.objects.Command
-import me.duncte123.ghostbot.objects.CommandCategory
-import me.duncte123.ghostbot.utils.SpoopyUtils
-import me.duncte123.ghostbot.variables.Variables
+import me.duncte123.ghostbot.utils.AudioUtils
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendSuccess
+import java.util.concurrent.ThreadLocalRandom
 
-class ReloadAudioCommand extends Command {
+import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
+
+class GoingGhostCommand extends AudioBaseCommand {
     @Override
     void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
-        if (event.getAuthor().getIdLong() != Variables.OWNER_ID) return
 
-        SpoopyUtils.getCommandManager().getCommands().forEach { it.reloadAudioFiles() }
+        if (!preAudioChecks(event)) {
+            return
+        }
 
-        sendSuccess(event.getMessage())
+        def selectedTrack = randomTrack
+        def p = ThreadLocalRandom.current().nextInt(100)
+
+        if (p >= 50 && p <= 55) {
+            selectedTrack = "extra/its going ghost.mp3"
+        }
+
+        sendMsg(event, "Selected track: _" + selectedTrack.replace("_", "\\_") + "_")
+        AudioUtils.instance.loadAndPlay(getMusicManager(event.guild), event.channel,
+                audioPath + selectedTrack, false)
+
+
     }
-
-    @Override
-    String getName() { "reloadaudio" }
 
     @Override
     String getHelp() {
-        return null
-    }
-
-    @Override
-    CommandCategory getCategory() {
-        return CommandCategory.HIDDEN
+        'Screams _"going ghost"_ in the voice channel that you are in (has a 5% chance of becoming ghostly)'
     }
 }

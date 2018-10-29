@@ -44,7 +44,7 @@ import java.util.function.Consumer;
 import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed;
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
-abstract class ImageBase implements Command {
+abstract class ImageBase extends Command {
 
     private static final Map<String, GoogleSearchResults> searchCache = new HashMap<>();
     private static final Logger logger = LoggerFactory.getLogger(ImageBase.class);

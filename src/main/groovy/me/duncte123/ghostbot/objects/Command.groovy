@@ -34,9 +34,9 @@ import java.util.concurrent.ThreadLocalRandom
 import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 
-trait Command {
+abstract class Command {
 
-    protected final Logger logger = LoggerFactory.getLogger("${name}Command")
+    protected final Logger logger = LoggerFactory.getLogger(getClass())
     protected String audioPath = ""
     private def audioFiles = []
 
@@ -77,7 +77,7 @@ trait Command {
     String getRandomTrack() {
         if (category != CommandCategory.AUDIO) return null
 
-        return audioFiles[ThreadLocalRandom.current().nextInt(audioFiles.length)]
+        return audioFiles[ThreadLocalRandom.current().nextInt(audioFiles.size())]
     }
 
     void doAudioStuff(GuildMessageReceivedEvent event) {
@@ -98,21 +98,23 @@ trait Command {
 
     boolean preAudioChecks(GuildMessageReceivedEvent event) {
 
-        if (!event.member.voiceState.inVoiceChannel()) {
+        def voiceState = event.member.voiceState
+
+        if (!voiceState.inVoiceChannel()) {
             sendEmbed(event, EmbedUtils.embedMessage("Please join a voice channel first"))
 
             return false
         }
 
         try {
-            LavalinkManager.ins.openConnection(event.member.voiceState.channel)
+            LavalinkManager.ins.openConnection(voiceState.channel)
         } catch (PermissionException e) {
 
             if (e.permission == Permission.VOICE_CONNECT) {
-                sendEmbed(event, EmbedUtils.embedMessage("I don't have permission to join $event.member.voiceState.channel.name"))
+                sendEmbed(event, EmbedUtils.embedMessage("I don't have permission to join $voiceState.channel.name"))
             } else {
                 sendEmbed(event, EmbedUtils.embedMessage("Error while joining channel " +
-                        "`$event.member.voiceState.channel.name`: $e.message"))
+                        "`$voiceState.channel.name`: $e.message"))
             }
 
             return false

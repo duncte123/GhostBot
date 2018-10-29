@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
-public class QuotesCommand implements Command {
+public class QuotesCommand extends Command {
 
     private static final String DOMAIN = "totallycorrectdannyphantomquotes.tumblr.com";
     private final String[] types = {"chat", "text", "quote"};

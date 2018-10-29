@@ -35,7 +35,7 @@ import static me.duncte123.botcommons.messaging.MessageUtils.sendErrorWithMessag
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 import static me.duncte123.botcommons.messaging.MessageUtils.sendSuccess
 
-class EvalCommand implements Command {
+class EvalCommand extends Command {
 
     private final ScriptEngine engine = new GroovyScriptEngineImpl()
     private final ExecutorService service = Executors.newCachedThreadPool { new Thread(it, "Eval-Thread") }

@@ -31,7 +31,7 @@ import java.util.stream.Collectors
 import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 
-class HelpCommand implements Command {
+class HelpCommand extends Command {
     @Override
     void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
 

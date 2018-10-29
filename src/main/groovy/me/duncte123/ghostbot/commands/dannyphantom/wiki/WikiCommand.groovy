@@ -16,36 +16,39 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostbot.commands.main
+package me.duncte123.ghostbot.commands.dannyphantom.wiki
 
-import me.duncte123.ghostbot.objects.Command
-import me.duncte123.ghostbot.objects.CommandCategory
-import me.duncte123.ghostbot.utils.SpoopyUtils
 import me.duncte123.ghostbot.variables.Variables
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendSuccess
+import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 
-class ReloadAudioCommand extends Command {
+class WikiCommand extends WikiBaseCommand {
     @Override
     void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
-        if (event.getAuthor().getIdLong() != Variables.OWNER_ID) return
+        if (args.length == 0) {
+            sendMsg(event, "Insufficient arguments, Correct usage: `$Variables.PREFIX$name <search term>`")
+            return
+        }
 
-        SpoopyUtils.getCommandManager().getCommands().forEach { it.reloadAudioFiles() }
-
-        sendSuccess(event.getMessage())
+        handleWikiSearch(wiki, args.join(" "), event)
     }
 
     @Override
-    String getName() { "reloadaudio" }
+    String getName() { "wiki" }
+
+    @Override
+    String[] getAliases() {
+        [
+                "wikia",
+                "wikisearch",
+                "dannyphantomwiki"
+        ]
+    }
 
     @Override
     String getHelp() {
-        return null
-    }
-
-    @Override
-    CommandCategory getCategory() {
-        return CommandCategory.HIDDEN
+        "Search the Danny Phantom wiki\n" +
+                "Usage `$Variables.PREFIX$name <search term>`\nExample: `$Variables.PREFIX$name Danny`"
     }
 }

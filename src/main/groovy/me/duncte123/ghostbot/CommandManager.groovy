@@ -19,6 +19,13 @@
 package me.duncte123.ghostbot
 
 import me.duncte123.ghostbot.commands.ReactionCommand
+import me.duncte123.ghostbot.commands.dannyphantom.audio.BoxGhostCommand
+import me.duncte123.ghostbot.commands.dannyphantom.audio.EmberCommand
+import me.duncte123.ghostbot.commands.dannyphantom.audio.FruitloopCommand
+import me.duncte123.ghostbot.commands.dannyphantom.audio.GoingGhostCommand
+import me.duncte123.ghostbot.commands.dannyphantom.audio.WailCommand
+import me.duncte123.ghostbot.commands.dannyphantom.wiki.WikiCommand
+import me.duncte123.ghostbot.commands.dannyphantom.wiki.WikiUserCommand
 import me.duncte123.ghostbot.commands.fiveyearslater.FylCommicCommand
 import me.duncte123.ghostbot.commands.fiveyearslater.FylWikiCommand
 import me.duncte123.ghostbot.commands.main.AboutCommand
@@ -49,9 +56,16 @@ class CommandManager {
     final ReactionListenerRegistry reactListReg = new ReactionListenerRegistry()
 
     CommandManager() {
+        this.addCommand(new GoingGhostCommand())
+        this.addCommand(new WailCommand())
+        this.addCommand(new FruitloopCommand())
+        this.addCommand(new EmberCommand())
+        this.addCommand(new BoxGhostCommand())
 
         this.addCommand(new FylCommicCommand(this.reactListReg))
 
+        this.addCommand(new WikiCommand())
+        this.addCommand(new WikiUserCommand())
         this.addCommand(new FylWikiCommand())
 
         this.addCommand(new HelpCommand())
@@ -71,11 +85,11 @@ class CommandManager {
     private Command getCommand(String name) {
         def cmd = commands.stream().filter { it.name.equalsIgnoreCase(name) }.findFirst()
 
-        if (cmd.isPresent()) {
+        if (cmd.present) {
             return cmd.get()
         }
 
-        cmd = commands.stream().filter { Arrays.asList(it.aliases).contains(name) }.findFirst()
+        cmd = commands.stream().filter { it.aliases.contains(name) }.findFirst()
 
         return cmd.orElse(null)
     }
@@ -88,14 +102,15 @@ class CommandManager {
 
         //ParallelStream for less execution time
         if (this.commands.stream().anyMatch { it.name.equalsIgnoreCase(command.name) }) {
-            def aliases = Arrays.asList(this.commands.stream().filter { it.name
-                    .equalsIgnoreCase(command.name) }.findFirst().get().aliases)
+            def aliases = this.commands.stream().filter { it.name
+                    .equalsIgnoreCase(command.name) }.findFirst().get().aliases
 
             for (String alias : command.aliases) {
                 if (aliases.contains(alias)) {
                     return false
                 }
             }
+
             return false
         }
         this.commands.add(command)

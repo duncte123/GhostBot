@@ -25,7 +25,7 @@ import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed
 
-class AboutCommand implements Command {
+class AboutCommand extends Command {
 
     AboutCommand() {}
 

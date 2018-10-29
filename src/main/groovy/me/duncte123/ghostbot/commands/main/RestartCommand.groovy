@@ -29,7 +29,7 @@ import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 
-class RestartCommand implements Command {
+class RestartCommand extends Command {
     @Override
     void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
         if (event.author.getIdLong() != Variables.OWNER_ID) {

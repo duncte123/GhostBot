@@ -16,36 +16,36 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostbot.commands.main
+package me.duncte123.ghostbot.commands.dannyphantom.audio
 
 import me.duncte123.ghostbot.objects.Command
 import me.duncte123.ghostbot.objects.CommandCategory
-import me.duncte123.ghostbot.utils.SpoopyUtils
-import me.duncte123.ghostbot.variables.Variables
+import me.duncte123.ghostbot.utils.AudioUtils
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendSuccess
+import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 
-class ReloadAudioCommand extends Command {
+class EmberCommand extends Command {
     @Override
     void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
-        if (event.getAuthor().getIdLong() != Variables.OWNER_ID) return
+        if (!preAudioChecks(event)) {
+            return
+        }
 
-        SpoopyUtils.getCommandManager().getCommands().forEach { it.reloadAudioFiles() }
-
-        sendSuccess(event.getMessage())
+        sendMsg(event, "Selected track: _Ember McLain - Remember_")
+        AudioUtils.instance.loadAndPlay(getMusicManager(event.guild), event.channel, "wBMOc24_aIw", false)
     }
 
     @Override
-    String getName() { "reloadaudio" }
-
-    @Override
-    String getHelp() {
-        return null
-    }
+    String getName() { "remember" }
 
     @Override
     CommandCategory getCategory() {
-        return CommandCategory.HIDDEN
+        return CommandCategory.AUDIO
+    }
+
+    @Override
+    String getHelp() {
+        'Plays the song "Remember" in the voice channel that you are in'
     }
 }

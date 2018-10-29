@@ -16,35 +16,9 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostbot.commands.main
+package me.duncte123.ghostbot.commands.dannyphantom.audio
 
-import me.duncte123.ghostbot.objects.Command
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
-
-import java.time.temporal.ChronoUnit
-
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
-
-class PingCommand extends Command {
+class BoxGhostCommand extends AudioBaseCommand {
     @Override
-    void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
-
-        sendMsg(event, "PONG!") {
-
-            def rest = event.message.creationTime.until(it.creationTime, ChronoUnit.MILLIS)
-
-            it.editMessage(
-                    """"PONG!
-                    Rest Ping: $rest
-                    Websocket Ping: $event.JDA.ping
-                    """).queue()
-        }
-
-    }
-
-    @Override
-    String getName() { "ping" }
-
-    @Override
-    String getHelp() { "PONG" }
+    String getHelp() { "BWEARE" }
 }
