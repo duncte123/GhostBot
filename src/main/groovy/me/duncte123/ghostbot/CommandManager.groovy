@@ -24,6 +24,8 @@ import me.duncte123.ghostbot.commands.dannyphantom.audio.EmberCommand
 import me.duncte123.ghostbot.commands.dannyphantom.audio.FruitloopCommand
 import me.duncte123.ghostbot.commands.dannyphantom.audio.GoingGhostCommand
 import me.duncte123.ghostbot.commands.dannyphantom.audio.WailCommand
+import me.duncte123.ghostbot.commands.dannyphantom.text.GamesCommand
+import me.duncte123.ghostbot.commands.dannyphantom.text.PetitionCommand
 import me.duncte123.ghostbot.commands.dannyphantom.wiki.WikiCommand
 import me.duncte123.ghostbot.commands.dannyphantom.wiki.WikiUserCommand
 import me.duncte123.ghostbot.commands.fiveyearslater.FylCommicCommand
@@ -67,6 +69,9 @@ class CommandManager {
         this.addCommand(new WikiCommand())
         this.addCommand(new WikiUserCommand())
         this.addCommand(new FylWikiCommand())
+        this.addCommand(new PetitionCommand())
+
+        this.addCommand(new GamesCommand())
 
         this.addCommand(new HelpCommand())
         this.addCommand(new AboutCommand())
