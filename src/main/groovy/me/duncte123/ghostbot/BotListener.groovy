@@ -20,7 +20,7 @@ package me.duncte123.ghostbot
 
 import fredboat.audio.player.LavalinkManager
 import me.duncte123.botcommons.web.WebUtils
-import me.duncte123.ghostBot.audio.GuildMusicManager
+import me.duncte123.ghostbot.audio.GuildMusicManager
 import me.duncte123.ghostbot.utils.SpoopyUtils
 import me.duncte123.ghostbot.variables.Variables
 import net.dv8tion.jda.core.JDA
@@ -67,7 +67,7 @@ class BotListener extends ListenerAdapter {
         if (!content.startsWith(Variables.PREFIX.toLowerCase())
                 && !content.startsWith(Variables.OTHER_PREFIX.toLowerCase())) return
 
-        if (event.message.contentRaw == Variables.PREFIX + "shutdown" && event.author.idLong == Variables.OWNER_ID) {
+        if (event.message.contentRaw == Variables.PREFIX + "shutdown" && event.author.id == Variables.OWNER_ID) {
             logger.info("Shutting down!!")
             service.shutdownNow()
             SpoopyUtils.commandManager.commandService.shutdown()

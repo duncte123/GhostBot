@@ -32,7 +32,6 @@ import net.dv8tion.jda.core.entities.Game
 import net.dv8tion.jda.core.utils.cache.CacheFlag
 import org.slf4j.LoggerFactory
 
-import java.awt.Color
 import java.time.Instant
 
 class GhostBot {

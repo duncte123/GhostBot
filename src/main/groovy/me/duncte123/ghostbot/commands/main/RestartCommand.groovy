@@ -32,12 +32,12 @@ import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 class RestartCommand extends Command {
     @Override
     void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
-        if (event.author.getIdLong() != Variables.OWNER_ID) {
+        if (event.author.id != Variables.OWNER_ID) {
             sendMsg(event, "No permission")
             return
         }
 
-        def manager = event.getJDA().asBot().getShardManager()
+        def manager = event.JDA.asBot().shardManager
 
         if (args.length < 1) {
             sendMsg(event, "Restarting all shards") {

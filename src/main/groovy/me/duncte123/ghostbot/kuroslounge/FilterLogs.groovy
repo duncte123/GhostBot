@@ -28,12 +28,12 @@ class FilterLogs extends ListenerAdapter {
 
     private static final Logger logger = LoggerFactory.getLogger(FilterLogs.class)
 
-    private static final long logsBotspam = 377529193220800522L
-    private static final long loggerBot = 327424261180620801L
+    private static final String logsBotspam = "377529193220800522"
+    private static final String loggerBot = "327424261180620801"
 
     @Override
     void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-        if (event.channel.idLong != logsBotspam || event.author.idLong != loggerBot) return
+        if (event.channel.id != logsBotspam || event.author.id != loggerBot) return
 
         logger.debug(event.author.toString())
 

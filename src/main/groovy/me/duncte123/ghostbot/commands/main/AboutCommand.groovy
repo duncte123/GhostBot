@@ -36,14 +36,14 @@ class AboutCommand extends Command {
         def guildCount = event.JDA.asBot().shardManager.guildCache.size()
 
         sendEmbed(event, EmbedUtils.embedMessage(
-             """Hey there I'm GhostBot, I'm here for all your <:DPEmblemInvertStroke:422022982450282496> Danny Phantom needs.
-                I'm being developed by $devName and if you have any ideas of what to add to me you can contact him or join [this server](https://discord.gg/NKM9Xtk)
+                """Hey there I'm GhostBot, I'm here for all your <:DPEmblemInvertStroke:422022982450282496> Danny Phantom needs.
+I'm being developed by $devName and if you have any ideas of what to add to me you can contact him or join [this server](https://discord.gg/NKM9Xtk)
 
-                **Useful information:**
-                Invite link: [Click HERE](https://discordapp.com/oauth2/authorize?client_id=397297702150602752&scope=bot&permissions=8)
-                Prefix: `${Variables.PREFIX}`
-                Support server: [https://discord.gg/NKM9Xtk](https://discord.gg/NKM9Xtk)
-                Amount of servers that I'm in: $guildCount"""
+**Useful information:**
+Invite link: [Click HERE](https://discordapp.com/oauth2/authorize?client_id=397297702150602752&scope=bot&permissions=8)
+Prefix: `${Variables.PREFIX}`
+Support server: [https://discord.gg/NKM9Xtk](https://discord.gg/NKM9Xtk)
+Amount of servers that I'm in: $guildCount"""
         ))
 
     }
@@ -58,13 +58,13 @@ class AboutCommand extends Command {
         "Get some info about the bot"
     }
 
-    private String getDevName(GuildMessageReceivedEvent event) {
+    private static String getDevName(GuildMessageReceivedEvent event) {
 
-        long devId = 191231307290771456
+        def devId = "191231307290771456"
         def defaultVal = "duncte123 (duncte123#1245)"
 
         def foundCount = event.getGuild().getMemberCache().stream()
-                .map { it.user }.map { it.idLong }.filter { it == devId }.count()
+                .map { it.user }.map { it.id }.filter { it == devId }.count()
 
         if (foundCount > 0) {
             return event.guild.getMemberById(devId).asMention

@@ -1,5 +1,5 @@
 /*
- * GhostBot, a Discord bot made for all your Danny Phantom needs
+ *     GhostBot, a Discord bot made for all your Danny Phantom needs
  *     Copyright (C) 2018  Duncan "duncte123" Sterken
  *
  *     This program is free software: you can redistribute it and/or modify
@@ -16,27 +16,26 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostBot.audio;
+package me.duncte123.ghostbot.audio
 
-import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame;
-import lavalink.client.player.IPlayer;
-import lavalink.client.player.LavaplayerPlayerWrapper;
-import net.dv8tion.jda.core.audio.AudioSendHandler;
+import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame
+import lavalink.client.player.IPlayer
+import lavalink.client.player.LavaplayerPlayerWrapper
+import net.dv8tion.jda.core.audio.AudioSendHandler
 
-public class AudioPlayerSenderHandler implements AudioSendHandler {
-
+class AudioPlayerSenderHandler implements AudioSendHandler {
     /**
      * This is our audio player
      */
-    private final IPlayer audioPlayer;
+    private final IPlayer audioPlayer
 
     /**
      * I don't know what this does but it seems important
      */
-    private AudioFrame lastFrame;
+    private AudioFrame lastFrame
 
     AudioPlayerSenderHandler(IPlayer audioPlayer) {
-        this.audioPlayer = audioPlayer;
+        this.audioPlayer = audioPlayer
     }
 
     /**
@@ -45,12 +44,14 @@ public class AudioPlayerSenderHandler implements AudioSendHandler {
      * @return true if we can provide something
      */
     @Override
-    public boolean canProvide() {
-        LavaplayerPlayerWrapper lavaplayerPlayer = (LavaplayerPlayerWrapper) audioPlayer;
+    boolean canProvide() {
+        def lavaplayerPlayer = (LavaplayerPlayerWrapper) audioPlayer
+
         if (lastFrame == null) {
-            lastFrame = lavaplayerPlayer.provide();
+            lastFrame = lavaplayerPlayer.provide()
         }
-        return lastFrame != null;
+
+        return lastFrame != null
     }
 
     /**
@@ -59,15 +60,17 @@ public class AudioPlayerSenderHandler implements AudioSendHandler {
      * @return The audio in some nice bytes
      */
     @Override
-    public byte[] provide20MsAudio() {
-        LavaplayerPlayerWrapper lavaplayerPlayer = (LavaplayerPlayerWrapper) audioPlayer;
+    byte[] provide20MsAudio() {
+        def lavaplayerPlayer = (LavaplayerPlayerWrapper) audioPlayer
+
         if (lastFrame == null) {
-            lastFrame = lavaplayerPlayer.provide();
+            lastFrame = lavaplayerPlayer.provide()
         }
 
-        byte[] data = lastFrame != null ? lastFrame.getData() : null;
-        lastFrame = null;
-        return data;
+        def data = lastFrame != null ? lastFrame.data : null
+        lastFrame = null
+
+        return data
     }
 
     /**
@@ -76,7 +79,7 @@ public class AudioPlayerSenderHandler implements AudioSendHandler {
      * @return always true
      */
     @Override
-    public boolean isOpus() {
-        return true;
+    boolean isOpus() {
+        return true
     }
 }

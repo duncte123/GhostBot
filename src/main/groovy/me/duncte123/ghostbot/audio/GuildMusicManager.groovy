@@ -1,5 +1,5 @@
 /*
- * GhostBot, a Discord bot made for all your Danny Phantom needs
+ *     GhostBot, a Discord bot made for all your Danny Phantom needs
  *     Copyright (C) 2018  Duncan "duncte123" Sterken
  *
  *     This program is free software: you can redistribute it and/or modify
@@ -16,28 +16,28 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostBot.audio;
+package me.duncte123.ghostbot.audio
 
-import fredboat.audio.player.LavalinkManager;
-import lavalink.client.player.IPlayer;
-import net.dv8tion.jda.core.entities.Guild;
+import fredboat.audio.player.LavalinkManager
+import lavalink.client.player.IPlayer
+import net.dv8tion.jda.core.entities.Guild
 
-public class GuildMusicManager {
+class GuildMusicManager {
 
     /**
      * This is our player
      */
-    public final IPlayer player;
+    final IPlayer player
 
     /**
      * This is the scheduler
      */
-    public final TrackScheduler scheduler;
+    final TrackScheduler scheduler
 
     /**
      * This is what actually sends the audio
      */
-    private final AudioPlayerSenderHandler sendHandler;
+    private final AudioPlayerSenderHandler sendHandler
 
     /**
      * Constructor
@@ -45,11 +45,11 @@ public class GuildMusicManager {
      * @param g
      *         The guild that we wannt the manager for
      */
-    public GuildMusicManager(Guild g) {
-        player = LavalinkManager.ins.createPlayer(g.getId());
-        scheduler = new TrackScheduler(player);
-        sendHandler = new AudioPlayerSenderHandler(player);
-        player.addListener(scheduler);
+    GuildMusicManager(Guild g) {
+        player = LavalinkManager.ins.createPlayer(g.id)
+        scheduler = new TrackScheduler(player)
+        sendHandler = new AudioPlayerSenderHandler(player)
+        player.addListener(scheduler)
     }
 
     /**
@@ -57,7 +57,7 @@ public class GuildMusicManager {
      *
      * @return The {@link AudioPlayerSenderHandler thing} that sends our audio
      */
-    public AudioPlayerSenderHandler getSendHandler() {
-        return sendHandler;
+    AudioPlayerSenderHandler getSendHandler() {
+        return sendHandler
     }
 }

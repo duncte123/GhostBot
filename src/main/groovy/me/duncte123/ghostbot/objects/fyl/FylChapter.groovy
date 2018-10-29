@@ -20,17 +20,17 @@ package me.duncte123.ghostbot.objects.fyl
 
 class FylChapter {
 
-    final String pageId
+    final String page_id
     final int pages
     final String name
-    final String chapterUrl
-    final List<String> pagesUrl
+    final String chapter_url
+    final List<String> pages_url
 
     FylChapter(String page_id, int pages, String name, String chapter_url, List<String> pages_url) {
-        this.pageId = page_id
+        this.page_id = page_id
         this.pages = pages
         this.name = name
-        this.chapterUrl = chapter_url
-        this.pagesUrl = pages_url
+        this.chapter_url = chapter_url
+        this.pages_url = pages_url
     }
 }

@@ -29,11 +29,11 @@ import static me.duncte123.botcommons.messaging.MessageUtils.sendSuccess
 class ReloadAudioCommand extends Command {
     @Override
     void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
-        if (event.getAuthor().getIdLong() != Variables.OWNER_ID) return
+        if (event.author.id != Variables.OWNER_ID) return
 
-        SpoopyUtils.getCommandManager().getCommands().forEach { it.reloadAudioFiles() }
+        SpoopyUtils.commandManager.commands.forEach { it.reloadAudioFiles() }
 
-        sendSuccess(event.getMessage())
+        sendSuccess(event.message)
     }
 
     @Override

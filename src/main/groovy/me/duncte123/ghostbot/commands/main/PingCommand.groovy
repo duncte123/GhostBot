@@ -34,10 +34,9 @@ class PingCommand extends Command {
             def rest = event.message.creationTime.until(it.creationTime, ChronoUnit.MILLIS)
 
             it.editMessage(
-                    """"PONG!
-                    Rest Ping: $rest
-                    Websocket Ping: $event.JDA.ping
-                    """).queue()
+                    """PONG!
+Rest Ping: $rest
+Websocket Ping: $event.JDA.ping""").queue()
         }
 
     }

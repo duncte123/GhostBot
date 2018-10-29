@@ -22,22 +22,16 @@ import me.duncte123.ghostbot.objects.Command
 import me.duncte123.ghostbot.objects.CommandCategory
 import me.duncte123.ghostbot.variables.Variables
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
-import org.codehaus.groovy.jsr223.GroovyScriptEngineImpl
 
-import javax.script.ScriptEngine
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import java.util.concurrent.Future
 import java.util.concurrent.TimeUnit
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendErrorWithMessage
-import static me.duncte123.botcommons.messaging.MessageUtils.sendErrorWithMessage
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
-import static me.duncte123.botcommons.messaging.MessageUtils.sendSuccess
+import static me.duncte123.botcommons.messaging.MessageUtils.*
 
 class EvalCommand extends Command {
 
-    private final ScriptEngine engine = new GroovyScriptEngineImpl()
+    private final GroovyShell engine = new GroovyShell()
     private final ExecutorService service = Executors.newCachedThreadPool { new Thread(it, "Eval-Thread") }
     private final List<String> packageImports = [
             "java.io",
@@ -58,17 +52,17 @@ class EvalCommand extends Command {
     @Override
     void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
 
-        if (event.author.idLong != Variables.OWNER_ID) {
+        if (event.author.id != Variables.OWNER_ID) {
             return
         }
 
-        engine.put("event", event)
-        engine.put("jda", event.JDA)
-        engine.put("channel", event.channel)
-        engine.put("member", event.member)
-        engine.put("author", event.author)
-        engine.put("guild", event.guild)
-        engine.put("args", args)
+        engine.setVariable("event", event)
+        engine.setVariable("jda", event.JDA)
+        engine.setVariable("channel", event.channel)
+        engine.setVariable("member", event.member)
+        engine.setVariable("author", event.author)
+        engine.setVariable("guild", event.guild)
+        engine.setVariable("args", args)
 
         final def script = "import ${packageImports.join(".*\nimport ")}.*\n\n" +
                 event.message.contentRaw.split("\\s+", 2)[1]

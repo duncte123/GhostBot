@@ -41,10 +41,11 @@ class FylCommicCommand extends ReactionCommand {
     private static final String PAGE_SELECTOR = "page:"
     private static final String CHAPTER_SELECTOR = "chapter:"
     private static final String FYL_ICON = "https://cdn.discordapp.com/emojis/374708234772283403.png?v=1"
-    private FylComic comic = new Gson().fromJson(new File("5yearslater_NEW.json").text, FylComic.class)
+    private FylComic comic
 
     FylCommicCommand(CommandManager.ReactionListenerRegistry registry) {
         super(registry)
+        comic = new Gson().fromJson(new File("5yearslater_NEW.json").text, FylComic.class)
     }
 
     @Override
@@ -94,30 +95,35 @@ class FylCommicCommand extends ReactionCommand {
                         .build(), { m ->
             this.addReactions(m, Arrays.asList(LEFT_ARROW, RIGHT_ARROW, CANCEL),
                     newLongSet(event.author.idLong), 30, TimeUnit.MINUTES, { index ->
+
                 if (index >= 2) { //cancel button or other error
                     stopReactions(m, false)
                     return
                 }
+
                 def chap = chapterRef.get()
-                def nextPage = pageIndex.updateAndGet { current -> index == 1 ? Math.min(current + 1, chap.getPages()) : Math.max(current - 1, -1) }
+                def nextPage = pageIndex.updateAndGet { current ->
+                    return index == 1 ? Math.min(current + 1, chap.pages) : Math.max(current - 1, -1)
+                }
 
                 if ((nextPage + 1) > chap.pages) {
-                    nextPage = pageIndex.updateAndGet { c -> 0 }
+                    nextPage = pageIndex.updateAndGet { return 0 }
                     int i = chapterIndex.incrementAndGet()
-                    chapterRef.updateAndGet { c -> chapterList.get(i) }
+                    chap = chapterRef.updateAndGet { return chapterList.get(i) }
                 } else if (nextPage == -1) {
                     int i = chapterIndex.decrementAndGet()
 
                     if (i > -1) {
-                        def captt = chapterRef.updateAndGet { c -> chapterList.get(i) }
-                        nextPage = pageIndex.updateAndGet { c -> captt.getPages() - 1 }
+                        chap = chapterRef.updateAndGet { return chapterList.get(i) }
+                        nextPage = pageIndex.updateAndGet { return chap.getPages() - 1 }
                     } else {
-                        chapterIndex.updateAndGet { c -> 0 }
+                        chapterIndex.updateAndGet { return 0 }
                     }
                 }
 
-                if (nextPage >= 0 && nextPage <= chap.pages)
+                if (nextPage >= 0 && nextPage <= chap.pages) {
                     m.editMessage(getEmbed(chapterIndex.get(), nextPage)).queue()
+                }
             })
         })
     }
@@ -131,9 +137,10 @@ class FylCommicCommand extends ReactionCommand {
     }
 
     private MessageEmbed getEmbed(int numChapter, int numPage) {
-        final def chapter = comic.chapters.get(numChapter)
-        final def page = chapter.pagesUrl.get(numPage)
-        def url = comic.baseUrl + chapter.pageId + "/" + page
+        def chapter = comic.chapters.get(numChapter)
+        def page = chapter.pages_url.get(numPage)
+
+        def url = comic.baseUrl + chapter.page_id + "/" + page
 
         if (comic.useWixUrl) {
             url = comic.wixUrl + page.substring(2)
@@ -142,9 +149,9 @@ class FylCommicCommand extends ReactionCommand {
         return EmbedUtils.defaultEmbed()
                 .setImage(url)
                 .setThumbnail(FYL_ICON)
-                .setTitle("Chapter: " + chapter.name, chapter.chapterUrl)
+                .setTitle("Chapter: $chapter.name", chapter.chapter_url)
                 .setTimestamp(null)
-                .setFooter(String.format("Chapter: %s, Page: %s/%s", numChapter + 1, numPage + 1, chapter.pages), Variables.FOOTER_ICON)
+                .setFooter("Chapter: ${numChapter + 1}, Page: ${numPage + 1}/$chapter.pages", Variables.FOOTER_ICON)
                 .build()
     }
 

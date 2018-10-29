@@ -28,7 +28,7 @@ abstract class AudioBaseCommand extends Command {
     private final String commandName
 
     AudioBaseCommand() {
-        this.commandName = getClass().name.replaceFirst("Command", "").toLowerCase()
+        this.commandName = getClass().simpleName.replaceFirst("Command", "").toLowerCase()
         this.audioPath = "$AudioUtils.instance.BASE_AUDIO_DIR$commandName/"
         reloadAudioFiles()
     }

@@ -20,7 +20,7 @@ package me.duncte123.ghostbot.objects
 
 import fredboat.audio.player.LavalinkManager
 import me.duncte123.botcommons.messaging.EmbedUtils
-import me.duncte123.ghostBot.audio.GuildMusicManager
+import me.duncte123.ghostbot.audio.GuildMusicManager
 import me.duncte123.ghostbot.utils.AudioUtils
 import net.dv8tion.jda.core.Permission
 import net.dv8tion.jda.core.entities.Guild

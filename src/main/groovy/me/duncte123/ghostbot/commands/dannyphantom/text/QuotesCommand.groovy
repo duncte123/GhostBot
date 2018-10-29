@@ -18,6 +18,8 @@
 
 package me.duncte123.ghostbot.commands.dannyphantom.text
 
+import gnu.trove.list.TLongList
+import gnu.trove.list.array.TLongArrayList
 import gnu.trove.map.TLongObjectMap
 import gnu.trove.map.hash.TLongObjectHashMap
 import me.duncte123.botcommons.messaging.EmbedUtils
@@ -43,40 +45,42 @@ class QuotesCommand extends Command {
     private final String[] types = ["chat", "text", "quote"]
     private final List<TumblrPost> allQuotes = []
     private final TLongObjectMap<List<TumblrPost>> guildQuotes = new TLongObjectHashMap<>()
-    private final List<Long> badPostIds = [
-            156199508936L,
-            141701068521L,
-            139748205676L,
-            145485004576L,
-            131957587201L,
-            145767003281L,
-            122464866251L,
-            149288809271L,
-            131048227566L,
-            160064523456L,
-            146961714036L,
-            157865830301L,
-            136789766336L,
-            148512885491L,
-            137376851771L,
-            147819522951L,
-            147825378346L,
-            156199957996L,
-            143194957186L,
-            121801283241L,
-            121891439031L,
-            144734161886L,
-            130808913006L,
-            130834334051L,
-            131278048551L,
-            163028433406L,
-            150823532681L,
-            173944925826L,
-            127476921111L,
-            174190854511L
-    ]
+    private final TLongList badPostIds = new TLongArrayList()
 
     QuotesCommand() {
+        ["156199508936",
+         "141701068521",
+         "139748205676",
+         "145485004576",
+         "131957587201",
+         "145767003281",
+         "122464866251",
+         "149288809271",
+         "131048227566",
+         "160064523456",
+         "146961714036",
+         "157865830301",
+         "136789766336",
+         "148512885491",
+         "137376851771",
+         "147819522951",
+         "147825378346",
+         "156199957996",
+         "143194957186",
+         "121801283241",
+         "121891439031",
+         "144734161886",
+         "130808913006",
+         "130834334051",
+         "131278048551",
+         "163028433406",
+         "150823532681",
+         "173944925826",
+         "127476921111",
+         "174190854511"].stream().map {
+            badPostIds.add(Long.parseLong(it))
+        }
+
         reloadQuotes()
     }
 
@@ -131,7 +135,7 @@ class QuotesCommand extends Command {
         return CommandCategory.TEXT
     }
 
-    private void sendQuote(GuildMessageReceivedEvent event, TumblrPost post) {
+    private static void sendQuote(GuildMessageReceivedEvent event, TumblrPost post) {
         def eb = EmbedUtils.defaultEmbed()
                 .setTitle("Link to Post", post.post_url)
                 .setFooter("Quote id: $post.id", Variables.FOOTER_ICON)

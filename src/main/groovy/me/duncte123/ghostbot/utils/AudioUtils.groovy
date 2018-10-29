@@ -30,7 +30,7 @@ import gnu.trove.map.TLongObjectMap
 import gnu.trove.map.hash.TLongObjectHashMap
 import me.duncte123.botcommons.messaging.EmbedUtils
 import me.duncte123.botcommons.messaging.MessageUtils
-import me.duncte123.ghostBot.audio.GuildMusicManager
+import me.duncte123.ghostbot.audio.GuildMusicManager
 import net.dv8tion.jda.core.entities.Guild
 import net.dv8tion.jda.core.entities.TextChannel
 

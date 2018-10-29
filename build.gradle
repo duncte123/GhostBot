@@ -19,10 +19,9 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
-    id 'java'
+    id 'groovy'
     id 'application'
     id 'idea'
-    id 'groovy'
     id 'com.github.johnrengelman.shadow' version '2.0.4'
 }
 
@@ -30,7 +29,7 @@ group 'me.duncte123.ghostbot'
 version "1.12.1_${getGitHash()}"
 mainClassName = "${group}.GhostBot"
 
-sourceCompatibility = JavaVersion.VERSION_1_10
+sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
     jcenter()
@@ -53,7 +52,8 @@ dependencies {
     // Logback classic
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
 
-    implementation 'com.github.apache.groovy:groovy-all:43d9f2178f'
+    compile 'com.github.apache.groovy:groovy-all:d87966b'
+
 }
 
 task sourcesForRelease(type: Copy) {
@@ -69,7 +69,8 @@ task sourcesForRelease(type: Copy) {
 }
 
 task generateJavaSources(type: SourceTask) {
-    def javaSources = sourceSets.main.allJava.filter {
+    def javaSources = sourceSets.main.allSource.filter {
+        println it.name
         it.name != 'Variables.java'
     }
     source = javaSources + sourcesForRelease.destinationDir
@@ -77,7 +78,7 @@ task generateJavaSources(type: SourceTask) {
     dependsOn sourcesForRelease
 }
 
-compileJava {
+compileGroovy {
     source = generateJavaSources.source
 
     options.encoding = 'UTF-8'
