@@ -26,7 +26,6 @@ import me.duncte123.ghostbot.variables.Variables
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 
 import java.util.regex.Pattern
-import java.util.stream.Collectors
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
@@ -116,9 +115,9 @@ class HelpCommand extends Command {
 
         def manager = SpoopyUtils.getCommandManager()
 
-        List<String> temp = manager.getCommands().stream()
+        def temp = manager.getCommands().stream()
                 .filter { (it.getCategory() == commandCategory) }
-                .map(Command::getName).collect(Collectors.toList())
+                .map(Command::getName).collect()
 
         manager.getCommands().stream()
                 .filter { (it.getCategory() == commandCategory) }

@@ -20,7 +20,7 @@ package me.duncte123.ghostBot.commands.dannyPhantom.image;
 
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.botcommons.web.WebUtils;
-import me.duncte123.ghostBot.commands.dannyPhantom.text.QuotesCommand;
+import me.duncte123.ghostbot.commands.dannyphantom.text.QuotesCommand;
 import me.duncte123.ghostbot.objects.tumblr.TumblrPost;
 import me.duncte123.ghostbot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
@@ -32,7 +32,7 @@ import java.util.function.Consumer;
 import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed;
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
-public class DPArtistsCommand extends ImageCommand {
+public class DPArtistsCommand extends ImageBase {
     /*
     http://earthphantom.tumblr.com/ (approved)
     http://amethystocean-adr.tumblr.com/

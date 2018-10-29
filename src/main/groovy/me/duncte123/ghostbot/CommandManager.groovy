@@ -19,24 +19,17 @@
 package me.duncte123.ghostbot
 
 import me.duncte123.ghostbot.commands.ReactionCommand
-import me.duncte123.ghostbot.commands.dannyphantom.audio.BoxGhostCommand
-import me.duncte123.ghostbot.commands.dannyphantom.audio.EmberCommand
-import me.duncte123.ghostbot.commands.dannyphantom.audio.FruitloopCommand
-import me.duncte123.ghostbot.commands.dannyphantom.audio.GoingGhostCommand
-import me.duncte123.ghostbot.commands.dannyphantom.audio.WailCommand
+import me.duncte123.ghostbot.commands.dannyphantom.audio.*
+import me.duncte123.ghostbot.commands.dannyphantom.image.ImageCommand
 import me.duncte123.ghostbot.commands.dannyphantom.text.GamesCommand
 import me.duncte123.ghostbot.commands.dannyphantom.text.PetitionCommand
+import me.duncte123.ghostbot.commands.dannyphantom.text.QuotesCommand
+import me.duncte123.ghostbot.commands.dannyphantom.text.RandomGhostCommand
 import me.duncte123.ghostbot.commands.dannyphantom.wiki.WikiCommand
 import me.duncte123.ghostbot.commands.dannyphantom.wiki.WikiUserCommand
 import me.duncte123.ghostbot.commands.fiveyearslater.FylCommicCommand
 import me.duncte123.ghostbot.commands.fiveyearslater.FylWikiCommand
-import me.duncte123.ghostbot.commands.main.AboutCommand
-import me.duncte123.ghostbot.commands.main.EvalCommand
-import me.duncte123.ghostbot.commands.main.HelpCommand
-import me.duncte123.ghostbot.commands.main.PingCommand
-import me.duncte123.ghostbot.commands.main.ReloadAudioCommand
-import me.duncte123.ghostbot.commands.main.RestartCommand
-import me.duncte123.ghostbot.commands.main.ShardInfoCommand
+import me.duncte123.ghostbot.commands.main.*
 import me.duncte123.ghostbot.objects.Command
 import me.duncte123.ghostbot.variables.Variables
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
@@ -64,6 +57,7 @@ class CommandManager {
         this.addCommand(new EmberCommand())
         this.addCommand(new BoxGhostCommand())
 
+        this.addCommand(new ImageCommand())
         this.addCommand(new FylCommicCommand(this.reactListReg))
 
         this.addCommand(new WikiCommand())
@@ -71,6 +65,8 @@ class CommandManager {
         this.addCommand(new FylWikiCommand())
         this.addCommand(new PetitionCommand())
 
+        this.addCommand(new QuotesCommand())
+        this.addCommand(new RandomGhostCommand())
         this.addCommand(new GamesCommand())
 
         this.addCommand(new HelpCommand())
@@ -107,8 +103,10 @@ class CommandManager {
 
         //ParallelStream for less execution time
         if (this.commands.stream().anyMatch { it.name.equalsIgnoreCase(command.name) }) {
-            def aliases = this.commands.stream().filter { it.name
-                    .equalsIgnoreCase(command.name) }.findFirst().get().aliases
+            def aliases = this.commands.stream().filter {
+                it.name
+                        .equalsIgnoreCase(command.name)
+            }.findFirst().get().aliases
 
             for (String alias : command.aliases) {
                 if (aliases.contains(alias)) {

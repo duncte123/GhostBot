@@ -1,5 +1,5 @@
 /*
- * GhostBot, a Discord bot made for all your Danny Phantom needs
+ *     GhostBot, a Discord bot made for all your Danny Phantom needs
  *     Copyright (C) 2018  Duncan "duncte123" Sterken
  *
  *     This program is free software: you can redistribute it and/or modify
@@ -16,16 +16,15 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostBot.commands.dannyPhantom.image;
+package me.duncte123.ghostbot.commands.dannyphantom.image
 
-import me.duncte123.ghostbot.objects.CommandCategory;
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.ThreadLocalRandom
 
-public class ImageCommand extends ImageBase {
+class ImageCommand extends ImageBase {
 
-    private final String[] keywords = {
+    private final String[] keywords = [
             "Danny Phantom",
             "Danny Fenton",
             "Danny Fenton",
@@ -46,30 +45,20 @@ public class ImageCommand extends ImageBase {
             "Vlad Plasmius (Danny Phantom)",
             "Danny Fenton",
             "desiree"
-    };
+    ]
 
     @Override
-    public void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
-
-        String keyword = keywords[ThreadLocalRandom.current().nextInt(keywords.length)];
-        System.out.println(keyword);
-        ImageData file = requestImage(keyword);
-        sendMessageFromName(event, file);
-
+    void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
+        def keyword = keywords[ThreadLocalRandom.current().nextInt(keywords.length)]
+        def file = requestImage(keyword)
+        sendMessageFromName(event, file)
     }
 
     @Override
-    public String getName() {
-        return "image";
-    }
+    String getName() { "image" }
 
     @Override
-    public CommandCategory getCategory() {
-        return CommandCategory.IMAGE;
-    }
-
-    @Override
-    public String getHelp() {
-        return "Gives you a random Danny Phantom <:DPEmblemInvertStroke:402746292788264960> related image from google";
+    String getHelp() {
+        "Gives you a random Danny Phantom <:DPEmblemInvertStroke:402746292788264960> related image from google"
     }
 }
