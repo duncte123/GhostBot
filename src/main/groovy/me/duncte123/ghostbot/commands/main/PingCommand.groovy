@@ -35,8 +35,8 @@ class PingCommand extends Command {
 
             it.editMessage(
                     """PONG!
-Rest Ping: $rest
-Websocket Ping: $event.JDA.ping""").queue()
+Rest Ping: ${rest}ms
+Websocket Ping: ${event.JDA.ping}ms""").queue()
         }
 
     }

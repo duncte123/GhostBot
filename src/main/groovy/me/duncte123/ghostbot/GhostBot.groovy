@@ -45,7 +45,7 @@ class GhostBot {
         logger.info("Booting GhostBot")
         def token = SpoopyUtils.config.discord.token
         def totalShards = SpoopyUtils.config.discord.totalShards
-        WebUtils.setUserAgent("Mozilla/5.0 (compatible; GhostBot/v${Variables.VERSION}; +https://github.com/duncte123/GhostBot)")
+        WebUtils.userAgent = "Mozilla/5.0 (compatible; GhostBot/v${Variables.VERSION}; +https://github.com/duncte123/GhostBot)"
         EmbedUtils.setEmbedBuilder {
             return new EmbedBuilder()
                     .setColor(0x6ffe32)

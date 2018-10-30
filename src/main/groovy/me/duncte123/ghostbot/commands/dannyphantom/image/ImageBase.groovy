@@ -41,12 +41,13 @@ import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 
 abstract class ImageBase extends Command {
 
-    private final Map<String, GoogleSearchResults> searchCache = new HashMap<>()
+    final Map<String, GoogleSearchResults> searchCache = new HashMap<>()
     private static final Logger logger = LoggerFactory.getLogger(ImageBase.class)
     private static final JSONObject IMAGES = new ConfigUtils().images
     final Gson gson = new Gson()
 
     void requestSearch(String query, Consumer<GoogleSearchResults> success, Consumer<RequestException> error) {
+
         if (searchCache.containsKey(query)) {
             success.accept(searchCache.get(query))
 

@@ -49,7 +49,7 @@ class SpoopyUtils {
     // [0] = users, [1] = bots
     static double[] getBotRatio(Guild g) {
 
-        MemberCacheView memberCache = g.getMemberCache()
+        def memberCache = g.memberCache
         double totalCount = memberCache.size()
         double botCount = memberCache.stream().filter { it.user.bot }.count()
         double userCount = totalCount - botCount
@@ -60,15 +60,15 @@ class SpoopyUtils {
         //percent in bots
         double botCountP = (botCount / totalCount) * 100
 
-        return new double[]{Math.round(userCountP), Math.round(botCountP)}
+        return [ Math.round(userCountP), Math.round(botCountP) ]
     }
 
     static TextChannel getPublicChannel(Guild guild) {
 
-        TextChannel pubChann = guild.getTextChannelCache().getElementById(guild.getId())
+        def pubChann = guild.textChannelCache.getElementById(guild.id)
 
         if (pubChann == null || !pubChann.canTalk()) {
-            return guild.getTextChannelCache().stream().filter(TextChannel::canTalk).findFirst().orElse(null)
+            return guild.textChannelCache.stream().filter { it.&canTalk }.findFirst().orElse(null)
         }
 
         return pubChann
@@ -79,7 +79,7 @@ class SpoopyUtils {
     }
 
     static String encodeUrl(String inp) {
-        return URLEncoder.encode(inp, StandardCharsets.UTF_8);
+        return URLEncoder.encode(inp, StandardCharsets.UTF_8)
     }
 
     static TLongSet newLongSet(long... ids) {

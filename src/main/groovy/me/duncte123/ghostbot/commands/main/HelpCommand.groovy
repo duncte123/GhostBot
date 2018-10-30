@@ -107,21 +107,21 @@ class HelpCommand extends Command {
     @Override
     String[] getAliases() { ["commands"] }
 
-    private String buildCommands(List<String> commands) {
+    private static String buildCommands(List<String> commands) {
         return "`${Variables.PREFIX + commands.join("`, `${Variables.PREFIX}")}`"
     }
 
-    private List<String> getCommandsForCategory(CommandCategory commandCategory) {
+    private static List<String> getCommandsForCategory(CommandCategory commandCategory) {
 
-        def manager = SpoopyUtils.getCommandManager()
+        def manager = SpoopyUtils.commandManager
 
-        def temp = manager.getCommands().stream()
-                .filter { (it.getCategory() == commandCategory) }
-                .map(Command::getName).collect()
+        def temp = manager.commands.stream()
+                .filter { (it.category == commandCategory) }
+                .map(Command.&getName).collect()
 
-        manager.getCommands().stream()
-                .filter { (it.getCategory() == commandCategory) }
-                .map { Arrays.asList(it.aliases) }.forEach(temp::addAll)
+        manager.commands.stream()
+                .filter { (it.category == commandCategory) }
+                .map { it.aliases }.forEach(temp.&addAll)
 
         return temp
     }

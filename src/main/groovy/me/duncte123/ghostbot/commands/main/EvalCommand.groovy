@@ -56,6 +56,11 @@ class EvalCommand extends Command {
             return
         }
 
+        if (args.length == 0) {
+            sendSuccess(event.message)
+            return
+        }
+
         engine.setVariable("event", event)
         engine.setVariable("jda", event.JDA)
         engine.setVariable("channel", event.channel)
@@ -68,15 +73,17 @@ class EvalCommand extends Command {
                 event.message.contentRaw.split("\\s+", 2)[1]
 
         try {
-            def task = service.submit {
-                return engine.eval(script)
-            }
+            service.submit {
+                def result = engine.evaluate(script)
 
-            def result = task.get(1, TimeUnit.MINUTES)
+                if (result != null) {
+                    sendMsg(event, result.toString())
+                }
 
-            if (result != null) sendMsg(event, result.toString())
+                sendSuccess(event.message)
+            }.get(1, TimeUnit.MINUTES)
 
-            sendSuccess(event.message)
+
         } catch (Exception e) {
             try {
                 sendErrorWithMessage(event.message, e.cause.toString())

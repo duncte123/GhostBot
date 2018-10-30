@@ -22,11 +22,11 @@ plugins {
     id 'groovy'
     id 'application'
     id 'idea'
-    id 'com.github.johnrengelman.shadow' version '2.0.4'
+    id 'com.github.johnrengelman.shadow' version '4.0.2'
 }
 
 group 'me.duncte123.ghostbot'
-version "1.12.1_${getGitHash()}"
+version "2.0.0_${getGitHash()}"
 mainClassName = "${group}.GhostBot"
 
 sourceCompatibility = JavaVersion.VERSION_11
@@ -41,6 +41,9 @@ repositories {
 }
 
 dependencies {
+//    compile 'com.github.apache.groovy:groovy-all:d87966b'
+    compile 'org.codehaus.groovy:groovy:2.5.3'
+    
     //My little utils
     compile 'com.github.duncte123:botCommons:fbb8f98'
     //JDA
@@ -48,17 +51,14 @@ dependencies {
         exclude module: 'opus-java'
     }
     //LavaPlayer/Lavalink
-    compile group: 'com.github.FredBoat', name: 'Lavalink-Client', version: 'edd76a0ae8'
+    compile group: 'com.github.FredBoat', name: 'Lavalink-Client', version: 'fbd2975'
     // Logback classic
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
-
-    compile 'com.github.apache.groovy:groovy-all:d87966b'
-
 }
 
 task sourcesForRelease(type: Copy) {
-    from('src/main/java') {
-        include '**/Variables.java'
+    from('src/main/groovy') {
+        include '**/Variables.groovy'
         filter(ReplaceTokens, tokens: [
                 ghostBotVersion: project.version.toString()
         ])
@@ -68,22 +68,25 @@ task sourcesForRelease(type: Copy) {
     includeEmptyDirs = false
 }
 
-task generateJavaSources(type: SourceTask) {
-    def javaSources = sourceSets.main.allSource.filter {
-        println it.name
-        it.name != 'Variables.java'
+task generateGroovySources(type: SourceTask) {
+    def groovySources = sourceSets.main.allGroovy.filter {
+        it.name != 'Variables.groovy'
     }
-    source = javaSources + sourcesForRelease.destinationDir
+	
+    source = groovySources + sourcesForRelease.destinationDir
 
     dependsOn sourcesForRelease
 }
 
 compileGroovy {
-    source = generateJavaSources.source
+
+    println groovyClasspath
+    
+    source = generateGroovySources.source
 
     options.encoding = 'UTF-8'
 
-    dependsOn generateJavaSources
+    dependsOn generateGroovySources
 }
 
 def getGitHash() {
@@ -102,9 +105,6 @@ shadowJar {
 
 build {
     dependsOn clean
-    dependsOn jar
-    dependsOn shadowJar
-
-    jar.mustRunAfter clean
-    shadowJar.mustRunAfter jar
+    
+    build.mustRunAfter clean
 }

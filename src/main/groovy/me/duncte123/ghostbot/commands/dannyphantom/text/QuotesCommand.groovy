@@ -192,7 +192,7 @@ class QuotesCommand extends Command {
 
             logger.info("Getting quotes from type $type")
 
-            TumblrUtils.getInstance().fetchAllFromAccount(DOMAIN, type,
+            TumblrUtils.instance.fetchAllFromAccount(DOMAIN, type,
                     { posts ->
 
                         def filteredPosts = posts.stream().filter {

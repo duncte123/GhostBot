@@ -114,7 +114,7 @@ class AudioUtils {
                     if (mng.player.playingTrack == null) {
                         msg += "\nand the Player has started playing;"
                     }
-                    tracks.forEach(mng.scheduler::queue)
+                    tracks.forEach(mng.scheduler.&queue)
                 } else {
                     msg = "Adding to queue $firstTrack.info.title (first track of playlist $playlist.name)"
                     if (mng.player.playingTrack == null) {

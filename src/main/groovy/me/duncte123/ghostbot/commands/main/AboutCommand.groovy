@@ -63,7 +63,7 @@ Amount of servers that I'm in: $guildCount"""
         def devId = "191231307290771456"
         def defaultVal = "duncte123 (duncte123#1245)"
 
-        def foundCount = event.getGuild().getMemberCache().stream()
+        def foundCount = event.guild.memberCache.stream()
                 .map { it.user }.map { it.id }.filter { it == devId }.count()
 
         if (foundCount > 0) {
