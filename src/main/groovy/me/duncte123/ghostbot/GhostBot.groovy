@@ -59,7 +59,8 @@ class GhostBot {
         def builder = new DefaultShardManagerBuilder()
                 .setShardsTotal(totalShards)
                 .setToken(token)
-                .setGame(Game.watching("${Variables.PREFIX}help | #GoGhostAgain"))
+//                .setGame(Game.watching("${Variables.PREFIX}help | #GoGhostAgain"))
+                .setGame(Game.playing("GhostBot 2.0 | Now with popup blocker"))
                 .setDisabledCacheFlags(EnumSet.of(CacheFlag.EMOTE, CacheFlag.GAME))
                 .addEventListeners(botListener, filterLogs)
 

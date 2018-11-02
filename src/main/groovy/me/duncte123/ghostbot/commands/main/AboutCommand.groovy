@@ -36,14 +36,17 @@ class AboutCommand extends Command {
         def guildCount = event.JDA.asBot().shardManager.guildCache.size()
 
         sendEmbed(event, EmbedUtils.embedMessage(
-                """Hey there I'm GhostBot, I'm here for all your <:DPEmblemInvertStroke:422022982450282496> Danny Phantom needs.
-I'm being developed by $devName and if you have any ideas of what to add to me you can contact him or join [this server](https://discord.gg/NKM9Xtk)
+                """\
+Hey there, my name is GhostBot, I am the must have bot for your spooky server.
+I am manly themed around Danny Phantom but other spooky stuff that you have for me can be suggested to $devName.
+If you want to stay in contact with my developer you can join [this server](https://discord.gg/NKM9Xtk).
 
-**Useful information:**
-Invite link: [Click HERE](https://discordapp.com/oauth2/authorize?client_id=397297702150602752&scope=bot&permissions=8)
-Prefix: `${Variables.PREFIX}`
-Support server: [https://discord.gg/NKM9Xtk](https://discord.gg/NKM9Xtk)
-Amount of servers that I'm in: $guildCount"""
+**Extra information:**
+My invite link: [Click here](https://discordapp.com/oauth2/authorize?client_id=397297702150602752&scope=bot&permissions=-1)
+My prefix: `$Variables.PREFIX`
+My home: [https://discord.gg/NKM9Xtk](https://discord.gg/NKM9Xtk)
+My version: `$Variables.VERSION`
+The amount of servers that I am in: $guildCount"""
         ))
 
     }
