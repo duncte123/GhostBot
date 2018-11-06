@@ -1,6 +1,6 @@
 /*
  *     GhostBot, a Discord bot made for all your Danny Phantom needs
- *     Copyright (C) 2018  Duncan "duncte123" Sterken
+ *     Copyright (C) 2018  Duncan 'duncte123' Sterken
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
 
 package me.duncte123.ghostbot.commands.dannyphantom.image
 
+import me.duncte123.ghostbot.objects.CommandCategory
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 
 import java.util.concurrent.ThreadLocalRandom
@@ -27,72 +28,77 @@ class OtherGhostCommands extends ImageBase {
     void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
 
         switch (invoke) {
-            case "cujo":
-                sendFromKeywords(event, "Cujo Danny Phantom")
+            case 'cujo':
+                sendFromKeywords(event, 'Cujo Danny Phantom')
                 break
-            case "ember":
-                sendFromKeywords(event, "Ember Mclain")
+            case 'ember':
+                sendFromKeywords(event, 'Ember Mclain')
                 break
-            case "dan":
-                sendFromKeywords(event, "Dan Phantom", "Dark Danny")
+            case 'dan':
+                sendFromKeywords(event, 'Dan Phantom', 'Dark Danny')
                 break
-            case "vlad":
-                sendFromKeywords(event, "Vlad Plasmius", "Vlad masters")
+            case 'vlad':
+                sendFromKeywords(event, 'Vlad Plasmius', 'Vlad masters')
                 break
-            case "sam":
-                sendFromKeywords(event, "Sam Manson")
+            case 'sam':
+                sendFromKeywords(event, 'Sam Manson')
                 break
-            case "tucker":
-                sendFromKeywords(event, "Tucker Foley")
+            case 'tucker':
+                sendFromKeywords(event, 'Tucker Foley')
                 break
-            case "danny":
-                sendFromKeywords(event, "Danny Fenton", "Danny Phantom")
+            case 'danny':
+                sendFromKeywords(event, 'Danny Fenton', 'Danny Phantom')
                 break
-            case "clockwork":
-                sendFromKeywords(event, "Clockwork Danny Phantom")
+            case 'clockwork':
+                sendFromKeywords(event, 'Clockwork Danny Phantom')
                 break
-            case "pitchpearl":
-                sendFromKeywords(event, "pitch pearl")
+            case 'pitchpearl':
+                sendFromKeywords(event, 'pitch pearl')
                 break
-            case "valerie":
-                sendFromKeywords(event, "valerie gray")
+            case 'valerie':
+                sendFromKeywords(event, 'valerie gray')
                 break
-            case "dani":
-                sendFromKeywords(event, "Dani Fenton", "Dani Phantom")
+            case 'dani':
+                sendFromKeywords(event, 'Dani Fenton', 'Dani Phantom')
                 break
-            case "skulker":
-                sendFromKeywords(event, "Skulker Danny Phantom")
+            case 'skulker':
+                sendFromKeywords(event, 'Skulker Danny Phantom')
                 break
-            case "jack":
-                sendFromKeywords(event, "Jack Fenton")
+            case 'jack':
+                sendFromKeywords(event, 'Jack Fenton')
                 break
-            case "jazz":
-                sendFromKeywords(event, "Jazz Fenton")
+            case 'jazz':
+                sendFromKeywords(event, 'Jazz Fenton')
                 break
-            case "maddie":
-                sendFromKeywords(event, "Maddie Fenton")
+            case 'maddie':
+                sendFromKeywords(event, 'Maddie Fenton')
                 break
-            case "desiree":
-                sendFromKeywords(event, "Danny Phantom desiree")
+            case 'desiree':
+                sendFromKeywords(event, 'Danny Phantom desiree')
                 break
-            case "poindexter":
-                sendFromKeywords(event, "Sidney Poindexter")
+            case 'poindexter':
+                sendFromKeywords(event, 'Sidney Poindexter')
                 break
         }
 
     }
 
     @Override
-    String getName() { "cujo" }
+    String getName() { 'cujo' }
 
     @Override
-    String getHelp() { "" }
+    String getHelp() { '' }
 
     @Override
     String[] getAliases() {
-        return ["ember", "dan", "vlad",
-                "sam", "tucker", "danny", "clockwork", "pitchpearl", "valerie", "dani", "skulker", "jack", "jazz",
-                "maddie", "desiree", "poindexter"]
+        return ['ember', 'dan', 'vlad',
+                'sam', 'tucker', 'danny', 'clockwork', 'pitchpearl', 'valerie', 'dani', 'skulker', 'jack', 'jazz',
+                'maddie', 'desiree', 'poindexter']
+    }
+
+    @Override
+    CommandCategory getCategory() {
+        return CommandCategory.CHARACTERS
     }
 
     private void sendFromKeywords(GuildMessageReceivedEvent event, String... words) {

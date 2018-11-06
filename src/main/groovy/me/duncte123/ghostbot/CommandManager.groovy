@@ -34,6 +34,7 @@ import me.duncte123.ghostbot.commands.dannyphantom.wiki.WikiUserCommand
 import me.duncte123.ghostbot.commands.fiveyearslater.FylCommicCommand
 import me.duncte123.ghostbot.commands.fiveyearslater.FylWikiCommand
 import me.duncte123.ghostbot.commands.main.*
+import me.duncte123.ghostbot.commands.space.ISSCommand
 import me.duncte123.ghostbot.objects.Command
 import me.duncte123.ghostbot.variables.Variables
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
@@ -85,6 +86,8 @@ class CommandManager {
         this.addCommand(new ShardInfoCommand())
         this.addCommand(new RestartCommand())
         this.addCommand(new PingCommand())
+        
+        this.addCommand(new ISSCommand())
     }
 
     Set<Command> getCommands() {

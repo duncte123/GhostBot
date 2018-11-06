@@ -36,26 +36,26 @@ class HelpCommand extends Command {
 
 
         if (args.length > 0) {
-            String toSearch = args.join(" ")
+            String toSearch = args.join(' ')
 
             if (toSearch.startsWith(Variables.PREFIX)) {
-                toSearch = toSearch.replaceFirst(Pattern.quote(Variables.PREFIX), "")
+                toSearch = toSearch.replaceFirst(Pattern.quote(Variables.PREFIX), '')
             }
 
             if (toSearch.startsWith(Variables.OTHER_PREFIX)) {
-                toSearch = toSearch.replaceFirst(Pattern.quote(Variables.OTHER_PREFIX), "")
+                toSearch = toSearch.replaceFirst(Pattern.quote(Variables.OTHER_PREFIX), '')
             }
 
             for (Command cmd : SpoopyUtils.commandManager.commands) {
                 if (cmd.name == toSearch) {
                     sendMsg(event, "Command help for `$cmd.name` :\n" +
-                            "$cmd.help${cmd.aliases.length > 0 ? "\nAliases: ${cmd.aliases.join(", ")}" : ""}")
+                            "$cmd.help${cmd.aliases.length > 0 ? "\nAliases: ${cmd.aliases.join(', ')}" : ''}")
                     return
                 } else {
                     for (String alias : cmd.aliases) {
                         if (alias == toSearch) {
                             sendMsg(event, "Command help for `$cmd.name` :\n" +
-                                    "$cmd.help${cmd.aliases.length > 0 ? "\nAliases: " + cmd.aliases.join(", ") : ""}")
+                                    "$cmd.help${cmd.aliases.length > 0 ? "\nAliases: ${cmd.aliases.join(', ')}" : ''}")
                             return
                         }
 
@@ -68,6 +68,7 @@ class HelpCommand extends Command {
         }
 
 
+        def spaceCommands = getCommandsForCategory(CommandCategory.SPACE)
         def audioCommands = getCommandsForCategory(CommandCategory.AUDIO)
         def imageCommands = getCommandsForCategory(CommandCategory.IMAGE)
         def wikiCommands = getCommandsForCategory(CommandCategory.WIKI)
@@ -78,12 +79,13 @@ class HelpCommand extends Command {
 
         def helpEmbed = EmbedUtils.defaultEmbed()
                 .setDescription("Use `${Variables.PREFIX}help [command]` for more info about a command")
-                .addField("Audio commands", buildCommands(audioCommands), false)
-                .addField("Image commands", buildCommands(imageCommands), false)
-                .addField("Text commands", buildCommands(textCommands), false)
-                .addField("Wiki commands", buildCommands(wikiCommands), false)
-                .addField("Other commands", buildCommands(otherCommands), false)
-                .addField("Character commands", buildCommands(characterCommands), false)
+                .addField('Commands for all you space nerds', buildCommands(spaceCommands), false)
+                .addField('Audio commands', buildCommands(audioCommands), false)
+                .addField('Image commands', buildCommands(imageCommands), false)
+                .addField('Text commands', buildCommands(textCommands), false)
+                .addField('Wiki commands', buildCommands(wikiCommands), false)
+                .addField('Other commands', buildCommands(otherCommands), false)
+                .addField('Character commands', buildCommands(characterCommands), false)
                 .build()
 
         event.author.openPrivateChannel().queue({
@@ -99,13 +101,13 @@ class HelpCommand extends Command {
     }
 
     @Override
-    String getName() { "help" }
+    String getName() { 'help' }
 
     @Override
-    String getHelp() { "Shows a list of all the commands" }
+    String getHelp() { 'Shows a list of all the commands' }
 
     @Override
-    String[] getAliases() { ["commands"] }
+    String[] getAliases() { ['commands'] }
 
     private static String buildCommands(List<String> commands) {
         return "`${Variables.PREFIX + commands.join("`, `${Variables.PREFIX}")}`"
@@ -117,7 +119,7 @@ class HelpCommand extends Command {
 
         def temp = manager.commands.stream()
                 .filter { (it.category == commandCategory) }
-                .map(Command.&getName).collect()
+                .map { it.name }.collect()
 
         manager.commands.stream()
                 .filter { (it.category == commandCategory) }

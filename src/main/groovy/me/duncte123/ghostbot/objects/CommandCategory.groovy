@@ -25,5 +25,6 @@ enum CommandCategory {
     HIDDEN,
     TEXT,
     CHARACTERS,
+    SPACE,
     NONE
 }
