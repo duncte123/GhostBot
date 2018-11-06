@@ -28,10 +28,7 @@
   span.servers {
   	background: #4BB020;
   }
-  /*#menu {
-  	background-color: #4BB020 !important;
-  	box-shadow: 0 0 8px rgba(65, 68, 99, .8);
-  } */
+  
   .grow,
   .grow-less,
   .grow-more,
@@ -50,10 +47,6 @@
 .grow-more:hover {
 	transform: scale(1.2);
 }
-
-#bot-stats {
- 	display: none; 
- }
 </style>
 # GhostBot
 GhostBot is a discord bot made for Danny Phantom fans.
@@ -80,6 +73,6 @@ Current Command list:
     
     gb.5yl: Allows you to read the 5 years later comic within discord
     gb.5ylwiki: Search the 5 years later wiki
+    
+    gb.iss: Does something
 ```
-
-https://im.going-g.host/xQ6rB6KwtJ.png
