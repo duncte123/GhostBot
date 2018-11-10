@@ -35,7 +35,7 @@ class RandomGhostCommand extends Command {
     private final String wikiUrl = "https://dannyphantom.fandom.com"
 
     RandomGhostCommand() {
-        if (SpoopyUtils.config.running_local) {
+        if (!SpoopyUtils.config.running_local) {
             return
         }
 
@@ -43,20 +43,12 @@ class RandomGhostCommand extends Command {
 
         WebUtils.ins.scrapeWebPage("$wikiUrl/wiki/Category:Ghosts?display=page&sort=alphabetical").async {
 
-            def el = it.getElementsByClass("mw-content-ltr").get(2)
-            def tds = el.child(0).child(0).children()
-            def trs = tds.get(0).children()
-
+            def els = it.getElementsByClass('category-page__member')
             def anchors = new ArrayList<Element>()
 
-            trs.forEach { tr ->
-                tr.children().forEach {
-                    if (it.tagName() == "ul") {
-                        it.children().forEach { listItem ->
-                            anchors.addAll(listItem.children())
-                        }
-                    }
-                }
+            els.forEach {
+                def aTags = it.getElementsByClass('category-page__member-link')
+                anchors.addAll(aTags)
             }
 
             logger.info("Scraped ${anchors.size()} Ghosts from the wiki")
