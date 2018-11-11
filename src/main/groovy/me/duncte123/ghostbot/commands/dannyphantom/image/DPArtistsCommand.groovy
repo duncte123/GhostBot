@@ -58,15 +58,62 @@ class DPArtistsCommand extends ImageBase {
 */
 
     private final String[] artists = [
-            "earthphantom",
-            "allyphantomrush",
-            "umbrihearts",
-            "amethystocean-adr",
-            "ceciliaspen"
+            'earthphantom',
+            'allyphantomrush',
+            'umbrihearts',
+            'amethystocean-adr',
+            'amethystocean',
+            'ceciliaspen'
     ]
 
     @Override
     void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
+
+        if (!name.equalsIgnoreCase(invoke)) {
+            args = [invoke]
+        }
+
+        if (args.length < 1) {
+            sendMsg(event, "Correct usage is `gb.$name <artist name>`")
+            return
+        }
+
+        switch (args[0]) {
+            case 'earthphantom':
+                doStuff('earthphantom.tumblr.com', event)
+                break
+
+            case 'allyphantomrush':
+                doStuff('https://allyphantomrush.deviantart.com/', event)
+                break
+
+            case 'umbrihearts':
+                doStuff('https://umbrihearts.deviantart.com/', event)
+                break
+
+            case 'amethystocean-adr':
+                doStuff('amethystocean-adr.tumblr.com', event)
+                break
+
+            case 'amethystocean':
+                doStuff('amethyst-ocean.deviantart.com', event)
+                break
+
+            case 'ceciliaspen':
+                doStuff('ceciliaspen.tumblr.com', event)
+                break
+
+            case 'list':
+                sendMsg(event, "The current list of artists is: `${artists.join('"`, `"')}`")
+                break
+
+            default:
+                sendMsg(event, 'This artist is not in the list of artists that have approved their art to be in this bot.\n' +
+                        "Use `gb.$name list` for a list of artists.")
+                break
+
+        }
+
 
     }
 
@@ -82,40 +129,37 @@ class DPArtistsCommand extends ImageBase {
     }
 
     private String[] extractInfo(String a) {
-        return a.replaceAll("https?://", "").split("\\.")
+        return a.replaceAll('https?://', '').split('\\.')
     }
 
     private String getTumblrProfilePictureUrl(String domain) {
-        return "https://api.tumblr.com/v2/blog/" + domain + "/avatar/48"
+        return "https://api.tumblr.com/v2/blog/$domain/avatar/48"
     }
 
     private void extractPictureFromTumblr(String username, @NotNull Consumer<TumblrPost> cb) {
-        def url = String.format(
-                "https://api.tumblr.com/v2/blog/%s.tumblr.com/posts/photo?api_key=%s&type=photo&limit=1",
-                username,
-                SpoopyUtils.config.api.tumblr
-        )
+        def url = "https://api.tumblr.com/v2/blog/${username}.tumblr.com/posts/photo?api_key=" +
+                "${SpoopyUtils.config.api.tumblr}&type=photo&limit=1"
 
         WebUtils.ins.getJSONObject(url).async {
             cb.accept(
-                    gson.fromJson(it.getJSONObject("response")
-                            .getJSONArray("posts").getJSONObject(0).toString(), TumblrPost.class)
+                    gson.fromJson(it.getJSONObject('response')
+                            .getJSONArray('posts').getJSONObject(0).toString(), TumblrPost.class)
             )
         }
 
     }
 
     private void getDeviantartDataXmlOnly(String usn, Consumer<LocalDeviantData> cb) {
-        WebUtils.ins.scrapeWebPage("https://backend.deviantart.com/rss.xml" +
+        WebUtils.ins.scrapeWebPage('https://backend.deviantart.com/rss.xml' +
                 "?type=deviation&q=by%3A$usn+sort%3Atime+meta%3Aall").async {
             //get an item
-            Element item = it.selectFirst("item")
+            Element item = it.selectFirst('item')
             cb.accept(new LocalDeviantData(
-                    item.selectFirst("media|copyright").attr("url"),
-                    item.selectFirst("media|content[medium=\"image\"]").attr("url"),
-                    item.selectFirst("title").text(),
-                    item.select("media|credit").get(1).text(),
-                    item.selectFirst("link").text()
+                    item.selectFirst('media|copyright').attr('url'),
+                    item.selectFirst('media|content[medium="image"]').attr('url'),
+                    item.selectFirst('title').text(),
+                    item.select('media|credit').get(1).text(),
+                    item.selectFirst('link').text()
             ))
         }
     }
@@ -125,21 +169,22 @@ class DPArtistsCommand extends ImageBase {
         def usn = info[0]
         def type = info[1]
 
-        if (type.equalsIgnoreCase("tumblr")) {
+        if (type.equalsIgnoreCase('tumblr')) {
             def profilePicture = getTumblrProfilePictureUrl(url)
 
             extractPictureFromTumblr(usn) {
 
-                if (!it.type.equalsIgnoreCase("photo")) {
+                if (!it.type.equalsIgnoreCase('photo')) {
                     sendMsg(event, "Got a post of type `$it.type` for the type `photo`\n" +
-                            "WTF tumblr?")
+                            'WTF tumblr?\n' +
+                            "Here's the link anyway: <$it.post_url>")
                     return
                 }
 
                 sendEmbed(event,
                         EmbedUtils.defaultEmbed()
                                 .setAuthor(usn, it.post_url, profilePicture)
-                                .setTitle("Link to post", it.post_url)
+                                .setTitle('Link to post', it.post_url)
                                 .setDescription(QuotesCommand.parseText(it.caption))
                                 .setThumbnail(profilePicture)
                                 .setImage(it.photos[0].original_size.url)
@@ -149,7 +194,7 @@ class DPArtistsCommand extends ImageBase {
             }
         }
 
-        if (type.equalsIgnoreCase("deviantart")) {
+        if (type.equalsIgnoreCase('deviantart')) {
 
             getDeviantartDataXmlOnly(usn) {
                 sendEmbed(event,
