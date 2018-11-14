@@ -68,7 +68,7 @@ class SpoopyUtils {
         def pubChann = guild.textChannelCache.getElementById(guild.id)
 
         if (pubChann == null || !pubChann.canTalk()) {
-            return guild.textChannelCache.stream().filter { it.&canTalk }.findFirst().orElse(null)
+            return guild.textChannelCache.stream().filter { it.canTalk() }.findFirst().orElse(null)
         }
 
         return pubChann
