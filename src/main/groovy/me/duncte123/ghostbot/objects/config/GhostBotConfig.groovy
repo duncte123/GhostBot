@@ -18,12 +18,16 @@
 
 package me.duncte123.ghostbot.objects.config
 
+import com.google.gson.JsonElement
+
 class GhostBotConfig {
 
     public Discord discord
     public Lavalink lavalink
     public Api api
     public boolean running_local
+    public boolean shouldPostStats
+    public JsonElement botLists
 
     static class Discord {
         public String prefix
@@ -42,8 +46,6 @@ class GhostBotConfig {
     }
 
     static class Api {
-        public String dbots
-        public String dbl
         public String google
         public String tumblr
     }

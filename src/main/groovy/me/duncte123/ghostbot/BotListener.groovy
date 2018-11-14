@@ -23,7 +23,7 @@ import me.duncte123.botcommons.web.WebUtils
 import me.duncte123.ghostbot.audio.GuildMusicManager
 import me.duncte123.ghostbot.utils.SpoopyUtils
 import me.duncte123.ghostbot.variables.Variables
-import net.dv8tion.jda.core.JDA
+import net.dv8tion.jda.bot.sharding.ShardManager
 import net.dv8tion.jda.core.entities.Guild
 import net.dv8tion.jda.core.entities.VoiceChannel
 import net.dv8tion.jda.core.events.ReadyEvent
@@ -36,6 +36,7 @@ import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent
 import net.dv8tion.jda.core.hooks.ListenerAdapter
 import okhttp3.RequestBody
 import org.json.JSONObject
+import org.json.JSONTokener
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -48,14 +49,12 @@ import static me.duncte123.botcommons.web.WebUtils.EncodingType.APPLICATION_JSON
 class BotListener extends ListenerAdapter {
     public static final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor()
     private final Logger logger = LoggerFactory.getLogger(BotListener.class)
-    private final String dbotsToken = SpoopyUtils.config.api.dbots
-    private final String dblToken = SpoopyUtils.config.api.dbl
 
     @Override
     void onReady(ReadyEvent event) {
         def jda = event.JDA
         logger.info("Logged in as $jda.selfUser ($jda.shardInfo)")
-        postServerCount(jda)
+        postServerCount(jda.asBot().shardManager)
     }
 
     @Override
@@ -151,35 +150,30 @@ class BotListener extends ListenerAdapter {
         SpoopyUtils.commandManager.reactListReg.handle(event)
     }
 
-    private void postServerCount(JDA jda) {
-        if (!dbotsToken.isEmpty() && !dblToken.isEmpty()) {
+    private void postServerCount(ShardManager manager) {
+        if (SpoopyUtils.config.shouldPostStats) {
             service.scheduleWithFixedDelay({
 
-                WebUtils.ins.prepareRaw(
-                        WebUtils.defaultRequest()
-                                .url("https://bots.discord.pw/api/bots/397297702150602752/stats")
-                                .post(RequestBody.create(APPLICATION_JSON.toMediaType(),
-                                new JSONObject().put("server_count", jda.guilds.size()).toString()))
-                                .addHeader("Authorization", dbotsToken)
-                                .build(), { it.body().string() }).async({
-                    logger.info("Posted stats to dbots ($it)")
-                },
-                        {
-                            logger.info("something borked")
-                            logger.info(it.message)
-                        })
+                def jsonString = new JSONObject(SpoopyUtils.config.botLists.toString())
+                        .put('server_count', manager.guildCache.size())
+                        .put('shard_count', manager.shardsTotal)
+                        .put('bot_id', '397297702150602752'.toLong())
+                        .toString()
 
                 WebUtils.ins.prepareRaw(
                         WebUtils.defaultRequest()
-                                .url("https://discordbots.org/api/bots/397297702150602752/stats")
-                                .post(RequestBody.create(APPLICATION_JSON.toMediaType(),
-                                new JSONObject().put("server_count", jda.guilds.size()).toString()))
-                                .addHeader("Authorization", dblToken)
-                                .build(), { it.body().string() }).async({
-                    logger.info("Posted stats to dbl ($it)")
-                },
+                                .url('https://botblock.org/api/count')
+                                .post(RequestBody.create(APPLICATION_JSON.toMediaType(), jsonString))
+                                .build(),
                         {
-
+                            new JSONObject(new JSONTokener(it.body().byteStream()))
+                        }
+                )
+                        .async(
+                        {
+                            logger.info("Posted stats to botblock api ($it)")
+                        },
+                        {
                             logger.info("something borked")
                             logger.info(it.message)
                         }

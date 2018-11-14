@@ -26,7 +26,7 @@ plugins {
 }
 
 group 'me.duncte123.ghostbot'
-version "2.0.0_${getGitHash()}"
+version "2.0.1_${getGitHash()}"
 mainClassName = "${group}.GhostBot"
 
 sourceCompatibility = JavaVersion.VERSION_11
@@ -47,7 +47,7 @@ dependencies {
     //My little utils
     compile group: 'com.github.duncte123', name: 'botCommons', version: '8c9ad29'
     //JDA
-    compile(group: 'net.dv8tion', name: 'JDA', version: '3.8.1_439') {
+    compile(group: 'net.dv8tion', name: 'JDA', version: '3.8.1_441') {
         exclude module: 'opus-java'
     }
     //LavaPlayer/Lavalink
