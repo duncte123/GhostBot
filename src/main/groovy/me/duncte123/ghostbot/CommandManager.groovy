@@ -25,6 +25,7 @@ import me.duncte123.ghostbot.commands.dannyphantom.image.DoppelgangerComicComman
 import me.duncte123.ghostbot.commands.dannyphantom.image.GifCommand
 import me.duncte123.ghostbot.commands.dannyphantom.image.ImageCommand
 import me.duncte123.ghostbot.commands.dannyphantom.image.OtherGhostCommands
+import me.duncte123.ghostbot.commands.dannyphantom.text.AuCommand
 import me.duncte123.ghostbot.commands.dannyphantom.text.GamesCommand
 import me.duncte123.ghostbot.commands.dannyphantom.text.PetitionCommand
 import me.duncte123.ghostbot.commands.dannyphantom.text.QuotesCommand
@@ -75,6 +76,7 @@ class CommandManager {
         this.addCommand(new PetitionCommand())
 
         this.addCommand(new QuotesCommand())
+        this.addCommand(new AuCommand())
         this.addCommand(new RandomGhostCommand())
         this.addCommand(new GamesCommand())
 

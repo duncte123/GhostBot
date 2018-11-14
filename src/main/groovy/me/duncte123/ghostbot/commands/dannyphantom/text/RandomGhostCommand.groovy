@@ -35,7 +35,7 @@ class RandomGhostCommand extends Command {
     private final String wikiUrl = "https://dannyphantom.fandom.com"
 
     RandomGhostCommand() {
-        if (!SpoopyUtils.config.running_local) {
+        if (SpoopyUtils.config.running_local) {
             return
         }
 
