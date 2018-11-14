@@ -93,7 +93,7 @@ class FylCommicCommand extends ReactionCommand {
                         .append('The controls have a timeout of 30 minutes')
                         .setEmbed(getEmbed(chapterIndex.get(), pageIndex.get()))
                         .build(), { m ->
-            this.addReactions(m, Arrays.asList(LEFT_ARROW, RIGHT_ARROW, CANCEL),
+            this.addReactions(m, LEFT_RIGHT_CANCEL,
                     newLongSet(event.author.idLong), 30, TimeUnit.MINUTES, { index ->
 
                 if (index >= 2) { //cancel button or other error

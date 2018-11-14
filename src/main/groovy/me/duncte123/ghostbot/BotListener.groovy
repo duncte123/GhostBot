@@ -66,8 +66,8 @@ class BotListener extends ListenerAdapter {
         if (!content.startsWith(Variables.PREFIX.toLowerCase())
                 && !content.startsWith(Variables.OTHER_PREFIX.toLowerCase())) return
 
-        if (event.message.contentRaw == Variables.PREFIX + "shutdown" && event.author.idLong == Variables.OWNER_ID) {
-            logger.info("Shutting down!!")
+        if (event.message.contentRaw == "${Variables.PREFIX}shutdown" && event.author.idLong == Variables.OWNER_ID) {
+            logger.info('Shutting down!!')
             service.shutdownNow()
             SpoopyUtils.commandManager.commandService.shutdown()
             event.JDA.shutdown()
@@ -89,10 +89,10 @@ class BotListener extends ListenerAdapter {
         //if 70 of a guild is bots, we'll leave it
         double[] botToUserRatio = SpoopyUtils.getBotRatio(event.guild)
         if (botToUserRatio[1] > 80) {
-            SpoopyUtils.getPublicChannel(event.guild).sendMessage(String.format("Hey %s, %s%s of this server are bots (%s is the total btw). I'm outta here.",
+            SpoopyUtils.getPublicChannel(event.guild).sendMessage(String.format('Hey %s, %s%s of this server are bots (%s is the total btw). I\'m outta here.',
                     event.guild.owner.asMention,
                     botToUserRatio[1],
-                    "%",
+                    '%',
                     event.guild.memberCache.size())).queue {
                 message -> message.guild.leave().queue()
             }
@@ -183,7 +183,7 @@ class BotListener extends ListenerAdapter {
 
     }
 
-    private void channelCheckThing(Guild g, VoiceChannel vc) {
+    private static void channelCheckThing(Guild g, VoiceChannel vc) {
         if (vc.members.stream().filter { !it.user.bot }.count() < 1) {
             GuildMusicManager manager = SpoopyUtils.audio.getMusicManager(g)
             manager.player.stopTrack()

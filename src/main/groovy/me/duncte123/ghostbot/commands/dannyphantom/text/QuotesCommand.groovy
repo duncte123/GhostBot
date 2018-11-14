@@ -179,14 +179,16 @@ class QuotesCommand extends Command {
     }
 
     private void reloadQuotes() {
-        if (SpoopyUtils.config.running_local) {
+        if (!SpoopyUtils.config.running_local) {
             return
         }
 
         allQuotes.clear()
         guildQuotes.clear()
 
-        for (String type : types) {
+        for (String _type : types) {
+
+            def type = _type
 
             logger.info("Getting quotes from type $type")
 
