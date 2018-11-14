@@ -61,13 +61,13 @@ class EvalCommand extends Command {
             return
         }
 
-        engine.setVariable("event", event)
-        engine.setVariable("jda", event.JDA)
-        engine.setVariable("channel", event.channel)
-        engine.setVariable("member", event.member)
-        engine.setVariable("author", event.author)
-        engine.setVariable("guild", event.guild)
-        engine.setVariable("args", args)
+        engine.setVariable('event', event)
+        engine.setVariable('jda', event.JDA)
+        engine.setVariable('channel', event.channel)
+        engine.setVariable('member', event.member)
+        engine.setVariable('author', event.author)
+        engine.setVariable('guild', event.guild)
+        engine.setVariable('args', args)
 
         final def script = "import ${packageImports.join(".*\nimport ")}.*\n\n" +
                 event.message.contentRaw.split("\\s+", 2)[1]
