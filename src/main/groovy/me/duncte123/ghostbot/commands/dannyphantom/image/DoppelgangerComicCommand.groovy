@@ -39,9 +39,9 @@ import static me.duncte123.ghostbot.utils.SpoopyUtils.newLongSet
 
 class DoppelgangerComicCommand extends ReactionCommand {
 
-    private static final String PAGE_SELECTOR = "page:"
-    private static final String CHAPTER_SELECTOR = "chapter:"
-    private static final String BLOG_URL = "doppelgangercomic.tumblr.com"
+    private static final String PAGE_SELECTOR = 'page:'
+    private static final String CHAPTER_SELECTOR = 'chapter:'
+    private static final String BLOG_URL = 'doppelgangercomic.tumblr.com'
     private static final String PROFILE_PICTURE = "https://api.tumblr.com/v2/blog/$BLOG_URL/avatar/48"
     private final List<TumblrPost> pages = new ArrayList<>()
     // The numbers in this list represent the page numbers of where the chapters start
@@ -63,14 +63,14 @@ class DoppelgangerComicCommand extends ReactionCommand {
     void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
 
         if (pages.empty) {
-            sendMsg(event, "Something went wrong with loading the pages, please notify duncte123#1245")
+            sendMsg(event, 'Something went wrong with loading the pages, please notify duncte123#1245')
             return
         }
 
         def page = 0
 
         if (args.length > 0) {
-            def arg = args.join("").toLowerCase()
+            def arg = args.join('').toLowerCase()
 
             if (arg.startsWith(PAGE_SELECTOR)) {
                 page = getNumberFromArg(arg.substring(PAGE_SELECTOR.length()))
@@ -79,7 +79,7 @@ class DoppelgangerComicCommand extends ReactionCommand {
                 try {
                     page = chapters[getNumberFromArg(arg.substring(CHAPTER_SELECTOR.length())) - 1]
                 } catch (IndexOutOfBoundsException ignored) {
-                    sendMsg(event, "That chapter is not known")
+                    sendMsg(event, 'That chapter is not known')
                     return
                 }
             }
@@ -98,11 +98,11 @@ class DoppelgangerComicCommand extends ReactionCommand {
 
         sendMsg(event,
                 new MessageBuilder()
-                        .append("Use the emotes at the bottom to navigate through pages, use the ❌ emote when you are done reading.\n")
-                        .append("The controls have a timeout of 30 minutes")
+                        .append('Use the emotes at the bottom to navigate through pages, use the ❌ emote when you are done reading.\n')
+                        .append('The controls have a timeout of 30 minutes')
                         .setEmbed(getEmbed(pa.get()))
                         .build()) {
-            this.addReactions(it, [LEFT_ARROW, RIGHT_ARROW, CANCEL], newLongSet(event.author.idLong), 30, TimeUnit.MINUTES, { index ->
+            this.addReactions(it, LEFT_RIGHT_CANCEL, newLongSet(event.author.idLong), 30, TimeUnit.MINUTES, { index ->
 
                 if (index >= 2) { //cancel button or other error
                     stopReactions(it)
@@ -117,16 +117,16 @@ class DoppelgangerComicCommand extends ReactionCommand {
     }
 
     @Override
-    String getName() { "doppelganger" }
+    String getName() { 'doppelganger' }
 
     @Override
     String getHelp() {
-        "Read the doppelganger comic within discord (comic website: <http://doppelgangercomic.tumblr.com/>)\n" +
+        'Read the doppelganger comic within discord (comic website: <http://doppelgangercomic.tumblr.com/>)\n' +
                 "Usage: `gb.$name [page:number/chapter:number]`"
     }
 
     @Override
-    String[] getAliases() { ["doppelgangercomic"] }
+    String[] getAliases() { ['doppelgangercomic'] }
 
     @Override
     CommandCategory getCategory() {
@@ -145,8 +145,8 @@ class DoppelgangerComicCommand extends ReactionCommand {
         def post = pages[page]
 
         return EmbedUtils.defaultEmbed()
-                .setAuthor("DOPPELGÄNGER", post.post_url, PROFILE_PICTURE)
-                .setTitle("Link to post", post.post_url)
+                .setAuthor('DOPPELGÄNGER', post.post_url, PROFILE_PICTURE)
+                .setTitle('Link to post', post.post_url)
                 .setDescription(QuotesCommand.parseText(post.caption))
                 .setThumbnail(PROFILE_PICTURE)
                 .setImage(post.photos[0].original_size.url)
@@ -156,11 +156,11 @@ class DoppelgangerComicCommand extends ReactionCommand {
     }
 
     private void loadPages() {
-        logger.info("Loading doppelganger pages")
+        logger.info('Loading doppelganger pages')
 
         List<TumblrPost> posts = TumblrUtils.getInstance()
                 .getGson().fromJson(
-                new File("doppelganger.json").text,
+                new File('doppelganger.json').text,
                 new TypeToken<List<TumblrPost>>() {}.getType()
         )
 

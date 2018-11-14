@@ -19,7 +19,7 @@
 package me.duncte123.fandomapi.search
 
 class LocalWikiSearchResultSet {
-    
+
     final int batches
     final List<LocalWikiSearchResult> items
     final int total

@@ -34,11 +34,11 @@ class ShardInfoCommand extends Command {
     @Override
     void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
         def headers = new ArrayList<String>()
-        headers.add("Shard ID")
-        headers.add("Status")
-        headers.add("Ping")
-        headers.add("Guild Count")
-        headers.add("Connected VCs")
+        headers.add('Shard ID')
+        headers.add('Status')
+        headers.add('Ping')
+        headers.add('Guild Count')
+        headers.add('Connected VCs')
 
         def table = new ArrayList<List<String>>()
         def shardManager = event.getJDA().asBot().getShardManager()
@@ -48,21 +48,21 @@ class ShardInfoCommand extends Command {
             def row = new ArrayList<String>()
 
             row.add(shard.shardInfo.shardId +
-                    (event.JDA.shardInfo.shardId == shard.shardInfo.shardId ? " (current)" : ""))
+                    (event.JDA.shardInfo.shardId == shard.shardInfo.shardId ? ' (current)' : ''))
 
-            row.add(WordUtils.capitalizeFully(shard.status.toString().replace("_", " ")))
+            row.add(WordUtils.capitalizeFully(shard.status.toString().replace('_', ' ')))
 
             row.add(String.valueOf(shard.ping))
             row.add(String.valueOf(shard.guildCache.size()))
 
             def listeningVC = shard.voiceChannelCache.stream().filter { vc ->
-                    vc.members.contains(vc.guild.selfMember)
-                }
-                .mapToLong { it ->
-                    it.members.stream().filter { itt ->
-                        !itt.user.bot && !itt.voiceState.deafened
-                    }.count()
-                }.sum().toString()
+                vc.members.contains(vc.guild.selfMember)
+            }
+            .mapToLong { it ->
+                it.members.stream().filter { itt ->
+                    !itt.user.bot && !itt.voiceState.deafened
+                }.count()
+            }.sum().toString()
 
             row.add(listeningVC)
             table.add(row)
@@ -79,10 +79,13 @@ class ShardInfoCommand extends Command {
     }
 
     @Override
-    String getName() { "shardinfo" }
+    String getName() { 'shardinfo' }
 
     @Override
-    String getHelp() { "Shows some shardinfo" }
+    String getHelp() { 'Shows some shardinfo' }
+
+    @Override
+    String[] getAliases() { ['shards'] }
 
     @Override
     CommandCategory getCategory() {
@@ -93,7 +96,8 @@ class ShardInfoCommand extends Command {
      * These 2 functions have been inspired from FlareBot
      * https://github.com/FlareBot/FlareBot/blob/master/src/main/java/stream/flarebot/flarebot/util/ShardUtils.java
      */
-    private String makeAsciiTable(List<String> headers, List<List<String>> table, ShardManager shardManager) {
+
+    private static String makeAsciiTable(List<String> headers, List<List<String>> table, ShardManager shardManager) {
         def sb = new StringBuilder()
         def padding = 1
         def widths = new int[headers.size()]
@@ -115,28 +119,28 @@ class ShardInfoCommand extends Command {
             }
         }
 
-        sb.append("```").append("PROLOG").append("\n")
-        def formatLine = new StringBuilder("║")
+        sb.append('```').append('PROLOG').append('\n')
+        def formatLine = new StringBuilder('║')
 
         for (int width : widths) {
-            formatLine.append(" %-").append(width).append("s ║")
+            formatLine.append(' %-').append(width).append('s ║')
         }
 
-        formatLine.append("\n")
-        sb.append(appendSeparatorLine("╔", "╦", "╗", padding, widths))
+        formatLine.append('\n')
+        sb.append(appendSeparatorLine('╔', '╦', '╗', padding, widths))
         sb.append(String.format(formatLine.toString(), headers.toArray()))
-        sb.append(appendSeparatorLine("╠", "╬", "╣", padding, widths))
+        sb.append(appendSeparatorLine('╠', '╬', '╣', padding, widths))
 
         for (List<String> row : table) {
             sb.append(String.format(formatLine.toString(), row.toArray()))
         }
 
-        sb.append(appendSeparatorLine("╠", "╬", "╣", padding, widths))
+        sb.append(appendSeparatorLine('╠', '╬', '╣', padding, widths))
 
         def connectedShards = String.valueOf(shardManager.shardCache.stream().filter {
             shard -> shard.status == JDA.Status.CONNECTED
         }.count())
-        def avgPing = new DecimalFormat("###").format(shardManager.averagePing)
+        def avgPing = new DecimalFormat('###').format(shardManager.averagePing)
         def guilds = String.valueOf(shardManager.guildCache.size())
 
         def connectedVC = shardManager.shardCache.stream().mapToLong { shard ->
@@ -156,26 +160,26 @@ class ShardInfoCommand extends Command {
             }.sum()
         }.sum()
 
-        sb.append(String.format(formatLine.toString(), "Sum/Avg", connectedShards, avgPing, guilds, connectedVC + " / " + listeningVC))
-        sb.append(appendSeparatorLine("╚", "╩", "╝", padding, widths))
-        sb.append("```")
+        sb.append(String.format(formatLine.toString(), 'Sum/Avg', connectedShards, avgPing, guilds, "$connectedVC / $listeningVC"))
+        sb.append(appendSeparatorLine('╚', '╩', '╝', padding, widths))
+        sb.append('```')
 
         return sb.toString()
     }
 
-    private String appendSeparatorLine(String left, String middle, String right, int padding, int... sizes) {
+    private static String appendSeparatorLine(String left, String middle, String right, int padding, int ... sizes) {
         def first = true
         def ret = new StringBuilder()
 
         for (int size : sizes) {
             if (first) {
                 first = false
-                ret.append(left).append(StringUtils.repeat("═", size + padding * 2))
+                ret.append(left).append(StringUtils.repeat('═', size + padding * 2))
             } else {
-                ret.append(middle).append(StringUtils.repeat("═", size + padding * 2))
+                ret.append(middle).append(StringUtils.repeat('═', size + padding * 2))
             }
         }
 
-        return ret.append(right).append("\n").toString()
+        return ret.append(right).append('\n').toString()
     }
 }

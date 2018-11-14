@@ -20,8 +20,8 @@ package me.duncte123.ghostbot.commands.dannyphantom.audio
 
 class WailCommand extends AudioBaseCommand {
     @Override
-    String getHelp() { "Gives you a nice ghostly wail" }
+    String getHelp() { 'Gives you a nice ghostly wail' }
 
     @Override
-    String[] getAliases() { [ "ghostlywail" ] }
+    String[] getAliases() { ['ghostlywail'] }
 }

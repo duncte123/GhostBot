@@ -40,26 +40,26 @@ abstract class WikiBaseCommand extends Command {
     Gson gson = new Gson()
 
     //shortcut to the wiki
-    WikiHolder wiki = new WikiHolder("https://dannyphantom.fandom.com")
+    WikiHolder wiki = new WikiHolder('https://dannyphantom.fandom.com')
 
 
     protected void handleWikiSearch(WikiHolder wiki, String searchQuery, GuildMessageReceivedEvent event) {
         WebUtils.ins.getJSONObject(String.format(
-                "%s?query=%s",
+                '%s?query=%s',
                 wiki.searchListEndpoint,
                 SpoopyUtils.encodeUrl(searchQuery))
 
         ).async({ json ->
 
-            if (json.has("exception")) {
+            if (json.has('exception')) {
                 def ex = toEx(json)
 
-                if (ex.type.equalsIgnoreCase("NotFoundApiException")) {
-                    sendMsg(event, "Your search returned no results.")
+                if (ex.type.equalsIgnoreCase('NotFoundApiException')) {
+                    sendMsg(event, 'Your search returned no results.')
                     return
                 }
 
-                sendMsg(event, "An error occurred: " + ex)
+                sendMsg(event, "An error occurred: $ex")
 
                 return
             }
@@ -80,52 +80,52 @@ abstract class WikiBaseCommand extends Command {
             }
 
             def eb = EmbedUtils.defaultEmbed()
-                    .setTitle("Query: " + searchQuery, wiki.domain +
-                    "/wiki/Special:Search?query=" + searchQuery.replaceAll(" ", "%20"))
-                    .setAuthor("Requester: " + String.format("%#s", event.author),
-                    "https://ghostbot.duncte123.me/", event.author.effectiveAvatarUrl)
-                    .setDescription("Total results: " + wikiSearchResultSet.total + "\n" +
-                    "Current Listed: " + items.size() + "\n\n")
+                    .setTitle("Query: $searchQuery", "$wiki.domain/wiki/Special:Search?query=${searchQuery.replaceAll(' ', '%20')}")
+                    .setAuthor("Requester: ${String.format('%#s', event.author)}",
+                    'https://ghostbot.duncte123.me/', event.author.effectiveAvatarUrl)
+                    .setDescription("Total results: $wikiSearchResultSet.total\n" +
+                    "Current Listed: ${items.size()}\n" +
+                    '\n')
 
 
             for (LocalWikiSearchResult localWikiSearchResult : items) {
-                eb.appendDescription("[")
+                eb.appendDescription('[')
                         .appendDescription(localWikiSearchResult.title)
-                        .appendDescription(" - ")
+                        .appendDescription(' - ')
                         .appendDescription(StringUtils.abbreviate(
-                             safeUrl(localWikiSearchResult.snippet), 50)
-                        )
-                        .appendDescription("](")
+                        safeUrl(localWikiSearchResult.snippet), 50)
+                )
+                        .appendDescription('](')
                         .appendDescription(safeUrl(localWikiSearchResult.url))
-                        .appendDescription(")\n")
+                        .appendDescription(')\n')
             }
 
             sendEmbed(event, eb.build())
         },
-        {
-            sendMsg(event, "Something went wrong: " + it.message)
-        })
+                {
+                    sendMsg(event, "Something went wrong: $it.message")
+                })
     }
 
-    FandomException toEx(JSONObject json) {
-        JSONObject ex = json.getJSONObject("exception")
+    static FandomException toEx(JSONObject json) {
+        JSONObject ex = json.getJSONObject('exception')
         return new FandomException(
-                ex.getString("type"),
-                ex.getString("message"),
-                ex.getInt("code"),
-                ex.getString("details"),
-                json.getString("trace_id")
+                ex.getString('type'),
+                ex.getString('message'),
+                ex.getInt('code'),
+                ex.getString('details'),
+                json.getString('trace_id')
         )
     }
 
-    private String safeUrl(String inp) {
+    private static String safeUrl(String inp) {
         return inp
-                .replaceAll("<span class=\"searchmatch\">", "**")
-                .replaceAll("</span>", "**")
-                .replaceAll("\\[", "\\]")
-                .replaceAll("]", "\\]")
-                .replaceAll("\\(", "\\(")
-                .replaceAll("\\)", "\\)")
+                .replaceAll('<span class="searchmatch">', '**')
+                .replaceAll('</span>', '**')
+                .replaceAll('\\[', '\\]')
+                .replaceAll(']', '\\]')
+                .replaceAll('\\(', '\\(')
+                .replaceAll('\\)', '\\)')
     }
 
     @Override

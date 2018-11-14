@@ -31,18 +31,18 @@ class WikiCommand extends WikiBaseCommand {
             return
         }
 
-        handleWikiSearch(wiki, args.join(" "), event)
+        handleWikiSearch(wiki, args.join(' '), event)
     }
 
     @Override
-    String getName() { "wiki" }
+    String getName() { 'wiki' }
 
     @Override
     String[] getAliases() {
         [
-                "wikia",
-                "wikisearch",
-                "dannyphantomwiki"
+                'wikia',
+                'wikisearch',
+                'dannyphantomwiki'
         ]
     }
 

@@ -24,7 +24,7 @@ import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 
 class GifCommand extends ImageBase {
 
-    private final String keyword = "Danny Phantom gif"
+    private final String keyword = 'Danny Phantom gif'
 
     @Override
     void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
@@ -34,8 +34,8 @@ class GifCommand extends ImageBase {
     }
 
     @Override
-    String getName() { "gif" }
+    String getName() { 'gif' }
 
     @Override
-    String getHelp() { "Gives you a random Danny Phantom gif" }
+    String getHelp() { 'Gives you a random Danny Phantom gif' }
 }

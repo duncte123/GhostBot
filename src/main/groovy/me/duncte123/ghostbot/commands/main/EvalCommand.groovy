@@ -32,27 +32,27 @@ import static me.duncte123.botcommons.messaging.MessageUtils.*
 class EvalCommand extends Command {
 
     private final GroovyShell engine = new GroovyShell()
-    private final ExecutorService service = Executors.newCachedThreadPool { new Thread(it, "Eval-Thread") }
+    private final ExecutorService service = Executors.newCachedThreadPool { new Thread(it, 'Eval-Thread') }
     private final List<String> packageImports = [
-            "java.io",
-            "java.lang",
-            "java.util",
-            "net.dv8tion.jda.core",
-            "net.dv8tion.jda.core.entities",
-            "net.dv8tion.jda.core.entities.impl",
-            "net.dv8tion.jda.core.managers",
-            "net.dv8tion.jda.core.managers.impl",
-            "net.dv8tion.jda.core.utils",
-            "me.duncte123.ghostBot.utils",
-            "me.duncte123.ghostBot.commands.main",
-            "me.duncte123.ghostBot.commands.dannyPhantom",
-            "me.duncte123.ghostBot"
+            'java.io',
+            'java.lang',
+            'java.util',
+            'net.dv8tion.jda.core',
+            'net.dv8tion.jda.core.entities',
+            'net.dv8tion.jda.core.entities.impl',
+            'net.dv8tion.jda.core.managers',
+            'net.dv8tion.jda.core.managers.impl',
+            'net.dv8tion.jda.core.utils',
+            'me.duncte123.ghostBot.utils',
+            'me.duncte123.ghostBot.commands.main',
+            'me.duncte123.ghostBot.commands.dannyPhantom',
+            'me.duncte123.ghostBot'
     ]
 
     @Override
     void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
 
-        if (event.author.id != Variables.OWNER_ID) {
+        if (event.author.idLong != Variables.OWNER_ID) {
             return
         }
 
@@ -69,8 +69,8 @@ class EvalCommand extends Command {
         engine.setVariable('guild', event.guild)
         engine.setVariable('args', args)
 
-        final def script = "import ${packageImports.join(".*\nimport ")}.*\n\n" +
-                event.message.contentRaw.split("\\s+", 2)[1]
+        final def script = "import ${packageImports.join('.*\nimport ')}.*\n\n" +
+                event.message.contentRaw.split('\\s+', 2)[1]
 
         try {
             service.submit {
@@ -96,10 +96,10 @@ class EvalCommand extends Command {
     }
 
     @Override
-    String getName() { "eval" }
+    String getName() { 'eval' }
 
     @Override
-    String getHelp() { "evaluate groovy code" }
+    String getHelp() { 'evaluate groovy code' }
 
     @Override
     CommandCategory getCategory() { CommandCategory.HIDDEN }

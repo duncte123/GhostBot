@@ -38,16 +38,16 @@ class WikiUserCommand extends WikiBaseCommand {
             return
         }
 
-        def searchQuery = args.join(" ")
+        def searchQuery = args.join(' ')
 
         WebUtils.ins.getJSONObject(String.format(
-                "%s?ids=%s",
+                '%s?ids=%s',
                 wiki.userDetailsEndpoint,
                 SpoopyUtils.encodeUrl(searchQuery)
         )).async({ json ->
 
-            if (json.has("exception")) {
-                sendMsg(event, "An error occurred: " + toEx(json))
+            if (json.has('exception')) {
+                sendMsg(event, "An error occurred: ${toEx(json)}")
                 return
             }
 
@@ -59,9 +59,9 @@ class WikiUserCommand extends WikiBaseCommand {
 
                 sendEmbed(event, EmbedUtils.defaultEmbed()
                         .setThumbnail(user.avatar)
-                        .setTitle("Profile link", user.absoluteUrl)
+                        .setTitle('Profile link', user.absoluteUrl)
                         .setAuthor(user.name, user.absoluteUrl, user.avatar)
-                        .addField("User Info:", "**Name:** $user.name\n" +
+                        .addField('User Info:', "**Name:** $user.name\n" +
                         "**Id:** $user.userId\n" +
                         "**Title:** $user.title\n" +
                         "**Number of edits:** $user.numberofedits", false)
@@ -71,34 +71,34 @@ class WikiUserCommand extends WikiBaseCommand {
                 return
             }
 
-            def eb = EmbedUtils.defaultEmbed().setTitle("I found the following users:")
+            def eb = EmbedUtils.defaultEmbed().setTitle('I found the following users:')
 
             for (UserElement user : (userResultSet.items)) {
-                eb.appendDescription("[")
+                eb.appendDescription('[')
                         .appendDescription(user.name)
-                        .appendDescription("](")
+                        .appendDescription('](')
                         .appendDescription(userResultSet.basepath + user.url)
-                        .appendDescription(")\n")
+                        .appendDescription(')\n')
             }
 
             sendEmbed(event, eb.build())
 
         },
-        {
-            sendMsg(event, "Something went wrong: $it.message")
-            /* it.printStackTrace()*/
-        })
+                {
+                    sendMsg(event, "Something went wrong: $it.message")
+                    /* it.printStackTrace()*/
+                })
     }
 
     @Override
-    String getName() { "wikiuser" }
+    String getName() { 'wikiuser' }
 
     @Override
-    String[] getAliases() { ["wikiusersearch"] }
+    String[] getAliases() { ['wikiusersearch'] }
 
     @Override
     String getHelp() {
-        "Search wikia for users.\n" +
+        'Search wikia for users.\n' +
                 "Usage: `$Variables.PREFIX$name <username/user id>`\n" +
                 "Examples: `$Variables.PREFIX$name duncte123`\n" +
                 "`$Variables.PREFIX$name 34322457`\n"

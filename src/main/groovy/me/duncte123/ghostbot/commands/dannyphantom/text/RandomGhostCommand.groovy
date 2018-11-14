@@ -32,14 +32,14 @@ import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 class RandomGhostCommand extends Command {
 
     private final List<String> ghosts = []
-    private final String wikiUrl = "https://dannyphantom.fandom.com"
+    private final String wikiUrl = 'https://dannyphantom.fandom.com'
 
     RandomGhostCommand() {
         if (SpoopyUtils.config.running_local) {
             return
         }
 
-        logger.info("Scraping ghosts async")
+        logger.info('Scraping ghosts async')
 
         WebUtils.ins.scrapeWebPage("$wikiUrl/wiki/Category:Ghosts?display=page&sort=alphabetical").async {
 
@@ -54,7 +54,7 @@ class RandomGhostCommand extends Command {
             logger.info("Scraped ${anchors.size()} Ghosts from the wiki")
 
             anchors.forEach {
-                ghosts.add(it.attr("href"))
+                ghosts.add(it.attr('href'))
             }
 
         }
@@ -65,7 +65,7 @@ class RandomGhostCommand extends Command {
     void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
 
         if (ghosts.empty) {
-            sendMsg(event, "It looks like Danny defeated all the ghosts")
+            sendMsg(event, 'It looks like Danny defeated all the ghosts')
             return
         }
 
@@ -74,13 +74,13 @@ class RandomGhostCommand extends Command {
     }
 
     @Override
-    String getName() { "randomghost" }
+    String getName() { 'randomghost' }
 
     @Override
-    String getHelp() { "Get a random ghost from the wiki" }
+    String getHelp() { 'Get a random ghost from the wiki' }
 
     @Override
-    String[] getAliases() { ["ghost"] }
+    String[] getAliases() { ['ghost'] }
 
     @Override
     CommandCategory getCategory() {

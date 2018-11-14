@@ -31,7 +31,7 @@ class TumblrUtils {
 
     static final TumblrUtils instance = new TumblrUtils()
 
-    private final String API_URL = "https://api.tumblr.com/v2/blog/%s/posts%s?limit=20" +
+    private final String API_URL = 'https://api.tumblr.com/v2/blog/%s/posts%s?limit=20' +
             "&api_key=$SpoopyUtils.config.api.tumblr"
     final Gson gson = new Gson()
 
@@ -43,19 +43,19 @@ class TumblrUtils {
         def response = new ArrayList<>()
         def url = String.format(API_URL,
                 domain,
-                (type != null && !type.isEmpty() ? "/" + type : "")
+                (type != null && !type.isEmpty() ? "/$type" : '')
         )
 
         WebUtils.ins.getJSONObject(url).async {
-            def res = it.getJSONObject("response")
-            def total = res.getInt("total_posts")
-            def postsJson = res.getJSONArray("posts")
+            def res = it.getJSONObject('response')
+            def total = res.getInt('total_posts')
+            def postsJson = res.getJSONArray('posts')
             def firstPosts = gson.fromJson(postsJson.toString(), new TypeToken<List<TumblrPost>>() {}.getType())
             response.addAll(firstPosts)
 
             for (int i = 20; i <= total; i += 20) {
                 def j = WebUtils.ins.getJSONObject("$url&offset=$i").execute()
-                def fetched = j.getJSONObject("response").getJSONArray("posts")
+                def fetched = j.getJSONObject('response').getJSONArray('posts')
                 def posts = gson.fromJson(fetched.toString(), new TypeToken<List<TumblrPost>>() {}.getType())
                 response.addAll(posts)
             }
@@ -69,12 +69,12 @@ class TumblrUtils {
     }*/
 
     void fetchSinglePost(String domain, long id, @NotNull Consumer<TumblrPost> cb, Consumer<RequestException> error) {
-        def url = "${String.format(API_URL, domain, "")}&id=$id"
+        def url = "${String.format(API_URL, domain, '')}&id=$id"
 
         WebUtils.ins.getJSONObject(url).async({
             cb.accept(
-                    gson.fromJson(it.getJSONObject("response")
-                            .getJSONArray("posts").getJSONObject(0).toString(), TumblrPost.class)
+                    gson.fromJson(it.getJSONObject('response')
+                            .getJSONArray('posts').getJSONObject(0).toString(), TumblrPost.class)
             )
         }, error)
     }

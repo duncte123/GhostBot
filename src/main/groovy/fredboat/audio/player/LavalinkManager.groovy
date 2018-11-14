@@ -117,11 +117,11 @@ class LavalinkManager {
      *
      * @return the client id of the bot
      */
-    private String getIdFromToken(String token) {
+    private static String getIdFromToken(String token) {
 
         return new String(
                 Base64.decoder.decode(
-                        token.split("\\.")[0]
+                        token.split('\\.')[0]
                 )
         )
     }

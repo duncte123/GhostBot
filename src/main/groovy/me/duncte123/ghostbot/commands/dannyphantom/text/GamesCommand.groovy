@@ -1,6 +1,6 @@
 /*
  *     GhostBot, a Discord bot made for all your Danny Phantom needs
- *     Copyright (C) 2018  Duncan "duncte123" Sterken
+ *     Copyright (C) 2018  Duncan 'duncte123' Sterken
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -29,32 +29,33 @@ import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 class GamesCommand extends Command {
 
     private final String[] games = [
-        "https://paurachan.deviantart.com/art/Danny-Phantom-Dress-up-game-v0-1-435498005",
-        "http://www.dannyphantomgames.net/fright-flight.php",
-        "http://www.dannyphantomgames.net/dueling-decks.php",
-        "http://www.dannyphantomgames.net/action-jack.php",
-        "http://www.dannyphantomgames.net/urban-jungle-rumble.php",
-        "http://www.dannyphantomgames.net/the-ultimate-enemy-face-off.php",
-        "http://www.dannyphantomgames.net/portal-peril.php",
-        "http://www.dannyphantomgames.net/freak-for-all.php",
-        "http://www.dannyphantomgames.net/prom-fright.php",
-        "http://www.nick.com.au/shows/dannyphantom/games/dannyphantom-action-jack/qjm29h",
-        "http://www.nick.com.au/shows/dannyphantom/games/dannyphantom-fright-flight/rp6an6",
-        "http://www.nick.com.au/shows/dannyphantom/games/dannyphantom-enemy-face-off/g11t0x",
-        "http://www.nick.com.au/shows/dannyphantom/games/dannyphantom-freak-for-all/yk6kly"
+            'https://paurachan.deviantart.com/art/Danny-Phantom-Dress-up-game-v0-1-435498005',
+            'http://www.dannyphantomgames.net/fright-flight.php',
+            'http://www.dannyphantomgames.net/dueling-decks.php',
+            'http://www.dannyphantomgames.net/action-jack.php',
+            'http://www.dannyphantomgames.net/urban-jungle-rumble.php',
+            'http://www.dannyphantomgames.net/the-ultimate-enemy-face-off.php',
+            'http://www.dannyphantomgames.net/portal-peril.php',
+            'http://www.dannyphantomgames.net/freak-for-all.php',
+            'http://www.dannyphantomgames.net/prom-fright.php',
+            'http://www.nick.com.au/shows/dannyphantom/games/dannyphantom-action-jack/qjm29h',
+            'http://www.nick.com.au/shows/dannyphantom/games/dannyphantom-fright-flight/rp6an6',
+            'http://www.nick.com.au/shows/dannyphantom/games/dannyphantom-enemy-face-off/g11t0x',
+            'http://www.nick.com.au/shows/dannyphantom/games/dannyphantom-freak-for-all/yk6kly'
     ]
 
     @Override
     void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
         def game = games[ThreadLocalRandom.current().nextInt(games.length)]
+
         sendMsg(event, game)
     }
 
     @Override
-    String getName() { "game" }
+    String getName() { 'game' }
 
     @Override
-    String getHelp() { "Gives you a Danny Phantom game." }
+    String getHelp() { 'Gives you a Danny Phantom game.' }
 
     @Override
     CommandCategory getCategory() {

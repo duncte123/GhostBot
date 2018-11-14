@@ -118,10 +118,10 @@ class DPArtistsCommand extends ImageBase {
     }
 
     @Override
-    String getName() { "artist" }
+    String getName() { 'artist' }
 
     @Override
-    String getHelp() { "Get the latest post of a GhostBotApproved™ artist" }
+    String getHelp() { 'Get the latest post of a GhostBotApproved™ artist' }
 
     @Override
     String[] getAliases() {

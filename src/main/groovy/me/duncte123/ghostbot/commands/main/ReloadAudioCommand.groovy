@@ -29,7 +29,7 @@ import static me.duncte123.botcommons.messaging.MessageUtils.sendSuccess
 class ReloadAudioCommand extends Command {
     @Override
     void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
-        if (event.author.id != Variables.OWNER_ID) return
+        if (event.author.idLong != Variables.OWNER_ID) return
 
         SpoopyUtils.commandManager.commands.forEach { it.reloadAudioFiles() }
 

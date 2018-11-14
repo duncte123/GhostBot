@@ -20,16 +20,8 @@ package me.duncte123.ghostbot
 
 import me.duncte123.ghostbot.commands.ReactionCommand
 import me.duncte123.ghostbot.commands.dannyphantom.audio.*
-import me.duncte123.ghostbot.commands.dannyphantom.image.DPArtistsCommand
-import me.duncte123.ghostbot.commands.dannyphantom.image.DoppelgangerComicCommand
-import me.duncte123.ghostbot.commands.dannyphantom.image.GifCommand
-import me.duncte123.ghostbot.commands.dannyphantom.image.ImageCommand
-import me.duncte123.ghostbot.commands.dannyphantom.image.OtherGhostCommands
-import me.duncte123.ghostbot.commands.dannyphantom.text.AuCommand
-import me.duncte123.ghostbot.commands.dannyphantom.text.GamesCommand
-import me.duncte123.ghostbot.commands.dannyphantom.text.PetitionCommand
-import me.duncte123.ghostbot.commands.dannyphantom.text.QuotesCommand
-import me.duncte123.ghostbot.commands.dannyphantom.text.RandomGhostCommand
+import me.duncte123.ghostbot.commands.dannyphantom.image.*
+import me.duncte123.ghostbot.commands.dannyphantom.text.*
 import me.duncte123.ghostbot.commands.dannyphantom.wiki.WikiCommand
 import me.duncte123.ghostbot.commands.dannyphantom.wiki.WikiUserCommand
 import me.duncte123.ghostbot.commands.fiveyearslater.FylCommicCommand
@@ -88,7 +80,7 @@ class CommandManager {
         this.addCommand(new ShardInfoCommand())
         this.addCommand(new RestartCommand())
         this.addCommand(new PingCommand())
-        
+
         this.addCommand(new ISSCommand())
     }
 
@@ -108,10 +100,10 @@ class CommandManager {
         return cmd.orElse(null)
     }
 
-    @SuppressWarnings("UnusedReturnValue")
+    @SuppressWarnings('UnusedReturnValue')
     private boolean addCommand(Command command) {
-        if (command.getName().contains(" ")) {
-            throw new IllegalArgumentException("Name can't have spaces!")
+        if (command.getName().contains(' ')) {
+            throw new IllegalArgumentException('Name can\'t have spaces!')
         }
 
         //ParallelStream for less execution time
@@ -136,10 +128,10 @@ class CommandManager {
 
     void handleCommand(GuildMessageReceivedEvent event) {
         final def rw = event.message.contentRaw
-        final def split = rw.replaceFirst("(?i)" +
-                Pattern.quote(Variables.PREFIX) + "|" +
-                Pattern.quote(Variables.OTHER_PREFIX), "")
-                .split("\\s+")
+        final def split = rw.replaceFirst('(?i)' +
+                Pattern.quote(Variables.PREFIX) + '|' +
+                Pattern.quote(Variables.OTHER_PREFIX), '')
+                .split('\\s+')
 
         final def invoke = split[0].toLowerCase()
         final def args = Arrays.copyOfRange(split, 1, split.length)
@@ -147,7 +139,7 @@ class CommandManager {
         def cmd = getCommand(invoke)
 
         if (cmd != null) {
-            logger.info("Dispatching command \"{}\" in \"{}\" with {}", invoke, event.guild, Arrays.toString(args))
+            logger.info('Dispatching command "{}" in "{}" with {}', invoke, event.guild, Arrays.toString(args))
             event.channel.sendTyping().queue()
 
             commandService.submit {
@@ -159,7 +151,7 @@ class CommandManager {
             }
             /*cmd.execute(invoke, args, event);*/
         } else {
-            logger.info("Unknown command: \"{}\" in \"{}\" with {}", invoke, event.guild, Arrays.toString(args))
+            logger.info('Unknown command: "{}" in "{}" with {}', invoke, event.guild, Arrays.toString(args))
         }
 
     }

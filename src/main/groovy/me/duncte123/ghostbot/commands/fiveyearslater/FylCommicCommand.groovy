@@ -38,14 +38,14 @@ import static me.duncte123.ghostbot.utils.SpoopyUtils.newLongSet
 
 class FylCommicCommand extends ReactionCommand {
 
-    private static final String PAGE_SELECTOR = "page:"
-    private static final String CHAPTER_SELECTOR = "chapter:"
-    private static final String FYL_ICON = "https://cdn.discordapp.com/emojis/374708234772283403.png?v=1"
+    private static final String PAGE_SELECTOR = 'page:'
+    private static final String CHAPTER_SELECTOR = 'chapter:'
+    private static final String FYL_ICON = 'https://cdn.discordapp.com/emojis/374708234772283403.png?v=1'
     private FylComic comic
 
     FylCommicCommand(CommandManager.ReactionListenerRegistry registry) {
         super(registry)
-        comic = new Gson().fromJson(new File("5yearslater_NEW.json").text, FylComic.class)
+        comic = new Gson().fromJson(new File('5yearslater_NEW.json').text, FylComic.class)
     }
 
     @Override
@@ -72,14 +72,14 @@ class FylCommicCommand extends ReactionCommand {
         def chapterList = comic.chapters
 
         if (chapter >= chapterList.size()) {
-            sendMsg(event, "Chapter " + (chapter + 1) + " is not known")
+            sendMsg(event, "Chapter ${chapter + 1} is not known")
             return
         }
 
         def fylChapter = chapterList.get(chapter)
 
         if (page > fylChapter.pages) {
-            sendMsg(event, "Page  " + page + " is not known in that chapter")
+            sendMsg(event, "Page  $page is not known in that chapter")
             return
         }
 
@@ -89,8 +89,8 @@ class FylCommicCommand extends ReactionCommand {
 
         sendMsg(event,
                 new MessageBuilder()
-                        .append("Use the emotes at the bottom to navigate through pages, use the ❌ emote when you are done reading.\n")
-                        .append("The controls have a timeout of 30 minutes")
+                        .append('Use the emotes at the bottom to navigate through pages, use the ❌ emote when you are done reading.\n')
+                        .append('The controls have a timeout of 30 minutes')
                         .setEmbed(getEmbed(chapterIndex.get(), pageIndex.get()))
                         .build(), { m ->
             this.addReactions(m, Arrays.asList(LEFT_ARROW, RIGHT_ARROW, CANCEL),
@@ -128,7 +128,7 @@ class FylCommicCommand extends ReactionCommand {
         })
     }
 
-    private int getNumberFromArg(String input) {
+    private static int getNumberFromArg(String input) {
         try {
             return Integer.parseInt(input)
         } catch (NumberFormatException ignored) {
@@ -140,7 +140,7 @@ class FylCommicCommand extends ReactionCommand {
         def chapter = comic.chapters.get(numChapter)
         def page = chapter.pages_url.get(numPage)
 
-        def url = comic.baseUrl + chapter.page_id + "/" + page
+        def url = "$comic.baseUrl$chapter.page_id/$page"
 
         if (comic.useWixUrl) {
             url = comic.wixUrl + page.substring(2)
@@ -156,16 +156,20 @@ class FylCommicCommand extends ReactionCommand {
     }
 
     @Override
-    String getName() { "5yl" }
+    String getName() { '5yl' }
 
     @Override
     String getHelp() {
-        "Read the Five years later comic within discord (comic website: <http://kurothewebsite.com/5yearslater>)\n" +
+        'Read the Five years later comic within discord (comic website: <http://kurothewebsite.com/5yearslater>)\n' +
                 "Usage: `gb.$name [page:number/chapter:number]`"
     }
 
     @Override
     String[] getAliases() {
-        ["5ylcomic", "fiveyearslater", "fiveyearslatercomic"]
+        [
+                '5ylcomic',
+                'fiveyearslater',
+                'fiveyearslatercomic'
+        ]
     }
 }

@@ -88,7 +88,7 @@ abstract class ImageBase extends Command {
                 .build())
     }
 
-    void sendMessageFromData(GuildMessageReceivedEvent event, GoogleSearchResults data, String key) {
+    static void sendMessageFromData(GuildMessageReceivedEvent event, GoogleSearchResults data, String key) {
         def arr = data.items
 
         if (arr == null || arr.empty) {

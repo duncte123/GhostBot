@@ -27,7 +27,6 @@ import me.duncte123.ghostbot.utils.SpoopyUtils
 import net.dv8tion.jda.core.Permission
 import net.dv8tion.jda.core.entities.Emote
 import net.dv8tion.jda.core.entities.Message
-import static net.dv8tion.jda.core.entities.MessageReaction.ReactionEmote
 import net.dv8tion.jda.core.entities.TextChannel
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent
 import net.dv8tion.jda.core.utils.MiscUtil
@@ -35,20 +34,19 @@ import net.dv8tion.jda.core.utils.MiscUtil
 import java.util.concurrent.TimeUnit
 import java.util.function.Consumer
 
+import static net.dv8tion.jda.core.entities.MessageReaction.ReactionEmote
+
 /**
  * Taken from:
  * https://github.com/Almighty-Alpaca/JDA-Butler/blob/master/src/main/java/com/almightyalpaca/discord/jdabutler/commands/ReactionCommand.java
  */
 abstract class ReactionCommand extends Command {
 
-    /*public final static String[] NUMBERS = ["1\u20E3", "2\u20E3", "3\u20E3",
-                                            "4\u20E3", "5\u20E3", "6\u20E3", "7\u20E3", "8\u20E3", "9\u20E3", "\uD83D\uDD1F"]
-    public final static String[] LETTERS = ["\uD83C\uDDE6", "\uD83C\uDDE7", "\uD83C\uDDE8",
-                                            "\uD83C\uDDE9", "\uD83C\uDDEA", "\uD83C\uDDEB", "\uD83C\uDDEC", "\uD83C\uDDED",
-                                            "\uD83C\uDDEE", "\uD83C\uDDEF"]*/
-    public final static String LEFT_ARROW = "\u2B05"
-    public final static String RIGHT_ARROW = "\u27A1"
-    public final static String CANCEL = "\u274C"
+    public final static String LEFT_ARROW = '\u2B05'
+    public final static String RIGHT_ARROW = '\u27A1'
+    public final static String CANCEL = '\u274C'
+    public final static List<String> LEFT_RIGHT_CANCEL = [LEFT_ARROW, RIGHT_ARROW, CANCEL]
+
 
     private final CommandManager.ReactionListenerRegistry listenerRegistry
 

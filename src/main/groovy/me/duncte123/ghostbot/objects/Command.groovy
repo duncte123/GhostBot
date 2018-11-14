@@ -37,7 +37,7 @@ import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 abstract class Command {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass())
-    protected String audioPath = ""
+    protected String audioPath = ''
     private def audioFiles = []
 
     abstract void execute(String invoke, String[] args, GuildMessageReceivedEvent event)
@@ -92,16 +92,16 @@ abstract class Command {
 
     }
 
-    GuildMusicManager getMusicManager(Guild guild) {
+    static GuildMusicManager getMusicManager(Guild guild) {
         return AudioUtils.instance.getMusicManager(guild)
     }
 
-    boolean preAudioChecks(GuildMessageReceivedEvent event) {
+    static boolean preAudioChecks(GuildMessageReceivedEvent event) {
 
         def voiceState = event.member.voiceState
 
         if (!voiceState.inVoiceChannel()) {
-            sendEmbed(event, EmbedUtils.embedMessage("Please join a voice channel first"))
+            sendEmbed(event, EmbedUtils.embedMessage('Please join a voice channel first'))
 
             return false
         }
@@ -113,7 +113,7 @@ abstract class Command {
             if (e.permission == Permission.VOICE_CONNECT) {
                 sendEmbed(event, EmbedUtils.embedMessage("I don't have permission to join $voiceState.channel.name"))
             } else {
-                sendEmbed(event, EmbedUtils.embedMessage("Error while joining channel " +
+                sendEmbed(event, EmbedUtils.embedMessage('Error while joining channel ' +
                         "`$voiceState.channel.name`: $e.message"))
             }
 

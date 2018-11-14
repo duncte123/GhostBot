@@ -25,26 +25,26 @@ import java.util.concurrent.ThreadLocalRandom
 class ImageCommand extends ImageBase {
 
     private final String[] keywords = [
-            "Danny Phantom",
-            "Danny Fenton",
-            "Danny Fenton",
-            "Samantha Manson",
-            "Sam Manson",
-            "Tucker Foley",
-            "Jack Fenton",
-            "Maddie Fenton",
-            "Jazz Fenton",
-            "Vlad Plasmius",
-            "Danny Fenton (Danny Phantom)",
-            "Sam Manson (Danny Phantom)",
-            "Tucker Foley (Danny Phantom)",
-            "Jack Fenton (Danny Phantom)",
-            "Maddie Fenton (Danny Phantom)",
-            "Jazz Fenton (Danny Phantom)",
-            "Vlad Masters (Danny Phantom)",
-            "Vlad Plasmius (Danny Phantom)",
-            "Danny Fenton",
-            "desiree"
+            'Danny Phantom',
+            'Danny Fenton',
+            'Danny Fenton',
+            'Samantha Manson',
+            'Sam Manson',
+            'Tucker Foley',
+            'Jack Fenton',
+            'Maddie Fenton',
+            'Jazz Fenton',
+            'Vlad Plasmius',
+            'Danny Fenton (Danny Phantom)',
+            'Sam Manson (Danny Phantom)',
+            'Tucker Foley (Danny Phantom)',
+            'Jack Fenton (Danny Phantom)',
+            'Maddie Fenton (Danny Phantom)',
+            'Jazz Fenton (Danny Phantom)',
+            'Vlad Masters (Danny Phantom)',
+            'Vlad Plasmius (Danny Phantom)',
+            'Danny Fenton',
+            'desiree'
     ]
 
     @Override
@@ -55,10 +55,10 @@ class ImageCommand extends ImageBase {
     }
 
     @Override
-    String getName() { "image" }
+    String getName() { 'image' }
 
     @Override
     String getHelp() {
-        "Gives you a random Danny Phantom <:DPEmblemInvertStroke:402746292788264960> related image from google"
+        'Gives you a random Danny Phantom <:DPEmblemInvertStroke:402746292788264960> related image from google'
     }
 }

@@ -20,5 +20,5 @@ package me.duncte123.ghostbot.commands.dannyphantom.audio
 
 class FruitloopCommand extends AudioBaseCommand {
     @Override
-    String getHelp() { "You're one crazed up fruitloop" }
+    String getHelp() { 'You\'re one crazed up fruitloop' }
 }

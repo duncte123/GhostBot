@@ -20,5 +20,5 @@ package me.duncte123.ghostbot.commands.dannyphantom.audio
 
 class BoxGhostCommand extends AudioBaseCommand {
     @Override
-    String getHelp() { "BWEARE" }
+    String getHelp() { 'BWEARE' }
 }

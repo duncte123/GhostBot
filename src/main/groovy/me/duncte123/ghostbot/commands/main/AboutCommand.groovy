@@ -42,8 +42,8 @@ I am manly themed around Danny Phantom but other spooky stuff that you have for 
 If you want to stay in contact with my developer you can join [this server](https://discord.gg/NKM9Xtk).
 
 **Extra information:**
-My invite link: [Click here](https://discordapp.com/oauth2/authorize?client_id=397297702150602752&scope=bot&permissions=-1)
-My prefix: `$Variables.PREFIX`
+My invite link: [Click here](https://discordapp.com/oauth2/authorize?client_id=397297702150602752&scope=bot&permissions=36817984)
+My prefixes: `$Variables.PREFIX` and `$Variables.OTHER_PREFIX`
 My home: [https://discord.gg/NKM9Xtk](https://discord.gg/NKM9Xtk)
 My version: `$Variables.VERSION`
 The amount of servers that I am in: $guildCount"""
@@ -52,22 +52,18 @@ The amount of servers that I am in: $guildCount"""
     }
 
     @Override
-    String getName() {
-        "about"
-    }
+    String getName() { 'about' }
 
     @Override
-    String getHelp() {
-        "Get some info about the bot"
-    }
+    String getHelp() { 'Get some info about the bot' }
 
     private static String getDevName(GuildMessageReceivedEvent event) {
 
-        def devId = "191231307290771456"
-        def defaultVal = "duncte123 (duncte123#1245)"
+        def devId = 191231307290771456L
+        def defaultVal = 'duncte123 (duncte123#1245)'
 
         def foundCount = event.guild.memberCache.stream()
-                .map { it.user }.map { it.id }.filter { it == devId }.count()
+                .map { it.user }.map { it.idLong }.filter { it == devId }.count()
 
         if (foundCount > 0) {
             return event.guild.getMemberById(devId).asMention

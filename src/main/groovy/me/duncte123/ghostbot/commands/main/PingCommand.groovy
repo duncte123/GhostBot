@@ -29,12 +29,13 @@ class PingCommand extends Command {
     @Override
     void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
 
-        sendMsg(event, "PONG!") {
+        sendMsg(event, 'PONG!') {
 
             def rest = event.message.creationTime.until(it.creationTime, ChronoUnit.MILLIS)
 
             it.editMessage(
-                    """PONG!
+                    """\
+PONG!
 Rest Ping: ${rest}ms
 Websocket Ping: ${event.JDA.ping}ms""").queue()
         }
@@ -42,8 +43,8 @@ Websocket Ping: ${event.JDA.ping}ms""").queue()
     }
 
     @Override
-    String getName() { "ping" }
+    String getName() { 'ping' }
 
     @Override
-    String getHelp() { "PONG" }
+    String getHelp() { 'PONG' }
 }

@@ -41,15 +41,15 @@ class AudioUtils {
 
     static final AudioUtils instance = new AudioUtils()
 
-    public final String BASE_AUDIO_DIR = "../GhostBot/audioFiles/"
+    public final String BASE_AUDIO_DIR = '../GhostBot/audioFiles/'
     private static final int DEFAULT_VOLUME = 35 //(0-150, where 100 is the default max volume)
-    private final String embedTitle = "Spoopy-Luma-Player"
+    private final String embedTitle = 'Spoopy-Luma-Player'
 
     private final TLongObjectMap<GuildMusicManager> musicManagers
     private AudioPlayerManager playerManager
 
     private AudioUtils() {
-        Logger.getLogger("org.apache.http.client.protocol.ResponseProcessCookies").setLevel(Level.OFF)
+        Logger.getLogger('org.apache.http.client.protocol.ResponseProcessCookies').setLevel(Level.OFF)
 
         initPlayerManager()
 
@@ -101,7 +101,7 @@ class AudioUtils {
                 def tracks = playlist.tracks
 
                 if (tracks.size() == 0) {
-                    MessageUtils.sendEmbed(channel, EmbedUtils.embedField(embedTitle, "Error: This playlist is empty."))
+                    MessageUtils.sendEmbed(channel, EmbedUtils.embedField(embedTitle, 'Error: This playlist is empty.'))
                     return
 
                 } else if (firstTrack == null) {
@@ -112,13 +112,13 @@ class AudioUtils {
                 if (addPlayList) {
                     msg = "Adding **${playlist.tracks.size()}** tracks to queue from playlist: $playlist.name"
                     if (mng.player.playingTrack == null) {
-                        msg += "\nand the Player has started playing;"
+                        msg += '\nand the Player has started playing;'
                     }
                     tracks.forEach(mng.scheduler.&queue)
                 } else {
                     msg = "Adding to queue $firstTrack.info.title (first track of playlist $playlist.name)"
                     if (mng.player.playingTrack == null) {
-                        msg += "\nand the Player has started playing;"
+                        msg += '\nand the Player has started playing;'
                     }
                     mng.scheduler.queue(firstTrack)
                 }
@@ -129,13 +129,13 @@ class AudioUtils {
 
             @Override
             void noMatches() {
-                MessageUtils.sendEmbed(channel, EmbedUtils.embedField(embedTitle, "Nothing found by _" + trackUrl + "_"))
+                MessageUtils.sendEmbed(channel, EmbedUtils.embedField(embedTitle, "Nothing found by _${trackUrl}_"))
             }
 
             @Override
             void loadFailed(FriendlyException exception) {
                 MessageUtils.sendEmbed(channel, EmbedUtils.embedField(embedTitle, "Could not play: $exception.message" +
-                        "\nIf this happens often try another link or join our [support guild](https://discord.gg/NKM9Xtk) for more!"))
+                        '\nIf this happens often try another link or join our [support guild](https://discord.gg/NKM9Xtk) for more!'))
             }
         })
     }

@@ -83,5 +83,5 @@ class GoogleSearchResults {
         public String type
         public String template
     }
-    
+
 }

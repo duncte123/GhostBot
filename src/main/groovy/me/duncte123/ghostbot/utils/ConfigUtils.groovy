@@ -33,12 +33,12 @@ class ConfigUtils {
      */
     ConfigUtils() {
         try {
-            logger.info("Loading images.json")
-            def file = new File("images.json").text
+            logger.info('Loading images.json')
+            def file = new File('images.json').text
             this.images = new JSONObject(file)
-            logger.info("Loaded images.json")
+            logger.info('Loaded images.json')
         } catch (Exception e) {
-            logger.error("Could not load config, aborting", e)
+            logger.error('Could not load config, aborting', e)
             System.exit(-1)
         }
     }

@@ -28,12 +28,12 @@ class FilterLogs extends ListenerAdapter {
 
     private static final Logger logger = LoggerFactory.getLogger(FilterLogs.class)
 
-    private static final String logsBotspam = "377529193220800522"
-    private static final String loggerBot = "327424261180620801"
+    private static final long logsBotspam = 377529193220800522L
+    private static final long loggerBot = 327424261180620801L
 
     @Override
     void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-        if (event.channel.id != logsBotspam || event.author.id != loggerBot) return
+        if (event.channel.idLong != logsBotspam || event.author.idLong != loggerBot) return
 
         logger.debug(event.author.toString())
 
@@ -48,7 +48,7 @@ class FilterLogs extends ListenerAdapter {
                 logger.debug(field.value)
 
                 if (matcher.find()) {
-                    logger.debug("deleting")
+                    logger.debug('deleting')
                     shouldDelete = true
                 }
             }
@@ -56,8 +56,8 @@ class FilterLogs extends ListenerAdapter {
         }
 
         if (shouldDelete) {
-            logger.debug("deleting for real")
-            event.message.delete().reason("Log contains discord invite").queue()
+            logger.debug('deleting for real')
+            event.message.delete().reason('Log contains discord invite').queue()
         }
     }
 

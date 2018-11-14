@@ -21,26 +21,22 @@ package me.duncte123.ghostbot.commands.main
 import me.duncte123.ghostbot.objects.Command
 import me.duncte123.ghostbot.objects.CommandCategory
 import me.duncte123.ghostbot.variables.Variables
-import net.dv8tion.jda.bot.sharding.ShardManager
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 
 class RestartCommand extends Command {
     @Override
     void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
-        if (event.author.id != Variables.OWNER_ID) {
-            sendMsg(event, "No permission")
+        if (event.author.idLong != Variables.OWNER_ID) {
+            sendMsg(event, 'No permission')
             return
         }
 
         def manager = event.JDA.asBot().shardManager
 
         if (args.length < 1) {
-            sendMsg(event, "Restarting all shards") {
+            sendMsg(event, 'Restarting all shards') {
                 manager.restart()
             }
             return
@@ -49,17 +45,17 @@ class RestartCommand extends Command {
         def toRestart = Integer.parseInt(args[0])
 
         if (toRestart > manager.shardsTotal - 1) {
-            sendMsg(event, "Invalid shard")
+            sendMsg(event, 'Invalid shard')
             return
         }
 
-        sendMsg(event, "Restarting shard " + toRestart) {
+        sendMsg(event, "Restarting shard $toRestart") {
             manager.restart(toRestart)
         }
     }
 
     @Override
-    String getName() { "restart" }
+    String getName() { 'restart' }
 
     @Override
     String getHelp() { "restarts a shard or the bot\nUsage: `$Variables.PREFIX$name [shard id]`" }

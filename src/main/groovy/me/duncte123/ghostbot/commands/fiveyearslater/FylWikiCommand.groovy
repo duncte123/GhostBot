@@ -27,7 +27,7 @@ import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 
 class FylWikiCommand extends WikiBaseCommand {
 
-    private final WikiHolder FYL_WIKI_HOLDER = new WikiHolder("https://5yl.wikia.com")
+    private final WikiHolder FYL_WIKI_HOLDER = new WikiHolder('https://5yl.wikia.com')
 
     @Override
     void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
@@ -37,16 +37,16 @@ class FylWikiCommand extends WikiBaseCommand {
             return
         }
 
-        handleWikiSearch(FYL_WIKI_HOLDER, args.join(" "), event)
+        handleWikiSearch(FYL_WIKI_HOLDER, args.join(' '), event)
 
     }
 
     @Override
-    String getName() { "5ylwiki" }
+    String getName() { '5ylwiki' }
 
     @Override
     String getHelp() {
-        "Search the 5YL wiki\n" +
+        'Search the 5YL wiki\n' +
                 "Usage `$Variables.PREFIX$name <search term>`\n" +
                 "Example: `$Variables.PREFIX$name Danny`"
     }

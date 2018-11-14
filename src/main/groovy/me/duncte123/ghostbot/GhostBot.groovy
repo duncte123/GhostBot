@@ -42,7 +42,7 @@ class GhostBot {
     GhostBot() {
         def logger = LoggerFactory.getLogger(GhostBot.class)
 
-        logger.info("Booting GhostBot")
+        logger.info('Booting GhostBot')
         def token = SpoopyUtils.config.discord.token
         def totalShards = SpoopyUtils.config.discord.totalShards
         WebUtils.userAgent = "Mozilla/5.0 (compatible; GhostBot/v${Variables.VERSION}; +https://github.com/duncte123/GhostBot)"
@@ -60,7 +60,7 @@ class GhostBot {
                 .setShardsTotal(totalShards)
                 .setToken(token)
 //                .setGame(Game.watching("${Variables.PREFIX}help | #GoGhostAgain"))
-                .setGame(Game.playing("GhostBot 2.0 | Now with popup blocker"))
+                .setGame(Game.playing('GhostBot 2.0 | Now with popup blocker'))
                 .setDisabledCacheFlags(EnumSet.of(CacheFlag.EMOTE, CacheFlag.GAME))
                 .addEventListeners(botListener, filterLogs)
 

@@ -31,31 +31,31 @@ class PetitionCommand extends Command {
     private final String[] messages = [
             // %1$s = "http://bit.ly/dp-petition"
             // %2$s = "#GoGhostAgain"
-            "What you gonna sign? %1\$s %2\$s",
-            "I would appreciate it if you could sign this petition %1\$s %2\$s !",
-            "SIGN THE PETITION %1\$s %2\$s",
-            "%2\$s! %1\$s",
-            "https://ghostbot.duncte123.me/img/GoGhostAgainBanner.png%n" +
-                    "Click the link to sign the petition <%1\$s>",
+            'What you gonna sign? %1$s %2$s',
+            'I would appreciate it if you could sign this petition %1$s %2$s !',
+            'SIGN THE PETITION %1$s %2$s',
+            '%2$s! %1$s',
+            'https://ghostbot.duncte123.me/img/GoGhostAgainBanner.png%n' +
+                    'Click the link to sign the petition <%1$s>',
             //Lol a haiku by Lady Phantom
-            "Let's go ghost again!%n" +
-                    "Come on; sign the petition!%n" +
-                    "Team Phantom needs you!%n%1\$s"
+            'Let\'s go ghost again!%n' +
+                    'Come on; sign the petition!%n' +
+                    'Team Phantom needs you!%n%1$s'
     ]
 
     @Override
     void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
         def message = messages[ThreadLocalRandom.current().nextInt(messages.length)]
-        def formatted = String.format(message, "http://bit.ly/dp-petition", "#GoGhostAgain")
+        def formatted = String.format(message, 'http://bit.ly/dp-petition', '#GoGhostAgain')
 
         sendMsg(event, formatted)
     }
 
     @Override
-    String getName() { "petition" }
+    String getName() { 'petition' }
 
     @Override
-    String getHelp() { "Sends you a link to the Danny Phantom petition #GoGhostAgain" }
+    String getHelp() { 'Sends you a link to the Danny Phantom petition #GoGhostAgain' }
 
     @Override
     CommandCategory getCategory() {

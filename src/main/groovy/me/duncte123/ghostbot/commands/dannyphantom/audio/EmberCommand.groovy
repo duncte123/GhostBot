@@ -32,12 +32,12 @@ class EmberCommand extends Command {
             return
         }
 
-        sendMsg(event, "Selected track: _Ember McLain - Remember_")
-        AudioUtils.instance.loadAndPlay(getMusicManager(event.guild), event.channel, "wBMOc24_aIw", false)
+        sendMsg(event, 'Selected track: _Ember McLain - Remember_')
+        AudioUtils.instance.loadAndPlay(getMusicManager(event.guild), event.channel, 'wBMOc24_aIw', false)
     }
 
     @Override
-    String getName() { "remember" }
+    String getName() { 'remember' }
 
     @Override
     CommandCategory getCategory() {

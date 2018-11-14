@@ -20,18 +20,17 @@ package me.duncte123.ghostbot.utils
 
 import gnu.trove.set.TLongSet
 import gnu.trove.set.hash.TLongHashSet
-import me.duncte123.ghostbot.objects.config.GhostBotConfig
 import me.duncte123.botcommons.config.ConfigUtils
 import me.duncte123.ghostbot.CommandManager
+import me.duncte123.ghostbot.objects.config.GhostBotConfig
 import net.dv8tion.jda.core.entities.Guild
 import net.dv8tion.jda.core.entities.TextChannel
-import net.dv8tion.jda.core.utils.cache.MemberCacheView
 
 import java.nio.charset.StandardCharsets
 
 class SpoopyUtils {
 
-    static final GhostBotConfig config = ConfigUtils.loadFromFile("config.json", GhostBotConfig.class)
+    static final GhostBotConfig config = ConfigUtils.loadFromFile('config.json', GhostBotConfig.class)
     static final AudioUtils audio = AudioUtils.instance
     static final CommandManager commandManager = new CommandManager()
 
@@ -60,7 +59,7 @@ class SpoopyUtils {
         //percent in bots
         double botCountP = (botCount / totalCount) * 100
 
-        return [ Math.round(userCountP), Math.round(botCountP) ]
+        return [Math.round(userCountP), Math.round(botCountP)]
     }
 
     static TextChannel getPublicChannel(Guild guild) {
@@ -82,7 +81,7 @@ class SpoopyUtils {
         return URLEncoder.encode(inp, StandardCharsets.UTF_8)
     }
 
-    static TLongSet newLongSet(long... ids) {
+    static TLongSet newLongSet(long ... ids) {
         return new TLongHashSet(ids)
     }
 

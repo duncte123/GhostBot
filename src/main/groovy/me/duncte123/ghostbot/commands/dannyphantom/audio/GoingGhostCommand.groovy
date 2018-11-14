@@ -37,10 +37,10 @@ class GoingGhostCommand extends AudioBaseCommand {
         def p = ThreadLocalRandom.current().nextInt(100)
 
         if (p >= 50 && p <= 55) {
-            selectedTrack = "extra/its going ghost.mp3"
+            selectedTrack = 'extra/its going ghost.mp3'
         }
 
-        sendMsg(event, "Selected track: _" + selectedTrack.replace("_", "\\_") + "_")
+        sendMsg(event, "Selected track: _${selectedTrack.replace('_', '\\_')}_")
         AudioUtils.instance.loadAndPlay(getMusicManager(event.guild), event.channel,
                 audioPath + selectedTrack, false)
 

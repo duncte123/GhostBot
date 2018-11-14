@@ -41,5 +41,5 @@ class TumblrPhoto {
             this.height = height
         }
     }
-    
+
 }
