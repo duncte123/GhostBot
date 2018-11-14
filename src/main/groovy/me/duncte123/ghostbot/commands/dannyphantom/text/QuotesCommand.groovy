@@ -41,43 +41,43 @@ import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 
 class QuotesCommand extends Command {
 
-    private static final String DOMAIN = "totallycorrectdannyphantomquotes.tumblr.com"
-    private final String[] types = ["chat", "text", "quote"]
+    private static final String DOMAIN = 'totallycorrectdannyphantomquotes.tumblr.com'
+    private final String[] types = ['chat', 'text', 'quote']
     private final List<TumblrPost> allQuotes = []
     private final TLongObjectMap<List<TumblrPost>> guildQuotes = new TLongObjectHashMap<>()
     private final TLongList badPostIds = new TLongArrayList()
 
     QuotesCommand() {
-        ["156199508936",
-         "141701068521",
-         "139748205676",
-         "145485004576",
-         "131957587201",
-         "145767003281",
-         "122464866251",
-         "149288809271",
-         "131048227566",
-         "160064523456",
-         "146961714036",
-         "157865830301",
-         "136789766336",
-         "148512885491",
-         "137376851771",
-         "147819522951",
-         "147825378346",
-         "156199957996",
-         "143194957186",
-         "121801283241",
-         "121891439031",
-         "144734161886",
-         "130808913006",
-         "130834334051",
-         "131278048551",
-         "163028433406",
-         "150823532681",
-         "173944925826",
-         "127476921111",
-         "174190854511"].stream().map {
+        ['156199508936',
+         '141701068521',
+         '139748205676',
+         '145485004576',
+         '131957587201',
+         '145767003281',
+         '122464866251',
+         '149288809271',
+         '131048227566',
+         '160064523456',
+         '146961714036',
+         '157865830301',
+         '136789766336',
+         '148512885491',
+         '137376851771',
+         '147819522951',
+         '147825378346',
+         '156199957996',
+         '143194957186',
+         '121801283241',
+         '121891439031',
+         '144734161886',
+         '130808913006',
+         '130834334051',
+         '131278048551',
+         '163028433406',
+         '150823532681',
+         '173944925826',
+         '127476921111',
+         '174190854511'].stream().map {
             badPostIds.add(Long.parseLong(it))
         }
 
@@ -88,12 +88,12 @@ class QuotesCommand extends Command {
     void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
 
         if (args.size() > 0) {
-            def joined = args.join("")
+            def joined = args.join('')
 
-            if (joined.startsWith("id:")) {
+            if (joined.startsWith('id:')) {
 
 
-                def id = joined.substring("id:".length())
+                def id = joined.substring('id:'.length())
 
                 if (!id.empty) {
                     def idLong = Long.parseLong(id)
@@ -102,7 +102,7 @@ class QuotesCommand extends Command {
                 }
 
                 return
-            } else if ("total" == args[0]) {
+            } else if ('total' == args[0]) {
                 sendMsg(event, "There are a total of ${allQuotes.size()} quotes in the system at the moment")
                 return
             }
@@ -122,13 +122,13 @@ class QuotesCommand extends Command {
     }
 
     @Override
-    String getName() { "quote" }
+    String getName() { 'quote' }
 
     @Override
-    String getHelp() { "Get a random quote from http://totallycorrectdannyphantomquotes.tumblr.com/" }
+    String getHelp() { 'Get a random quote from http://totallycorrectdannyphantomquotes.tumblr.com/' }
 
     @Override
-    String[] getAliases() { ["quotes"] }
+    String[] getAliases() { ['quotes'] }
 
     @Override
     CommandCategory getCategory() {
@@ -141,16 +141,16 @@ class QuotesCommand extends Command {
                 .setFooter("Quote id: $post.id", Variables.FOOTER_ICON)
 
         switch (post.type) {
-            case "chat":
+            case 'chat':
                 def dialogue = post.dialogue
                 dialogue.forEach {
                     eb.appendDescription("**$it.label** ${parseText(it.phrase)}\n")
                 }
                 break
-            case "text":
+            case 'text':
                 eb.setDescription(parseText(post.body))
                 break
-            case "quote":
+            case 'quote':
                 eb.setDescription("\"${parseText(post.text)}\"\n\n - _ ${parseText(post.source)}_")
                 break
         }
@@ -213,29 +213,29 @@ class QuotesCommand extends Command {
         }
 
         raw = StringEscapeUtils.unescapeHtml4(raw)
-        def input = raw.replaceAll(Pattern.quote("<br/>"), "\n")
-        def replacePWith = input.contains("</p>\n") ? "" : "\n"
+        def input = raw.replaceAll(Pattern.quote('<br/>'), '\n')
+        def replacePWith = input.contains('</p>\n') ? '' : '\n'
 
         return input
         //show the stars and remove the ps
-                .replaceAll("\\*", "\\\\*")
-                .replaceAll(Pattern.quote("<p>"), "")
-                .replaceAll(Pattern.quote("</p>"), replacePWith)
-                .replaceAll(Pattern.quote("<p/>"), replacePWith) //because some posts are fucked
+                .replaceAll('\\*', '\\\\*')
+                .replaceAll(Pattern.quote('<p>'), '')
+                .replaceAll(Pattern.quote('</p>'), replacePWith)
+                .replaceAll(Pattern.quote('<p/>'), replacePWith) //because some posts are fucked
         //Italics
-                .replaceAll(Pattern.quote("<i>"), "*")
-                .replaceAll(Pattern.quote("</i>"), "*")
-                .replaceAll(Pattern.quote("<em>"), "*")
-                .replaceAll(Pattern.quote("</em>"), "*")
+                .replaceAll(Pattern.quote('<i>'), '*')
+                .replaceAll(Pattern.quote('</i>'), '*')
+                .replaceAll(Pattern.quote('<em>'), '*')
+                .replaceAll(Pattern.quote('</em>'), '*')
         //bold
-                .replaceAll(Pattern.quote("<b>"), "**")
-                .replaceAll(Pattern.quote("</b>"), "**")
-                .replaceAll(Pattern.quote("<strong>"), "**")
-                .replaceAll(Pattern.quote("</strong>"), "**")
+                .replaceAll(Pattern.quote('<b>'), '**')
+                .replaceAll(Pattern.quote('</b>'), '**')
+                .replaceAll(Pattern.quote('<strong>'), '**')
+                .replaceAll(Pattern.quote('</strong>'), '**')
         //useless crap that we don't need
-                .replaceAll(Pattern.quote("<small>"), "")
-                .replaceAll(Pattern.quote("</small>"), "")
+                .replaceAll(Pattern.quote('<small>'), '')
+                .replaceAll(Pattern.quote('</small>'), '')
         //links
-                .replaceAll("<a(?:.*)href=\"(\\S+)\"(?:.*)>(.*)</a>", "[\$2](\$1)")
+                .replaceAll('<a(?:.*)href="(\\S+)"(?:.*)>(.*)</a>', '[$2]($1)')
     }
 }
