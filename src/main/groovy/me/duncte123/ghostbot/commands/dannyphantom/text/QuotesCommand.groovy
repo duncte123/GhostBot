@@ -179,7 +179,7 @@ class QuotesCommand extends Command {
     }
 
     private void reloadQuotes() {
-        if (!SpoopyUtils.config.running_local) {
+        if (SpoopyUtils.config.running_local) {
             return
         }
 

@@ -49,62 +49,65 @@ abstract class WikiBaseCommand extends Command {
                 wiki.searchListEndpoint,
                 SpoopyUtils.encodeUrl(searchQuery))
 
-        ).async({ json ->
+        ).async(
+                { json ->
 
-            if (json.has('exception')) {
-                def ex = toEx(json)
+                    if (json.has('exception')) {
+                        def ex = toEx(json)
 
-                if (ex.type.equalsIgnoreCase('NotFoundApiException')) {
-                    sendMsg(event, 'Your search returned no results.')
-                    return
-                }
+                        if (ex.type.equalsIgnoreCase('NotFoundApiException')) {
+                            sendMsg(event, 'Your search returned no results.')
+                            return
+                        }
 
-                sendMsg(event, "An error occurred: $ex")
+                        sendMsg(event, "An error occurred: $ex")
 
-                return
-            }
+                        return
+                    }
 
-            def wikiSearchResultSet = gson.fromJson(json.toString(), LocalWikiSearchResultSet.class)
+                    def wikiSearchResultSet = gson.fromJson(json.toString(), LocalWikiSearchResultSet.class)
 
-            def items = wikiSearchResultSet.getItems()
+                    def items = wikiSearchResultSet.getItems()
 
-            if (items.size() > 10) {
-                def temp = new ArrayList<LocalWikiSearchResult>()
+                    if (items.size() > 10) {
+                        def temp = new ArrayList<LocalWikiSearchResult>()
 
-                for (int i = 0; i < 10; i++) {
-                    temp.add(items.get(i))
-                }
+                        for (int i = 0; i < 10; i++) {
+                            temp.add(items.get(i))
+                        }
 
-                items.clear()
-                items.addAll(temp)
-            }
+                        items.clear()
+                        items.addAll(temp)
+                    }
 
-            def eb = EmbedUtils.defaultEmbed()
-                    .setTitle("Query: $searchQuery", "$wiki.domain/wiki/Special:Search?query=${searchQuery.replaceAll(' ', '%20')}")
-                    .setAuthor("Requester: ${String.format('%#s', event.author)}",
-                    'https://ghostbot.duncte123.me/', event.author.effectiveAvatarUrl)
-                    .setDescription("Total results: $wikiSearchResultSet.total\n" +
-                    "Current Listed: ${items.size()}\n" +
-                    '\n')
+                    def eb = EmbedUtils.defaultEmbed().with {
+                        setTitle("Query: $searchQuery",
+                                "$wiki.domain/wiki/Special:Search?query=${searchQuery.replaceAll(' ', '%20')}")
+                        setAuthor("Requester: ${String.format('%#s', event.author)}",
+                                'https://ghostbot.duncte123.me/', event.author.effectiveAvatarUrl)
+                        setDescription("Total results: $wikiSearchResultSet.total\n" +
+                                "Current Listed: ${items.size()}\n\n")
+                    }
 
 
-            for (LocalWikiSearchResult localWikiSearchResult : items) {
-                eb.appendDescription('[')
-                        .appendDescription(localWikiSearchResult.title)
-                        .appendDescription(' - ')
-                        .appendDescription(StringUtils.abbreviate(
-                        safeUrl(localWikiSearchResult.snippet), 50)
-                )
-                        .appendDescription('](')
-                        .appendDescription(safeUrl(localWikiSearchResult.url))
-                        .appendDescription(')\n')
-            }
+                    for (LocalWikiSearchResult localWikiSearchResult : items) {
+                        eb.with {
+                            appendDescription('[')
+                            appendDescription(localWikiSearchResult.title)
+                            appendDescription(' - ')
+                            appendDescription(StringUtils.abbreviate(safeUrl(localWikiSearchResult.snippet), 50))
+                            appendDescription('](')
+                            appendDescription(safeUrl(localWikiSearchResult.url))
+                            appendDescription(')\n')
+                        }
+                    }
 
-            sendEmbed(event, eb.build())
-        },
+                    sendEmbed(event, eb.build())
+                },
                 {
                     sendMsg(event, "Something went wrong: $it.message")
-                })
+                }
+        )
     }
 
     static FandomException toEx(JSONObject json) {

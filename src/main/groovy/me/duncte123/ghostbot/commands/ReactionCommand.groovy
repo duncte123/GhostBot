@@ -122,8 +122,8 @@ abstract class ReactionCommand extends Command {
                 return
             }
 
-            ReactionEmote reactionEmote = event.reactionEmote
-            String reaction = reactionEmote.isEmote() ? reactionEmote.emote.id : reactionEmote.name
+            def reactionEmote = event.reactionEmote
+            def reaction = reactionEmote.isEmote() ? reactionEmote.emote.id : reactionEmote.name
 
             if (allowedReactions.contains(reaction)) {
                 callback.accept(allowedReactions.indexOf(reaction))
@@ -147,7 +147,7 @@ abstract class ReactionCommand extends Command {
                     continue
                 }
 
-                Emote emote = message.JDA.getEmoteById(reaction)
+                def emote = message.JDA.getEmoteById(reaction)
 
                 if (emote != null) {
                     message.addReaction(emote).queue()
@@ -159,9 +159,11 @@ abstract class ReactionCommand extends Command {
             registry.remove(this)
 
             if (shouldDeleteReactions) {
-                TextChannel channel = GhostBot.getInstance().getShardManager().getTextChannelById(channelId)
-                channel.getMessageById(messageId).queue {
-                    it.clearReactions().queue()
+                def channel = GhostBot.instance.shardManager.getTextChannelById(channelId)
+                if (channel != null) {
+                    channel.getMessageById(messageId).queue {
+                        it.clearReactions().queue()
+                    }
                 }
             }
 

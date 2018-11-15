@@ -32,6 +32,7 @@ import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 import java.util.concurrent.ThreadLocalRandom
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed
+import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 import static me.duncte123.ghostbot.commands.dannyphantom.text.QuotesCommand.parseText
 
 class AuCommand extends Command {
@@ -47,6 +48,18 @@ class AuCommand extends Command {
 
     @Override
     void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
+
+        if (args.length == 1 && args[0] == 'reload' && event.author.idLong == Variables.OWNER_ID) {
+            loadAus()
+            sendMsg(event, 'Reloading')
+            return
+        }
+
+        if (allAus.isEmpty()) {
+            sendMsg(event, 'No AU\'s found, they are probably being reloaded')
+            return
+        }
+
         def gid = event.guild.idLong
 
         if (!guildAus.containsKey(gid) || guildAus.get(gid).isEmpty()) {
@@ -58,15 +71,12 @@ class AuCommand extends Command {
 
         posts.remove(post)
 
-        def tags = post.tags.toList().stream().map { "#$it" }.collect().toListString()
-                .replaceFirst('\\[', '')
-
-        def parsedTags = tags.substring(0, tags.lastIndexOf(']'))
+        def tags = post.tags.join(' #')
 
         def eb = EmbedUtils.defaultEmbed()
                 .setTitle('Link to Post', post.post_url)
                 .setDescription(parseText(post.body))
-                .setFooter(parsedTags, Variables.FOOTER_ICON)
+                .setFooter("#$tags", Variables.FOOTER_ICON)
                 .setTimestamp(null)
 
         sendEmbed(event, eb)

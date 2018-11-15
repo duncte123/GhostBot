@@ -44,46 +44,53 @@ class WikiUserCommand extends WikiBaseCommand {
                 '%s?ids=%s',
                 wiki.userDetailsEndpoint,
                 SpoopyUtils.encodeUrl(searchQuery)
-        )).async({ json ->
+        )).async(
+                { json ->
 
-            if (json.has('exception')) {
-                sendMsg(event, "An error occurred: ${toEx(json)}")
-                return
-            }
+                    if (json.has('exception')) {
+                        sendMsg(event, "An error occurred: ${toEx(json)}")
+                        return
+                    }
 
-            def userResultSet = gson.fromJson(json.toString(), UserResultSet.class)
+                    def userResultSet = gson.fromJson(json.toString(), UserResultSet.class)
 
-            if (userResultSet.items.size() == 1) {
-                def user = userResultSet.items.get(0)
-                user.basePath = userResultSet.basepath
+                    if (userResultSet.items.size() == 1) {
+                        def user = userResultSet.items.get(0)
+                        user.basePath = userResultSet.basepath
 
-                sendEmbed(event, EmbedUtils.defaultEmbed()
-                        .setThumbnail(user.avatar)
-                        .setTitle('Profile link', user.absoluteUrl)
-                        .setAuthor(user.name, user.absoluteUrl, user.avatar)
-                        .addField('User Info:', "**Name:** $user.name\n" +
-                        "**Id:** $user.userId\n" +
-                        "**Title:** $user.title\n" +
-                        "**Number of edits:** $user.numberofedits", false)
-                        .build()
-                )
+                        def embed = EmbedUtils.defaultEmbed().with {
+                            setThumbnail(user.avatar)
+                            setTitle('Profile link', user.absoluteUrl)
+                            setAuthor(user.name, user.absoluteUrl, user.avatar)
+                            addField('User Info:', "**Name:** $user.name\n" +
+                                    "**Id:** $user.userId\n" +
+                                    "**Title:** $user.title\n" +
+                                    "**Number of edits:** $user.numberofedits", false)
+                        }
 
-                return
-            }
+                        sendEmbed(event, embed)
 
-            def eb = EmbedUtils.defaultEmbed().setTitle('I found the following users:')
+                        return
+                    }
 
-            for (UserElement user : (userResultSet.items)) {
-                eb.appendDescription('[')
-                        .appendDescription(user.name)
-                        .appendDescription('](')
-                        .appendDescription(userResultSet.basepath + user.url)
-                        .appendDescription(')\n')
-            }
+                    def eb = EmbedUtils.defaultEmbed().with {
+                        setTitle('I found the following users:')
+                    }
 
-            sendEmbed(event, eb.build())
+                    for (UserElement user : (userResultSet.items)) {
+                        eb.with {
+                            appendDescription('[')
+                            appendDescription(user.name)
+                            appendDescription('](')
+                            appendDescription(userResultSet.basepath + user.url)
+                            appendDescription(')\n')
+                        }
 
-        },
+                    }
+
+                    sendEmbed(event, eb.build())
+
+                },
                 {
                     sendMsg(event, "Something went wrong: $it.message")
                     /* it.printStackTrace()*/
