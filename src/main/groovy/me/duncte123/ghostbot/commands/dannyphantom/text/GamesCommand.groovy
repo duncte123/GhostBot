@@ -30,14 +30,14 @@ class GamesCommand extends Command {
 
     private final String[] games = [
             'https://paurachan.deviantart.com/art/Danny-Phantom-Dress-up-game-v0-1-435498005',
-            'http://www.dannyphantomgames.net/fright-flight.php',
-            'http://www.dannyphantomgames.net/dueling-decks.php',
-            'http://www.dannyphantomgames.net/action-jack.php',
-            'http://www.dannyphantomgames.net/urban-jungle-rumble.php',
-            'http://www.dannyphantomgames.net/the-ultimate-enemy-face-off.php',
-            'http://www.dannyphantomgames.net/portal-peril.php',
-            'http://www.dannyphantomgames.net/freak-for-all.php',
-            'http://www.dannyphantomgames.net/prom-fright.php',
+            'https://dpgames.duncte123.me/fright-flight.html',
+            'https://dpgames.duncte123.me/dueling-decks.html',
+            'https://dpgames.duncte123.me/action-jack.html',
+            'https://dpgames.duncte123.me/urban-jungle-rumble.html',
+            'https://dpgames.duncte123.me/the-ultimate-enemy-face-off.html',
+            'https://dpgames.duncte123.me/portal-peril.html',
+            'https://dpgames.duncte123.me/freak-for-all.html',
+            'https://dpgames.duncte123.me/prom-fright.html',
             'http://www.nick.com.au/shows/dannyphantom/games/dannyphantom-action-jack/qjm29h',
             'http://www.nick.com.au/shows/dannyphantom/games/dannyphantom-fright-flight/rp6an6',
             'http://www.nick.com.au/shows/dannyphantom/games/dannyphantom-enemy-face-off/g11t0x',
@@ -48,7 +48,8 @@ class GamesCommand extends Command {
     void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
         def game = games[ThreadLocalRandom.current().nextInt(games.length)]
 
-        sendMsg(event, game)
+        sendMsg(event, "Here is a DP game: $game\n" +
+                'The game will work best on an old browser like internet explorer because it has flash enabled')
     }
 
     @Override
