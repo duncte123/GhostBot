@@ -79,6 +79,9 @@ class OtherGhostCommands extends ImageBase {
             case 'poindexter':
                 sendFromKeywords(event, 'Sidney Poindexter')
                 break
+            case 'wes':
+                sendFromKeywords(event, 'Wes Weston')
+                break
         }
 
     }
@@ -93,7 +96,7 @@ class OtherGhostCommands extends ImageBase {
     String[] getAliases() {
         return ['ember', 'dan', 'vlad',
                 'sam', 'tucker', 'danny', 'clockwork', 'pitchpearl', 'valerie', 'dani', 'skulker', 'jack', 'jazz',
-                'maddie', 'desiree', 'poindexter']
+                'maddie', 'desiree', 'poindexter', 'wes']
     }
 
     @Override

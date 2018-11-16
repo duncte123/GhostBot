@@ -44,7 +44,7 @@ class ImageCommand extends ImageBase {
             'Vlad Masters (Danny Phantom)',
             'Vlad Plasmius (Danny Phantom)',
             'Danny Fenton',
-            'desiree'
+            'Danny Phantom desiree'
     ]
 
     @Override
