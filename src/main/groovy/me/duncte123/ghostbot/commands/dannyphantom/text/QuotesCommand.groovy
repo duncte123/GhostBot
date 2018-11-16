@@ -237,5 +237,10 @@ class QuotesCommand extends Command {
                 .replaceAll(Pattern.quote('</small>'), '')
         //links
                 .replaceAll('<a(?:.*)href="(\\S+)"(?:.*)>(.*)</a>', '[$2]($1)')
+        // Lists
+                .replaceAll('<ul>', '')
+                .replaceAll('</ul>', '')
+                .replaceAll('<li>', ' - ')
+                .replaceAll('</li>', '')
     }
 }

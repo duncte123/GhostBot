@@ -114,7 +114,6 @@ class DPArtistsCommand extends ImageBase {
 
         }
 
-
     }
 
     @Override
@@ -128,11 +127,11 @@ class DPArtistsCommand extends ImageBase {
         return artists
     }
 
-    private String[] extractInfo(String a) {
+    private static String[] extractInfo(String a) {
         return a.replaceAll('https?://', '').split('\\.')
     }
 
-    private String getTumblrProfilePictureUrl(String domain) {
+    private static String getTumblrProfilePictureUrl(String domain) {
         return "https://api.tumblr.com/v2/blog/$domain/avatar/48"
     }
 
