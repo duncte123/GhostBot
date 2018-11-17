@@ -108,6 +108,8 @@ class AuCommand extends Command {
             return
         }
 
+        allAus.clear()
+
         def tagToFind1 = 'dpau'
         def tagToFind2 = 'reallybaddpau'
 

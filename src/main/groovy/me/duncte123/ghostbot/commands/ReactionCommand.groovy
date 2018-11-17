@@ -160,9 +160,10 @@ abstract class ReactionCommand extends Command {
 
             if (shouldDeleteReactions) {
                 def channel = GhostBot.instance.shardManager.getTextChannelById(channelId)
+
                 if (channel != null) {
                     channel.getMessageById(messageId).queue {
-                        it.clearReactions().queue()
+                        it.clearReactions().queue(null, {})
                     }
                 }
             }

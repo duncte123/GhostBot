@@ -63,6 +63,7 @@ class DPArtistsCommand extends ImageBase {
             'umbrihearts',
             'amethystocean-adr',
             'amethystocean',
+            'amethyst-ocean',
             'ceciliaspen'
     ]
 
@@ -96,6 +97,7 @@ class DPArtistsCommand extends ImageBase {
                 break
 
             case 'amethystocean':
+            case 'amethyst-ocean':
                 doStuff('amethyst-ocean.deviantart.com', event)
                 break
 
