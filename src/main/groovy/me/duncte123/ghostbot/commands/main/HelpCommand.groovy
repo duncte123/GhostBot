@@ -21,6 +21,7 @@ package me.duncte123.ghostbot.commands.main
 import me.duncte123.botcommons.messaging.EmbedUtils
 import me.duncte123.ghostbot.objects.Command
 import me.duncte123.ghostbot.objects.CommandCategory
+import me.duncte123.ghostbot.objects.CommandEvent
 import me.duncte123.ghostbot.utils.SpoopyUtils
 import me.duncte123.ghostbot.variables.Variables
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
@@ -32,8 +33,10 @@ import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 
 class HelpCommand extends Command {
     @Override
-    void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
+    void execute(CommandEvent commandEvent) {
 
+        def args = commandEvent.args
+        def event = commandEvent.event
 
         if (args.length > 0) {
             String toSearch = args.join(' ')
@@ -48,13 +51,13 @@ class HelpCommand extends Command {
 
             for (Command cmd : SpoopyUtils.commandManager.commands) {
                 if (cmd.name == toSearch) {
-                    sendMsg(event, "Command help for `$cmd.name` :\n" +
+                    sendMessage(event, "Command help for `$cmd.name` :\n" +
                             "$cmd.help${cmd.aliases.length > 0 ? "\nAliases: ${cmd.aliases.join(', ')}" : ''}")
                     return
                 } else {
                     for (String alias : cmd.aliases) {
                         if (alias == toSearch) {
-                            sendMsg(event, "Command help for `$cmd.name` :\n" +
+                            sendMessage(event, "Command help for `$cmd.name` :\n" +
                                     "$cmd.help${cmd.aliases.length > 0 ? "\nAliases: ${cmd.aliases.join(', ')}" : ''}")
                             return
                         }
@@ -63,7 +66,7 @@ class HelpCommand extends Command {
                 }
             }
 
-            sendMsg(event, "That command could not be found, try ${Variables.PREFIX}help for a list of commands")
+            sendMessage(event, "That command could not be found, try ${Variables.PREFIX}help for a list of commands")
             return
         }
 
@@ -86,16 +89,22 @@ class HelpCommand extends Command {
                 .addField('Wiki commands', buildCommands(wikiCommands), false)
                 .addField('Other commands', buildCommands(otherCommands), false)
                 .addField('Character commands', buildCommands(characterCommands), false)
-                .build()
 
-        event.author.openPrivateChannel().queue({
-            it.sendMessage(helpEmbed).queue({
-                sendMsg(event, "$event.author.asMention, check your dms")
+        if (event.fromSlack) {
+            sendMessage(event, helpEmbed)
+            return
+        }
+
+        def jdaEvent = event.originalEvent as GuildMessageReceivedEvent
+
+        jdaEvent.author.openPrivateChannel().queue({
+            it.sendMessage(helpEmbed.build()).queue({
+                sendMessage(event, "$jdaEvent.author.asMention, check your dms")
             }, {
-                sendEmbed(event, helpEmbed)
+                sendMessage(event, helpEmbed)
             })
         }, {
-            sendEmbed(event, helpEmbed)
+            sendMessage(event, helpEmbed)
         })
 
     }
@@ -127,4 +136,7 @@ class HelpCommand extends Command {
 
         return temp
     }
+
+    @Override
+    boolean isSlackCompatible() { true }
 }

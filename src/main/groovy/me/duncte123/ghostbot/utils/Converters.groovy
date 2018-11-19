@@ -28,7 +28,7 @@ class Converters {
 
         def attachment = new SlackAttachment()
         attachment.color = Variables.EMBED_COLOR_SLACK
-        attachment.fallback = 'You should get out of compact mode ;)'
+        attachment.fallback = 'Embed with cool content ;)'
 
         if (embed.title != null) {
             attachment.title = embed.title
@@ -44,6 +44,19 @@ class Converters {
             attachment.footerIcon = footer.iconUrl
         }
 
+        if (!embed.fields.isEmpty()) {
+            embed.fields.forEach {
+                attachment.addField(it.name, it.value, it.inline)
+            }
+        }
+
+        if (embed.image != null) {
+            attachment.imageUrl = embed.image.url
+        }
+
+        if (embed.thumbnail != null) {
+            attachment.thumbUrl = embed.thumbnail.url
+        }
 
         if (embed.timestamp != null) {
             attachment.timestamp = embed.timestamp.toEpochSecond()
