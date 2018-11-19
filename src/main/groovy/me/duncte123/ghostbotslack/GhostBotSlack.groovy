@@ -33,6 +33,11 @@ class GhostBotSlack {
         logger.info('Booting Slack Bot')
         String token = System.getProperty('slackToken')
 
+        if (token == null) {
+            this.session = null
+            return
+        }
+
         this.session = SlackSessionFactory
             .getSlackSessionBuilder(token)
             .withAutoreconnectOnDisconnection(true)
