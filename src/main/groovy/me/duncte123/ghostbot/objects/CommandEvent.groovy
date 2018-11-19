@@ -18,11 +18,7 @@
 
 package me.duncte123.ghostbot.objects
 
-import me.duncte123.ghostbot.objects.entities.GhostBotApi
-import me.duncte123.ghostbot.objects.entities.GhostBotChannel
-import me.duncte123.ghostbot.objects.entities.GhostBotGuild
-import me.duncte123.ghostbot.objects.entities.GhostBotMessageEvent
-import me.duncte123.ghostbot.objects.entities.GhostBotUser
+import me.duncte123.ghostbot.objects.entities.*
 
 class CommandEvent {
 
@@ -30,9 +26,10 @@ class CommandEvent {
     final String[] args
     final GhostBotMessageEvent event
     final GhostBotChannel channel
-    final GhostBotUser user
+    final GhostBotUser author
     final GhostBotApi api
     final GhostBotGuild guild
+    final GhostBotMessage message
     final boolean fromSlack
 
     CommandEvent(String invoke, String[] args, GhostBotMessageEvent event, boolean fromSlack) {
@@ -40,9 +37,10 @@ class CommandEvent {
         this.args = args
         this.event = event
         this.channel = event.channel
-        this.user = event.author
+        this.author = event.author
         this.api = event.API
         this.guild = event.guild
+        this.message = event.message
         this.fromSlack = fromSlack
     }
 }

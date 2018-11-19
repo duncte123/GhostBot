@@ -18,25 +18,36 @@
 
 package me.duncte123.ghostbot.commands.main
 
+import com.ullink.slack.simpleslackapi.SlackSession
 import me.duncte123.botcommons.messaging.EmbedUtils
 import me.duncte123.ghostbot.objects.Command
+import me.duncte123.ghostbot.objects.CommandEvent
 import me.duncte123.ghostbot.variables.Variables
+import net.dv8tion.jda.core.JDA
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
-
-import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed
 
 class AboutCommand extends Command {
 
-    AboutCommand() {}
-
     @Override
-    void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
+    void execute(CommandEvent event) {
 
-        def devName = getDevName(event)
-        def guildCount = event.JDA.asBot().shardManager.guildCache.size()
+        def devName
+        def guildCount
 
-        sendEmbed(event, EmbedUtils.embedMessage(
-                """\
+        if (!event.fromSlack) {
+            def jdaEvent = event.event.originalEvent as GuildMessageReceivedEvent
+
+            devName = getDevNameJDA(jdaEvent)
+            guildCount = (event.api as JDA).asBot().shardManager.guildCache.size()
+        } else {
+            def slackSession = event.api.get() as SlackSession
+
+            devName = 'duncte123'
+            guildCount = slackSession.channels.size()
+        }
+
+        sendMessage(event.event, EmbedUtils.embedMessage(
+            """\
 Hey there, my name is GhostBot, I am the must have bot for your spooky server.
 I am manly themed around Danny Phantom but other spooky stuff that you have for me can be suggested to $devName.
 If you want to stay in contact with my developer you can join [this server](https://discord.gg/NKM9Xtk).
@@ -57,13 +68,13 @@ The amount of servers that I am in: $guildCount"""
     @Override
     String getHelp() { 'Get some info about the bot' }
 
-    private static String getDevName(GuildMessageReceivedEvent event) {
+    private static String getDevNameJDA(GuildMessageReceivedEvent event) {
 
         def devId = 191231307290771456L
         def defaultVal = 'duncte123 (duncte123#1245)'
 
         def foundCount = event.guild.memberCache.stream()
-                .map { it.user }.map { it.idLong }.filter { it == devId }.count()
+            .map { it.user }.map { it.idLong }.filter { it == devId }.count()
 
         if (foundCount > 0) {
             return event.guild.getMemberById(devId).asMention
@@ -71,4 +82,7 @@ The amount of servers that I am in: $guildCount"""
 
         return defaultVal
     }
+
+    @Override
+    boolean isSlackCompatible() { true }
 }

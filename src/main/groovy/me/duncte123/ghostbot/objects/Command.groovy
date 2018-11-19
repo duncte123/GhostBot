@@ -40,7 +40,10 @@ abstract class Command extends CommandHelpers {
     protected String audioPath = ''
     private def audioFiles = []
 
-    abstract void execute(String invoke, String[] args, GuildMessageReceivedEvent event)
+    @Deprecated
+    void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
+        // For removal
+    }
 
     void execute(CommandEvent event) {
         execute(event.invoke, event.args, event.event.originalEvent as GuildMessageReceivedEvent)

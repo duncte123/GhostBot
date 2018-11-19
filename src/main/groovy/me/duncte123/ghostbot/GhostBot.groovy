@@ -51,7 +51,7 @@ class GhostBot {
         WebUtils.userAgent = "Mozilla/5.0 (compatible; GhostBot/v${Variables.VERSION}; +https://github.com/duncte123/GhostBot)"
         EmbedUtils.setEmbedBuilder {
             return new EmbedBuilder()
-                    .setColor(0x6ffe32)
+                    .setColor(Variables.EMBED_COLOR)
                     .setFooter("GhostBot", Variables.FOOTER_ICON)
                     .setTimestamp(Instant.now())
         }

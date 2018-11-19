@@ -27,5 +27,7 @@ class Variables {
     public static final long OWNER_ID = 191231307290771456L
     public static final String VERSION = '@ghostBotVersion@'
     public static final String FOOTER_ICON = 'https://cdn.discordapp.com/emojis/394148311835344896.png'
+    public static final int EMBED_COLOR = 0x6ffe32
+    public static final String EMBED_COLOR_SLACK = '#6ffe32'
 
 }

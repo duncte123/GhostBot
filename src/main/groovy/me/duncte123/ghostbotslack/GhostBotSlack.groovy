@@ -31,7 +31,7 @@ class GhostBotSlack {
 
     GhostBotSlack() {
         logger.info('Booting Slack Bot')
-        String token = ''
+        String token = System.getProperty('slackToken')
 
         this.session = SlackSessionFactory
             .getSlackSessionBuilder(token)

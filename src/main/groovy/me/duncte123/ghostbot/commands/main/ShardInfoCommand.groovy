@@ -20,6 +20,7 @@ package me.duncte123.ghostbot.commands.main
 
 import me.duncte123.ghostbot.objects.Command
 import me.duncte123.ghostbot.objects.CommandCategory
+import me.duncte123.ghostbot.objects.CommandEvent
 import net.dv8tion.jda.bot.sharding.ShardManager
 import net.dv8tion.jda.core.JDA
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
@@ -31,8 +32,12 @@ import java.text.DecimalFormat
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 
 class ShardInfoCommand extends Command {
+
     @Override
-    void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
+    void execute(CommandEvent commandEvent) {
+
+        def event = commandEvent.event.originalEvent as GuildMessageReceivedEvent
+
         def headers = new ArrayList<String>()
         headers.add('Shard ID')
         headers.add('Status')
@@ -41,14 +46,14 @@ class ShardInfoCommand extends Command {
         headers.add('Connected VCs')
 
         def table = new ArrayList<List<String>>()
-        def shardManager = event.getJDA().asBot().getShardManager()
+        def shardManager = event.JDA.asBot().getShardManager()
         def shards = new ArrayList<JDA>(shardManager.getShards()).reverse()
 
         for (JDA shard : shards) {
             def row = new ArrayList<String>()
 
             row.add(shard.shardInfo.shardId +
-                    (event.JDA.shardInfo.shardId == shard.shardInfo.shardId ? ' (current)' : ''))
+                (event.JDA.shardInfo.shardId == shard.shardInfo.shardId ? ' (current)' : ''))
 
             row.add(WordUtils.capitalizeFully(shard.status.toString().replace('_', ' ')))
 

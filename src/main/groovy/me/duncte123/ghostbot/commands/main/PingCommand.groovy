@@ -28,13 +28,6 @@ import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 
 class PingCommand extends Command {
     @Override
-    void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
-
-        sendMsg(event, 'JDA event')
-
-    }
-
-    @Override
     void execute(CommandEvent event) {
 
         def botEvent = event.event

@@ -24,12 +24,15 @@ import me.duncte123.ghostbot.objects.entities.GhostBotMessage
 import me.duncte123.ghostbot.objects.entities.GhostBotMessageEvent
 import me.duncte123.ghostbot.objects.entities.impl.jda.JDAMessage
 import me.duncte123.ghostbot.objects.entities.impl.slack.GbSlackMessageReply
+import me.duncte123.ghostbot.utils.Converters
+import net.dv8tion.jda.core.EmbedBuilder
 import net.dv8tion.jda.core.entities.Message
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 
 import java.util.concurrent.TimeUnit
 import java.util.function.Consumer
 
+import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 
 class CommandHelpers {
@@ -40,6 +43,24 @@ class CommandHelpers {
 
     static void sendMessage(GhostBotMessageEvent event, String content) {
         sendMessage(event, content, null)
+    }
+
+    static void sendMessage(GhostBotMessageEvent event, EmbedBuilder embed) {
+
+        if (!event.fromSlack) {
+            def jdaEvent = event.originalEvent as GuildMessageReceivedEvent
+
+            sendEmbed(jdaEvent, embed)
+
+            return
+        }
+
+        def session = event.API.get() as SlackSession
+        def channel = event.channel.get() as SlackChannel
+
+        def attachment = Converters.embedToAttachment(embed.build())
+
+        session.sendMessage(channel,'', attachment)
     }
 
     static void sendMessage(GhostBotMessageEvent event, String content, Consumer<GhostBotMessage> success) {
