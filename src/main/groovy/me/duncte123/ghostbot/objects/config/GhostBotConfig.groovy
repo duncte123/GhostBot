@@ -23,7 +23,7 @@ import com.google.gson.JsonElement
 class GhostBotConfig {
 
     public Discord discord
-    public Slack slack
+    public String api_token
     public Lavalink lavalink
     public Api api
     public boolean running_local
@@ -33,10 +33,6 @@ class GhostBotConfig {
     static class Discord {
         public String prefix
         public int totalShards
-        public String token
-    }
-
-    static class Slack {
         public String token
     }
 

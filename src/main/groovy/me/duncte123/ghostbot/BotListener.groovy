@@ -79,8 +79,8 @@ class BotListener extends ListenerAdapter {
             SpoopyUtils.commandManager.commandService.shutdown()
             event.JDA.shutdown()
 
-            if (slack.session != null) {
-                slack.session.disconnect()
+            slack.sessions.forEach {
+                it.disconnect()
             }
 
             if (LavalinkManager.ins.lavalink != null) {

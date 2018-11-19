@@ -20,7 +20,9 @@ package me.duncte123.ghostbotslack
 
 import com.ullink.slack.simpleslackapi.SlackSession
 import com.ullink.slack.simpleslackapi.impl.SlackSessionFactory
+import me.duncte123.botcommons.web.WebUtils
 import me.duncte123.ghostbot.utils.SpoopyUtils
+import org.json.JSONObject
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -28,32 +30,36 @@ class GhostBotSlack {
 
     private static final Logger logger = LoggerFactory.getLogger(GhostBotSlack.class)
 
-    final SlackSession session
+    final List<SlackSession> sessions = []
 
     GhostBotSlack() {
         logger.info('Booting Slack Bot')
-        String token = SpoopyUtils.config.slack.token
+        String token = SpoopyUtils.config.api_token
 
-        if (token == null) {
-            this.session = null
-            return
-        }
+        WebUtils.ins.getJSONObject("https://duncte123-apis-lumen.local/internal/slacktokens?token=$token").async {
 
-        this.session = SlackSessionFactory
-            .getSlackSessionBuilder(token)
-            .withAutoreconnectOnDisconnection(true)
-            .build()
+            def tokens = it.getJSONArray('data')
 
-        SlackListener listener = new SlackListener()
+            tokens.forEach {
+                def json = it as JSONObject
 
-        session.addMessagePostedListener(listener)
+                def session = SlackSessionFactory
+                    .getSlackSessionBuilder(json.getString('bot_access_token'))
+                    .withAutoreconnectOnDisconnection(true)
+                    .build()
 
-        try {
-            session.connect()
-            logger.info('connected to slack')
-        } catch (IOException e) {
-            logger.error('Could not connect to slack', e)
-            System.exit(0)
+                SlackListener listener = new SlackListener()
+                session.addMessagePostedListener(listener)
+
+                try {
+                    session.connect()
+                    sessions.add(session)
+                    logger.info("connected to slack ($session.team.name)")
+                } catch (IOException e) {
+                    logger.error('Could not connect to slack', e)
+                }
+            }
+
         }
     }
 }
