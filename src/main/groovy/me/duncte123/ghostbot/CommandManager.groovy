@@ -171,6 +171,11 @@ class CommandManager {
             def jdaEvent = event.originalEvent as GuildMessageReceivedEvent
 
             jdaEvent.channel.sendTyping().queue()
+        } else {
+            def session = event.API.get() as SlackSession
+            def channel = event.channel.get() as SlackChannel
+
+            session.sendTyping(channel)
         }
 
         if (!cmd.discordCompatible && !event.fromSlack) {
