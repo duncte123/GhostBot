@@ -20,6 +20,7 @@ package me.duncte123.ghostbotslack
 
 import com.ullink.slack.simpleslackapi.SlackSession
 import com.ullink.slack.simpleslackapi.impl.SlackSessionFactory
+import me.duncte123.ghostbot.utils.SpoopyUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -31,7 +32,7 @@ class GhostBotSlack {
 
     GhostBotSlack() {
         logger.info('Booting Slack Bot')
-        String token = System.getProperty('slackToken')
+        String token = SpoopyUtils.config.slack.token
 
         if (token == null) {
             this.session = null
