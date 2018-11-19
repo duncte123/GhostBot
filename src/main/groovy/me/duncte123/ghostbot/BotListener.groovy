@@ -165,7 +165,7 @@ class BotListener extends ListenerAdapter {
                 def jsonString = new JSONObject(SpoopyUtils.config.botLists.toString())
                     .put('server_count', manager.guildCache.size())
                     .put('shard_count', manager.shardsTotal)
-                    .put('bot_id', '397297702150602752'.toLong())
+                    .put('bot_id', '397297702150602752')
                     .toString()
 
                 WebUtils.ins.prepareRaw(
