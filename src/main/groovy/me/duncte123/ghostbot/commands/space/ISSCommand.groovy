@@ -22,13 +22,11 @@ import me.duncte123.botcommons.messaging.EmbedUtils
 import me.duncte123.botcommons.web.WebUtils
 import me.duncte123.ghostbot.objects.Command
 import me.duncte123.ghostbot.objects.CommandCategory
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
-
-import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed
+import me.duncte123.ghostbot.objects.CommandEvent
 
 class ISSCommand extends Command {
     @Override
-    void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
+    void execute(CommandEvent event) {
 
         def data = WebUtils.ins.getJSONObject('http://api.open-notify.org/iss-now.json').execute()
 
@@ -38,9 +36,9 @@ class ISSCommand extends Command {
         def mapsUrl = "https://google.com/maps/search/$latitude,$longitude"
 
         def embed = EmbedUtils.embedField('International Space Station',
-                "The position of the ISS is [`$latitude`, `$longitude`]($mapsUrl)")
+            "The position of the ISS is [`$latitude`, `$longitude`]($mapsUrl)")
 
-        sendEmbed(event, embed)
+        sendMessage(event.event, embed)
     }
 
     @Override
@@ -53,4 +51,7 @@ class ISSCommand extends Command {
     CommandCategory getCategory() {
         return CommandCategory.SPACE
     }
+
+    @Override
+    boolean isSlackCompatible() { true }
 }

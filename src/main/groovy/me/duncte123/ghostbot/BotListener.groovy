@@ -23,6 +23,7 @@ import me.duncte123.botcommons.web.WebUtils
 import me.duncte123.ghostbot.audio.GuildMusicManager
 import me.duncte123.ghostbot.utils.SpoopyUtils
 import me.duncte123.ghostbot.variables.Variables
+import me.duncte123.ghostbotslack.GhostBotSlack
 import net.dv8tion.jda.bot.sharding.ShardManager
 import net.dv8tion.jda.core.entities.Guild
 import net.dv8tion.jda.core.entities.VoiceChannel
@@ -50,6 +51,12 @@ class BotListener extends ListenerAdapter {
     public static final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor()
     private final Logger logger = LoggerFactory.getLogger(BotListener.class)
 
+    private final GhostBotSlack slack
+
+    BotListener(GhostBotSlack slack) {
+        this.slack = slack
+    }
+
     @Override
     void onReady(ReadyEvent event) {
         def jda = event.JDA
@@ -64,13 +71,17 @@ class BotListener extends ListenerAdapter {
         def content = event.message.contentRaw.toLowerCase()
 
         if (!content.startsWith(Variables.PREFIX.toLowerCase())
-                && !content.startsWith(Variables.OTHER_PREFIX.toLowerCase())) return
+            && !content.startsWith(Variables.OTHER_PREFIX.toLowerCase())) return
 
         if (event.message.contentRaw == "${Variables.PREFIX}shutdown" && event.author.idLong == Variables.OWNER_ID) {
             logger.info('Shutting down!!')
             service.shutdownNow()
             SpoopyUtils.commandManager.commandService.shutdown()
             event.JDA.shutdown()
+
+            if (slack.session != null) {
+                slack.session.disconnect()
+            }
 
             if (LavalinkManager.ins.lavalink != null) {
                 LavalinkManager.ins.lavalink.shutdown()
@@ -90,10 +101,10 @@ class BotListener extends ListenerAdapter {
         double[] botToUserRatio = SpoopyUtils.getBotRatio(event.guild)
         if (botToUserRatio[1] > 80) {
             SpoopyUtils.getPublicChannel(event.guild).sendMessage(String.format('Hey %s, %s%s of this server are bots (%s is the total btw). I\'m outta here.',
-                    event.guild.owner.asMention,
-                    botToUserRatio[1],
-                    '%',
-                    event.guild.memberCache.size())).queue {
+                event.guild.owner.asMention,
+                botToUserRatio[1],
+                '%',
+                event.guild.memberCache.size())).queue {
                 message -> message.guild.leave().queue()
             }
             logger.info("Joining guild: $event.guild.name, and leaving it after. BOT ALERT")
@@ -110,7 +121,7 @@ class BotListener extends ListenerAdapter {
     @Override
     void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
         if (LavalinkManager.ins.isConnected(event.getGuild())
-                && event.voiceState.member != event.guild.selfMember) {
+            && event.voiceState.member != event.guild.selfMember) {
             VoiceChannel vc = LavalinkManager.ins.getConnectedChannel(event.guild)
 
             if (vc != null) {
@@ -131,7 +142,7 @@ class BotListener extends ListenerAdapter {
             }
 
             if (event.channelJoined == LavalinkManager.ins.getConnectedChannel(event.guild)
-                    && event.member != event.guild.selfMember) {
+                && event.member != event.guild.selfMember) {
                 return
             } else {
                 channelCheckThing(event.guild, LavalinkManager.ins.getConnectedChannel(event.guild))
@@ -155,28 +166,28 @@ class BotListener extends ListenerAdapter {
             service.scheduleWithFixedDelay({
 
                 def jsonString = new JSONObject(SpoopyUtils.config.botLists.toString())
-                        .put('server_count', manager.guildCache.size())
-                        .put('shard_count', manager.shardsTotal)
-                        .put('bot_id', '397297702150602752'.toLong())
-                        .toString()
+                    .put('server_count', manager.guildCache.size())
+                    .put('shard_count', manager.shardsTotal)
+                    .put('bot_id', '397297702150602752')
+                    .toString()
 
                 WebUtils.ins.prepareRaw(
-                        WebUtils.defaultRequest()
-                                .url('https://botblock.org/api/count')
-                                .post(RequestBody.create(APPLICATION_JSON.toMediaType(), jsonString))
-                                .build(),
-                        {
-                            new JSONObject(new JSONTokener(it.body().byteStream()))
-                        }
+                    WebUtils.defaultRequest()
+                        .url('https://botblock.org/api/count')
+                        .post(RequestBody.create(APPLICATION_JSON.toMediaType(), jsonString))
+                        .build(),
+                    {
+                        new JSONObject(new JSONTokener(it.body().byteStream()))
+                    }
                 )
-                        .async(
-                        {
-                            logger.info("Posted stats to botblock api ($it)")
-                        },
-                        {
-                            logger.info("something borked")
-                            logger.info(it.message)
-                        }
+                    .async(
+                    {
+                        logger.info("Posted stats to botblock api ($it)")
+                    },
+                    {
+                        logger.info("something borked")
+                        logger.info(it.message)
+                    }
                 )
             }, 0L, 1L, TimeUnit.DAYS)
         }

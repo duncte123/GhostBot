@@ -20,6 +20,7 @@ package me.duncte123.ghostbot.commands.main
 
 import me.duncte123.ghostbot.objects.Command
 import me.duncte123.ghostbot.objects.CommandCategory
+import me.duncte123.ghostbot.objects.CommandEvent
 import me.duncte123.ghostbot.variables.Variables
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 
@@ -27,7 +28,10 @@ import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 
 class RestartCommand extends Command {
     @Override
-    void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
+    void execute(CommandEvent commandEvent) {
+
+        def event = commandEvent.event.originalEvent as GuildMessageReceivedEvent
+
         if (event.author.idLong != Variables.OWNER_ID) {
             sendMsg(event, 'No permission')
             return

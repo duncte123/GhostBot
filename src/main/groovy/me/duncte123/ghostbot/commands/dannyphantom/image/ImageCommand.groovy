@@ -18,39 +18,40 @@
 
 package me.duncte123.ghostbot.commands.dannyphantom.image
 
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
+import me.duncte123.ghostbot.objects.CommandEvent
 
 import java.util.concurrent.ThreadLocalRandom
 
 class ImageCommand extends ImageBase {
 
     private final String[] keywords = [
-            'Danny Phantom',
-            'Danny Fenton',
-            'Danny Fenton',
-            'Samantha Manson',
-            'Sam Manson',
-            'Tucker Foley',
-            'Jack Fenton',
-            'Maddie Fenton',
-            'Jazz Fenton',
-            'Vlad Plasmius',
-            'Danny Fenton (Danny Phantom)',
-            'Sam Manson (Danny Phantom)',
-            'Tucker Foley (Danny Phantom)',
-            'Jack Fenton (Danny Phantom)',
-            'Maddie Fenton (Danny Phantom)',
-            'Jazz Fenton (Danny Phantom)',
-            'Vlad Masters (Danny Phantom)',
-            'Vlad Plasmius (Danny Phantom)',
-            'Danny Fenton',
-            'Danny Phantom desiree'
+        'Danny Phantom',
+        'Danny Fenton',
+        'Danny Fenton',
+        'Samantha Manson',
+        'Sam Manson',
+        'Tucker Foley',
+        'Jack Fenton',
+        'Maddie Fenton',
+        'Jazz Fenton',
+        'Vlad Plasmius',
+        'Danny Fenton (Danny Phantom)',
+        'Sam Manson (Danny Phantom)',
+        'Tucker Foley (Danny Phantom)',
+        'Jack Fenton (Danny Phantom)',
+        'Maddie Fenton (Danny Phantom)',
+        'Jazz Fenton (Danny Phantom)',
+        'Vlad Masters (Danny Phantom)',
+        'Vlad Plasmius (Danny Phantom)',
+        'Danny Fenton',
+        'Danny Phantom desiree'
     ]
 
     @Override
-    void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
+    void execute(CommandEvent event) {
         def keyword = keywords[ThreadLocalRandom.current().nextInt(keywords.length)]
         def file = requestImage(keyword)
+
         sendMessageFromName(event, file)
     }
 
@@ -61,4 +62,7 @@ class ImageCommand extends ImageBase {
     String getHelp() {
         'Gives you a random Danny Phantom <:DPEmblemInvertStroke:402746292788264960> related image from google'
     }
+
+    @Override
+    boolean isSlackCompatible() { true }
 }

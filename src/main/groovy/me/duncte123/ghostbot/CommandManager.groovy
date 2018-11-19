@@ -18,6 +18,9 @@
 
 package me.duncte123.ghostbot
 
+import com.ullink.slack.simpleslackapi.SlackChannel
+import com.ullink.slack.simpleslackapi.SlackSession
+import com.ullink.slack.simpleslackapi.events.SlackMessagePosted
 import me.duncte123.ghostbot.commands.ReactionCommand
 import me.duncte123.ghostbot.commands.dannyphantom.audio.*
 import me.duncte123.ghostbot.commands.dannyphantom.image.*
@@ -29,6 +32,10 @@ import me.duncte123.ghostbot.commands.fiveyearslater.FylWikiCommand
 import me.duncte123.ghostbot.commands.main.*
 import me.duncte123.ghostbot.commands.space.ISSCommand
 import me.duncte123.ghostbot.objects.Command
+import me.duncte123.ghostbot.objects.CommandEvent
+import me.duncte123.ghostbot.objects.entities.GhostBotMessageEvent
+import me.duncte123.ghostbot.objects.entities.impl.jda.JDAMessageEvent
+import me.duncte123.ghostbot.objects.entities.impl.slack.SlackMessageEvent
 import me.duncte123.ghostbot.variables.Variables
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent
@@ -40,6 +47,8 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.regex.Pattern
+
+import static me.duncte123.ghostbot.objects.CommandHelpers.sendMessage
 
 class CommandManager {
 
@@ -110,7 +119,7 @@ class CommandManager {
         if (this.commands.stream().anyMatch { it.name.equalsIgnoreCase(command.name) }) {
             def aliases = this.commands.stream().filter {
                 it.name
-                        .equalsIgnoreCase(command.name)
+                    .equalsIgnoreCase(command.name)
             }.findFirst().get().aliases
 
             for (String alias : command.aliases) {
@@ -127,33 +136,74 @@ class CommandManager {
     }
 
     void handleCommand(GuildMessageReceivedEvent event) {
-        final def rw = event.message.contentRaw
+        def jdaEvent = new JDAMessageEvent(event)
+
+        handleCommand(event.message.contentRaw, jdaEvent)
+    }
+
+    void handleCommand(SlackMessagePosted event, SlackSession session) {
+        def slackEvent = new SlackMessageEvent(event, session)
+
+        handleCommand(event.messageContent, slackEvent)
+    }
+
+    void handleCommand(String rw, GhostBotMessageEvent event) {
         final def split = rw.replaceFirst('(?i)' +
-                Pattern.quote(Variables.PREFIX) + '|' +
-                Pattern.quote(Variables.OTHER_PREFIX), '')
-                .split('\\s+')
+            Pattern.quote(Variables.PREFIX) + '|' +
+            Pattern.quote(Variables.OTHER_PREFIX), '')
+            .split('\\s+')
 
         final def invoke = split[0].toLowerCase()
         final def args = Arrays.copyOfRange(split, 1, split.length)
 
         def cmd = getCommand(invoke)
+        def guild = event.guild.toString()
 
-        if (cmd != null) {
-            logger.info('Dispatching command "{}" in "{}" with {}', invoke, event.guild, Arrays.toString(args))
-            event.channel.sendTyping().queue()
-
-            commandService.submit {
-                try {
-                    cmd.execute(invoke, args, event)
-                } catch (Exception e) {
-                    e.printStackTrace()
-                }
-            }
-            /*cmd.execute(invoke, args, event);*/
-        } else {
-            logger.info('Unknown command: "{}" in "{}" with {}', invoke, event.guild, Arrays.toString(args))
+        if (cmd == null) {
+            logger.info('Unknown command: "{}" in "{}" with {}', invoke, guild, Arrays.toString(args))
+            return
         }
 
+        logger.info('Dispatching command "{}" in "{}" with {}', invoke, guild, Arrays.toString(args))
+
+        if (!event.fromSlack) {
+            def jdaEvent = event.originalEvent as GuildMessageReceivedEvent
+
+            jdaEvent.channel.sendTyping().queue()
+        } else {
+            def session = event.API.get() as SlackSession
+            def channel = event.channel.get() as SlackChannel
+
+            session.sendTyping(channel)
+        }
+
+        if (!cmd.discordCompatible && !event.fromSlack) {
+            sendMessage(event, """\
+This command cannot be used on Discord unfortunately,
+to use this command please use the bot on Slack.
+Click the link to add GhostBot to your Slack: $Variables.GHOSTBOT_INVITE_SLACK
+""")
+            return
+        }
+
+        if (!cmd.slackCompatible && event.fromSlack) {
+            sendMessage(event, """\
+This command cannot be used on Slack unfortunately,
+to use this command please use the bot on Discord.
+You can invite GhostBot to your Discord server by <$Variables.GHOSTBOT_INVITE|clicking here> or <$Variables.GHOSTBOT_GUILD|click here> to join the official discord server.
+""")
+            return
+        }
+
+        commandService.submit {
+            try {
+                def commandEvent = new CommandEvent(invoke, args, event, event.fromSlack)
+
+                cmd.execute(commandEvent)
+            } catch (Exception e) {
+                e.printStackTrace()
+            }
+        }
     }
 
     /**

@@ -20,35 +20,33 @@ package me.duncte123.ghostbot.commands.dannyphantom.text
 
 import me.duncte123.ghostbot.objects.Command
 import me.duncte123.ghostbot.objects.CommandCategory
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
+import me.duncte123.ghostbot.objects.CommandEvent
 
 import java.util.concurrent.ThreadLocalRandom
-
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 
 class PetitionCommand extends Command {
 
     private final String[] messages = [
-            // %1$s = "http://bit.ly/dp-petition"
-            // %2$s = "#GoGhostAgain"
-            'What you gonna sign? %1$s %2$s',
-            'I would appreciate it if you could sign this petition %1$s %2$s !',
-            'SIGN THE PETITION %1$s %2$s',
-            '%2$s! %1$s',
-            'https://ghostbot.duncte123.me/img/GoGhostAgainBanner.png%n' +
-                    'Click the link to sign the petition <%1$s>',
-            //Lol a haiku by Lady Phantom
-            'Let\'s go ghost again!%n' +
-                    'Come on; sign the petition!%n' +
-                    'Team Phantom needs you!%n%1$s'
+        // %1$s = "http://bit.ly/dp-petition"
+        // %2$s = "#GoGhostAgain"
+        'What you gonna sign? %1$s %2$s',
+        'I would appreciate it if you could sign this petition %1$s %2$s !',
+        'SIGN THE PETITION %1$s %2$s',
+        '%2$s! %1$s',
+        'https://ghostbot.duncte123.me/img/GoGhostAgainBanner.png%n' +
+            'Click the link to sign the petition <%1$s>',
+        //Lol a haiku by Lady Phantom
+        'Let\'s go ghost again!%n' +
+            'Come on; sign the petition!%n' +
+            'Team Phantom needs you!%n%1$s'
     ]
 
     @Override
-    void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
+    void execute(CommandEvent event) {
         def message = messages[ThreadLocalRandom.current().nextInt(messages.length)]
         def formatted = String.format(message, 'http://bit.ly/dp-petition', '#GoGhostAgain')
 
-        sendMsg(event, formatted)
+        sendMessage(event, formatted)
     }
 
     @Override
@@ -61,4 +59,7 @@ class PetitionCommand extends Command {
     CommandCategory getCategory() {
         return CommandCategory.TEXT
     }
+
+    @Override
+    boolean isSlackCompatible() { true }
 }

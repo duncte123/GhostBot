@@ -25,16 +25,12 @@ import me.duncte123.ghostbot.GhostBot
 import me.duncte123.ghostbot.objects.Command
 import me.duncte123.ghostbot.utils.SpoopyUtils
 import net.dv8tion.jda.core.Permission
-import net.dv8tion.jda.core.entities.Emote
 import net.dv8tion.jda.core.entities.Message
-import net.dv8tion.jda.core.entities.TextChannel
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent
 import net.dv8tion.jda.core.utils.MiscUtil
 
 import java.util.concurrent.TimeUnit
 import java.util.function.Consumer
-
-import static net.dv8tion.jda.core.entities.MessageReaction.ReactionEmote
 
 /**
  * Taken from:

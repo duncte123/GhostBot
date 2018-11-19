@@ -18,20 +18,19 @@
 
 package me.duncte123.ghostbot.commands.dannyphantom.wiki
 
+import me.duncte123.ghostbot.objects.CommandEvent
 import me.duncte123.ghostbot.variables.Variables
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
-
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 
 class WikiCommand extends WikiBaseCommand {
     @Override
-    void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
-        if (args.length == 0) {
-            sendMsg(event, "Insufficient arguments, Correct usage: `$Variables.PREFIX$name <search term>`")
+    void execute(CommandEvent event) {
+
+        if (event.args.length == 0) {
+            sendMessage(event.event, "Insufficient arguments, Correct usage: `$Variables.PREFIX$name <search term>`")
             return
         }
 
-        handleWikiSearch(wiki, args.join(' '), event)
+        handleWikiSearch(wiki, event.args.join(' '), event.event)
     }
 
     @Override
@@ -40,15 +39,18 @@ class WikiCommand extends WikiBaseCommand {
     @Override
     String[] getAliases() {
         [
-                'wikia',
-                'wikisearch',
-                'dannyphantomwiki'
+            'wikia',
+            'wikisearch',
+            'dannyphantomwiki'
         ]
     }
 
     @Override
     String getHelp() {
         "Search the Danny Phantom wiki\n" +
-                "Usage `$Variables.PREFIX$name <search term>`\nExample: `$Variables.PREFIX$name Danny`"
+            "Usage `$Variables.PREFIX$name <search term>`\nExample: `$Variables.PREFIX$name Danny`"
     }
+
+    @Override
+    boolean isSlackCompatible() { true }
 }

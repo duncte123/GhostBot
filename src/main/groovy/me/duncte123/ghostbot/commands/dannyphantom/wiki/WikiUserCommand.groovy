@@ -22,79 +22,77 @@ import me.duncte123.botcommons.messaging.EmbedUtils
 import me.duncte123.botcommons.web.WebUtils
 import me.duncte123.fandomapi.user.UserElement
 import me.duncte123.fandomapi.user.UserResultSet
+import me.duncte123.ghostbot.objects.CommandEvent
 import me.duncte123.ghostbot.utils.SpoopyUtils
 import me.duncte123.ghostbot.variables.Variables
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
-
-import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 
 class WikiUserCommand extends WikiBaseCommand {
     @Override
-    void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
+    void execute(CommandEvent commandEvent) {
 
-        if (args.length == 0) {
-            sendMsg(event, "Insufficient arguments, Correct usage: `$Variables.PREFIX$name <search term>`")
+        def event = commandEvent.event
+
+        if (commandEvent.args.length == 0) {
+            sendMessage(event, "Insufficient arguments, Correct usage: `$Variables.PREFIX$name <search term>`")
             return
         }
 
-        def searchQuery = args.join(' ')
+        def searchQuery = commandEvent.args.join(' ')
 
         WebUtils.ins.getJSONObject(String.format(
-                '%s?ids=%s',
-                wiki.userDetailsEndpoint,
-                SpoopyUtils.encodeUrl(searchQuery)
+            '%s?ids=%s',
+            wiki.userDetailsEndpoint,
+            SpoopyUtils.encodeUrl(searchQuery)
         )).async(
-                { json ->
+            { json ->
 
-                    if (json.has('exception')) {
-                        sendMsg(event, "An error occurred: ${toEx(json)}")
-                        return
+                if (json.has('exception')) {
+                    sendMessage(event, "An error occurred: ${toEx(json)}")
+                    return
+                }
+
+                def userResultSet = gson.fromJson(json.toString(), UserResultSet.class)
+
+                if (userResultSet.items.size() == 1) {
+                    def user = userResultSet.items.get(0)
+                    user.basePath = userResultSet.basepath
+
+                    def embed = EmbedUtils.defaultEmbed().with {
+                        setThumbnail(user.avatar)
+                        setTitle('Profile link', user.absoluteUrl)
+                        setAuthor(user.name, user.absoluteUrl, user.avatar)
+                        addField('User Info:', "**Name:** $user.name\n" +
+                            "**Id:** $user.userId\n" +
+                            "**Title:** $user.title\n" +
+                            "**Number of edits:** $user.numberofedits", false)
                     }
 
-                    def userResultSet = gson.fromJson(json.toString(), UserResultSet.class)
+                    sendMessage(event, embed)
 
-                    if (userResultSet.items.size() == 1) {
-                        def user = userResultSet.items.get(0)
-                        user.basePath = userResultSet.basepath
+                    return
+                }
 
-                        def embed = EmbedUtils.defaultEmbed().with {
-                            setThumbnail(user.avatar)
-                            setTitle('Profile link', user.absoluteUrl)
-                            setAuthor(user.name, user.absoluteUrl, user.avatar)
-                            addField('User Info:', "**Name:** $user.name\n" +
-                                    "**Id:** $user.userId\n" +
-                                    "**Title:** $user.title\n" +
-                                    "**Number of edits:** $user.numberofedits", false)
-                        }
+                def eb = EmbedUtils.defaultEmbed().with {
+                    setTitle('I found the following users:')
+                }
 
-                        sendEmbed(event, embed)
-
-                        return
+                for (UserElement user : (userResultSet.items)) {
+                    eb.with {
+                        appendDescription('[')
+                        appendDescription(user.name)
+                        appendDescription('](')
+                        appendDescription(userResultSet.basepath + user.url)
+                        appendDescription(')\n')
                     }
 
-                    def eb = EmbedUtils.defaultEmbed().with {
-                        setTitle('I found the following users:')
-                    }
+                }
 
-                    for (UserElement user : (userResultSet.items)) {
-                        eb.with {
-                            appendDescription('[')
-                            appendDescription(user.name)
-                            appendDescription('](')
-                            appendDescription(userResultSet.basepath + user.url)
-                            appendDescription(')\n')
-                        }
+                sendMessage(event, eb)
 
-                    }
-
-                    sendEmbed(event, eb.build())
-
-                },
-                {
-                    sendMsg(event, "Something went wrong: $it.message")
-                    /* it.printStackTrace()*/
-                })
+            },
+            {
+                sendMessage(event, "Something went wrong: $it.message")
+            })
     }
 
     @Override
@@ -106,8 +104,11 @@ class WikiUserCommand extends WikiBaseCommand {
     @Override
     String getHelp() {
         'Search wikia for users.\n' +
-                "Usage: `$Variables.PREFIX$name <username/user id>`\n" +
-                "Examples: `$Variables.PREFIX$name duncte123`\n" +
-                "`$Variables.PREFIX$name 34322457`\n"
+            "Usage: `$Variables.PREFIX$name <username/user id>`\n" +
+            "Examples: `$Variables.PREFIX$name duncte123`\n" +
+            "`$Variables.PREFIX$name 34322457`\n"
     }
+
+    @Override
+    boolean isSlackCompatible() { true }
 }

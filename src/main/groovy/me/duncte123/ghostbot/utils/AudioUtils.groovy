@@ -31,6 +31,7 @@ import gnu.trove.map.hash.TLongObjectHashMap
 import me.duncte123.botcommons.messaging.EmbedUtils
 import me.duncte123.botcommons.messaging.MessageUtils
 import me.duncte123.ghostbot.audio.GuildMusicManager
+import me.duncte123.ghostbot.variables.Variables
 import net.dv8tion.jda.core.entities.Guild
 import net.dv8tion.jda.core.entities.TextChannel
 
@@ -134,8 +135,8 @@ class AudioUtils {
 
             @Override
             void loadFailed(FriendlyException exception) {
-                MessageUtils.sendEmbed(channel, EmbedUtils.embedField(embedTitle, "Could not play: $exception.message" +
-                        '\nIf this happens often try another link or join our [support guild](https://discord.gg/NKM9Xtk) for more!'))
+                MessageUtils.sendEmbed(channel, EmbedUtils.embedField(embedTitle, "Could not play: $exception.message\n" +
+                    "If this happens often try another link or join our [support guild]($Variables.GHOSTBOT_GUILD) for more!"))
             }
         })
     }

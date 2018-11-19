@@ -34,13 +34,20 @@ import java.util.concurrent.ThreadLocalRandom
 import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 
-abstract class Command {
+abstract class Command extends CommandHelpers {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass())
     protected String audioPath = ''
     private def audioFiles = []
 
-    abstract void execute(String invoke, String[] args, GuildMessageReceivedEvent event)
+    @Deprecated
+    void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
+        // For removal
+    }
+
+    void execute(CommandEvent event) {
+        execute(event.invoke, event.args, event.event.originalEvent as GuildMessageReceivedEvent)
+    }
 
     abstract String getName()
 
@@ -48,11 +55,13 @@ abstract class Command {
         return CommandCategory.NONE
     }
 
-    String[] getAliases() {
-        return []
-    }
+    String[] getAliases() { [] }
 
     abstract String getHelp()
+
+    boolean isSlackCompatible() { false }
+
+    boolean isDiscordCompatible() { true }
 
     void reloadAudioFiles() {
         if (category != CommandCategory.AUDIO) return
@@ -87,7 +96,7 @@ abstract class Command {
             def selectedTrack = randomTrack
             sendMsg(event, "Selected track: _${selectedTrack.replaceAll("_", "\\_")}_")
             AudioUtils.instance.loadAndPlay(getMusicManager(event.guild), event.channel,
-                    audioPath + selectedTrack, false)
+                audioPath + selectedTrack, false)
         }
 
     }
@@ -114,7 +123,7 @@ abstract class Command {
                 sendEmbed(event, EmbedUtils.embedMessage("I don't have permission to join $voiceState.channel.name"))
             } else {
                 sendEmbed(event, EmbedUtils.embedMessage('Error while joining channel ' +
-                        "`$voiceState.channel.name`: $e.message"))
+                    "`$voiceState.channel.name`: $e.message"))
             }
 
             return false

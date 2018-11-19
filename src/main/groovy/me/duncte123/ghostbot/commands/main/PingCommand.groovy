@@ -19,25 +19,19 @@
 package me.duncte123.ghostbot.commands.main
 
 import me.duncte123.ghostbot.objects.Command
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
-
-import java.time.temporal.ChronoUnit
-
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
+import me.duncte123.ghostbot.objects.CommandEvent
 
 class PingCommand extends Command {
     @Override
-    void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
+    void execute(CommandEvent event) {
 
-        sendMsg(event, 'PONG!') {
+        def botEvent = event.event
+        def startTime = System.currentTimeMillis()
 
-            def rest = event.message.creationTime.until(it.creationTime, ChronoUnit.MILLIS)
-
-            it.editMessage(
-                    """\
+        sendMessage(botEvent, 'PONG!') {
+            editMessage(it, """\
 PONG!
-Rest Ping: ${rest}ms
-Websocket Ping: ${event.JDA.ping}ms""").queue()
+Ping is: ${System.currentTimeMillis() - startTime}ms""", event.fromSlack)
         }
 
     }
@@ -47,4 +41,7 @@ Websocket Ping: ${event.JDA.ping}ms""").queue()
 
     @Override
     String getHelp() { 'PONG' }
+
+    @Override
+    boolean isSlackCompatible() { true }
 }

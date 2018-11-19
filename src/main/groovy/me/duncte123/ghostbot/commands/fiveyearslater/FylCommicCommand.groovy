@@ -88,13 +88,13 @@ class FylCommicCommand extends ReactionCommand {
         def chapterRef = new AtomicReference<FylChapter>(fylChapter)
 
         sendMsg(event,
-                new MessageBuilder()
-                        .append('Use the emotes at the bottom to navigate through pages, use the ❌ emote when you are done reading.\n')
-                        .append('The controls have a timeout of 30 minutes')
-                        .setEmbed(getEmbed(chapterIndex.get(), pageIndex.get()))
-                        .build(), { m ->
+            new MessageBuilder()
+                .append('Use the emotes at the bottom to navigate through pages, use the ❌ emote when you are done reading.\n')
+                .append('The controls have a timeout of 30 minutes')
+                .setEmbed(getEmbed(chapterIndex.get(), pageIndex.get()))
+                .build(), { m ->
             this.addReactions(m, LEFT_RIGHT_CANCEL,
-                    newLongSet(event.author.idLong), 30, TimeUnit.MINUTES, { index ->
+                newLongSet(event.author.idLong), 30, TimeUnit.MINUTES, { index ->
 
                 if (index >= 2) { //cancel button or other error
                     stopReactions(m, false)
@@ -147,12 +147,12 @@ class FylCommicCommand extends ReactionCommand {
         }
 
         return EmbedUtils.defaultEmbed()
-                .setImage(url)
-                .setThumbnail(FYL_ICON)
-                .setTitle("Chapter: $chapter.name", chapter.chapter_url)
-                .setTimestamp(null)
-                .setFooter("Chapter: ${numChapter + 1}, Page: ${numPage + 1}/$chapter.pages", Variables.FOOTER_ICON)
-                .build()
+            .setImage(url)
+            .setThumbnail(FYL_ICON)
+            .setTitle("Chapter: $chapter.name", chapter.chapter_url)
+            .setTimestamp(null)
+            .setFooter("Chapter: ${numChapter + 1}, Page: ${numPage + 1}/$chapter.pages", Variables.FOOTER_ICON)
+            .build()
     }
 
     @Override
@@ -161,15 +161,15 @@ class FylCommicCommand extends ReactionCommand {
     @Override
     String getHelp() {
         'Read the Five years later comic within discord (comic website: <http://kurothewebsite.com/5yearslater>)\n' +
-                "Usage: `gb.$name [page:number/chapter:number]`"
+            "Usage: `gb.$name [page:number/chapter:number]`"
     }
 
     @Override
     String[] getAliases() {
         [
-                '5ylcomic',
-                'fiveyearslater',
-                'fiveyearslatercomic'
+            '5ylcomic',
+            'fiveyearslater',
+            'fiveyearslatercomic'
         ]
     }
 }

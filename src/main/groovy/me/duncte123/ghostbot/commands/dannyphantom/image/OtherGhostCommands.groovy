@@ -19,15 +19,15 @@
 package me.duncte123.ghostbot.commands.dannyphantom.image
 
 import me.duncte123.ghostbot.objects.CommandCategory
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
+import me.duncte123.ghostbot.objects.CommandEvent
 
 import java.util.concurrent.ThreadLocalRandom
 
 class OtherGhostCommands extends ImageBase {
     @Override
-    void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
+    void execute(CommandEvent event) {
 
-        switch (invoke) {
+        switch (event.invoke) {
             case 'cujo':
                 sendFromKeywords(event, 'Cujo Danny Phantom')
                 break
@@ -104,7 +104,10 @@ class OtherGhostCommands extends ImageBase {
         return CommandCategory.CHARACTERS
     }
 
-    private void sendFromKeywords(GuildMessageReceivedEvent event, String... words) {
+    private void sendFromKeywords(CommandEvent event, String... words) {
         sendMessageFromName(event, requestImage(words[ThreadLocalRandom.current().nextInt(words.length)]))
     }
+
+    @Override
+    boolean isSlackCompatible() { true }
 }

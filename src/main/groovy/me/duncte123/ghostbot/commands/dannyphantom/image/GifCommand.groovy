@@ -18,19 +18,17 @@
 
 package me.duncte123.ghostbot.commands.dannyphantom.image
 
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
-
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
+import me.duncte123.ghostbot.objects.CommandEvent
 
 class GifCommand extends ImageBase {
 
     private final String keyword = 'Danny Phantom gif'
 
     @Override
-    void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
+    void execute(CommandEvent event) {
         requestSearch(keyword,
-                { sendMessageFromData(event, it, keyword) },
-                { sendMsg(event, "Error while looking up image: $it") })
+            { sendMessageFromData(event, it, keyword) },
+            { sendMessage(event, "Error while looking up image: $it") })
     }
 
     @Override
@@ -38,4 +36,7 @@ class GifCommand extends ImageBase {
 
     @Override
     String getHelp() { 'Gives you a random Danny Phantom gif' }
+
+    @Override
+    boolean isSlackCompatible() { true }
 }

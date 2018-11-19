@@ -35,15 +35,15 @@ class SpoopyUtils {
     static final CommandManager commandManager = new CommandManager()
 
     private static final String GOOGLE_URL = 'https://www.googleapis.com/customsearch/v1' +
-            '?q=%s' +
-            '&prettyPrint=false' +
-            '&cx=012048784535646064391:v-fxkttbw54' +
-            '&num=10' +
-            '&hl=en' +
-            '&searchType=image' +
-            '&filter=1' +
-            '&safe=medium' +
-            "&key=$config.api.google"
+        '?q=%s' +
+        '&prettyPrint=false' +
+        '&cx=012048784535646064391:v-fxkttbw54' +
+        '&num=10' +
+        '&hl=en' +
+        '&searchType=image' +
+        '&filter=1' +
+        '&safe=medium' +
+        "&key=$config.api.google"
 
     // [0] = users, [1] = bots
     static double[] getBotRatio(Guild g) {

@@ -21,13 +21,11 @@ package me.duncte123.ghostbot.commands.dannyphantom.text
 import me.duncte123.botcommons.web.WebUtils
 import me.duncte123.ghostbot.objects.Command
 import me.duncte123.ghostbot.objects.CommandCategory
+import me.duncte123.ghostbot.objects.CommandEvent
 import me.duncte123.ghostbot.utils.SpoopyUtils
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 import org.jsoup.nodes.Element
 
 import java.util.concurrent.ThreadLocalRandom
-
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 
 class RandomGhostCommand extends Command {
 
@@ -62,15 +60,15 @@ class RandomGhostCommand extends Command {
     }
 
     @Override
-    void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
+    void execute(CommandEvent event) {
 
         if (ghosts.empty) {
-            sendMsg(event, 'It looks like Danny defeated all the ghosts')
+            sendMessage(event, 'It looks like Danny defeated all the ghosts')
             return
         }
 
         def ghost = ghosts[ThreadLocalRandom.current().nextInt(ghosts.size())]
-        sendMsg(event, "$wikiUrl$ghost")
+        sendMessage(event, "$wikiUrl$ghost")
     }
 
     @Override
@@ -86,4 +84,7 @@ class RandomGhostCommand extends Command {
     CommandCategory getCategory() {
         return CommandCategory.TEXT
     }
+
+    @Override
+    boolean isSlackCompatible() { true }
 }

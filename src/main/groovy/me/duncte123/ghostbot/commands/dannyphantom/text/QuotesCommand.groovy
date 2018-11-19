@@ -25,19 +25,16 @@ import gnu.trove.map.hash.TLongObjectHashMap
 import me.duncte123.botcommons.messaging.EmbedUtils
 import me.duncte123.ghostbot.objects.Command
 import me.duncte123.ghostbot.objects.CommandCategory
+import me.duncte123.ghostbot.objects.CommandEvent
 import me.duncte123.ghostbot.objects.tumblr.TumblrPost
 import me.duncte123.ghostbot.utils.SpoopyUtils
 import me.duncte123.ghostbot.utils.TumblrUtils
 import me.duncte123.ghostbot.variables.Variables
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 import org.apache.commons.text.StringEscapeUtils
 
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Consumer
 import java.util.regex.Pattern
-
-import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 
 class QuotesCommand extends Command {
 
@@ -46,36 +43,36 @@ class QuotesCommand extends Command {
     private final List<TumblrPost> allQuotes = []
     private final TLongObjectMap<List<TumblrPost>> guildQuotes = new TLongObjectHashMap<>()
     private final TLongList badPostIds = new TLongArrayList((long[]) [
-            156199508936L,
-            141701068521L,
-            139748205676L,
-            145485004576L,
-            131957587201L,
-            145767003281L,
-            122464866251L,
-            149288809271L,
-            131048227566L,
-            160064523456L,
-            146961714036L,
-            157865830301L,
-            136789766336L,
-            148512885491L,
-            137376851771L,
-            147819522951L,
-            147825378346L,
-            156199957996L,
-            143194957186L,
-            121801283241L,
-            121891439031L,
-            144734161886L,
-            130808913006L,
-            130834334051L,
-            131278048551L,
-            163028433406L,
-            150823532681L,
-            173944925826L,
-            127476921111L,
-            174190854511L
+        156199508936L,
+        141701068521L,
+        139748205676L,
+        145485004576L,
+        131957587201L,
+        145767003281L,
+        122464866251L,
+        149288809271L,
+        131048227566L,
+        160064523456L,
+        146961714036L,
+        157865830301L,
+        136789766336L,
+        148512885491L,
+        137376851771L,
+        147819522951L,
+        147825378346L,
+        156199957996L,
+        143194957186L,
+        121801283241L,
+        121891439031L,
+        144734161886L,
+        130808913006L,
+        130834334051L,
+        131278048551L,
+        163028433406L,
+        150823532681L,
+        173944925826L,
+        127476921111L,
+        174190854511L
     ])
 
     QuotesCommand() {
@@ -83,7 +80,9 @@ class QuotesCommand extends Command {
     }
 
     @Override
-    void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
+    void execute(CommandEvent event) {
+
+        def args = event.args
 
         if (args.size() > 0) {
             def joined = args.join('')
@@ -96,12 +95,12 @@ class QuotesCommand extends Command {
                 if (!id.empty) {
                     def idLong = Long.parseLong(id)
 
-                    getPostFromId(idLong, { sendQuote(event, it) }, { sendMsg(event, it) })
+                    getPostFromId(idLong, { sendQuote(event, it) }, { sendMessage(event, it) })
                 }
 
                 return
             } else if ('total' == args[0]) {
-                sendMsg(event, "There are a total of ${allQuotes.size()} quotes in the system at the moment")
+                sendMessage(event, "There are a total of ${allQuotes.size()} quotes in the system at the moment")
                 return
             }
         }
@@ -133,10 +132,10 @@ class QuotesCommand extends Command {
         return CommandCategory.TEXT
     }
 
-    private static void sendQuote(GuildMessageReceivedEvent event, TumblrPost post) {
+    private static void sendQuote(CommandEvent event, TumblrPost post) {
         def eb = EmbedUtils.defaultEmbed()
-                .setTitle("Link to Post", post.post_url)
-                .setFooter("Quote id: $post.id", Variables.FOOTER_ICON)
+            .setTitle("Link to Post", post.post_url)
+            .setFooter("Quote id: $post.id", Variables.FOOTER_ICON)
 
         switch (post.type) {
             case 'chat':
@@ -153,7 +152,7 @@ class QuotesCommand extends Command {
                 break
         }
 
-        sendEmbed(event, eb.build())
+        sendMessage(event, eb)
     }
 
     private void getPostFromId(long id, Consumer<TumblrPost> cb, Consumer<String> fail) {
@@ -167,13 +166,13 @@ class QuotesCommand extends Command {
         }
 
         TumblrUtils.instance.fetchSinglePost(DOMAIN, id,
-                {
-                    allQuotes.add(it)
-                    cb.accept(it)
-                },
-                {
-                    fail.accept("Something went wrong: $it.message")
-                }
+            {
+                allQuotes.add(it)
+                cb.accept(it)
+            },
+            {
+                fail.accept("Something went wrong: $it.message")
+            }
         )
 
     }
@@ -193,15 +192,15 @@ class QuotesCommand extends Command {
             logger.info("Getting quotes from type $type")
 
             TumblrUtils.instance.fetchAllFromAccount(DOMAIN, type,
-                    { posts ->
+                { posts ->
 
-                        def filteredPosts = posts.stream().filter {
-                            !badPostIds.contains(it.id)
-                        }.collect()
+                    def filteredPosts = posts.stream().filter {
+                        !badPostIds.contains(it.id)
+                    }.collect()
 
-                        allQuotes.addAll(filteredPosts)
-                        logger.info("Fetched ${filteredPosts.size()} quotes from type $type")
-                    }
+                    allQuotes.addAll(filteredPosts)
+                    logger.info("Fetched ${filteredPosts.size()} quotes from type $type")
+                }
             )
         }
     }
@@ -218,29 +217,32 @@ class QuotesCommand extends Command {
 
         return input
         //show the stars and remove the ps
-                .replaceAll('\\*', '\\\\*')
-                .replaceAll(Pattern.quote('<p>'), '')
-                .replaceAll(Pattern.quote('</p>'), replacePWith)
-                .replaceAll(Pattern.quote('<p/>'), replacePWith) //because some posts are fucked
+            .replaceAll('\\*', '\\\\*')
+            .replaceAll(Pattern.quote('<p>'), '')
+            .replaceAll(Pattern.quote('</p>'), replacePWith)
+            .replaceAll(Pattern.quote('<p/>'), replacePWith) //because some posts are fucked
         //Italics
-                .replaceAll(Pattern.quote('<i>'), '*')
-                .replaceAll(Pattern.quote('</i>'), '*')
-                .replaceAll(Pattern.quote('<em>'), '*')
-                .replaceAll(Pattern.quote('</em>'), '*')
+            .replaceAll(Pattern.quote('<i>'), '*')
+            .replaceAll(Pattern.quote('</i>'), '*')
+            .replaceAll(Pattern.quote('<em>'), '*')
+            .replaceAll(Pattern.quote('</em>'), '*')
         //bold
-                .replaceAll(Pattern.quote('<b>'), '**')
-                .replaceAll(Pattern.quote('</b>'), '**')
-                .replaceAll(Pattern.quote('<strong>'), '**')
-                .replaceAll(Pattern.quote('</strong>'), '**')
+            .replaceAll(Pattern.quote('<b>'), '**')
+            .replaceAll(Pattern.quote('</b>'), '**')
+            .replaceAll(Pattern.quote('<strong>'), '**')
+            .replaceAll(Pattern.quote('</strong>'), '**')
         //useless crap that we don't need
-                .replaceAll(Pattern.quote('<small>'), '')
-                .replaceAll(Pattern.quote('</small>'), '')
+            .replaceAll(Pattern.quote('<small>'), '')
+            .replaceAll(Pattern.quote('</small>'), '')
         //links
-                .replaceAll('<a(?:.*)href="(\\S+)"(?:.*)>(.*)</a>', '[$2]($1)')
+            .replaceAll('<a(?:.*)href="(\\S+)"(?:.*)>(.*)</a>', '[$2]($1)')
         // Lists
-                .replaceAll('<ul>', '')
-                .replaceAll('</ul>', '')
-                .replaceAll('<li>', ' - ')
-                .replaceAll('</li>', '')
+            .replaceAll('<ul>', '')
+            .replaceAll('</ul>', '')
+            .replaceAll('<li>', ' - ')
+            .replaceAll('</li>', '')
     }
+
+    @Override
+    boolean isSlackCompatible() { true }
 }

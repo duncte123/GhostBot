@@ -23,16 +23,14 @@ import gnu.trove.map.hash.TLongObjectHashMap
 import me.duncte123.botcommons.messaging.EmbedUtils
 import me.duncte123.ghostbot.objects.Command
 import me.duncte123.ghostbot.objects.CommandCategory
+import me.duncte123.ghostbot.objects.CommandEvent
 import me.duncte123.ghostbot.objects.tumblr.TumblrPost
 import me.duncte123.ghostbot.utils.SpoopyUtils
 import me.duncte123.ghostbot.utils.TumblrUtils
 import me.duncte123.ghostbot.variables.Variables
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 
 import java.util.concurrent.ThreadLocalRandom
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 import static me.duncte123.ghostbot.commands.dannyphantom.text.QuotesCommand.parseText
 
 class AuCommand extends Command {
@@ -47,16 +45,19 @@ class AuCommand extends Command {
     }
 
     @Override
-    void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
+    void execute(CommandEvent commandEvent) {
 
-        if (args.length == 1 && args[0] == 'reload' && event.author.idLong == Variables.OWNER_ID) {
+        def args = commandEvent.args
+        def event = commandEvent.event
+
+        if (args.length == 1 && args[0] == 'reload' && event.author.get().idLong == Variables.OWNER_ID) {
             loadAus()
-            sendMsg(event, 'Reloading')
+            sendMessage(event, 'Reloading')
             return
         }
 
         if (allAus.isEmpty()) {
-            sendMsg(event, 'No AU\'s found, they are probably being reloaded')
+            sendMessage(event, 'No AU\'s found, they are probably being reloaded')
             return
         }
 
@@ -74,12 +75,12 @@ class AuCommand extends Command {
         def tags = post.tags.join(' #')
 
         def eb = EmbedUtils.defaultEmbed()
-                .setTitle('Link to Post', post.post_url)
-                .setDescription(parseText(post.body))
-                .setFooter("#$tags", Variables.FOOTER_ICON)
-                .setTimestamp(null)
+            .setTitle('Link to Post', post.post_url)
+            .setDescription(parseText(post.body))
+            .setFooter("#$tags", Variables.FOOTER_ICON)
+            .setTimestamp(null)
 
-        sendEmbed(event, eb)
+        sendMessage(event, eb)
     }
 
     @Override
@@ -88,10 +89,10 @@ class AuCommand extends Command {
     @Override
     String[] getAliases() {
         [
-                'reallydumbdannyphantomaus',
-                'dumbau',
-                'greatau',
-                'reallygreatdannyphantomaus'
+            'reallydumbdannyphantomaus',
+            'dumbau',
+            'greatau',
+            'reallygreatdannyphantomaus'
         ]
     }
 
@@ -126,4 +127,7 @@ class AuCommand extends Command {
             logger.info("Loaded ${allAus.size()} aus")
         }
     }
+
+    @Override
+    boolean isSlackCompatible() { true }
 }

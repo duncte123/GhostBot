@@ -47,7 +47,7 @@ class FylWikiCommand extends WikiBaseCommand {
     @Override
     String getHelp() {
         'Search the 5YL wiki\n' +
-                "Usage `$Variables.PREFIX$name <search term>`\n" +
-                "Example: `$Variables.PREFIX$name Danny`"
+            "Usage `$Variables.PREFIX$name <search term>`\n" +
+            "Example: `$Variables.PREFIX$name Danny`"
     }
 }

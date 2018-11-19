@@ -20,36 +20,34 @@ package me.duncte123.ghostbot.commands.dannyphantom.text
 
 import me.duncte123.ghostbot.objects.Command
 import me.duncte123.ghostbot.objects.CommandCategory
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
+import me.duncte123.ghostbot.objects.CommandEvent
 
 import java.util.concurrent.ThreadLocalRandom
-
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 
 class GamesCommand extends Command {
 
     private final String[] games = [
-            'https://paurachan.deviantart.com/art/Danny-Phantom-Dress-up-game-v0-1-435498005',
-            'https://dpgames.duncte123.me/fright-flight.html',
-            'https://dpgames.duncte123.me/dueling-decks.html',
-            'https://dpgames.duncte123.me/action-jack.html',
-            'https://dpgames.duncte123.me/urban-jungle-rumble.html',
-            'https://dpgames.duncte123.me/the-ultimate-enemy-face-off.html',
-            'https://dpgames.duncte123.me/portal-peril.html',
-            'https://dpgames.duncte123.me/freak-for-all.html',
-            'https://dpgames.duncte123.me/prom-fright.html',
-            'http://www.nick.com.au/shows/dannyphantom/games/dannyphantom-action-jack/qjm29h',
-            'http://www.nick.com.au/shows/dannyphantom/games/dannyphantom-fright-flight/rp6an6',
-            'http://www.nick.com.au/shows/dannyphantom/games/dannyphantom-enemy-face-off/g11t0x',
-            'http://www.nick.com.au/shows/dannyphantom/games/dannyphantom-freak-for-all/yk6kly'
+        'https://paurachan.deviantart.com/art/Danny-Phantom-Dress-up-game-v0-1-435498005',
+        'https://dpgames.duncte123.me/fright-flight.html',
+        'https://dpgames.duncte123.me/dueling-decks.html',
+        'https://dpgames.duncte123.me/action-jack.html',
+        'https://dpgames.duncte123.me/urban-jungle-rumble.html',
+        'https://dpgames.duncte123.me/the-ultimate-enemy-face-off.html',
+        'https://dpgames.duncte123.me/portal-peril.html',
+        'https://dpgames.duncte123.me/freak-for-all.html',
+        'https://dpgames.duncte123.me/prom-fright.html',
+        'http://www.nick.com.au/shows/dannyphantom/games/dannyphantom-action-jack/qjm29h',
+        'http://www.nick.com.au/shows/dannyphantom/games/dannyphantom-fright-flight/rp6an6',
+        'http://www.nick.com.au/shows/dannyphantom/games/dannyphantom-enemy-face-off/g11t0x',
+        'http://www.nick.com.au/shows/dannyphantom/games/dannyphantom-freak-for-all/yk6kly'
     ]
 
     @Override
-    void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
+    void execute(CommandEvent event) {
         def game = games[ThreadLocalRandom.current().nextInt(games.length)]
 
-        sendMsg(event, "Here is a DP game: $game\n" +
-                'The game will work best on an old browser like internet explorer because it has flash enabled')
+        sendMessage(event, "Here is a DP game: $game\n" +
+            'The game will work best on an old browser like internet explorer because it has flash enabled')
     }
 
     @Override
@@ -62,4 +60,7 @@ class GamesCommand extends Command {
     CommandCategory getCategory() {
         return CommandCategory.TEXT
     }
+
+    @Override
+    boolean isSlackCompatible() { true }
 }
