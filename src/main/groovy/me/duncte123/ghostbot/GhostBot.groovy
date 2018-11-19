@@ -24,6 +24,7 @@ import me.duncte123.botcommons.web.WebUtils
 import me.duncte123.ghostbot.kuroslounge.FilterLogs
 import me.duncte123.ghostbot.utils.SpoopyUtils
 import me.duncte123.ghostbot.variables.Variables
+import me.duncte123.ghostbotslack.GhostBotSlack
 import net.dv8tion.jda.bot.sharding.DefaultShardManagerBuilder
 import net.dv8tion.jda.bot.sharding.ShardManager
 import net.dv8tion.jda.core.EmbedBuilder
@@ -38,9 +39,11 @@ class GhostBot {
 
     static GhostBot instance
     final ShardManager shardManager
+    private GhostBotSlack slack
 
     GhostBot() {
         def logger = LoggerFactory.getLogger(GhostBot.class)
+        this.slack = new GhostBotSlack()
 
         logger.info('Booting GhostBot')
         def token = SpoopyUtils.config.discord.token
@@ -54,7 +57,7 @@ class GhostBot {
         }
 
         LavalinkManager.ins.start()
-        def botListener = new BotListener()
+        def botListener = new BotListener(slack)
         def filterLogs = new FilterLogs()
         def builder = new DefaultShardManagerBuilder()
                 .setShardsTotal(totalShards)

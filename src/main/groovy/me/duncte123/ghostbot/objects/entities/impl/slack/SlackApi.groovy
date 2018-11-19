@@ -16,38 +16,17 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostbotslack
+package me.duncte123.ghostbot.objects.entities.impl.slack
 
 import com.ullink.slack.simpleslackapi.SlackSession
-import com.ullink.slack.simpleslackapi.impl.SlackSessionFactory
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import me.duncte123.ghostbot.objects.entities.GhostBotApi
 
-class GhostBotSlack {
+class SlackApi implements GhostBotApi<SlackSession> {
 
-    private static final Logger logger = LoggerFactory.getLogger(GhostBotSlack.class)
+    private SlackSession session
 
-    final SlackSession session
-
-    GhostBotSlack() {
-        logger.info('Booting Slack Bot')
-        String token = ''
-
-        this.session = SlackSessionFactory
-            .getSlackSessionBuilder(token)
-            .withAutoreconnectOnDisconnection(true)
-            .build()
-
-        SlackListener listener = new SlackListener()
-
-        session.addMessagePostedListener(listener)
-
-        try {
-            session.connect()
-            logger.info('connected to slack')
-        } catch (IOException e) {
-            logger.error('Could not connect to slack', e)
-            System.exit(0)
-        }
+    @Override
+    SlackSession get() {
+        return session
     }
 }

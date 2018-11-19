@@ -32,21 +32,27 @@ class SlackMessageEvent implements GhostBotMessageEvent<SlackMessagePosted> {
     private final SlackMessagePosted event
     private final GhostBotApi api
     private final GhostBotChannel channel
+    private final GhostBotGuild guild
+    private final GhostBotUser user
+    private final GhostBotMessage message
 
     SlackMessageEvent(SlackMessagePosted event, SlackSession session) {
         this.event = event
-        this.api = session as GhostBotApi
-        this.channel = event.channel as GhostBotChannel
+        this.api = new SlackApi(session: session)
+        this.channel = new GbSlackChannel(channel: event.channel)
+        this.guild = new SlackGuild(channel: event.channel)
+        this.user = new GbSlackUser(user: event.user)
+        this.message = new GbSlackMessage(event: event)
     }
 
     @Override
     GhostBotMessage getMessage() {
-        return null
+        return message
     }
 
     @Override
     GhostBotUser getAuthor() {
-        return null
+        return user
     }
 
     @Override
@@ -61,7 +67,7 @@ class SlackMessageEvent implements GhostBotMessageEvent<SlackMessagePosted> {
 
     @Override
     GhostBotGuild getGuild() {
-        return null
+        return guild
     }
 
     @Override

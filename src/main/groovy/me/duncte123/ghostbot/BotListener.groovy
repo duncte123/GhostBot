@@ -23,6 +23,7 @@ import me.duncte123.botcommons.web.WebUtils
 import me.duncte123.ghostbot.audio.GuildMusicManager
 import me.duncte123.ghostbot.utils.SpoopyUtils
 import me.duncte123.ghostbot.variables.Variables
+import me.duncte123.ghostbotslack.GhostBotSlack
 import net.dv8tion.jda.bot.sharding.ShardManager
 import net.dv8tion.jda.core.entities.Guild
 import net.dv8tion.jda.core.entities.VoiceChannel
@@ -50,6 +51,12 @@ class BotListener extends ListenerAdapter {
     public static final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor()
     private final Logger logger = LoggerFactory.getLogger(BotListener.class)
 
+    private final GhostBotSlack slack
+
+    BotListener(GhostBotSlack slack) {
+        this.slack = slack
+    }
+
     @Override
     void onReady(ReadyEvent event) {
         def jda = event.JDA
@@ -71,6 +78,7 @@ class BotListener extends ListenerAdapter {
             service.shutdownNow()
             SpoopyUtils.commandManager.commandService.shutdown()
             event.JDA.shutdown()
+            slack.session.disconnect()
 
             if (LavalinkManager.ins.lavalink != null) {
                 LavalinkManager.ins.lavalink.shutdown()

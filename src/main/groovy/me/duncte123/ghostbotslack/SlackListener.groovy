@@ -21,11 +21,26 @@ package me.duncte123.ghostbotslack
 import com.ullink.slack.simpleslackapi.SlackSession
 import com.ullink.slack.simpleslackapi.events.SlackMessagePosted
 import com.ullink.slack.simpleslackapi.listeners.SlackMessagePostedListener
+import me.duncte123.ghostbot.utils.SpoopyUtils
+import me.duncte123.ghostbot.variables.Variables
 
 class SlackListener implements SlackMessagePostedListener {
 
     @Override
     void onEvent(SlackMessagePosted event, SlackSession session) {
-        //
+        def user = event.user
+        def content = event.messageContent.toLowerCase()
+
+        if (user.bot) {
+            return
+        }
+
+        if (!content.startsWith(Variables.PREFIX.toLowerCase())
+            && !content.startsWith(Variables.OTHER_PREFIX.toLowerCase())) {
+            return
+        }
+
+        SpoopyUtils.commandManager.handleCommand(event, session)
+
     }
 }

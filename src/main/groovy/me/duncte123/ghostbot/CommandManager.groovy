@@ -18,6 +18,7 @@
 
 package me.duncte123.ghostbot
 
+import com.ullink.slack.simpleslackapi.SlackChannel
 import com.ullink.slack.simpleslackapi.SlackSession
 import com.ullink.slack.simpleslackapi.events.SlackMessagePosted
 import me.duncte123.ghostbot.commands.ReactionCommand
@@ -172,12 +173,12 @@ class CommandManager {
             jdaEvent.channel.sendTyping().queue()
         }
 
-        if (!cmd.discordCompatible) {
+        if (!cmd.discordCompatible && !event.fromSlack) {
             sendMessage(event, "messages.compat.no_discord")
             return
         }
 
-        if (!cmd.slackCompatible) {
+        if (!cmd.slackCompatible && event.fromSlack) {
             sendMessage(event, "messages.compat.no_slack")
             return
         }

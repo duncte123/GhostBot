@@ -16,38 +16,37 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostbotslack
+package me.duncte123.ghostbot.objects.entities.impl.slack
 
+import com.ullink.slack.simpleslackapi.SlackChannel
 import com.ullink.slack.simpleslackapi.SlackSession
-import com.ullink.slack.simpleslackapi.impl.SlackSessionFactory
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import com.ullink.slack.simpleslackapi.SlackUser
+import com.ullink.slack.simpleslackapi.events.SlackMessagePosted
+import me.duncte123.ghostbot.objects.entities.GhostBotMessage
 
-class GhostBotSlack {
+class GbSlackMessage implements GhostBotMessage {
 
-    private static final Logger logger = LoggerFactory.getLogger(GhostBotSlack.class)
+    private SlackMessagePosted event
+    SlackSession session
 
-    final SlackSession session
+    String getMessageContent() {
+        event.messageContent
+    }
 
-    GhostBotSlack() {
-        logger.info('Booting Slack Bot')
-        String token = ''
+    SlackUser getAuthor() {
+        event.user
+    }
 
-        this.session = SlackSessionFactory
-            .getSlackSessionBuilder(token)
-            .withAutoreconnectOnDisconnection(true)
-            .build()
+    SlackChannel getChannel() {
+        event.channel
+    }
 
-        SlackListener listener = new SlackListener()
+    String getTimeStamp() {
+        event.timeStamp
+    }
 
-        session.addMessagePostedListener(listener)
-
-        try {
-            session.connect()
-            logger.info('connected to slack')
-        } catch (IOException e) {
-            logger.error('Could not connect to slack', e)
-            System.exit(0)
-        }
+    @Override
+    Object get() {
+        return null
     }
 }
