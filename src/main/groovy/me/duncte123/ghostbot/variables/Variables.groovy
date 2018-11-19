@@ -31,5 +31,6 @@ class Variables {
     public static final String EMBED_COLOR_SLACK = '#6ffe32'
     public static final String GHOSTBOT_GUILD = 'https://discord.gg/NKM9Xtk'
     public static final String GHOSTBOT_INVITE = 'https://discordapp.com/oauth2/authorize?client_id=397297702150602752&scope=bot&permissions=36817984'
+    public static final String GHOSTBOT_INVITE_SLACK = 'https://slack.com/oauth/authorize?client_id=482311728258.482143316020&scope=bot,channels:history,chat:write:bot,emoji:read,links:write,team:read,users:read'
 
 }

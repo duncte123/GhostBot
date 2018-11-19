@@ -181,7 +181,7 @@ class CommandManager {
             sendMessage(event, """\
 This command cannot be used on Discord unfortunately,
 to use this command please use the bot on Slack.
-An invite is coming soon.
+Click the link to add GhostBot to your Slack: $Variables.GHOSTBOT_INVITE_SLACK
 """)
             return
         }
