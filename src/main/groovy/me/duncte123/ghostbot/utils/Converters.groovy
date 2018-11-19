@@ -34,6 +34,10 @@ class Converters {
             attachment.title = embed.title
         }
 
+        if (embed.url != null) {
+            attachment.titleLink = embed.url
+        }
+
         if (embed.description != null) {
             attachment.text = embed.description
         }
@@ -60,6 +64,24 @@ class Converters {
 
         if (embed.timestamp != null) {
             attachment.timestamp = embed.timestamp.toEpochSecond()
+        }
+
+        def author = embed.author
+
+        if (author != null) {
+
+            if (author.name != null) {
+                attachment.authorName = author.name
+            }
+
+            if (author.iconUrl != null) {
+                attachment.authorIcon = author.iconUrl
+            }
+
+            if (author.url != null) {
+                attachment.authorLink = author.url
+            }
+
         }
 
 

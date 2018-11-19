@@ -19,14 +19,33 @@
 package me.duncte123.ghostbot.objects.entities.impl.slack
 
 import com.ullink.slack.simpleslackapi.SlackChannel
+import com.ullink.slack.simpleslackapi.SlackTeam
 import me.duncte123.ghostbot.objects.entities.GhostBotGuild
 
 class SlackGuild implements GhostBotGuild<SlackChannel> {
 
     private SlackChannel channel
+    SlackTeam team
+
+    @Override
+    long getIdLong() {
+        def output = 0
+        def id = team.id
+
+        for (def i = 0; i < id.length(); i++) {
+            output += Character.getNumericValue(id.charAt(i))
+        }
+
+        return output.toLong()
+    }
 
     @Override
     SlackChannel get() {
         return channel
+    }
+
+    @Override
+    String toString() {
+        return team.name
     }
 }

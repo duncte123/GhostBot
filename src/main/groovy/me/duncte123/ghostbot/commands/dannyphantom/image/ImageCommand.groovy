@@ -18,7 +18,7 @@
 
 package me.duncte123.ghostbot.commands.dannyphantom.image
 
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
+import me.duncte123.ghostbot.objects.CommandEvent
 
 import java.util.concurrent.ThreadLocalRandom
 
@@ -48,9 +48,10 @@ class ImageCommand extends ImageBase {
     ]
 
     @Override
-    void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
+    void execute(CommandEvent event) {
         def keyword = keywords[ThreadLocalRandom.current().nextInt(keywords.length)]
         def file = requestImage(keyword)
+
         sendMessageFromName(event, file)
     }
 
@@ -61,4 +62,7 @@ class ImageCommand extends ImageBase {
     String getHelp() {
         'Gives you a random Danny Phantom <:DPEmblemInvertStroke:402746292788264960> related image from google'
     }
+
+    @Override
+    boolean isSlackCompatible() { true }
 }

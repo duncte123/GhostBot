@@ -157,7 +157,7 @@ class CommandManager {
         final def args = Arrays.copyOfRange(split, 1, split.length)
 
         def cmd = getCommand(invoke)
-        def guild = event.guild.get()
+        def guild = event.guild.toString()
 
         if (cmd == null) {
             logger.info('Unknown command: "{}" in "{}" with {}', invoke, guild, Arrays.toString(args))
@@ -178,12 +178,20 @@ class CommandManager {
         }
 
         if (!cmd.discordCompatible && !event.fromSlack) {
-            sendMessage(event, "messages.compat.no_discord")
+            sendMessage(event, """\
+This command cannot be used on Discord unfortunately,
+to use this command please use the bot on Slack.
+An invite is coming soon.
+""")
             return
         }
 
         if (!cmd.slackCompatible && event.fromSlack) {
-            sendMessage(event, "messages.compat.no_slack")
+            sendMessage(event, """\
+This command cannot be used on Slack unfortunately,
+to use this command please use the bot on Discord.
+You can invite GhostBot to your Discord server by <$Variables.GHOSTBOT_INVITE|clicking here> or <$Variables.GHOSTBOT_GUILD|click here> to join the official discord server.
+""")
             return
         }
 

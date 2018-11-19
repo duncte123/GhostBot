@@ -18,6 +18,7 @@
 
 package me.duncte123.ghostbot.commands.main
 
+
 import com.ullink.slack.simpleslackapi.SlackSession
 import me.duncte123.botcommons.messaging.EmbedUtils
 import me.duncte123.ghostbot.objects.Command
@@ -50,12 +51,12 @@ class AboutCommand extends Command {
             """\
 Hey there, my name is GhostBot, I am the must have bot for your spooky server.
 I am manly themed around Danny Phantom but other spooky stuff that you have for me can be suggested to $devName.
-If you want to stay in contact with my developer you can join [this server](https://discord.gg/NKM9Xtk).
+If you want to stay in contact with my developer you can join [this server]($Variables.GHOSTBOT_GUILD).
 
 **Extra information:**
-My invite link: [Click here](https://discordapp.com/oauth2/authorize?client_id=397297702150602752&scope=bot&permissions=36817984)
+My invite link: [Click here]($Variables.GHOSTBOT_INVITE)
 My prefixes: `$Variables.PREFIX` and `$Variables.OTHER_PREFIX`
-My home: [https://discord.gg/NKM9Xtk](https://discord.gg/NKM9Xtk)
+My home: [$Variables.GHOSTBOT_GUILD]($Variables.GHOSTBOT_GUILD)
 My version: `$Variables.VERSION`
 The amount of servers that I am in: $guildCount"""
         ))

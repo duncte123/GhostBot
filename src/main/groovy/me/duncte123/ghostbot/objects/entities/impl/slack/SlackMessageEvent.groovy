@@ -35,7 +35,7 @@ class SlackMessageEvent implements GhostBotMessageEvent<SlackMessagePosted> {
         this.event = event
         this.api = new SlackApi(session: session)
         this.channel = new GbSlackChannel(channel: event.channel)
-        this.guild = new SlackGuild(channel: event.channel)
+        this.guild = new SlackGuild(channel: event.channel, team: session.team)
         this.user = new GbSlackUser(user: event.user)
         this.message = new GbSlackMessage(event: event)
     }

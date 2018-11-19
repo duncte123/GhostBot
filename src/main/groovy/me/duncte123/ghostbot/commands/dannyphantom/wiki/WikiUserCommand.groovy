@@ -22,23 +22,22 @@ import me.duncte123.botcommons.messaging.EmbedUtils
 import me.duncte123.botcommons.web.WebUtils
 import me.duncte123.fandomapi.user.UserElement
 import me.duncte123.fandomapi.user.UserResultSet
+import me.duncte123.ghostbot.objects.CommandEvent
 import me.duncte123.ghostbot.utils.SpoopyUtils
 import me.duncte123.ghostbot.variables.Variables
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
-
-import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 
 class WikiUserCommand extends WikiBaseCommand {
     @Override
-    void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
+    void execute(CommandEvent commandEvent) {
 
-        if (args.length == 0) {
-            sendMsg(event, "Insufficient arguments, Correct usage: `$Variables.PREFIX$name <search term>`")
+        def event = commandEvent.event
+
+        if (commandEvent.args.length == 0) {
+            sendMessage(event, "Insufficient arguments, Correct usage: `$Variables.PREFIX$name <search term>`")
             return
         }
 
-        def searchQuery = args.join(' ')
+        def searchQuery = commandEvent.args.join(' ')
 
         WebUtils.ins.getJSONObject(String.format(
             '%s?ids=%s',
@@ -48,7 +47,7 @@ class WikiUserCommand extends WikiBaseCommand {
             { json ->
 
                 if (json.has('exception')) {
-                    sendMsg(event, "An error occurred: ${toEx(json)}")
+                    sendMessage(event, "An error occurred: ${toEx(json)}")
                     return
                 }
 
@@ -68,7 +67,7 @@ class WikiUserCommand extends WikiBaseCommand {
                             "**Number of edits:** $user.numberofedits", false)
                     }
 
-                    sendEmbed(event, embed)
+                    sendMessage(event, embed)
 
                     return
                 }
@@ -88,12 +87,11 @@ class WikiUserCommand extends WikiBaseCommand {
 
                 }
 
-                sendEmbed(event, eb.build())
+                sendMessage(event, eb)
 
             },
             {
-                sendMsg(event, "Something went wrong: $it.message")
-                /* it.printStackTrace()*/
+                sendMessage(event, "Something went wrong: $it.message")
             })
     }
 
@@ -110,4 +108,7 @@ class WikiUserCommand extends WikiBaseCommand {
             "Examples: `$Variables.PREFIX$name duncte123`\n" +
             "`$Variables.PREFIX$name 34322457`\n"
     }
+
+    @Override
+    boolean isSlackCompatible() { true }
 }

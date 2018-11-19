@@ -41,6 +41,14 @@ class CommandHelpers {
         sendMessage(event, content.toString(), null)
     }
 
+    static void sendMessage(CommandEvent event, String content) {
+        sendMessage(event.event, content, null)
+    }
+
+    static void sendMessage(CommandEvent event, EmbedBuilder embed) {
+        sendMessage(event.event, embed)
+    }
+
     static void sendMessage(GhostBotMessageEvent event, String content) {
         sendMessage(event, content, null)
     }

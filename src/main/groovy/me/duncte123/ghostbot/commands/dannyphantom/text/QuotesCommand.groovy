@@ -25,19 +25,16 @@ import gnu.trove.map.hash.TLongObjectHashMap
 import me.duncte123.botcommons.messaging.EmbedUtils
 import me.duncte123.ghostbot.objects.Command
 import me.duncte123.ghostbot.objects.CommandCategory
+import me.duncte123.ghostbot.objects.CommandEvent
 import me.duncte123.ghostbot.objects.tumblr.TumblrPost
 import me.duncte123.ghostbot.utils.SpoopyUtils
 import me.duncte123.ghostbot.utils.TumblrUtils
 import me.duncte123.ghostbot.variables.Variables
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 import org.apache.commons.text.StringEscapeUtils
 
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Consumer
 import java.util.regex.Pattern
-
-import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 
 class QuotesCommand extends Command {
 
@@ -83,7 +80,9 @@ class QuotesCommand extends Command {
     }
 
     @Override
-    void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
+    void execute(CommandEvent event) {
+
+        def args = event.args
 
         if (args.size() > 0) {
             def joined = args.join('')
@@ -96,12 +95,12 @@ class QuotesCommand extends Command {
                 if (!id.empty) {
                     def idLong = Long.parseLong(id)
 
-                    getPostFromId(idLong, { sendQuote(event, it) }, { sendMsg(event, it) })
+                    getPostFromId(idLong, { sendQuote(event, it) }, { sendMessage(event, it) })
                 }
 
                 return
             } else if ('total' == args[0]) {
-                sendMsg(event, "There are a total of ${allQuotes.size()} quotes in the system at the moment")
+                sendMessage(event, "There are a total of ${allQuotes.size()} quotes in the system at the moment")
                 return
             }
         }
@@ -133,7 +132,7 @@ class QuotesCommand extends Command {
         return CommandCategory.TEXT
     }
 
-    private static void sendQuote(GuildMessageReceivedEvent event, TumblrPost post) {
+    private static void sendQuote(CommandEvent event, TumblrPost post) {
         def eb = EmbedUtils.defaultEmbed()
             .setTitle("Link to Post", post.post_url)
             .setFooter("Quote id: $post.id", Variables.FOOTER_ICON)
@@ -153,7 +152,7 @@ class QuotesCommand extends Command {
                 break
         }
 
-        sendEmbed(event, eb.build())
+        sendMessage(event, eb)
     }
 
     private void getPostFromId(long id, Consumer<TumblrPost> cb, Consumer<String> fail) {
@@ -243,4 +242,7 @@ class QuotesCommand extends Command {
             .replaceAll('<li>', ' - ')
             .replaceAll('</li>', '')
     }
+
+    @Override
+    boolean isSlackCompatible() { true }
 }

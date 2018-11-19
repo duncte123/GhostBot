@@ -20,11 +20,9 @@ package me.duncte123.ghostbot.commands.dannyphantom.text
 
 import me.duncte123.ghostbot.objects.Command
 import me.duncte123.ghostbot.objects.CommandCategory
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
+import me.duncte123.ghostbot.objects.CommandEvent
 
 import java.util.concurrent.ThreadLocalRandom
-
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 
 class PetitionCommand extends Command {
 
@@ -44,11 +42,11 @@ class PetitionCommand extends Command {
     ]
 
     @Override
-    void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
+    void execute(CommandEvent event) {
         def message = messages[ThreadLocalRandom.current().nextInt(messages.length)]
         def formatted = String.format(message, 'http://bit.ly/dp-petition', '#GoGhostAgain')
 
-        sendMsg(event, formatted)
+        sendMessage(event, formatted)
     }
 
     @Override
@@ -61,4 +59,7 @@ class PetitionCommand extends Command {
     CommandCategory getCategory() {
         return CommandCategory.TEXT
     }
+
+    @Override
+    boolean isSlackCompatible() { true }
 }

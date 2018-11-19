@@ -25,6 +25,11 @@ class JDAGuild implements GhostBotGuild<Guild> {
     private Guild guild
 
     @Override
+    long getIdLong() {
+        return guild.idLong
+    }
+
+    @Override
     Guild get() {
         return guild
     }

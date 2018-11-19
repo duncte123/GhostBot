@@ -20,4 +20,6 @@ package me.duncte123.ghostbot.objects.entities
 
 interface GhostBotGuild<T> {
     T get()
+
+    long getIdLong()
 }
