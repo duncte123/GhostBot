@@ -58,13 +58,13 @@ class DPArtistsCommand extends ImageBase {
 */
 
     private final String[] artists = [
-            'earthphantom',
-            'allyphantomrush',
-            'umbrihearts',
-            'amethystocean-adr',
-            'amethystocean',
-            'amethyst-ocean',
-            'ceciliaspen'
+        'earthphantom',
+        'allyphantomrush',
+        'umbrihearts',
+        'amethystocean-adr',
+        'amethystocean',
+        'amethyst-ocean',
+        'ceciliaspen'
     ]
 
     @Override
@@ -111,7 +111,7 @@ class DPArtistsCommand extends ImageBase {
 
             default:
                 sendMsg(event, 'This artist is not in the list of artists that have approved their art to be in this bot.\n' +
-                        "Use `gb.$name list` for a list of artists.")
+                    "Use `gb.$name list` for a list of artists.")
                 break
 
         }
@@ -139,12 +139,12 @@ class DPArtistsCommand extends ImageBase {
 
     private void extractPictureFromTumblr(String username, @NotNull Consumer<TumblrPost> cb) {
         def url = "https://api.tumblr.com/v2/blog/${username}.tumblr.com/posts/photo?api_key=" +
-                "${SpoopyUtils.config.api.tumblr}&type=photo&limit=1"
+            "${SpoopyUtils.config.api.tumblr}&type=photo&limit=1"
 
         WebUtils.ins.getJSONObject(url).async {
             cb.accept(
-                    gson.fromJson(it.getJSONObject('response')
-                            .getJSONArray('posts').getJSONObject(0).toString(), TumblrPost.class)
+                gson.fromJson(it.getJSONObject('response')
+                    .getJSONArray('posts').getJSONObject(0).toString(), TumblrPost.class)
             )
         }
 
@@ -152,15 +152,15 @@ class DPArtistsCommand extends ImageBase {
 
     private void getDeviantartDataXmlOnly(String usn, Consumer<LocalDeviantData> cb) {
         WebUtils.ins.scrapeWebPage('https://backend.deviantart.com/rss.xml' +
-                "?type=deviation&q=by%3A$usn+sort%3Atime+meta%3Aall").async {
+            "?type=deviation&q=by%3A$usn+sort%3Atime+meta%3Aall").async {
             //get an item
             Element item = it.selectFirst('item')
             cb.accept(new LocalDeviantData(
-                    item.selectFirst('media|copyright').attr('url'),
-                    item.selectFirst('media|content[medium="image"]').attr('url'),
-                    item.selectFirst('title').text(),
-                    item.select('media|credit').get(1).text(),
-                    item.selectFirst('link').text()
+                item.selectFirst('media|copyright').attr('url'),
+                item.selectFirst('media|content[medium="image"]').attr('url'),
+                item.selectFirst('title').text(),
+                item.select('media|credit').get(1).text(),
+                item.selectFirst('link').text()
             ))
         }
     }
@@ -177,19 +177,19 @@ class DPArtistsCommand extends ImageBase {
 
                 if (!it.type.equalsIgnoreCase('photo')) {
                     sendMsg(event, "Got a post of type `$it.type` for the type `photo`\n" +
-                            'WTF tumblr?\n' +
-                            "Here's the link anyway: <$it.post_url>")
+                        'WTF tumblr?\n' +
+                        "Here's the link anyway: <$it.post_url>")
                     return
                 }
 
                 sendEmbed(event,
-                        EmbedUtils.defaultEmbed()
-                                .setAuthor(usn, it.post_url, profilePicture)
-                                .setTitle('Link to post', it.post_url)
-                                .setDescription(QuotesCommand.parseText(it.caption))
-                                .setThumbnail(profilePicture)
-                                .setImage(it.photos[0].original_size.url)
-                                .build()
+                    EmbedUtils.defaultEmbed()
+                        .setAuthor(usn, it.post_url, profilePicture)
+                        .setTitle('Link to post', it.post_url)
+                        .setDescription(QuotesCommand.parseText(it.caption))
+                        .setThumbnail(profilePicture)
+                        .setImage(it.photos[0].original_size.url)
+                        .build()
                 )
 
             }
@@ -199,12 +199,12 @@ class DPArtistsCommand extends ImageBase {
 
             getDeviantartDataXmlOnly(usn) {
                 sendEmbed(event,
-                        EmbedUtils.defaultEmbed()
-                                .setAuthor(usn, it.authorUrl, it.avatarUrl)
-                                .setTitle(it.title, it.link)
-                                .setThumbnail(it.avatarUrl)
-                                .setImage(it.thumbnailUrl)
-                                .build()
+                    EmbedUtils.defaultEmbed()
+                        .setAuthor(usn, it.authorUrl, it.avatarUrl)
+                        .setTitle(it.title, it.link)
+                        .setThumbnail(it.avatarUrl)
+                        .setImage(it.thumbnailUrl)
+                        .build()
                 )
             }
 

@@ -28,9 +28,6 @@ import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 
 import java.util.regex.Pattern
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
-
 class HelpCommand extends Command {
     @Override
     void execute(CommandEvent commandEvent) {
@@ -52,13 +49,13 @@ class HelpCommand extends Command {
             for (Command cmd : SpoopyUtils.commandManager.commands) {
                 if (cmd.name == toSearch) {
                     sendMessage(event, "Command help for `$cmd.name` :\n" +
-                            "$cmd.help${cmd.aliases.length > 0 ? "\nAliases: ${cmd.aliases.join(', ')}" : ''}")
+                        "$cmd.help${cmd.aliases.length > 0 ? "\nAliases: ${cmd.aliases.join(', ')}" : ''}")
                     return
                 } else {
                     for (String alias : cmd.aliases) {
                         if (alias == toSearch) {
                             sendMessage(event, "Command help for `$cmd.name` :\n" +
-                                    "$cmd.help${cmd.aliases.length > 0 ? "\nAliases: ${cmd.aliases.join(', ')}" : ''}")
+                                "$cmd.help${cmd.aliases.length > 0 ? "\nAliases: ${cmd.aliases.join(', ')}" : ''}")
                             return
                         }
 
@@ -81,14 +78,14 @@ class HelpCommand extends Command {
 
 
         def helpEmbed = EmbedUtils.defaultEmbed()
-                .setDescription("Use `${Variables.PREFIX}help [command]` for more info about a command")
-                .addField('Commands for all you space nerds', buildCommands(spaceCommands), false)
-                .addField('Audio commands', buildCommands(audioCommands), false)
-                .addField('Image commands', buildCommands(imageCommands), false)
-                .addField('Text commands', buildCommands(textCommands), false)
-                .addField('Wiki commands', buildCommands(wikiCommands), false)
-                .addField('Other commands', buildCommands(otherCommands), false)
-                .addField('Character commands', buildCommands(characterCommands), false)
+            .setDescription("Use `${Variables.PREFIX}help [command]` for more info about a command")
+            .addField('Commands for all you space nerds', buildCommands(spaceCommands), false)
+            .addField('Audio commands', buildCommands(audioCommands), false)
+            .addField('Image commands', buildCommands(imageCommands), false)
+            .addField('Text commands', buildCommands(textCommands), false)
+            .addField('Wiki commands', buildCommands(wikiCommands), false)
+            .addField('Other commands', buildCommands(otherCommands), false)
+            .addField('Character commands', buildCommands(characterCommands), false)
 
         if (event.fromSlack) {
             sendMessage(event, helpEmbed)
@@ -127,12 +124,12 @@ class HelpCommand extends Command {
         def manager = SpoopyUtils.commandManager
 
         def temp = manager.commands.stream()
-                .filter { (it.category == commandCategory) }
-                .map { it.name }.collect()
+            .filter { (it.category == commandCategory) }
+            .map { it.name }.collect()
 
         manager.commands.stream()
-                .filter { (it.category == commandCategory) }
-                .map { it.aliases }.forEach(temp.&addAll)
+            .filter { (it.category == commandCategory) }
+            .map { it.aliases }.forEach(temp.&addAll)
 
         return temp
     }

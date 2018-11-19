@@ -32,7 +32,7 @@ class TumblrUtils {
     static final TumblrUtils instance = new TumblrUtils()
 
     private final String API_URL = 'https://api.tumblr.com/v2/blog/%s/posts%s?limit=20' +
-            "&api_key=$SpoopyUtils.config.api.tumblr"
+        "&api_key=$SpoopyUtils.config.api.tumblr"
     final Gson gson = new Gson()
 
     /*public void fetcheAllFromAccount(String domain, @NotNull Consumer<List<TumblrPost>> cb) {
@@ -42,8 +42,8 @@ class TumblrUtils {
     void fetchAllFromAccount(String domain, String type, @NotNull Consumer<List<TumblrPost>> cb) {
         def response = new ArrayList<>()
         def url = String.format(API_URL,
-                domain,
-                (type != null && !type.isEmpty() ? "/$type" : '')
+            domain,
+            (type != null && !type.isEmpty() ? "/$type" : '')
         )
 
         WebUtils.ins.getJSONObject(url).async {
@@ -73,8 +73,8 @@ class TumblrUtils {
 
         WebUtils.ins.getJSONObject(url).async({
             cb.accept(
-                    gson.fromJson(it.getJSONObject('response')
-                            .getJSONArray('posts').getJSONObject(0).toString(), TumblrPost.class)
+                gson.fromJson(it.getJSONObject('response')
+                    .getJSONArray('posts').getJSONObject(0).toString(), TumblrPost.class)
             )
         }, error)
     }

@@ -42,7 +42,7 @@ class GoingGhostCommand extends AudioBaseCommand {
 
         sendMsg(event, "Selected track: _${selectedTrack.replace('_', '\\_')}_")
         AudioUtils.instance.loadAndPlay(getMusicManager(event.guild), event.channel,
-                audioPath + selectedTrack, false)
+            audioPath + selectedTrack, false)
 
 
     }

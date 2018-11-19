@@ -48,7 +48,6 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.regex.Pattern
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 import static me.duncte123.ghostbot.objects.CommandHelpers.sendMessage
 
 class CommandManager {

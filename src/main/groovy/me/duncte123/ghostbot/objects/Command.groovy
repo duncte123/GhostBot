@@ -55,7 +55,7 @@ abstract class Command extends CommandHelpers {
         return CommandCategory.NONE
     }
 
-    String[] getAliases() {[]}
+    String[] getAliases() { [] }
 
     abstract String getHelp()
 
@@ -96,7 +96,7 @@ abstract class Command extends CommandHelpers {
             def selectedTrack = randomTrack
             sendMsg(event, "Selected track: _${selectedTrack.replaceAll("_", "\\_")}_")
             AudioUtils.instance.loadAndPlay(getMusicManager(event.guild), event.channel,
-                    audioPath + selectedTrack, false)
+                audioPath + selectedTrack, false)
         }
 
     }
@@ -123,7 +123,7 @@ abstract class Command extends CommandHelpers {
                 sendEmbed(event, EmbedUtils.embedMessage("I don't have permission to join $voiceState.channel.name"))
             } else {
                 sendEmbed(event, EmbedUtils.embedMessage('Error while joining channel ' +
-                        "`$voiceState.channel.name`: $e.message"))
+                    "`$voiceState.channel.name`: $e.message"))
             }
 
             return false

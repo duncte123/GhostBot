@@ -29,18 +29,18 @@ import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 class PetitionCommand extends Command {
 
     private final String[] messages = [
-            // %1$s = "http://bit.ly/dp-petition"
-            // %2$s = "#GoGhostAgain"
-            'What you gonna sign? %1$s %2$s',
-            'I would appreciate it if you could sign this petition %1$s %2$s !',
-            'SIGN THE PETITION %1$s %2$s',
-            '%2$s! %1$s',
-            'https://ghostbot.duncte123.me/img/GoGhostAgainBanner.png%n' +
-                    'Click the link to sign the petition <%1$s>',
-            //Lol a haiku by Lady Phantom
-            'Let\'s go ghost again!%n' +
-                    'Come on; sign the petition!%n' +
-                    'Team Phantom needs you!%n%1$s'
+        // %1$s = "http://bit.ly/dp-petition"
+        // %2$s = "#GoGhostAgain"
+        'What you gonna sign? %1$s %2$s',
+        'I would appreciate it if you could sign this petition %1$s %2$s !',
+        'SIGN THE PETITION %1$s %2$s',
+        '%2$s! %1$s',
+        'https://ghostbot.duncte123.me/img/GoGhostAgainBanner.png%n' +
+            'Click the link to sign the petition <%1$s>',
+        //Lol a haiku by Lady Phantom
+        'Let\'s go ghost again!%n' +
+            'Come on; sign the petition!%n' +
+            'Team Phantom needs you!%n%1$s'
     ]
 
     @Override

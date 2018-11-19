@@ -38,7 +38,7 @@ class ISSCommand extends Command {
         def mapsUrl = "https://google.com/maps/search/$latitude,$longitude"
 
         def embed = EmbedUtils.embedField('International Space Station',
-                "The position of the ISS is [`$latitude`, `$longitude`]($mapsUrl)")
+            "The position of the ISS is [`$latitude`, `$longitude`]($mapsUrl)")
 
         sendEmbed(event, embed)
     }

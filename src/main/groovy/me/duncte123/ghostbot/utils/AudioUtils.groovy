@@ -135,7 +135,7 @@ class AudioUtils {
             @Override
             void loadFailed(FriendlyException exception) {
                 MessageUtils.sendEmbed(channel, EmbedUtils.embedField(embedTitle, "Could not play: $exception.message" +
-                        '\nIf this happens often try another link or join our [support guild](https://discord.gg/NKM9Xtk) for more!'))
+                    '\nIf this happens often try another link or join our [support guild](https://discord.gg/NKM9Xtk) for more!'))
             }
         })
     }

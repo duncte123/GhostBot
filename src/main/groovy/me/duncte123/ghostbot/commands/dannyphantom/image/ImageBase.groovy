@@ -57,11 +57,11 @@ abstract class ImageBase extends Command {
         logger.info("MAKING IMAGE REQUEST: $query")
 
         WebUtils.ins.getJSONObject(SpoopyUtils.getGoogleSearchUrl(query)).async(
-                {
-                    def data = gson.fromJson(it.toString(), GoogleSearchResults.class)
-                    success.accept(data)
-                    searchCache.put(query, data)
-                }, error
+            {
+                def data = gson.fromJson(it.toString(), GoogleSearchResults.class)
+                success.accept(data)
+                searchCache.put(query, data)
+            }, error
         )
     }
 
@@ -83,9 +83,9 @@ abstract class ImageBase extends Command {
         logger.debug("Image Link: '$i.url'")
 
         sendEmbed(event, EmbedUtils.defaultEmbed()
-                .setTitle(i.title, i.website)
-                .setImage(i.url)
-                .build())
+            .setTitle(i.title, i.website)
+            .setImage(i.url)
+            .build())
     }
 
     static void sendMessageFromData(GuildMessageReceivedEvent event, GoogleSearchResults data, String key) {
@@ -99,8 +99,8 @@ abstract class ImageBase extends Command {
         def randomItem = arr.get(ThreadLocalRandom.current().nextInt(arr.size()))
 
         sendEmbed(event, EmbedUtils.defaultEmbed()
-                .setTitle(randomItem.title, randomItem.image.contextLink)
-                .setImage(randomItem.link).build())
+            .setTitle(randomItem.title, randomItem.image.contextLink)
+            .setImage(randomItem.link).build())
     }
 
     @Override

@@ -51,21 +51,21 @@ class GhostBot {
         WebUtils.userAgent = "Mozilla/5.0 (compatible; GhostBot/v${Variables.VERSION}; +https://github.com/duncte123/GhostBot)"
         EmbedUtils.setEmbedBuilder {
             return new EmbedBuilder()
-                    .setColor(Variables.EMBED_COLOR)
-                    .setFooter("GhostBot", Variables.FOOTER_ICON)
-                    .setTimestamp(Instant.now())
+                .setColor(Variables.EMBED_COLOR)
+                .setFooter("GhostBot", Variables.FOOTER_ICON)
+                .setTimestamp(Instant.now())
         }
 
         LavalinkManager.ins.start()
         def botListener = new BotListener(slack)
         def filterLogs = new FilterLogs()
         def builder = new DefaultShardManagerBuilder()
-                .setShardsTotal(totalShards)
-                .setToken(token)
+            .setShardsTotal(totalShards)
+            .setToken(token)
 //                .setGame(Game.watching("${Variables.PREFIX}help | #GoGhostAgain"))
-                .setGame(Game.playing('GhostBot 2.0 | Now with popup blocker'))
-                .setDisabledCacheFlags(EnumSet.of(CacheFlag.EMOTE, CacheFlag.GAME))
-                .addEventListeners(botListener, filterLogs)
+            .setGame(Game.playing('GhostBot 2.0 | Now with popup blocker'))
+            .setDisabledCacheFlags(EnumSet.of(CacheFlag.EMOTE, CacheFlag.GAME))
+            .addEventListeners(botListener, filterLogs)
 
 
         if (LavalinkManager.ins.enabled) {

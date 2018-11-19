@@ -20,10 +20,16 @@ package me.duncte123.ghostbot.objects.entities
 
 interface GhostBotMessageEvent<T> {
     GhostBotMessage getMessage()
+
     GhostBotUser getAuthor()
+
     GhostBotChannel getChannel()
+
     GhostBotApi getAPI()
+
     GhostBotGuild getGuild()
+
     boolean isFromSlack()
+
     T getOriginalEvent()
 }

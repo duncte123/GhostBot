@@ -20,11 +20,6 @@ package me.duncte123.ghostbot.commands.main
 
 import me.duncte123.ghostbot.objects.Command
 import me.duncte123.ghostbot.objects.CommandEvent
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
-
-import java.time.temporal.ChronoUnit
-
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 
 class PingCommand extends Command {
     @Override

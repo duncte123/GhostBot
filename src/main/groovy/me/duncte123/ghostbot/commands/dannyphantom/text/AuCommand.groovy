@@ -74,10 +74,10 @@ class AuCommand extends Command {
         def tags = post.tags.join(' #')
 
         def eb = EmbedUtils.defaultEmbed()
-                .setTitle('Link to Post', post.post_url)
-                .setDescription(parseText(post.body))
-                .setFooter("#$tags", Variables.FOOTER_ICON)
-                .setTimestamp(null)
+            .setTitle('Link to Post', post.post_url)
+            .setDescription(parseText(post.body))
+            .setFooter("#$tags", Variables.FOOTER_ICON)
+            .setTimestamp(null)
 
         sendEmbed(event, eb)
     }
@@ -88,10 +88,10 @@ class AuCommand extends Command {
     @Override
     String[] getAliases() {
         [
-                'reallydumbdannyphantomaus',
-                'dumbau',
-                'greatau',
-                'reallygreatdannyphantomaus'
+            'reallydumbdannyphantomaus',
+            'dumbau',
+            'greatau',
+            'reallygreatdannyphantomaus'
         ]
     }
 

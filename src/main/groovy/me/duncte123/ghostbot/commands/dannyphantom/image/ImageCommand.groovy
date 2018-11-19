@@ -25,26 +25,26 @@ import java.util.concurrent.ThreadLocalRandom
 class ImageCommand extends ImageBase {
 
     private final String[] keywords = [
-            'Danny Phantom',
-            'Danny Fenton',
-            'Danny Fenton',
-            'Samantha Manson',
-            'Sam Manson',
-            'Tucker Foley',
-            'Jack Fenton',
-            'Maddie Fenton',
-            'Jazz Fenton',
-            'Vlad Plasmius',
-            'Danny Fenton (Danny Phantom)',
-            'Sam Manson (Danny Phantom)',
-            'Tucker Foley (Danny Phantom)',
-            'Jack Fenton (Danny Phantom)',
-            'Maddie Fenton (Danny Phantom)',
-            'Jazz Fenton (Danny Phantom)',
-            'Vlad Masters (Danny Phantom)',
-            'Vlad Plasmius (Danny Phantom)',
-            'Danny Fenton',
-            'Danny Phantom desiree'
+        'Danny Phantom',
+        'Danny Fenton',
+        'Danny Fenton',
+        'Samantha Manson',
+        'Sam Manson',
+        'Tucker Foley',
+        'Jack Fenton',
+        'Maddie Fenton',
+        'Jazz Fenton',
+        'Vlad Plasmius',
+        'Danny Fenton (Danny Phantom)',
+        'Sam Manson (Danny Phantom)',
+        'Tucker Foley (Danny Phantom)',
+        'Jack Fenton (Danny Phantom)',
+        'Maddie Fenton (Danny Phantom)',
+        'Jazz Fenton (Danny Phantom)',
+        'Vlad Masters (Danny Phantom)',
+        'Vlad Plasmius (Danny Phantom)',
+        'Danny Fenton',
+        'Danny Phantom desiree'
     ]
 
     @Override

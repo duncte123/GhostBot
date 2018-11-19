@@ -45,90 +45,90 @@ abstract class WikiBaseCommand extends Command {
 
     protected void handleWikiSearch(WikiHolder wiki, String searchQuery, GuildMessageReceivedEvent event) {
         WebUtils.ins.getJSONObject(String.format(
-                '%s?query=%s',
-                wiki.searchListEndpoint,
-                SpoopyUtils.encodeUrl(searchQuery))
+            '%s?query=%s',
+            wiki.searchListEndpoint,
+            SpoopyUtils.encodeUrl(searchQuery))
 
         ).async(
-                { json ->
+            { json ->
 
-                    if (json.has('exception')) {
-                        def ex = toEx(json)
+                if (json.has('exception')) {
+                    def ex = toEx(json)
 
-                        if (ex.type.equalsIgnoreCase('NotFoundApiException')) {
-                            sendMsg(event, 'Your search returned no results.')
-                            return
-                        }
-
-                        sendMsg(event, "An error occurred: $ex")
-
+                    if (ex.type.equalsIgnoreCase('NotFoundApiException')) {
+                        sendMsg(event, 'Your search returned no results.')
                         return
                     }
 
-                    def wikiSearchResultSet = gson.fromJson(json.toString(), LocalWikiSearchResultSet.class)
+                    sendMsg(event, "An error occurred: $ex")
 
-                    def items = wikiSearchResultSet.getItems()
-
-                    if (items.size() > 10) {
-                        def temp = new ArrayList<LocalWikiSearchResult>()
-
-                        for (int i = 0; i < 10; i++) {
-                            temp.add(items.get(i))
-                        }
-
-                        items.clear()
-                        items.addAll(temp)
-                    }
-
-                    def eb = EmbedUtils.defaultEmbed().with {
-                        setTitle("Query: $searchQuery",
-                                "$wiki.domain/wiki/Special:Search?query=${searchQuery.replaceAll(' ', '%20')}")
-                        setAuthor("Requester: ${String.format('%#s', event.author)}",
-                                'https://ghostbot.duncte123.me/', event.author.effectiveAvatarUrl)
-                        setDescription("Total results: $wikiSearchResultSet.total\n" +
-                                "Current Listed: ${items.size()}\n\n")
-                    }
-
-
-                    for (LocalWikiSearchResult localWikiSearchResult : items) {
-                        eb.with {
-                            appendDescription('[')
-                            appendDescription(localWikiSearchResult.title)
-                            appendDescription(' - ')
-                            appendDescription(StringUtils.abbreviate(safeUrl(localWikiSearchResult.snippet), 50))
-                            appendDescription('](')
-                            appendDescription(safeUrl(localWikiSearchResult.url))
-                            appendDescription(')\n')
-                        }
-                    }
-
-                    sendEmbed(event, eb.build())
-                },
-                {
-                    sendMsg(event, "Something went wrong: $it.message")
+                    return
                 }
+
+                def wikiSearchResultSet = gson.fromJson(json.toString(), LocalWikiSearchResultSet.class)
+
+                def items = wikiSearchResultSet.getItems()
+
+                if (items.size() > 10) {
+                    def temp = new ArrayList<LocalWikiSearchResult>()
+
+                    for (int i = 0; i < 10; i++) {
+                        temp.add(items.get(i))
+                    }
+
+                    items.clear()
+                    items.addAll(temp)
+                }
+
+                def eb = EmbedUtils.defaultEmbed().with {
+                    setTitle("Query: $searchQuery",
+                        "$wiki.domain/wiki/Special:Search?query=${searchQuery.replaceAll(' ', '%20')}")
+                    setAuthor("Requester: ${String.format('%#s', event.author)}",
+                        'https://ghostbot.duncte123.me/', event.author.effectiveAvatarUrl)
+                    setDescription("Total results: $wikiSearchResultSet.total\n" +
+                        "Current Listed: ${items.size()}\n\n")
+                }
+
+
+                for (LocalWikiSearchResult localWikiSearchResult : items) {
+                    eb.with {
+                        appendDescription('[')
+                        appendDescription(localWikiSearchResult.title)
+                        appendDescription(' - ')
+                        appendDescription(StringUtils.abbreviate(safeUrl(localWikiSearchResult.snippet), 50))
+                        appendDescription('](')
+                        appendDescription(safeUrl(localWikiSearchResult.url))
+                        appendDescription(')\n')
+                    }
+                }
+
+                sendEmbed(event, eb.build())
+            },
+            {
+                sendMsg(event, "Something went wrong: $it.message")
+            }
         )
     }
 
     static FandomException toEx(JSONObject json) {
         JSONObject ex = json.getJSONObject('exception')
         return new FandomException(
-                ex.getString('type'),
-                ex.getString('message'),
-                ex.getInt('code'),
-                ex.getString('details'),
-                json.getString('trace_id')
+            ex.getString('type'),
+            ex.getString('message'),
+            ex.getInt('code'),
+            ex.getString('details'),
+            json.getString('trace_id')
         )
     }
 
     private static String safeUrl(String inp) {
         return inp
-                .replaceAll('<span class="searchmatch">', '**')
-                .replaceAll('</span>', '**')
-                .replaceAll('\\[', '\\]')
-                .replaceAll(']', '\\]')
-                .replaceAll('\\(', '\\(')
-                .replaceAll('\\)', '\\)')
+            .replaceAll('<span class="searchmatch">', '**')
+            .replaceAll('</span>', '**')
+            .replaceAll('\\[', '\\]')
+            .replaceAll(']', '\\]')
+            .replaceAll('\\(', '\\(')
+            .replaceAll('\\)', '\\)')
     }
 
     @Override

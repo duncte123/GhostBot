@@ -60,7 +60,7 @@ class CommandHelpers {
 
         def attachment = Converters.embedToAttachment(embed.build())
 
-        session.sendMessage(channel,'', attachment)
+        session.sendMessage(channel, '', attachment)
     }
 
     static void sendMessage(GhostBotMessageEvent event, String content, Consumer<GhostBotMessage> success) {

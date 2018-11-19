@@ -29,8 +29,8 @@ class GifCommand extends ImageBase {
     @Override
     void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
         requestSearch(keyword,
-                { sendMessageFromData(event, it, keyword) },
-                { sendMsg(event, "Error while looking up image: $it") })
+            { sendMessageFromData(event, it, keyword) },
+            { sendMsg(event, "Error while looking up image: $it") })
     }
 
     @Override

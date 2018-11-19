@@ -40,15 +40,15 @@ class WikiCommand extends WikiBaseCommand {
     @Override
     String[] getAliases() {
         [
-                'wikia',
-                'wikisearch',
-                'dannyphantomwiki'
+            'wikia',
+            'wikisearch',
+            'dannyphantomwiki'
         ]
     }
 
     @Override
     String getHelp() {
         "Search the Danny Phantom wiki\n" +
-                "Usage `$Variables.PREFIX$name <search term>`\nExample: `$Variables.PREFIX$name Danny`"
+            "Usage `$Variables.PREFIX$name <search term>`\nExample: `$Variables.PREFIX$name Danny`"
     }
 }

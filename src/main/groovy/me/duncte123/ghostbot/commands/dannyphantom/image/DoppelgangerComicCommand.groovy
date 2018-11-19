@@ -46,12 +46,12 @@ class DoppelgangerComicCommand extends ReactionCommand {
     private final List<TumblrPost> pages = new ArrayList<>()
     // The numbers in this list represent the page numbers of where the chapters start
     private final int[] chapters = [
-            2,   // Chapter 1
-            29,  // Chapter 2
-            59,  // Chapter 3
-            82,  // Chapter 4
-            104, // Chapter 5
-            127, // Chapter 6
+        2,   // Chapter 1
+        29,  // Chapter 2
+        59,  // Chapter 3
+        82,  // Chapter 4
+        104, // Chapter 5
+        127, // Chapter 6
     ]
 
     DoppelgangerComicCommand(CommandManager.ReactionListenerRegistry registry) {
@@ -97,11 +97,11 @@ class DoppelgangerComicCommand extends ReactionCommand {
         AtomicInteger pa = new AtomicInteger(page)
 
         sendMsg(event,
-                new MessageBuilder()
-                        .append('Use the emotes at the bottom to navigate through pages, use the ❌ emote when you are done reading.\n')
-                        .append('The controls have a timeout of 30 minutes')
-                        .setEmbed(getEmbed(pa.get()))
-                        .build()) {
+            new MessageBuilder()
+                .append('Use the emotes at the bottom to navigate through pages, use the ❌ emote when you are done reading.\n')
+                .append('The controls have a timeout of 30 minutes')
+                .setEmbed(getEmbed(pa.get()))
+                .build()) {
             this.addReactions(it, LEFT_RIGHT_CANCEL, newLongSet(event.author.idLong), 30, TimeUnit.MINUTES, { index ->
 
                 if (index >= 2) { //cancel button or other error
@@ -122,7 +122,7 @@ class DoppelgangerComicCommand extends ReactionCommand {
     @Override
     String getHelp() {
         'Read the doppelganger comic within discord (comic website: <http://doppelgangercomic.tumblr.com/>)\n' +
-                "Usage: `gb.$name [page:number/chapter:number]`"
+            "Usage: `gb.$name [page:number/chapter:number]`"
     }
 
     @Override
@@ -145,23 +145,23 @@ class DoppelgangerComicCommand extends ReactionCommand {
         def post = pages[page]
 
         return EmbedUtils.defaultEmbed()
-                .setAuthor('DOPPELGÄNGER', post.post_url, PROFILE_PICTURE)
-                .setTitle('Link to post', post.post_url)
-                .setDescription(QuotesCommand.parseText(post.caption))
-                .setThumbnail(PROFILE_PICTURE)
-                .setImage(post.photos[0].original_size.url)
-                .setTimestamp(null)
-                .setFooter("Page: ${page + 1}/${pages.size()}", Variables.FOOTER_ICON)
-                .build()
+            .setAuthor('DOPPELGÄNGER', post.post_url, PROFILE_PICTURE)
+            .setTitle('Link to post', post.post_url)
+            .setDescription(QuotesCommand.parseText(post.caption))
+            .setThumbnail(PROFILE_PICTURE)
+            .setImage(post.photos[0].original_size.url)
+            .setTimestamp(null)
+            .setFooter("Page: ${page + 1}/${pages.size()}", Variables.FOOTER_ICON)
+            .build()
     }
 
     private void loadPages() {
         logger.info('Loading doppelganger pages')
 
         List<TumblrPost> posts = TumblrUtils.getInstance()
-                .getGson().fromJson(
-                new File('doppelganger.json').text,
-                new TypeToken<List<TumblrPost>>() {}.getType()
+            .getGson().fromJson(
+            new File('doppelganger.json').text,
+            new TypeToken<List<TumblrPost>>() {}.getType()
         )
 
         pages.addAll(posts)

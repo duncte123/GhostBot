@@ -20,12 +20,7 @@ package me.duncte123.ghostbot.objects.entities.impl.slack
 
 import com.ullink.slack.simpleslackapi.SlackSession
 import com.ullink.slack.simpleslackapi.events.SlackMessagePosted
-import me.duncte123.ghostbot.objects.entities.GhostBotApi
-import me.duncte123.ghostbot.objects.entities.GhostBotChannel
-import me.duncte123.ghostbot.objects.entities.GhostBotGuild
-import me.duncte123.ghostbot.objects.entities.GhostBotMessage
-import me.duncte123.ghostbot.objects.entities.GhostBotMessageEvent
-import me.duncte123.ghostbot.objects.entities.GhostBotUser
+import me.duncte123.ghostbot.objects.entities.*
 
 class SlackMessageEvent implements GhostBotMessageEvent<SlackMessagePosted> {
 
