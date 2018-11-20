@@ -45,7 +45,7 @@ class GhostBotSlack {
             def tokens = it.getJSONArray('data')
 
             for (def i = sessions.size(); i < tokens.length(); i++) {
-                def json = token[i] as JSONObject
+                def json = tokens[i] as JSONObject
 
                 def session = SlackSessionFactory
                     .getSlackSessionBuilder(json.getString('bot_access_token'))
