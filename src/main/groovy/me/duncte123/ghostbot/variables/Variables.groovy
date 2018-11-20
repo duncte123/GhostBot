@@ -22,15 +22,15 @@ import me.duncte123.ghostbot.utils.SpoopyUtils
 
 class Variables {
 
-    public static final String PREFIX = SpoopyUtils.config.discord.prefix
-    public static final String OTHER_PREFIX = 'gb!'
-    public static final long OWNER_ID = 191231307290771456L
-    public static final String VERSION = '@ghostBotVersion@'
-    public static final String FOOTER_ICON = 'https://cdn.discordapp.com/emojis/394148311835344896.png'
-    public static final int EMBED_COLOR = 0x6ffe32
-    public static final String EMBED_COLOR_SLACK = '#6ffe32'
-    public static final String GHOSTBOT_GUILD = 'https://discord.gg/NKM9Xtk'
-    public static final String GHOSTBOT_INVITE = 'https://discordapp.com/oauth2/authorize?client_id=397297702150602752&scope=bot&permissions=36817984'
-    public static final String GHOSTBOT_INVITE_SLACK = 'https://slack.com/oauth/authorize?client_id=482311728258.482143316020&scope=bot,channels:history,chat:write:bot,emoji:read,links:write,team:read,users:read'
+    static final String PREFIX = SpoopyUtils.config.discord.prefix
+    static final String OTHER_PREFIX = 'gb!'
+    static final long OWNER_ID = 191231307290771456L
+    static final String VERSION = '@ghostBotVersion@'
+    static final String FOOTER_ICON = 'https://cdn.discordapp.com/emojis/394148311835344896.png'
+    static final int EMBED_COLOR = 0x6ffe32
+    static final String EMBED_COLOR_SLACK = '#6ffe32'
+    static final String GHOSTBOT_GUILD = 'https://discord.gg/NKM9Xtk'
+    static final String GHOSTBOT_INVITE = 'https://discordapp.com/oauth2/authorize?client_id=397297702150602752&scope=bot&permissions=36817984'
+    static final String GHOSTBOT_INVITE_SLACK = 'https://slack.com/oauth/authorize?client_id=482311728258.482143316020&scope=bot'
 
 }

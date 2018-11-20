@@ -39,7 +39,7 @@ import javax.annotation.Nonnull
  */
 class LavalinkManager {
 
-    public static final LavalinkManager ins = new LavalinkManager()
+    static final LavalinkManager ins = new LavalinkManager()
     private JdaLavalink lavalink = null
 
     private LavalinkManager() {}

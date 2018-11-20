@@ -48,7 +48,7 @@ import java.util.concurrent.TimeUnit
 import static me.duncte123.botcommons.web.WebUtils.EncodingType.APPLICATION_JSON
 
 class BotListener extends ListenerAdapter {
-    public static final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor()
+    static final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor()
     private final Logger logger = LoggerFactory.getLogger(BotListener.class)
 
     private final GhostBotSlack slack

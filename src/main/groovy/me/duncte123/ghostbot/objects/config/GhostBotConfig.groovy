@@ -22,33 +22,33 @@ import com.google.gson.JsonElement
 
 class GhostBotConfig {
 
-    public Discord discord
-    public String api_token
-    public Lavalink lavalink
-    public Api api
-    public boolean running_local
-    public boolean shouldPostStats
-    public JsonElement botLists
+    Discord discord
+    String api_token
+    Lavalink lavalink
+    Api api
+    boolean running_local
+    boolean shouldPostStats
+    JsonElement botLists
 
     static class Discord {
-        public String prefix
-        public int totalShards
-        public String token
+        String prefix
+        int totalShards
+        String token
     }
 
     static class Lavalink {
-        public Node[] nodes
-        public boolean enable
+        Node[] nodes
+        boolean enable
 
         static class Node {
-            public String wsUrl
-            public String pass
+            String wsUrl
+            String pass
         }
     }
 
     static class Api {
-        public String google
-        public String tumblr
+        String google
+        String tumblr
     }
 
 }

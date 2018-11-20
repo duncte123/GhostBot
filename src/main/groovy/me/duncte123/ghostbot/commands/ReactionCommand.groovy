@@ -38,10 +38,10 @@ import java.util.function.Consumer
  */
 abstract class ReactionCommand extends Command {
 
-    public final static String LEFT_ARROW = '\u2B05'
-    public final static String RIGHT_ARROW = '\u27A1'
-    public final static String CANCEL = '\u274C'
-    public final static List<String> LEFT_RIGHT_CANCEL = [LEFT_ARROW, RIGHT_ARROW, CANCEL]
+    final static String LEFT_ARROW = '\u2B05'
+    final static String RIGHT_ARROW = '\u27A1'
+    final static String CANCEL = '\u274C'
+    final static List<String> LEFT_RIGHT_CANCEL = [LEFT_ARROW, RIGHT_ARROW, CANCEL]
 
 
     private final CommandManager.ReactionListenerRegistry listenerRegistry

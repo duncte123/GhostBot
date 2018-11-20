@@ -20,68 +20,68 @@ package me.duncte123.ghostbot.objects.googlesearch
 
 class GoogleSearchResults {
 
-    public String kind
-    public UrlField url
-    public QueriesField queries
-    public ContextField context
-    public SearchInformationField searchInformation
-    public List<SearchItem> items
+    String kind
+    UrlField url
+    QueriesField queries
+    ContextField context
+    SearchInformationField searchInformation
+    List<SearchItem> items
 
     static class ContextField {
-        public String title
+        String title
     }
 
     static class ImageData {
-        public String contextLink
-        public int height
-        public int width
-        public int byteSize
-        public String thumbnailLink
-        public int thumbnailHeight
-        public int thumbnailWidth
+        String contextLink
+        int height
+        int width
+        int byteSize
+        String thumbnailLink
+        int thumbnailHeight
+        int thumbnailWidth
     }
 
     static class InnerQueries {
-        public String title
-        public String totalResults
-        public String searchTerms
-        public int count
-        public int startIndex
-        public String inputEncoding
-        public String outputEncoding
-        public String safe
-        public String cx
+        String title
+        String totalResults
+        String searchTerms
+        int count
+        int startIndex
+        String inputEncoding
+        String outputEncoding
+        String safe
+        String cx
     }
 
     static class QueriesField {
-        public List<InnerQueries> request
-        public List<InnerQueries> nextPage
+        List<InnerQueries> request
+        List<InnerQueries> nextPage
 
     }
 
     static class SearchInformationField {
-        public double searchTime
-        public String formattedSearchTime
-        public String totalResults
-        public String formattedTotalResults
+        double searchTime
+        String formattedSearchTime
+        String totalResults
+        String formattedTotalResults
     }
 
     static class SearchItem {
-        public String kind
-        public String title
-        public String htmlTitle
-        public String link
-        public String displayLink
-        public String snippet
-        public String htmlSnippet
-        public String mime
-        public ImageData image
+        String kind
+        String title
+        String htmlTitle
+        String link
+        String displayLink
+        String snippet
+        String htmlSnippet
+        String mime
+        ImageData image
 
     }
 
     static class UrlField {
-        public String type
-        public String template
+        String type
+        String template
     }
 
 }

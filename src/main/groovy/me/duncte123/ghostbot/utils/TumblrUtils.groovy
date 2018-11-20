@@ -35,7 +35,7 @@ class TumblrUtils {
         "&api_key=$SpoopyUtils.config.api.tumblr"
     final Gson gson = new Gson()
 
-    /*public void fetcheAllFromAccount(String domain, @NotNull Consumer<List<TumblrPost>> cb) {
+    /*void fetcheAllFromAccount(String domain, @NotNull Consumer<List<TumblrPost>> cb) {
         fetchAllFromAccount(domain, null, cb);
     }*/
 
@@ -64,7 +64,7 @@ class TumblrUtils {
         }
     }
 
-    /*public void fetchSinglePost(String domain, long id, @NotNull Consumer<TumblrPost> cb) {
+    /*void fetchSinglePost(String domain, long id, @NotNull Consumer<TumblrPost> cb) {
         fetchSinglePost(domain, id, cb, null);
     }*/
 
