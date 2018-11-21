@@ -40,7 +40,7 @@ class GhostBotSlack {
 
     private void fetchSessions() {
         String token = SpoopyUtils.config.api_token
-        WebUtils.ins.getJSONObject("https://duncte123-apis-lumen.local/internal/slacktokens?token=$token").async {
+        WebUtils.ins.getJSONObject("https://apis.duncte123.me/internal/slacktokens?token=$token").async {
 
             def tokens = it.getJSONArray('data')
 
