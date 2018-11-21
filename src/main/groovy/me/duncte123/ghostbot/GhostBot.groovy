@@ -39,7 +39,7 @@ class GhostBot {
 
     static GhostBot instance
     final ShardManager shardManager
-    private GhostBotSlack slack
+    final GhostBotSlack slack
 
     GhostBot() {
         def logger = LoggerFactory.getLogger(GhostBot.class)

@@ -168,17 +168,16 @@ class BotListener extends ListenerAdapter {
                 def jsonString = new JSONObject(SpoopyUtils.config.botLists.toString())
                     .put('server_count', manager.guildCache.size())
                     .put('shard_count', manager.shardsTotal)
-                    .put('bot_id', '397297702150602752')
+                    .put('bot_id', 397297702150602752L)
                     .toString()
 
                 WebUtils.ins.prepareRaw(
                     WebUtils.defaultRequest()
                         .url('https://botblock.org/api/count')
-                        .post(RequestBody.create(APPLICATION_JSON.toMediaType(), jsonString))
+                        .post(RequestBody.create(null, jsonString))
+                        .addHeader('Content-Type', APPLICATION_JSON.type)
                         .build(),
-                    {
-                        new JSONObject(new JSONTokener(it.body().byteStream()))
-                    }
+                    { it.body().string() }
                 )
                     .async(
                     {

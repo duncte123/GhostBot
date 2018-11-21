@@ -41,7 +41,7 @@ abstract class ReactionCommand extends Command {
     final static String LEFT_ARROW = '\u2B05'
     final static String RIGHT_ARROW = '\u27A1'
     final static String CANCEL = '\u274C'
-    final static List<String> LEFT_RIGHT_CANCEL = [LEFT_ARROW, RIGHT_ARROW, CANCEL]
+    public final static List<String> LEFT_RIGHT_CANCEL = [LEFT_ARROW, RIGHT_ARROW, CANCEL]
 
 
     private final CommandManager.ReactionListenerRegistry listenerRegistry
