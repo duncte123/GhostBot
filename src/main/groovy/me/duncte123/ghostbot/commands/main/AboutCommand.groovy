@@ -44,8 +44,8 @@ My invite link: [Click here]($Variables.GHOSTBOT_INVITE)
 My prefixes: `$Variables.PREFIX` and `$Variables.OTHER_PREFIX`
 My home: [$Variables.GHOSTBOT_GUILD]($Variables.GHOSTBOT_GUILD)
 My version: `$Variables.VERSION`
-The amount of servers Discord that I am in: $guildCountDiscord
-The amount of servers Slack that I am in: $guildCountSlack"""
+The amount of Discord servers that I am in: $guildCountDiscord
+The amount of Slack servers that I am in: $guildCountSlack"""
         ))
 
     }
