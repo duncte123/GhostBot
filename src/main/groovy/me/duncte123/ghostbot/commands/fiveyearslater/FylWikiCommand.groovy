@@ -19,25 +19,23 @@
 package me.duncte123.ghostbot.commands.fiveyearslater
 
 import me.duncte123.ghostbot.commands.dannyphantom.wiki.WikiBaseCommand
+import me.duncte123.ghostbot.objects.CommandEvent
 import me.duncte123.ghostbot.utils.WikiHolder
 import me.duncte123.ghostbot.variables.Variables
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
-
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 
 class FylWikiCommand extends WikiBaseCommand {
 
     private final WikiHolder FYL_WIKI_HOLDER = new WikiHolder('https://5yl.wikia.com')
 
     @Override
-    void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
+    void execute(CommandEvent event) {
 
-        if (args.length == 0) {
-            sendMsg(event, "Insufficient arguments, Correct usage: `$Variables.PREFIX$name <search term>`")
+        if (event.args.length == 0) {
+            sendMessage(event, "Insufficient arguments, Correct usage: `$Variables.PREFIX$name <search term>`")
             return
         }
 
-        handleWikiSearch(FYL_WIKI_HOLDER, args.join(' '), event)
+        handleWikiSearch(FYL_WIKI_HOLDER, event.args.join(' '), event.event)
 
     }
 

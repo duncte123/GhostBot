@@ -18,18 +18,19 @@
 
 package me.duncte123.ghostbot.commands.dannyphantom.audio
 
+import me.duncte123.ghostbot.objects.CommandEvent
 import me.duncte123.ghostbot.utils.AudioUtils
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 
 import java.util.concurrent.ThreadLocalRandom
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
-
 class GoingGhostCommand extends AudioBaseCommand {
     @Override
-    void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
+    void execute(CommandEvent event) {
 
-        if (!preAudioChecks(event)) {
+        def jdaEvent = event.event.originalEvent as GuildMessageReceivedEvent
+
+        if (!preAudioChecks(jdaEvent)) {
             return
         }
 
@@ -40,11 +41,9 @@ class GoingGhostCommand extends AudioBaseCommand {
             selectedTrack = 'extra/its going ghost.mp3'
         }
 
-        sendMsg(event, "Selected track: _${selectedTrack.replace('_', '\\_')}_")
-        AudioUtils.instance.loadAndPlay(getMusicManager(event.guild), event.channel,
+        sendMessage(event, "Selected track: _${selectedTrack.replace('_', '\\_')}_")
+        AudioUtils.instance.loadAndPlay(getMusicManager(jdaEvent.guild), jdaEvent.channel,
             audioPath + selectedTrack, false)
-
-
     }
 
     @Override

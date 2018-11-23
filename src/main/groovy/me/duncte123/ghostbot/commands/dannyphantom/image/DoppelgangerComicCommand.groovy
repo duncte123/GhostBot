@@ -24,6 +24,7 @@ import me.duncte123.ghostbot.CommandManager
 import me.duncte123.ghostbot.commands.ReactionCommand
 import me.duncte123.ghostbot.commands.dannyphantom.text.QuotesCommand
 import me.duncte123.ghostbot.objects.CommandCategory
+import me.duncte123.ghostbot.objects.CommandEvent
 import me.duncte123.ghostbot.objects.tumblr.TumblrPost
 import me.duncte123.ghostbot.utils.TumblrUtils
 import me.duncte123.ghostbot.variables.Variables
@@ -60,10 +61,14 @@ class DoppelgangerComicCommand extends ReactionCommand {
     }
 
     @Override
-    void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
+    void execute(CommandEvent event) {
+
+        def args = event.args
+        def jdaEvent = event.event.originalEvent as GuildMessageReceivedEvent
+        def author = jdaEvent.author
 
         if (pages.empty) {
-            sendMsg(event, 'Something went wrong with loading the pages, please notify duncte123#1245')
+            sendMessage(event, 'Something went wrong with loading the pages, please notify duncte123#1245')
             return
         }
 
@@ -79,7 +84,7 @@ class DoppelgangerComicCommand extends ReactionCommand {
                 try {
                     page = chapters[getNumberFromArg(arg.substring(CHAPTER_SELECTOR.length())) - 1]
                 } catch (IndexOutOfBoundsException ignored) {
-                    sendMsg(event, 'That chapter is not known')
+                    sendMessage(event, 'That chapter is not known')
                     return
                 }
             }
@@ -90,19 +95,19 @@ class DoppelgangerComicCommand extends ReactionCommand {
         }
 
         if (page > pages.size()) {
-            sendMsg(event, "I could not find a page with number ${page + 1}")
+            sendMessage(event, "I could not find a page with number ${page + 1}")
             return
         }
 
         AtomicInteger pa = new AtomicInteger(page)
 
-        sendMsg(event,
+        sendMsg(jdaEvent,
             new MessageBuilder()
                 .append('Use the emotes at the bottom to navigate through pages, use the ❌ emote when you are done reading.\n')
                 .append('The controls have a timeout of 30 minutes')
                 .setEmbed(getEmbed(pa.get()))
                 .build()) {
-            this.addReactions(it, LEFT_RIGHT_CANCEL, newLongSet(event.author.idLong), 30, TimeUnit.MINUTES, { index ->
+            this.addReactions(it, LEFT_RIGHT_CANCEL, newLongSet(author.idLong), 30, TimeUnit.MINUTES, { index ->
 
                 if (index >= 2) { //cancel button or other error
                     stopReactions(it)

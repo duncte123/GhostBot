@@ -32,7 +32,6 @@ import org.slf4j.LoggerFactory
 import java.util.concurrent.ThreadLocalRandom
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 
 abstract class Command extends CommandHelpers {
 
@@ -40,14 +39,7 @@ abstract class Command extends CommandHelpers {
     protected String audioPath = ''
     private def audioFiles = []
 
-    @Deprecated
-    void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
-        // For removal
-    }
-
-    void execute(CommandEvent event) {
-        execute(event.invoke, event.args, event.event.originalEvent as GuildMessageReceivedEvent)
-    }
+    abstract void execute(CommandEvent event);
 
     abstract String getName()
 
@@ -89,13 +81,15 @@ abstract class Command extends CommandHelpers {
         return audioFiles[ThreadLocalRandom.current().nextInt(audioFiles.size())]
     }
 
-    void doAudioStuff(GuildMessageReceivedEvent event) {
+    void doAudioStuff(CommandEvent event) {
+        def jdaEvent = event.event.originalEvent as GuildMessageReceivedEvent
+
         if (category != CommandCategory.AUDIO) return
 
-        if (preAudioChecks(event)) {
+        if (preAudioChecks(jdaEvent)) {
             def selectedTrack = randomTrack
-            sendMsg(event, "Selected track: _${selectedTrack.replaceAll("_", "\\_")}_")
-            AudioUtils.instance.loadAndPlay(getMusicManager(event.guild), event.channel,
+            sendMessage(event, "Selected track: _${selectedTrack.replaceAll("_", "\\_")}_")
+            AudioUtils.instance.loadAndPlay(getMusicManager(jdaEvent.guild), jdaEvent.channel,
                 audioPath + selectedTrack, false)
         }
 

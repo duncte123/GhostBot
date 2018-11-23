@@ -47,7 +47,7 @@ dependencies {
     //My little utils
     implementation group: 'com.github.duncte123', name: 'botCommons', version: '8c9ad29'
     //JDA
-    implementation(group: 'net.dv8tion', name: 'JDA', version: '3.8.1_446') {
+    implementation(group: 'net.dv8tion', name: 'JDA', version: '3.8.1_447') {
         exclude module: 'opus-java'
     }
     //LavaPlayer/Lavalink

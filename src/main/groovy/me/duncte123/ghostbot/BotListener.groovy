@@ -37,7 +37,6 @@ import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent
 import net.dv8tion.jda.core.hooks.ListenerAdapter
 import okhttp3.RequestBody
 import org.json.JSONObject
-import org.json.JSONTokener
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 

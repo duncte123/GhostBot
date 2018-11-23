@@ -20,8 +20,8 @@ package me.duncte123.ghostbot.commands.dannyphantom.audio
 
 import me.duncte123.ghostbot.objects.Command
 import me.duncte123.ghostbot.objects.CommandCategory
+import me.duncte123.ghostbot.objects.CommandEvent
 import me.duncte123.ghostbot.utils.AudioUtils
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 
 abstract class AudioBaseCommand extends Command {
 
@@ -34,7 +34,7 @@ abstract class AudioBaseCommand extends Command {
     }
 
     @Override
-    void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
+    void execute(CommandEvent event) {
         doAudioStuff(event)
     }
 

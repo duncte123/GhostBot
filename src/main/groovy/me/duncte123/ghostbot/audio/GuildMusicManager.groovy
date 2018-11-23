@@ -55,7 +55,7 @@ class GuildMusicManager {
     /**
      * This will get our sendings handler
      *
-     * @return The {@link AudioPlayerSenderHandler thing} that sends our audio
+     * @return The{@link AudioPlayerSenderHandler thing} that sends our audio
      */
     AudioPlayerSenderHandler getSendHandler() {
         return sendHandler

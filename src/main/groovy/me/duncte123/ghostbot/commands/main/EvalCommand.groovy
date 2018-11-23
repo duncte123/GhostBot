@@ -20,7 +20,9 @@ package me.duncte123.ghostbot.commands.main
 
 import me.duncte123.ghostbot.objects.Command
 import me.duncte123.ghostbot.objects.CommandCategory
+import me.duncte123.ghostbot.objects.CommandEvent
 import me.duncte123.ghostbot.variables.Variables
+import net.dv8tion.jda.core.entities.Message
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 
 import java.util.concurrent.ExecutorService
@@ -50,45 +52,46 @@ class EvalCommand extends Command {
     ]
 
     @Override
-    void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
+    void execute(CommandEvent event) {
 
-        if (event.author.idLong != Variables.OWNER_ID) {
+        if (event.author.get().idLong != Variables.OWNER_ID) {
             return
         }
 
-        if (args.length == 0) {
-            sendSuccess(event.message)
+        def message = event.message.get() as Message
+
+        if (event.args.length == 0) {
+            sendSuccess(message)
             return
         }
 
         engine.setVariable('event', event)
-        engine.setVariable('jda', event.JDA)
-        engine.setVariable('channel', event.channel)
-        engine.setVariable('member', event.member)
-        engine.setVariable('author', event.author)
-        engine.setVariable('guild', event.guild)
-        engine.setVariable('args', args)
+        engine.setVariable('jda', event.api.get())
+        engine.setVariable('channel', event.channel.get())
+        engine.setVariable('author', event.author.get())
+        engine.setVariable('guild', event.guild.get())
+        engine.setVariable('args', event.args)
 
         final def script = "import ${packageImports.join('.*\nimport ')}.*\n\n" +
-            event.message.contentRaw.split('\\s+', 2)[1]
+            message.contentRaw.split('\\s+', 2)[1]
 
         try {
             service.submit {
                 def result = engine.evaluate(script)
 
                 if (result != null) {
-                    sendMsg(event, result.toString())
+                    sendMsg(event.event.originalEvent as GuildMessageReceivedEvent, result.toString())
                 }
 
-                sendSuccess(event.message)
+                sendSuccess(message)
             }.get(1, TimeUnit.MINUTES)
 
 
         } catch (Exception e) {
             try {
-                sendErrorWithMessage(event.message, e.cause.toString())
+                sendErrorWithMessage(message, e.cause.toString())
             } catch (NullPointerException ignored) {
-                sendErrorWithMessage(event.message, e.toString())
+                sendErrorWithMessage(message, e.toString())
             }
 
         }

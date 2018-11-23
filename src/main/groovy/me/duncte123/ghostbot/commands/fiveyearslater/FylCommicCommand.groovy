@@ -22,6 +22,7 @@ import com.google.gson.Gson
 import me.duncte123.botcommons.messaging.EmbedUtils
 import me.duncte123.ghostbot.CommandManager
 import me.duncte123.ghostbot.commands.ReactionCommand
+import me.duncte123.ghostbot.objects.CommandEvent
 import me.duncte123.ghostbot.objects.fyl.FylChapter
 import me.duncte123.ghostbot.objects.fyl.FylComic
 import me.duncte123.ghostbot.variables.Variables
@@ -49,7 +50,11 @@ class FylCommicCommand extends ReactionCommand {
     }
 
     @Override
-    void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
+    void execute(CommandEvent event) {
+
+        def args = event.args
+        def jdaEvent = event.event.originalEvent as GuildMessageReceivedEvent
+        def author = jdaEvent.author
 
         def page = 0
         def chapter = 0
@@ -72,14 +77,14 @@ class FylCommicCommand extends ReactionCommand {
         def chapterList = comic.chapters
 
         if (chapter >= chapterList.size()) {
-            sendMsg(event, "Chapter ${chapter + 1} is not known")
+            sendMessage(event, "Chapter ${chapter + 1} is not known")
             return
         }
 
         def fylChapter = chapterList.get(chapter)
 
         if (page > fylChapter.pages) {
-            sendMsg(event, "Page  $page is not known in that chapter")
+            sendMessage(event, "Page  $page is not known in that chapter")
             return
         }
 
@@ -87,14 +92,14 @@ class FylCommicCommand extends ReactionCommand {
         def chapterIndex = new AtomicInteger(chapter)
         def chapterRef = new AtomicReference<FylChapter>(fylChapter)
 
-        sendMsg(event,
+        sendMsg(jdaEvent,
             new MessageBuilder()
                 .append('Use the emotes at the bottom to navigate through pages, use the ❌ emote when you are done reading.\n')
                 .append('The controls have a timeout of 30 minutes')
                 .setEmbed(getEmbed(chapterIndex.get(), pageIndex.get()))
                 .build(), { m ->
             this.addReactions(m, LEFT_RIGHT_CANCEL,
-                newLongSet(event.author.idLong), 30, TimeUnit.MINUTES, { index ->
+                newLongSet(author.idLong), 30, TimeUnit.MINUTES, { index ->
 
                 if (index >= 2) { //cancel button or other error
                     stopReactions(m, false)

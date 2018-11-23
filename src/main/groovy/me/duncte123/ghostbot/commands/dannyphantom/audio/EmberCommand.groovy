@@ -20,20 +20,22 @@ package me.duncte123.ghostbot.commands.dannyphantom.audio
 
 import me.duncte123.ghostbot.objects.Command
 import me.duncte123.ghostbot.objects.CommandCategory
+import me.duncte123.ghostbot.objects.CommandEvent
 import me.duncte123.ghostbot.utils.AudioUtils
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
-
 class EmberCommand extends Command {
     @Override
-    void execute(String invoke, String[] args, GuildMessageReceivedEvent event) {
-        if (!preAudioChecks(event)) {
+    void execute(CommandEvent event) {
+
+        def jdaEvent = event.event.originalEvent as GuildMessageReceivedEvent
+
+        if (!preAudioChecks(jdaEvent)) {
             return
         }
 
-        sendMsg(event, 'Selected track: _Ember McLain - Remember_')
-        AudioUtils.instance.loadAndPlay(getMusicManager(event.guild), event.channel, 'wBMOc24_aIw', false)
+        sendMessage(event, 'Selected track: _Ember McLain - Remember_')
+        AudioUtils.instance.loadAndPlay(getMusicManager(jdaEvent.guild), jdaEvent.channel, 'wBMOc24_aIw', false)
     }
 
     @Override
