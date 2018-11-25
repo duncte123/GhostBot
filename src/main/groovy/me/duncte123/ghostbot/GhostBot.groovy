@@ -34,14 +34,23 @@ import net.dv8tion.jda.core.utils.cache.CacheFlag
 import org.slf4j.LoggerFactory
 
 import java.time.Instant
+import java.util.concurrent.Executors
+import java.util.concurrent.ScheduledExecutorService
+import java.util.concurrent.TimeUnit
+import java.util.function.IntFunction
 
 class GhostBot {
 
+    private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor()
+    private final IntFunction<? extends Game> gameProvider = {
+        return Game.watching("${Variables.PREFIX}help | #GoGhostAgain (shard ${it + 1})")
+//        return Game.playing("GhostBot 2.0 | Now with popup blocker (shard ${it + 1})")
+    }
     static GhostBot instance
     final ShardManager shardManager
     final GhostBotSlack slack
 
-    GhostBot() {
+    private GhostBot() {
         def logger = LoggerFactory.getLogger(GhostBot.class)
         this.slack = new GhostBotSlack()
 
@@ -62,8 +71,7 @@ class GhostBot {
         def builder = new DefaultShardManagerBuilder()
             .setShardsTotal(totalShards)
             .setToken(token)
-//                .setGame(Game.watching("${Variables.PREFIX}help | #GoGhostAgain"))
-            .setGame(Game.playing('GhostBot 2.0 | Now with popup blocker'))
+            .setGameProvider(this.gameProvider)
             .setDisabledCacheFlags(EnumSet.of(CacheFlag.EMOTE, CacheFlag.GAME))
             .addEventListeners(botListener, filterLogs)
 
@@ -73,6 +81,7 @@ class GhostBot {
         }
 
         shardManager = builder.build()
+        initGameLoop()
     }
 
     static void main(String[] args) {
@@ -81,5 +90,11 @@ class GhostBot {
 
     JDA getShard(int shardId) {
         return shardManager.getShardById(shardId)
+    }
+
+    private void initGameLoop() {
+        service.scheduleAtFixedRate({
+            this.shardManager.setGameProvider(this.gameProvider)
+        }, 1, 1, TimeUnit.DAYS)
     }
 }
