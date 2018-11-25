@@ -80,7 +80,7 @@ class OtherGhostCommands extends ImageBase {
                 sendFromKeywords(event, 'Sidney Poindexter')
                 break
             case 'wes':
-                sendFromKeywords(event, 'Wes Weston')
+                sendFromKeywords(event, 'Wes Weston Danny Phantom')
                 break
         }
 
