@@ -19,6 +19,8 @@
 package me.duncte123.ghostbot
 
 import fredboat.audio.player.LavalinkManager
+import gnu.trove.list.TLongList
+import gnu.trove.list.array.TLongArrayList
 import me.duncte123.botcommons.web.WebUtils
 import me.duncte123.ghostbot.audio.GuildMusicManager
 import me.duncte123.ghostbot.utils.SpoopyUtils
@@ -49,6 +51,19 @@ import static me.duncte123.botcommons.web.WebUtils.EncodingType.APPLICATION_JSON
 class BotListener extends ListenerAdapter {
     static final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor()
     private final Logger logger = LoggerFactory.getLogger(BotListener.class)
+    private final TLongList botLists = new TLongArrayList((long[])[
+        110373943822540800L, // Dbots
+        264445053596991498L, // Dbl
+        374071874222686211L, // Bots for discord
+        112319935652298752L, // Carbon
+        439866052684283905L, // Discord Boats
+        387812458661937152L, // Botlist.space
+        483344253963993113L, // AutomaCord
+        454933217666007052L, // Divine Discord Bot List
+        446682534135201793L, // Discords best bots
+        477792727577395210L, // discordbotlist.xyz
+        475571221946171393L, // bots.discordlist.app
+    ])
 
     private final GhostBotSlack slack
 
@@ -98,7 +113,7 @@ class BotListener extends ListenerAdapter {
     void onGuildJoin(GuildJoinEvent event) {
         //if 70 of a guild is bots, we'll leave it
         double[] botToUserRatio = SpoopyUtils.getBotRatio(event.guild)
-        if (botToUserRatio[1] > 80) {
+        if (botToUserRatio[1] > 80 && !botLists.contains(event.guild.idLong)) {
             SpoopyUtils.getPublicChannel(event.guild).sendMessage(String.format('Hey %s, %s%s of this server are bots (%s is the total btw). I\'m outta here.',
                 event.guild.owner.asMention,
                 botToUserRatio[1],
