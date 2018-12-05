@@ -9,3 +9,8 @@ a picture used in the bot please contact me to remove it.
 
 [invite_link]: https://bots.discord.pw/bots/397297702150602752
 [DP_link]: http://dannyphantom.wikia.com/wiki/Danny_Phantom_Wiki
+
+### Widgets
+<a href="https://discordbots.org/bot/397297702150602752" >
+  <img src="https://discordbots.org/api/widget/397297702150602752.svg" alt="GhostBot" />
+</a>
