@@ -83,6 +83,7 @@ class CommandManager {
 
         this.addCommand(new HelpCommand())
         this.addCommand(new AboutCommand())
+        this.addCommand(new VoteCommand())
 
         this.addCommand(new ReloadAudioCommand())
         this.addCommand(new EvalCommand())
