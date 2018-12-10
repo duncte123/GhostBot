@@ -40,6 +40,7 @@ I am manly themed around Danny Phantom but other spooky stuff that you have for 
 If you want to stay in contact with my developer you can join [this server]($Variables.GHOSTBOT_GUILD).
 
 **Extra information:**
+My twitter: [Click here](https://twitter.com/GhostBotDiscord)
 My invite link: [Click here]($Variables.GHOSTBOT_INVITE)
 My prefixes: `$Variables.PREFIX` and `$Variables.OTHER_PREFIX`
 My home: [$Variables.GHOSTBOT_GUILD]($Variables.GHOSTBOT_GUILD)
