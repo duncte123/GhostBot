@@ -56,10 +56,10 @@ This bot will fill your voice channel with ghostly sounds and your text channels
 The best part of this bot is that it allows you to read fan comics within discord, 
 the curent comics that you can read in discord with this bot are [5 years later](https://www.kurothewebsite.com/5yearslater) and [Doppelgänger](http://doppelgangercomic.tumblr.com/)
 
-Current Command list:
+Current Command list (might be incomplete):
 ```yaml
     gb.wail: Gives you a nice ghostly wail
-    gb.fuitloop: You're one crazed up fruitloop
+    gb.fruitloop: You're one crazed up fruitloop
     
     gb.image: Gives you a random Danny Phantom related image from google
     gb.gif: Gives you a random Danny Phantom gif
