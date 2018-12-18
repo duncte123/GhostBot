@@ -137,7 +137,7 @@ class DPArtistsCommand extends ImageBase {
     }
 
     private void extractPictureFromTumblr(String username, @NotNull Consumer<TumblrPost> cb) {
-        def url = "https://api.tumblr.com/v2/blog/${username}.tumblr.com/posts/photo?api_key=" +
+        def url = "https://api.tumblr.com/v2/blog/${username}.tumblr.com/posts?api_key=" +
             "${SpoopyUtils.config.api.tumblr}&type=photo&limit=1"
 
         WebUtils.ins.getJSONObject(url).async {
