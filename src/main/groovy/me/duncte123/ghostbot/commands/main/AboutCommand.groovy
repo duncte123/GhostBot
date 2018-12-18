@@ -31,7 +31,7 @@ class AboutCommand extends Command {
 
         def devName = '<@191231307290771456> (duncte123#1245)'
         def guildCountDiscord = GhostBot.instance.shardManager.guildCache.size()
-        def guildCountSlack = GhostBot.instance.slack.sessions.size()
+        def guildCountSlack = '(Disabled)'
 
         sendMessage(event.event, EmbedUtils.embedMessage(
             """\
