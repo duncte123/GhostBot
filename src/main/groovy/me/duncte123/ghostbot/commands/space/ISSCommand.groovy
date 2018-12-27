@@ -24,6 +24,8 @@ import me.duncte123.ghostbot.objects.Command
 import me.duncte123.ghostbot.objects.CommandCategory
 import me.duncte123.ghostbot.objects.CommandEvent
 
+import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed
+
 class ISSCommand extends Command {
     @Override
     void execute(CommandEvent event) {
@@ -38,7 +40,7 @@ class ISSCommand extends Command {
         def embed = EmbedUtils.embedField('International Space Station',
             "The position of the ISS is [`$latitude`, `$longitude`]($mapsUrl)")
 
-        sendMessage(event.event, embed)
+        sendEmbed(event.event, embed)
     }
 
     @Override
@@ -51,7 +53,4 @@ class ISSCommand extends Command {
     CommandCategory getCategory() {
         return CommandCategory.SPACE
     }
-
-    @Override
-    boolean isSlackCompatible() { true }
 }

@@ -31,6 +31,8 @@ import me.duncte123.ghostbot.variables.Variables
 
 import java.util.concurrent.ThreadLocalRandom
 
+import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed
+import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 import static me.duncte123.ghostbot.commands.dannyphantom.text.QuotesCommand.parseText
 
 class AuCommand extends Command {
@@ -52,12 +54,12 @@ class AuCommand extends Command {
 
         if (args.length == 1 && args[0] == 'reload' && event.author.get().idLong == Variables.OWNER_ID) {
             loadAus()
-            sendMessage(event, 'Reloading')
+            sendMsg(event, 'Reloading')
             return
         }
 
         if (allAus.isEmpty()) {
-            sendMessage(event, 'No AU\'s found, they are probably being reloaded')
+            sendMsg(event, 'No AU\'s found, they are probably being reloaded')
             return
         }
 
@@ -80,7 +82,7 @@ class AuCommand extends Command {
             .setFooter("#$tags", Variables.FOOTER_ICON)
             .setTimestamp(null)
 
-        sendMessage(event, eb)
+        sendEmbed(event, eb)
     }
 
     @Override
@@ -127,7 +129,4 @@ class AuCommand extends Command {
             logger.info("Loaded ${allAus.size()} aus")
         }
     }
-
-    @Override
-    boolean isSlackCompatible() { true }
 }

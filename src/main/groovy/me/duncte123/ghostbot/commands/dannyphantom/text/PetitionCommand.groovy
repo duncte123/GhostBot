@@ -24,6 +24,8 @@ import me.duncte123.ghostbot.objects.CommandEvent
 
 import java.util.concurrent.ThreadLocalRandom
 
+import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
+
 class PetitionCommand extends Command {
 
     private final String[] messages = [
@@ -46,7 +48,7 @@ class PetitionCommand extends Command {
         def message = messages[ThreadLocalRandom.current().nextInt(messages.length)]
         def formatted = String.format(message, 'http://bit.ly/dp-petition', '#GoGhostAgain')
 
-        sendMessage(event, formatted)
+        sendMsg(event.event, formatted)
     }
 
     @Override
@@ -59,7 +61,4 @@ class PetitionCommand extends Command {
     CommandCategory getCategory() {
         return CommandCategory.TEXT
     }
-
-    @Override
-    boolean isSlackCompatible() { true }
 }

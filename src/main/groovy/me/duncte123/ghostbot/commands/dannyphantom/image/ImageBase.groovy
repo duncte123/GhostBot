@@ -36,6 +36,9 @@ import org.slf4j.LoggerFactory
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Consumer
 
+import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed
+import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
+
 abstract class ImageBase extends Command {
 
     final Map<String, GoogleSearchResults> searchCache = new HashMap<>()
@@ -73,13 +76,13 @@ abstract class ImageBase extends Command {
 
     void sendMessageFromName(CommandEvent event, @NotNull ImageData i) {
         if (i.title == null || i.title.empty) {
-            sendMessage(event, "Nothing was found for the search query: `$i.title`")
+            sendMsg(event.event, "Nothing was found for the search query: `$i.title`")
             return
         }
 
         logger.debug("Image Link: '$i.url'")
 
-        sendMessage(event, EmbedUtils.defaultEmbed()
+        sendEmbed(event.event, EmbedUtils.defaultEmbed()
             .setTitle(i.title, i.website)
             .setImage(i.url))
     }
@@ -88,13 +91,13 @@ abstract class ImageBase extends Command {
         def arr = data.items
 
         if (arr == null || arr.empty) {
-            sendMessage(event, "Nothing was found for the search query: `$key`")
+            sendMsg(event.event, "Nothing was found for the search query: `$key`")
             return
         }
 
         def randomItem = arr.get(ThreadLocalRandom.current().nextInt(arr.size()))
 
-        sendMessage(event, EmbedUtils.defaultEmbed()
+        sendEmbed(event.event, EmbedUtils.defaultEmbed()
             .setTitle(randomItem.title, randomItem.image.contextLink)
             .setImage(randomItem.link))
     }

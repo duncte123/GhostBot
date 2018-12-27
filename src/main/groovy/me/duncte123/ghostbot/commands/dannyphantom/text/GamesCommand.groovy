@@ -24,6 +24,8 @@ import me.duncte123.ghostbot.objects.CommandEvent
 
 import java.util.concurrent.ThreadLocalRandom
 
+import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
+
 class GamesCommand extends Command {
 
     private final String[] games = [
@@ -46,7 +48,7 @@ class GamesCommand extends Command {
     void execute(CommandEvent event) {
         def game = games[ThreadLocalRandom.current().nextInt(games.length)]
 
-        sendMessage(event, "Here is a DP game: $game\n" +
+        sendMsg(event.event, "Here is a DP game: $game\n" +
             'The game will work best on an old browser like internet explorer because it has flash enabled')
     }
 
@@ -60,7 +62,4 @@ class GamesCommand extends Command {
     CommandCategory getCategory() {
         return CommandCategory.TEXT
     }
-
-    @Override
-    boolean isSlackCompatible() { true }
 }

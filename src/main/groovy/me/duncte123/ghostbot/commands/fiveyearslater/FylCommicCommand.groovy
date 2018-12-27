@@ -28,7 +28,6 @@ import me.duncte123.ghostbot.objects.fyl.FylComic
 import me.duncte123.ghostbot.variables.Variables
 import net.dv8tion.jda.core.MessageBuilder
 import net.dv8tion.jda.core.entities.MessageEmbed
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
@@ -53,7 +52,7 @@ class FylCommicCommand extends ReactionCommand {
     void execute(CommandEvent event) {
 
         def args = event.args
-        def jdaEvent = event.event.originalEvent as GuildMessageReceivedEvent
+        def jdaEvent = event.event
         def author = jdaEvent.author
 
         def page = 0
@@ -77,14 +76,14 @@ class FylCommicCommand extends ReactionCommand {
         def chapterList = comic.chapters
 
         if (chapter >= chapterList.size()) {
-            sendMessage(event, "Chapter ${chapter + 1} is not known")
+            sendMsg(jdaEvent, "Chapter ${chapter + 1} is not known")
             return
         }
 
         def fylChapter = chapterList.get(chapter)
 
         if (page > fylChapter.pages) {
-            sendMessage(event, "Page  $page is not known in that chapter")
+            sendMsg(jdaEvent, "Page  $page is not known in that chapter")
             return
         }
 

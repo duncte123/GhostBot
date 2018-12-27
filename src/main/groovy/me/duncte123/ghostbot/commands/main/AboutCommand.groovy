@@ -24,6 +24,8 @@ import me.duncte123.ghostbot.objects.Command
 import me.duncte123.ghostbot.objects.CommandEvent
 import me.duncte123.ghostbot.variables.Variables
 
+import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed
+
 class AboutCommand extends Command {
 
     @Override
@@ -31,9 +33,8 @@ class AboutCommand extends Command {
 
         def devName = '<@191231307290771456> (duncte123#1245)'
         def guildCountDiscord = GhostBot.instance.shardManager.guildCache.size()
-        def guildCountSlack = '(Disabled)'
 
-        sendMessage(event.event, EmbedUtils.embedMessage(
+        sendEmbed(event.event, EmbedUtils.embedMessage(
             """\
 Hey there, my name is GhostBot, I am the must have bot for your spooky server.
 I am manly themed around Danny Phantom but other spooky stuff that you have for me can be suggested to $devName.
@@ -45,8 +46,7 @@ My invite link: [Click here]($Variables.GHOSTBOT_INVITE)
 My prefixes: `$Variables.PREFIX` and `$Variables.OTHER_PREFIX`
 My home: [$Variables.GHOSTBOT_GUILD]($Variables.GHOSTBOT_GUILD)
 My version: `$Variables.VERSION`
-The amount of Discord servers that I am in: $guildCountDiscord
-The amount of Slack servers that I am in: $guildCountSlack"""
+The amount of Discord servers that I am in: $guildCountDiscord"""
         ))
 
     }
@@ -56,7 +56,4 @@ The amount of Slack servers that I am in: $guildCountSlack"""
 
     @Override
     String getHelp() { 'Get some info about the bot' }
-
-    @Override
-    boolean isSlackCompatible() { true }
 }

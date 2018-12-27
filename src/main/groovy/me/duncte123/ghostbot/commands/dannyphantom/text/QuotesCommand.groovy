@@ -36,6 +36,9 @@ import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Consumer
 import java.util.regex.Pattern
 
+import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed
+import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
+
 class QuotesCommand extends Command {
 
     private static final String DOMAIN = 'totallycorrectdannyphantomquotes.tumblr.com'
@@ -100,7 +103,7 @@ class QuotesCommand extends Command {
 
                 return
             } else if ('total' == args[0]) {
-                sendMessage(event, "There are a total of ${allQuotes.size()} quotes in the system at the moment")
+                sendMsg(event.event, "There are a total of ${allQuotes.size()} quotes in the system at the moment")
                 return
             }
         }
@@ -152,7 +155,7 @@ class QuotesCommand extends Command {
                 break
         }
 
-        sendMessage(event, eb)
+        sendEmbed(event.event, eb)
     }
 
     private void getPostFromId(long id, Consumer<TumblrPost> cb, Consumer<String> fail) {
@@ -242,7 +245,4 @@ class QuotesCommand extends Command {
             .replaceAll('<li>', ' - ')
             .replaceAll('</li>', '')
     }
-
-    @Override
-    boolean isSlackCompatible() { true }
 }

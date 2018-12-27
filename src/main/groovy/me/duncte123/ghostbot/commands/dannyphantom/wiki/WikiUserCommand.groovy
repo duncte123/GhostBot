@@ -26,6 +26,9 @@ import me.duncte123.ghostbot.objects.CommandEvent
 import me.duncte123.ghostbot.utils.SpoopyUtils
 import me.duncte123.ghostbot.variables.Variables
 
+import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed
+import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
+
 class WikiUserCommand extends WikiBaseCommand {
     @Override
     void execute(CommandEvent commandEvent) {
@@ -33,7 +36,7 @@ class WikiUserCommand extends WikiBaseCommand {
         def event = commandEvent.event
 
         if (commandEvent.args.length == 0) {
-            sendMessage(event, "Insufficient arguments, Correct usage: `$Variables.PREFIX$name <search term>`")
+            sendMsg(event, "Insufficient arguments, Correct usage: `$Variables.PREFIX$name <search term>`")
             return
         }
 
@@ -47,7 +50,7 @@ class WikiUserCommand extends WikiBaseCommand {
             { json ->
 
                 if (json.has('exception')) {
-                    sendMessage(event, "An error occurred: ${toEx(json)}")
+                    sendMsg(event, "An error occurred: ${toEx(json)}")
                     return
                 }
 
@@ -67,7 +70,7 @@ class WikiUserCommand extends WikiBaseCommand {
                             "**Number of edits:** $user.numberofedits", false)
                     }
 
-                    sendMessage(event, embed)
+                    sendEmbed(event, embed)
 
                     return
                 }
@@ -87,11 +90,11 @@ class WikiUserCommand extends WikiBaseCommand {
 
                 }
 
-                sendMessage(event, eb)
+                sendEmbed(event, eb)
 
             },
             {
-                sendMessage(event, "Something went wrong: $it.message")
+                sendMsg(event, "Something went wrong: $it.message")
             })
     }
 
@@ -108,7 +111,4 @@ class WikiUserCommand extends WikiBaseCommand {
             "Examples: `$Variables.PREFIX$name duncte123`\n" +
             "`$Variables.PREFIX$name 34322457`\n"
     }
-
-    @Override
-    boolean isSlackCompatible() { true }
 }

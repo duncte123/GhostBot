@@ -30,7 +30,6 @@ import me.duncte123.ghostbot.utils.TumblrUtils
 import me.duncte123.ghostbot.variables.Variables
 import net.dv8tion.jda.core.MessageBuilder
 import net.dv8tion.jda.core.entities.MessageEmbed
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
@@ -64,11 +63,11 @@ class DoppelgangerComicCommand extends ReactionCommand {
     void execute(CommandEvent event) {
 
         def args = event.args
-        def jdaEvent = event.event.originalEvent as GuildMessageReceivedEvent
+        def jdaEvent = event.event
         def author = jdaEvent.author
 
         if (pages.empty) {
-            sendMessage(event, 'Something went wrong with loading the pages, please notify duncte123#1245')
+            sendMsg(jdaEvent, 'Something went wrong with loading the pages, please notify duncte123#1245')
             return
         }
 
@@ -84,7 +83,7 @@ class DoppelgangerComicCommand extends ReactionCommand {
                 try {
                     page = chapters[getNumberFromArg(arg.substring(CHAPTER_SELECTOR.length())) - 1]
                 } catch (IndexOutOfBoundsException ignored) {
-                    sendMessage(event, 'That chapter is not known')
+                    sendMsg(jdaEvent, 'That chapter is not known')
                     return
                 }
             }
@@ -95,7 +94,7 @@ class DoppelgangerComicCommand extends ReactionCommand {
         }
 
         if (page > pages.size()) {
-            sendMessage(event, "I could not find a page with number ${page + 1}")
+            sendMsg(jdaEvent, "I could not find a page with number ${page + 1}")
             return
         }
 

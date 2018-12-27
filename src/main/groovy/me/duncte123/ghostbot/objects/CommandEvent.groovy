@@ -18,29 +18,33 @@
 
 package me.duncte123.ghostbot.objects
 
-import me.duncte123.ghostbot.objects.entities.*
+
+import net.dv8tion.jda.core.JDA
+import net.dv8tion.jda.core.entities.Guild
+import net.dv8tion.jda.core.entities.Message
+import net.dv8tion.jda.core.entities.TextChannel
+import net.dv8tion.jda.core.entities.User
+import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 
 class CommandEvent {
 
     final String invoke
     final String[] args
-    final GhostBotMessageEvent event
-    final GhostBotChannel channel
-    final GhostBotUser author
-    final GhostBotApi api
-    final GhostBotGuild guild
-    final GhostBotMessage message
-    final boolean fromSlack
+    final GuildMessageReceivedEvent event
+    final TextChannel channel
+    final User author
+    final JDA api
+    final Guild guild
+    final Message message
 
-    CommandEvent(String invoke, String[] args, GhostBotMessageEvent event, boolean fromSlack) {
+    CommandEvent(String invoke, String[] args, GuildMessageReceivedEvent event) {
         this.invoke = invoke
         this.args = args
         this.event = event
         this.channel = event.channel
         this.author = event.author
-        this.api = event.API
+        this.api = event.JDA
         this.guild = event.guild
         this.message = event.message
-        this.fromSlack = fromSlack
     }
 }

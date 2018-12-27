@@ -19,7 +19,6 @@
 package me.duncte123.ghostbot.commands.dannyphantom.wiki
 
 import com.google.gson.Gson
-import com.ullink.slack.simpleslackapi.SlackUser
 import me.duncte123.botcommons.messaging.EmbedUtils
 import me.duncte123.botcommons.web.WebUtils
 import me.duncte123.fandomapi.FandomException
@@ -27,12 +26,14 @@ import me.duncte123.fandomapi.search.LocalWikiSearchResult
 import me.duncte123.fandomapi.search.LocalWikiSearchResultSet
 import me.duncte123.ghostbot.objects.Command
 import me.duncte123.ghostbot.objects.CommandCategory
-import me.duncte123.ghostbot.objects.entities.GhostBotMessageEvent
 import me.duncte123.ghostbot.utils.SpoopyUtils
 import me.duncte123.ghostbot.utils.WikiHolder
-import net.dv8tion.jda.core.entities.User
+import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 import org.apache.commons.lang3.StringUtils
 import org.json.JSONObject
+
+import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed
+import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 
 abstract class WikiBaseCommand extends Command {
 
@@ -42,7 +43,7 @@ abstract class WikiBaseCommand extends Command {
     WikiHolder wiki = new WikiHolder('https://dannyphantom.fandom.com')
 
 
-    protected void handleWikiSearch(WikiHolder wiki, String searchQuery, GhostBotMessageEvent event) {
+    protected void handleWikiSearch(WikiHolder wiki, String searchQuery, GuildMessageReceivedEvent event) {
         WebUtils.ins.getJSONObject(String.format(
             '%s?query=%s',
             wiki.searchListEndpoint,
@@ -55,11 +56,11 @@ abstract class WikiBaseCommand extends Command {
                     def ex = toEx(json)
 
                     if (ex.type.equalsIgnoreCase('NotFoundApiException')) {
-                        sendMessage(event, 'Your search returned no results.')
+                        sendMsg(event, 'Your search returned no results.')
                         return
                     }
 
-                    sendMessage(event, "An error occurred: $ex")
+                    sendMsg(event, "An error occurred: $ex")
 
                     return
                 }
@@ -79,16 +80,10 @@ abstract class WikiBaseCommand extends Command {
                     items.addAll(temp)
                 }
 
-                def authorName
-                def authorIcon = null
-                def author = event.author.get()
+                def author = event.author
+                def authorName = String.format('%#s', author)
+                def authorIcon = author.effectiveAvatarUrl
 
-                if (author instanceof User) {
-                    authorName = String.format('%#s', author)
-                    authorIcon = author.effectiveAvatarUrl
-                } else {
-                    authorName = (author as SlackUser).realName
-                }
 
                 def eb = EmbedUtils.defaultEmbed().with {
                     setTitle("Query: $searchQuery",
@@ -112,10 +107,10 @@ abstract class WikiBaseCommand extends Command {
                     }
                 }
 
-                sendMessage(event, eb)
+                sendEmbed(event, eb)
             },
             {
-                sendMessage(event, "Something went wrong: $it.message")
+                sendMsg(event, "Something went wrong: $it.message")
             }
         )
     }

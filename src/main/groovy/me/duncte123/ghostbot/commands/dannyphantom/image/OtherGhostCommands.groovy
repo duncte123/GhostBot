@@ -107,7 +107,4 @@ class OtherGhostCommands extends ImageBase {
     private void sendFromKeywords(CommandEvent event, String... words) {
         sendMessageFromName(event, requestImage(words[ThreadLocalRandom.current().nextInt(words.length)]))
     }
-
-    @Override
-    boolean isSlackCompatible() { true }
 }

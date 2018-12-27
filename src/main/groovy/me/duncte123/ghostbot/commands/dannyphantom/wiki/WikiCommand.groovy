@@ -21,12 +21,14 @@ package me.duncte123.ghostbot.commands.dannyphantom.wiki
 import me.duncte123.ghostbot.objects.CommandEvent
 import me.duncte123.ghostbot.variables.Variables
 
+import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
+
 class WikiCommand extends WikiBaseCommand {
     @Override
     void execute(CommandEvent event) {
 
         if (event.args.length == 0) {
-            sendMessage(event.event, "Insufficient arguments, Correct usage: `$Variables.PREFIX$name <search term>`")
+            sendMsg(event.event, "Insufficient arguments, Correct usage: `$Variables.PREFIX$name <search term>`")
             return
         }
 
@@ -50,7 +52,4 @@ class WikiCommand extends WikiBaseCommand {
         "Search the Danny Phantom wiki\n" +
             "Usage `$Variables.PREFIX$name <search term>`\nExample: `$Variables.PREFIX$name Danny`"
     }
-
-    @Override
-    boolean isSlackCompatible() { true }
 }

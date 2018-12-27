@@ -27,6 +27,8 @@ import org.jsoup.nodes.Element
 
 import java.util.concurrent.ThreadLocalRandom
 
+import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
+
 class RandomGhostCommand extends Command {
 
     private final List<String> ghosts = []
@@ -63,12 +65,12 @@ class RandomGhostCommand extends Command {
     void execute(CommandEvent event) {
 
         if (ghosts.empty) {
-            sendMessage(event, 'It looks like Danny defeated all the ghosts')
+            sendMsg(event.event, 'It looks like Danny defeated all the ghosts')
             return
         }
 
         def ghost = ghosts[ThreadLocalRandom.current().nextInt(ghosts.size())]
-        sendMessage(event, "$wikiUrl$ghost")
+        sendMsg(event.event, "$wikiUrl$ghost")
     }
 
     @Override
@@ -84,7 +86,4 @@ class RandomGhostCommand extends Command {
     CommandCategory getCategory() {
         return CommandCategory.TEXT
     }
-
-    @Override
-    boolean isSlackCompatible() { true }
 }

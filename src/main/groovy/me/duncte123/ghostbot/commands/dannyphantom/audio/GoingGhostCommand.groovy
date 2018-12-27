@@ -24,11 +24,13 @@ import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 
 import java.util.concurrent.ThreadLocalRandom
 
+import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
+
 class GoingGhostCommand extends AudioBaseCommand {
     @Override
     void execute(CommandEvent event) {
 
-        def jdaEvent = event.event.originalEvent as GuildMessageReceivedEvent
+        def jdaEvent = event.event
 
         if (!preAudioChecks(jdaEvent)) {
             return
@@ -41,7 +43,7 @@ class GoingGhostCommand extends AudioBaseCommand {
             selectedTrack = 'extra/its going ghost.mp3'
         }
 
-        sendMessage(event, "Selected track: _${selectedTrack.replace('_', '\\_')}_")
+        sendMsg(jdaEvent, "Selected track: _${selectedTrack.replace('_', '\\_')}_")
         AudioUtils.instance.loadAndPlay(getMusicManager(jdaEvent.guild), jdaEvent.channel,
             audioPath + selectedTrack, false)
     }

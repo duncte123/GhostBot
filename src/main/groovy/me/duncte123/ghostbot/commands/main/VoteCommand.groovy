@@ -22,6 +22,8 @@ import me.duncte123.botcommons.messaging.EmbedUtils
 import me.duncte123.ghostbot.objects.Command
 import me.duncte123.ghostbot.objects.CommandEvent
 
+import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed
+
 class VoteCommand extends Command {
 
     @Override
@@ -32,7 +34,7 @@ Help the bot grow bigger by upvoting it on one of these sites:
 https://botsfordiscord.com/bots/397297702150602752/vote
 https://discordbots.org/bot/397297702150602752/vote
 '''
-        sendMessage(event, EmbedUtils.embedMessage(message))
+        sendEmbed(event.event, EmbedUtils.embedMessage(message))
     }
 
     @Override

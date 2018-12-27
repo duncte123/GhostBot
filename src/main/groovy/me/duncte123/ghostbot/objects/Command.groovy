@@ -32,14 +32,15 @@ import org.slf4j.LoggerFactory
 import java.util.concurrent.ThreadLocalRandom
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed
+import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
 
-abstract class Command extends CommandHelpers {
+abstract class Command {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass())
     protected String audioPath = ''
     private def audioFiles = []
 
-    abstract void execute(CommandEvent event);
+    abstract void execute(CommandEvent event)
 
     abstract String getName()
 
@@ -50,10 +51,6 @@ abstract class Command extends CommandHelpers {
     String[] getAliases() { [] }
 
     abstract String getHelp()
-
-    boolean isSlackCompatible() { false }
-
-    boolean isDiscordCompatible() { true }
 
     void reloadAudioFiles() {
         if (category != CommandCategory.AUDIO) return
@@ -82,14 +79,15 @@ abstract class Command extends CommandHelpers {
     }
 
     void doAudioStuff(CommandEvent event) {
-        def jdaEvent = event.event.originalEvent as GuildMessageReceivedEvent
+
+        def jdaEvent = event.event
 
         if (category != CommandCategory.AUDIO) return
 
         if (preAudioChecks(jdaEvent)) {
             def selectedTrack = randomTrack
-            sendMessage(event, "Selected track: _${selectedTrack.replaceAll("_", "\\_")}_")
-            AudioUtils.instance.loadAndPlay(getMusicManager(jdaEvent.guild), jdaEvent.channel,
+            sendMsg(jdaEvent, "Selected track: _${selectedTrack.replaceAll("_", "\\_")}_")
+            AudioUtils.instance.loadAndPlay(getMusicManager(event.guild), event.channel,
                 audioPath + selectedTrack, false)
         }
 

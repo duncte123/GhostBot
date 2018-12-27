@@ -23,6 +23,8 @@ import me.duncte123.ghostbot.objects.CommandEvent
 import me.duncte123.ghostbot.utils.WikiHolder
 import me.duncte123.ghostbot.variables.Variables
 
+import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
+
 class FylWikiCommand extends WikiBaseCommand {
 
     private final WikiHolder FYL_WIKI_HOLDER = new WikiHolder('https://5yl.wikia.com')
@@ -31,7 +33,7 @@ class FylWikiCommand extends WikiBaseCommand {
     void execute(CommandEvent event) {
 
         if (event.args.length == 0) {
-            sendMessage(event, "Insufficient arguments, Correct usage: `$Variables.PREFIX$name <search term>`")
+            sendMsg(event.event, "Insufficient arguments, Correct usage: `$Variables.PREFIX$name <search term>`")
             return
         }
 

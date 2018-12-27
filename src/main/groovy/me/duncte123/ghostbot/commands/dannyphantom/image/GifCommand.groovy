@@ -20,6 +20,8 @@ package me.duncte123.ghostbot.commands.dannyphantom.image
 
 import me.duncte123.ghostbot.objects.CommandEvent
 
+import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
+
 class GifCommand extends ImageBase {
 
     private final String keyword = 'Danny Phantom gif'
@@ -28,7 +30,7 @@ class GifCommand extends ImageBase {
     void execute(CommandEvent event) {
         requestSearch(keyword,
             { sendMessageFromData(event, it, keyword) },
-            { sendMessage(event, "Error while looking up image: $it") })
+            { sendMsg(event.event, "Error while looking up image: $it") })
     }
 
     @Override
@@ -36,7 +38,4 @@ class GifCommand extends ImageBase {
 
     @Override
     String getHelp() { 'Gives you a random Danny Phantom gif' }
-
-    @Override
-    boolean isSlackCompatible() { true }
 }

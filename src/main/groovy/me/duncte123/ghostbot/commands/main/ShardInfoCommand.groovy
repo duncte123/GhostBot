@@ -36,14 +36,14 @@ class ShardInfoCommand extends Command {
     @Override
     void execute(CommandEvent commandEvent) {
 
-        def event = commandEvent.event.originalEvent as GuildMessageReceivedEvent
+        def event = commandEvent.event
 
         def headers = new ArrayList<String>()
-        headers.add('Shard ID')
+        headers.add('ID')
         headers.add('Status')
         headers.add('Ping')
-        headers.add('Guild Count')
-        headers.add('Connected VCs')
+        headers.add('Guilds')
+        headers.add('VCs')
 
         def table = new ArrayList<List<String>>()
         def shardManager = event.JDA.asBot().getShardManager()

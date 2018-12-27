@@ -23,18 +23,17 @@ import me.duncte123.ghostbot.objects.CommandCategory
 import me.duncte123.ghostbot.objects.CommandEvent
 import me.duncte123.ghostbot.utils.SpoopyUtils
 import me.duncte123.ghostbot.variables.Variables
-import net.dv8tion.jda.core.entities.Message
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendSuccess
 
 class ReloadAudioCommand extends Command {
     @Override
     void execute(CommandEvent event) {
-        if (event.author.get().idLong != Variables.OWNER_ID) return
+        if (event.author.idLong != Variables.OWNER_ID) return
 
         SpoopyUtils.commandManager.commands.forEach { it.reloadAudioFiles() }
 
-        sendSuccess(event.message.get() as Message)
+        sendSuccess(event.message)
     }
 
     @Override

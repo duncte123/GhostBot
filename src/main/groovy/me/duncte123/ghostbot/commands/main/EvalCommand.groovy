@@ -54,11 +54,11 @@ class EvalCommand extends Command {
     @Override
     void execute(CommandEvent event) {
 
-        if (event.author.get().idLong != Variables.OWNER_ID) {
+        if (event.author.idLong != Variables.OWNER_ID) {
             return
         }
 
-        def message = event.message.get() as Message
+        def message = event.message
 
         if (event.args.length == 0) {
             sendSuccess(message)
@@ -66,10 +66,10 @@ class EvalCommand extends Command {
         }
 
         engine.setVariable('event', event)
-        engine.setVariable('jda', event.api.get())
-        engine.setVariable('channel', event.channel.get())
-        engine.setVariable('author', event.author.get())
-        engine.setVariable('guild', event.guild.get())
+        engine.setVariable('jda', event.api)
+        engine.setVariable('channel', event.channel)
+        engine.setVariable('author', event.author)
+        engine.setVariable('guild', event.guild)
         engine.setVariable('args', event.args)
 
         final def script = "import ${packageImports.join('.*\nimport ')}.*\n\n" +
@@ -80,7 +80,7 @@ class EvalCommand extends Command {
                 def result = engine.evaluate(script)
 
                 if (result != null) {
-                    sendMsg(event.event.originalEvent as GuildMessageReceivedEvent, result.toString())
+                    sendMsg(event.event, result.toString())
                 }
 
                 sendSuccess(message)

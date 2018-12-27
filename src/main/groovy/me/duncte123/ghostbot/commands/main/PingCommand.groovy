@@ -21,6 +21,8 @@ package me.duncte123.ghostbot.commands.main
 import me.duncte123.ghostbot.objects.Command
 import me.duncte123.ghostbot.objects.CommandEvent
 
+import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
+
 class PingCommand extends Command {
     @Override
     void execute(CommandEvent event) {
@@ -28,10 +30,11 @@ class PingCommand extends Command {
         def botEvent = event.event
         def startTime = System.currentTimeMillis()
 
-        sendMessage(botEvent, 'PONG!') {
-            editMessage(it, """\
+        sendMsg(botEvent, 'PONG!') {
+
+            it.editMessage("""\
 PONG!
-Ping is: ${System.currentTimeMillis() - startTime}ms""", event.fromSlack)
+Ping is: ${System.currentTimeMillis() - startTime}ms""").queue()
         }
 
     }
@@ -41,7 +44,4 @@ Ping is: ${System.currentTimeMillis() - startTime}ms""", event.fromSlack)
 
     @Override
     String getHelp() { 'PONG' }
-
-    @Override
-    boolean isSlackCompatible() { true }
 }
