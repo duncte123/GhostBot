@@ -29,7 +29,7 @@ group 'me.duncte123.ghostbot'
 version "2.0.1_${getGitHash()}"
 mainClassName = "${group}.GhostBot"
 
-sourceCompatibility = JavaVersion.VERSION_11
+sourceCompatibility = JavaVersion.VERSION_1_10
 
 repositories {
     jcenter()
