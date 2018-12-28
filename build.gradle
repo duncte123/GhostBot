@@ -54,9 +54,6 @@ dependencies {
     implementation group: 'com.github.FredBoat', name: 'Lavalink-Client', version: '1a4b0f5'
     // Logback classic
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
-    
-    // Slack support
-    implementation group: 'com.github.Ullink', name: 'simple-slack-api', version: '1.2.0'
 }
 
 task sourcesForRelease(type: Copy) {
