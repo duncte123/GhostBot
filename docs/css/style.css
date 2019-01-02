@@ -1,0 +1,44 @@
+body {
+    background: url("../img/dp__ghost_zone_background_by_mistyphantom.png") no-repeat;
+    background-size: cover;
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
+}
+.spoopy-font {
+    font-family: 'Aclonica', sans-serif;
+}
+.container {
+    text-align: center;
+    text-shadow:
+            -1px -1px 0 #000,
+            1px -1px 0 #000,
+            -1px 1px 0 #000,
+            1px 1px 0 #000;
+    color: ghostwhite;
+    max-width: 100%!important;
+    width: 80%;
+}
+.main-area {
+    width: 100%;
+    border-radius: 1px;
+    background: rgba(29, 154, 0, 0.44);
+    box-shadow: 0 0 20px 10px rgba(35, 140, 0, 0.6);
+    text-align: center;
+}
+main {
+    flex: 1 0 auto;
+}
+.page-footer {
+    background: transparent;
+}
+pre {
+    /*background: rgba(44, 193, 0, 0.55);*/
+    color: #FFFFFF;
+}
+
+@media screen and (max-width: 630px) {
+    .container {
+        width: 100%;
+    }
+}
