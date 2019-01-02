@@ -1,3 +1,6 @@
+---
+layout: default
+---
 <div class="row col s12 spoopy-font">
     <h3>Commands</h3>
     <br/>
