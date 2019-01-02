@@ -1,5 +1,23 @@
+/*
+ *     GhostBot, a Discord bot made for all your Danny Phantom needs
+ *     Copyright (C) 2018 - 2019  Duncan "duncte123" Sterken
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 body {
-    background: url("../img/dp__ghost_zone_background_by_mistyphantom.png") no-repeat;
+    background: url("../img/dp__ghost_zone_background_by_mistyphantom.png") repeat-y;
     background-size: cover;
     display: flex;
     height: 100vh;
