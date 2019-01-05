@@ -85,6 +85,7 @@ class CommandManager {
         this.addCommand(new PingCommand())
 
         this.addCommand(new ISSCommand())
+        this.addCommand(new DrakeCommand())
     }
 
     Set<Command> getCommands() {

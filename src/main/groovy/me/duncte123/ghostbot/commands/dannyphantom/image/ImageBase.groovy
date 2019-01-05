@@ -28,6 +28,8 @@ import me.duncte123.ghostbot.objects.CommandEvent
 import me.duncte123.ghostbot.objects.googlesearch.GoogleSearchResults
 import me.duncte123.ghostbot.utils.ConfigUtils
 import me.duncte123.ghostbot.utils.SpoopyUtils
+import net.dv8tion.jda.core.Permission
+import net.dv8tion.jda.core.entities.TextChannel
 import org.jetbrains.annotations.NotNull
 import org.json.JSONObject
 import org.slf4j.Logger
@@ -85,6 +87,17 @@ abstract class ImageBase extends Command {
         sendEmbed(event.event, EmbedUtils.defaultEmbed()
             .setTitle(i.title, i.website)
             .setImage(i.url))
+    }
+
+    void sendImage(CommandEvent event, byte[] data) {
+        def fileName = "${name}_${System.currentTimeMillis()}.png"
+        def channel = event.channel
+
+        if (event.guild.selfMember.hasPermission(channel, Permission.MESSAGE_ATTACH_FILES)) {
+            channel.sendFile(data, fileName).queue()
+        } else {
+            sendMsg(channel, "I need permission to upload files in order for this command to work.")
+        }
     }
 
     static void sendMessageFromData(CommandEvent event, GoogleSearchResults data, String key) {

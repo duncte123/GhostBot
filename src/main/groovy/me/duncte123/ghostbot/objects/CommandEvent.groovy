@@ -21,6 +21,7 @@ package me.duncte123.ghostbot.objects
 
 import net.dv8tion.jda.core.JDA
 import net.dv8tion.jda.core.entities.Guild
+import net.dv8tion.jda.core.entities.Member
 import net.dv8tion.jda.core.entities.Message
 import net.dv8tion.jda.core.entities.TextChannel
 import net.dv8tion.jda.core.entities.User
@@ -36,6 +37,7 @@ class CommandEvent {
     final JDA api
     final Guild guild
     final Message message
+    final Member selfMember
 
     CommandEvent(String invoke, String[] args, GuildMessageReceivedEvent event) {
         this.invoke = invoke
@@ -46,5 +48,6 @@ class CommandEvent {
         this.api = event.JDA
         this.guild = event.guild
         this.message = event.message
+        this.selfMember = event.guild.selfMember
     }
 }
