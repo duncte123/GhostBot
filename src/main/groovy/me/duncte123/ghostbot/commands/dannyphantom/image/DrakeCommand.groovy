@@ -49,7 +49,7 @@ class DrakeCommand extends ImageBase {
             return
         }
 
-        def split = args.join('').split('\\|')
+        def split = args.join(' ').split('\\|')
 
         if (split.length < 2) {
             sendMsg(event.event, "Missing arguments, usage: `$Variables.PREFIX$name <top text>|<bottom text>`")
