@@ -51,7 +51,7 @@ class DrakeCommand extends ImageBase {
 
         def split = args.join(' ').split('\\|')
 
-        if (split.length < 2) {
+        if (split.length < 2 || split[0].empty || split[1].empty) {
             sendMsg(event.event, "Missing arguments, usage: `$Variables.PREFIX$name <top text>|<bottom text>`")
             return
         }
@@ -80,7 +80,7 @@ Usage: `$Variables.PREFIX$name <top text>|<bottom text>`""" }
         def body = RequestBody.create(null, json.toString())
 
         def request = WebUtils.defaultRequest()
-            .url('https://apis.duncte123.me/bot/memes/dannyphantomdrake')
+            .url('https://apis.duncte123.me/memes/dannyphantomdrake')
             .post(body)
             .addHeader('Authorization', SpoopyUtils.config.api_token)
             .addHeader('Content-Type', APPLICATION_JSON.type)
