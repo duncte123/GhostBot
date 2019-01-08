@@ -71,6 +71,12 @@ abstract class ImageBase extends Command {
         return gson.fromJson(item.toString(), ImageData.class)
     }
 
+    void sendImage(CommandEvent event, byte[] data) {
+        def fileName = "${name}_${System.currentTimeMillis()}.png"
+
+        sendImage(event.event, data, fileName)
+    }
+
     void sendMessageFromName(CommandEvent event, @NotNull ImageData i) {
         if (i.title == null || i.title.empty) {
             sendMessage(event, "Nothing was found for the search query: `$i.title`")

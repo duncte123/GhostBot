@@ -26,6 +26,7 @@ import me.duncte123.ghostbot.objects.entities.impl.jda.JDAMessage
 import me.duncte123.ghostbot.objects.entities.impl.slack.GbSlackMessageReply
 import me.duncte123.ghostbot.utils.Converters
 import net.dv8tion.jda.core.EmbedBuilder
+import net.dv8tion.jda.core.Permission
 import net.dv8tion.jda.core.entities.Message
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 
@@ -104,6 +105,27 @@ class CommandHelpers {
         if (success != null) {
             success.accept(new GbSlackMessageReply(reply: result, channel: channel, session: session))
         }
+    }
+
+    static void sendImage(GhostBotMessageEvent event, byte[] data, String fileName) {
+        if (!event.fromSlack) {
+            def jdaEvent = event.originalEvent as GuildMessageReceivedEvent
+
+            def channel = jdaEvent.channel
+
+            if (jdaEvent.guild.selfMember.hasPermission(channel, Permission.MESSAGE_ATTACH_FILES)) {
+                channel.sendFile(data, fileName).queue()
+            } else {
+                sendMsg(channel, "I need permission to upload files in order for this command to work.")
+            }
+
+            return
+        }
+
+        def session = event.API.get() as SlackSession
+        def channel = event.channel.get() as SlackChannel
+
+        session.sendFile(channel, data, fileName)
     }
 
     static void editMessage(GhostBotMessage gmessage, String newContent, boolean isSlack) {
