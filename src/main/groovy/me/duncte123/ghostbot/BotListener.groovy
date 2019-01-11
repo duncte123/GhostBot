@@ -68,7 +68,7 @@ class BotListener extends ListenerAdapter {
     void onReady(ReadyEvent event) {
         def jda = event.JDA
         logger.info("Logged in as $jda.selfUser ($jda.shardInfo)")
-        postServerCount(jda.asBot().shardManager)
+        postServerCount()
     }
 
     @Override
@@ -84,11 +84,7 @@ class BotListener extends ListenerAdapter {
             logger.info('Shutting down!!')
             service.shutdownNow()
             SpoopyUtils.commandManager.commandService.shutdown()
-            event.JDA.shutdown()
-
-            if (LavalinkManager.ins.lavalink != null) {
-                LavalinkManager.ins.lavalink.shutdown()
-            }
+            event.JDA.asBot().shardManager.shutdown()
 
             System.exit(0)
 
@@ -164,9 +160,11 @@ class BotListener extends ListenerAdapter {
         SpoopyUtils.commandManager.reactListReg.handle(event)
     }
 
-    private void postServerCount(ShardManager manager) {
+    private void postServerCount() {
         if (SpoopyUtils.config.shouldPostStats) {
             service.scheduleWithFixedDelay({
+
+                def manager = GhostBot.instance.shardManager
 
                 def jsonString = new JSONObject(SpoopyUtils.config.botLists.toString())
                     .put('server_count', manager.guildCache.size())
