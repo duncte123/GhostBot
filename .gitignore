@@ -89,7 +89,6 @@ fabric.properties
 /logs/
 /target/
 /build/
-/gradle/
 /.settings/
 .classpath
 .project
