@@ -34,7 +34,6 @@ import me.duncte123.ghostbot.objects.CommandEvent
 import me.duncte123.ghostbot.variables.Variables
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent
-import org.apache.commons.collections4.set.UnmodifiableSet
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -89,7 +88,7 @@ class CommandManager {
     }
 
     Set<Command> getCommands() {
-        return UnmodifiableSet.unmodifiableSet(commands)
+        return commands
     }
 
     private Command getCommand(String name) {
