@@ -36,17 +36,17 @@ class AboutCommand extends Command {
 
         sendEmbed(event.event, EmbedUtils.embedMessage(
             """\
-Hey there, my name is GhostBot, I am the must have bot for your spooky server.
-I am manly themed around Danny Phantom but other spooky stuff that you have for me can be suggested to $devName.
-If you want to stay in contact with my developer you can join [this server]($Variables.GHOSTBOT_GUILD).
-
-**Extra information:**
-My twitter: [Click here](https://twitter.com/GhostBotDiscord)
-My invite link: [Click here]($Variables.GHOSTBOT_INVITE)
-My prefixes: `$Variables.PREFIX` and `$Variables.OTHER_PREFIX`
-My home: [$Variables.GHOSTBOT_GUILD]($Variables.GHOSTBOT_GUILD)
-My version: `$Variables.VERSION`
-The amount of Discord servers that I am in: $guildCountDiscord"""
+            | Hey there, my name is GhostBot, I am the must have bot for your spooky server.
+            | I am manly themed around Danny Phantom but other spooky stuff that you have for me can be suggested to $devName.
+            | If you want to stay in contact with my developer you can join [this server]($Variables.GHOSTBOT_GUILD).
+            |
+            | **Extra information:**
+            | My twitter: [Click here](https://twitter.com/GhostBotDiscord)
+            | My invite link: [Click here]($Variables.GHOSTBOT_INVITE)
+            | My prefixes: `$Variables.PREFIX` and `$Variables.OTHER_PREFIX`
+            | My home: [$Variables.GHOSTBOT_GUILD]($Variables.GHOSTBOT_GUILD)
+            | My version: `$Variables.VERSION`
+            | The amount of Discord servers that I am in: $guildCountDiscord""".stripMargin()
         ))
 
     }

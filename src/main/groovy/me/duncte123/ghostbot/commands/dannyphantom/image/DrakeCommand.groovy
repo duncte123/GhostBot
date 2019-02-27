@@ -72,8 +72,10 @@ class DrakeCommand extends ImageBase {
     ]}
 
     @Override
-    String getHelp() { """Generates a drake meme with Danny
-Usage: `$Variables.PREFIX$name <top text>|<bottom text>`""" }
+    String getHelp() {
+        """Generates a drake meme with Danny
+                        | Usage: `$Variables.PREFIX$name <top text>|<bottom text>`""".stripMargin()
+    }
 
     private static void genDanny(String top, String bottom, boolean dabbing, Consumer<byte[]> callback) {
         def json = new JSONObject().put('top', top).put('bottom', bottom).put('dabbing', dabbing)

@@ -33,8 +33,9 @@ class PingCommand extends Command {
         sendMsg(botEvent, 'PONG!') {
 
             it.editMessage("""\
-PONG!
-Ping is: ${System.currentTimeMillis() - startTime}ms""").queue()
+                            | PONG!
+                            | Ping is: ${System.currentTimeMillis() - startTime}ms
+                            | """.stripMargin()).queue()
         }
 
     }
