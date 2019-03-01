@@ -22,7 +22,7 @@ plugins {
     id 'groovy'
     id 'application'
     id 'idea'
-    id 'com.github.johnrengelman.shadow' version '4.0.4'
+    id 'com.github.johnrengelman.shadow' version '5.0.0'
 }
 
 group 'me.duncte123.ghostbot'
@@ -91,6 +91,10 @@ compileGroovy {
     options.encoding = 'UTF-8'
 
     dependsOn generateGroovySources
+}
+
+wrapper {
+    gradleVersion = '5.2.1'
 }
 
 def getGitHash() {
