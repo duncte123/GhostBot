@@ -53,14 +53,18 @@ abstract class Command {
     abstract String getHelp()
 
     void reloadAudioFiles() {
-        if (category != CommandCategory.AUDIO) return
+        if (category != CommandCategory.AUDIO) {
+            return
+        }
 
         logger.info("Path: $audioPath")
         def folder = new File(audioPath)
         def listOfFiles = folder.listFiles()
         def filesFound = new ArrayList<String>()
 
-        if (listOfFiles == null || listOfFiles.length == 0) return
+        if (listOfFiles == null || listOfFiles.length == 0) {
+            return
+        }
 
         for (File file : listOfFiles) {
             if (file.file) {
@@ -73,7 +77,9 @@ abstract class Command {
     }
 
     String getRandomTrack() {
-        if (category != CommandCategory.AUDIO) return null
+        if (category != CommandCategory.AUDIO) {
+            return null
+        }
 
         return audioFiles[ThreadLocalRandom.current().nextInt(audioFiles.size())]
     }
@@ -82,7 +88,9 @@ abstract class Command {
 
         def jdaEvent = event.event
 
-        if (category != CommandCategory.AUDIO) return
+        if (category != CommandCategory.AUDIO) {
+            return
+        }
 
         if (preAudioChecks(jdaEvent)) {
             def selectedTrack = randomTrack

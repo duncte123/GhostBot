@@ -16,19 +16,24 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostbot.variables
+package me.duncte123.ghostbot.commands.dannyphantom.phightclub
 
-import me.duncte123.ghostbot.utils.SpoopyUtils
+import me.duncte123.ghostbot.objects.Command
+import me.duncte123.ghostbot.objects.CommandEvent
+import me.duncte123.ghostbot.variables.Variables
 
-class Variables {
+class PhightCommand extends Command {
+    @Override
+    void execute(CommandEvent event) {
 
-    static final String PREFIX = SpoopyUtils.config.discord.prefix
-    static final String OTHER_PREFIX = 'gb!'
-    static final long OWNER_ID = 191231307290771456L
-    static final String VERSION = '@ghostBotVersion@'
-    static final String FOOTER_ICON = 'https://cdn.discordapp.com/emojis/394148311835344896.png'
-    static final int EMBED_COLOR = 0x6ffe32
-    static final String GHOSTBOT_GUILD = 'https://discord.gg/NKM9Xtk'
-    static final String GHOSTBOT_INVITE = 'https://discordapp.com/oauth2/authorize?client_id=397297702150602752&scope=bot&permissions=36817984'
+    }
 
+    @Override
+    String getName() { 'phight' }
+
+    @Override
+    String getHelp() {
+        """Makes you "phight" other users
+         | Usage: `$Variables.PREFIX$name [user 1] [user 2]`""".stripMargin()
+    }
 }

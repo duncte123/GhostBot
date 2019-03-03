@@ -22,6 +22,7 @@ package me.duncte123.ghostbot
 import me.duncte123.ghostbot.commands.ReactionCommand
 import me.duncte123.ghostbot.commands.dannyphantom.audio.*
 import me.duncte123.ghostbot.commands.dannyphantom.image.*
+import me.duncte123.ghostbot.commands.dannyphantom.phightclub.PhightCommand
 import me.duncte123.ghostbot.commands.dannyphantom.text.*
 import me.duncte123.ghostbot.commands.dannyphantom.wiki.WikiCommand
 import me.duncte123.ghostbot.commands.dannyphantom.wiki.WikiUserCommand
@@ -85,6 +86,7 @@ class CommandManager {
 
         this.addCommand(new ISSCommand())
         this.addCommand(new DrakeCommand())
+        this.addCommand(new PhightCommand())
     }
 
     Set<Command> getCommands() {
