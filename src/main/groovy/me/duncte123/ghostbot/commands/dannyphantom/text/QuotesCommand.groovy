@@ -18,8 +18,7 @@
 
 package me.duncte123.ghostbot.commands.dannyphantom.text
 
-import gnu.trove.list.TLongList
-import gnu.trove.list.array.TLongArrayList
+import com.google.gson.reflect.TypeToken
 import gnu.trove.map.TLongObjectMap
 import gnu.trove.map.hash.TLongObjectHashMap
 import me.duncte123.botcommons.messaging.EmbedUtils
@@ -27,7 +26,6 @@ import me.duncte123.ghostbot.objects.Command
 import me.duncte123.ghostbot.objects.CommandCategory
 import me.duncte123.ghostbot.objects.CommandEvent
 import me.duncte123.ghostbot.objects.tumblr.TumblrPost
-import me.duncte123.ghostbot.utils.SpoopyUtils
 import me.duncte123.ghostbot.utils.TumblrUtils
 import me.duncte123.ghostbot.variables.Variables
 import org.apache.commons.text.StringEscapeUtils
@@ -45,7 +43,7 @@ class QuotesCommand extends Command {
     private final String[] types = ['chat', 'text', 'quote']
     private final List<TumblrPost> allQuotes = []
     private final TLongObjectMap<List<TumblrPost>> guildQuotes = new TLongObjectHashMap<>()
-    private final TLongList badPostIds = new TLongArrayList((long[]) [
+    private final long[] badPostIds = [
         156199508936L,
         141701068521L,
         139748205676L,
@@ -76,7 +74,7 @@ class QuotesCommand extends Command {
         173944925826L,
         127476921111L,
         174190854511L
-    ])
+    ]
 
     QuotesCommand() {
         reloadQuotes()
@@ -98,7 +96,7 @@ class QuotesCommand extends Command {
                 if (!id.empty) {
                     def idLong = Long.parseLong(id)
 
-                    getPostFromId(idLong, { sendQuote(event, it) }, { sendMessage(event, it) })
+                    getPostFromId(idLong, { sendQuote(event, it) }, { sendMsg(event.event, it) })
                 }
 
                 return
@@ -181,21 +179,36 @@ class QuotesCommand extends Command {
     }
 
     private void reloadQuotes() {
-        if (SpoopyUtils.config.running_local) {
+        def quotesFile = new File('quotes.json')
+
+        if (quotesFile.exists()) {
+            def fileText = quotesFile.text
+
+            List<TumblrPost> quotes = TumblrUtils.instance.gson.fromJson(
+                fileText,
+                new TypeToken<List<TumblrPost>>() {}.getType()
+            )
+
+            allQuotes.addAll(quotes)
+
+            logger.info('Loading quotes from file')
+
             return
         }
 
         allQuotes.clear()
         guildQuotes.clear()
 
-        for (String _type : types) {
+        def counter = 0
 
-            def type = _type
+        for (String type : types) {
 
             logger.info("Getting quotes from type $type")
 
             TumblrUtils.instance.fetchAllFromAccount(DOMAIN, type,
                 { posts ->
+
+                    counter++
 
                     def filteredPosts = posts.stream().filter {
                         !badPostIds.contains(it.id)
@@ -203,6 +216,13 @@ class QuotesCommand extends Command {
 
                     allQuotes.addAll(filteredPosts)
                     logger.info("Fetched ${filteredPosts.size()} quotes from type $type")
+
+                    if (counter == types.size()) {
+                        quotesFile.createNewFile()
+                        quotesFile.text = TumblrUtils.getInstance().gson.toJson(allQuotes)
+
+                        logger.info('Wrote quotes to file')
+                    }
                 }
             )
         }
