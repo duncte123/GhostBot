@@ -162,8 +162,7 @@ class DoppelgangerComicCommand extends ReactionCommand {
     private void loadPages() {
         logger.info('Loading doppelganger pages')
 
-        List<TumblrPost> posts = TumblrUtils.getInstance()
-            .getGson().fromJson(
+        List<TumblrPost> posts = TumblrUtils.getInstance().gson.fromJson(
             new File('doppelganger.json').text,
             new TypeToken<List<TumblrPost>>() {}.getType()
         )
