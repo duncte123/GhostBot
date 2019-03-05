@@ -21,6 +21,9 @@ package me.duncte123.ghostbot.commands.dannyphantom.phightclub
 import me.duncte123.ghostbot.objects.Command
 import me.duncte123.ghostbot.objects.CommandEvent
 import me.duncte123.ghostbot.variables.Variables
+import net.dv8tion.jda.core.entities.Message
+
+import java.lang.reflect.Member
 
 class PhightCommand extends Command {
     @Override
@@ -35,5 +38,10 @@ class PhightCommand extends Command {
     String getHelp() {
         """Makes you "phight" other users
          | Usage: `$Variables.PREFIX$name [user 1] [user 2]`""".stripMargin()
+    }
+
+    private static Member getMemberOrNull(Message message) {
+        //
+
     }
 }
