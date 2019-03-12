@@ -18,12 +18,12 @@
 
 package me.duncte123.ghostbot.commands.dannyphantom.phightclub
 
+import com.jagrosh.jdautilities.commons.utils.FinderUtil
 import me.duncte123.ghostbot.objects.Command
 import me.duncte123.ghostbot.objects.CommandEvent
 import me.duncte123.ghostbot.variables.Variables
-import net.dv8tion.jda.core.entities.Message
-
-import java.lang.reflect.Member
+import net.dv8tion.jda.core.entities.Guild
+import net.dv8tion.jda.core.entities.Member
 
 class PhightCommand extends Command {
     @Override
@@ -40,8 +40,9 @@ class PhightCommand extends Command {
          | Usage: `$Variables.PREFIX$name [user 1] [user 2]`""".stripMargin()
     }
 
-    private static Member getMemberOrNull(Message message) {
-        //
+    private static Member getMemberOrNull(String message, Guild guild) {
+        def found = FinderUtil.findMembers(message, guild)
 
+        return found[0] ?: null
     }
 }
