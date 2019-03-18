@@ -21,7 +21,6 @@ package me.duncte123.ghostbot
 import fredboat.audio.player.LavalinkManager
 import me.duncte123.botcommons.messaging.EmbedUtils
 import me.duncte123.botcommons.web.WebUtils
-import me.duncte123.ghostbot.kuroslounge.FilterLogs
 import me.duncte123.ghostbot.utils.SpoopyUtils
 import me.duncte123.ghostbot.variables.Variables
 import net.dv8tion.jda.bot.sharding.DefaultShardManagerBuilder
@@ -64,13 +63,12 @@ class GhostBot {
 
         LavalinkManager.ins.start()
         def botListener = new BotListener()
-        def filterLogs = new FilterLogs()
         def builder = new DefaultShardManagerBuilder()
             .setShardsTotal(totalShards)
             .setToken(token)
             .setGameProvider(this.gameProvider)
             .setDisabledCacheFlags(EnumSet.of(CacheFlag.EMOTE, CacheFlag.GAME))
-            .addEventListeners(botListener, filterLogs)
+            .addEventListeners(botListener)
 
 
         if (LavalinkManager.ins.enabled) {
