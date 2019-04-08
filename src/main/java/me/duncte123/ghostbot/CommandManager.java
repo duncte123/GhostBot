@@ -47,7 +47,7 @@ public class CommandManager {
     private static final Logger logger = LoggerFactory.getLogger(CommandManager.class);
     private final Map<String, Command> commands = new ConcurrentHashMap<>();
     private final Map<String, String> aliases = new ConcurrentHashMap<>();
-    final ExecutorService commandService = Executors.newCachedThreadPool((it) -> new Thread(it, "Command-Thread"));
+    private final ExecutorService commandService = Executors.newCachedThreadPool((it) -> new Thread(it, "Command-Thread"));
     final ReactionListenerRegistry reactListReg = new ReactionListenerRegistry();
 
     CommandManager() {
@@ -161,6 +161,10 @@ public class CommandManager {
                 e.printStackTrace();
             }
         });
+    }
+
+    public ExecutorService getCommandService() {
+        return commandService;
     }
 
     /**
