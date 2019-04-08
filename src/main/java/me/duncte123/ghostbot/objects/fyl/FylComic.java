@@ -16,17 +16,36 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostbot.objects.tumblr
+package me.duncte123.ghostbot.objects.fyl;
 
-class TumblrDialogue {
+import java.util.List;
 
-    final String name
-    final String label
-    final String phrase
+public class FylComic {
+    private final String baseUrl;
+    private final List<FylChapter> chapters;
+    private final boolean useWixUrl;
+    private final String wixUrl;
 
-    TumblrDialogue(String name, String label, String phrase) {
-        this.name = name
-        this.label = label
-        this.phrase = phrase
+    public FylComic(String baseUrl, List<FylChapter> chapters, boolean useWixUrl, String wixUrl) {
+        this.baseUrl = baseUrl;
+        this.chapters = chapters;
+        this.useWixUrl = useWixUrl;
+        this.wixUrl = wixUrl;
+    }
+
+    public String getBaseUrl() {
+        return baseUrl;
+    }
+
+    public List<FylChapter> getChapters() {
+        return chapters;
+    }
+
+    public boolean isUseWixUrl() {
+        return useWixUrl;
+    }
+
+    public String getWixUrl() {
+        return wixUrl;
     }
 }

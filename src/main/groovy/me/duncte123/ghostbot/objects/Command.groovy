@@ -48,7 +48,7 @@ abstract class Command {
         return CommandCategory.NONE
     }
 
-    String[] getAliases() { [] }
+    List<String> getAliases() { [] }
 
     abstract String getHelp()
 

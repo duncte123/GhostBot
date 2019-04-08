@@ -54,7 +54,7 @@ class WikiUserCommand extends WikiBaseCommand {
                     return
                 }
 
-                UserResultSet userResultSet = gson.fromJson(json.toString(), UserResultSet.class)
+                def userResultSet = gson.fromJson(json.toString(), UserResultSet.class) as UserResultSet
 
                 if (userResultSet.items.size() == 1) {
                     def user = userResultSet.items.get(0)

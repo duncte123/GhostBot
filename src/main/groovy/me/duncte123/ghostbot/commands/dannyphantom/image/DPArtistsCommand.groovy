@@ -129,7 +129,7 @@ class DPArtistsCommand extends ImageBase {
     String getHelp() { 'Get the latest post of a GhostBotApproved™ artist' }
 
     @Override
-    String[] getAliases() {
+    List<String> getAliases() {
         return artists
     }
 
@@ -192,7 +192,7 @@ class DPArtistsCommand extends ImageBase {
                         .setTitle('Link to post', it.post_url)
                         .setDescription(QuotesCommand.parseText(it.caption))
                         .setThumbnail(profilePicture)
-                        .setImage(it.photos[0].original_size.url)
+                        .setImage(it.photos[0].originalSize.url)
                 )
 
             }

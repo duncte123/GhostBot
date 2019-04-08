@@ -126,7 +126,7 @@ class QuotesCommand extends Command {
     String getHelp() { 'Get a random quote from http://totallycorrectdannyphantomquotes.tumblr.com/' }
 
     @Override
-    String[] getAliases() { ['quotes'] }
+    List<String> getAliases() { ['quotes'] }
 
     @Override
     CommandCategory getCategory() {

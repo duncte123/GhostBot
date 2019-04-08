@@ -60,7 +60,7 @@ abstract class ImageBase extends Command {
 
         WebUtils.ins.getJSONObject(SpoopyUtils.getGoogleSearchUrl(query)).async(
             {
-                def data = gson.fromJson(it.toString(), GoogleSearchResults.class)
+                def data = gson.fromJson(it.toString(), GoogleSearchResults.class) as GoogleSearchResults
                 success.accept(data)
                 searchCache.put(query, data)
             }, error

@@ -16,21 +16,19 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostbot.objects.fyl
+package me.duncte123.ghostbot.variables;
 
-class FylChapter {
+import me.duncte123.ghostbot.utils.SpoopyUtils;
 
-    final String page_id
-    final int pages
-    final String name
-    final String chapter_url
-    final List<String> pages_url
+public class Variables {
 
-    FylChapter(String page_id, int pages, String name, String chapter_url, List<String> pages_url) {
-        this.page_id = page_id
-        this.pages = pages
-        this.name = name
-        this.chapter_url = chapter_url
-        this.pages_url = pages_url
-    }
+    public static final String PREFIX = SpoopyUtils.getConfig().getDiscord().getPrefix();
+    public static final String OTHER_PREFIX = "gb!";
+    public static final long OWNER_ID = 191231307290771456L;
+    public static final String VERSION = "@ghostBotVersion@";
+    public static final String FOOTER_ICON = "https://cdn.discordapp.com/emojis/394148311835344896.png";
+    public static final int EMBED_COLOR = 0x6ffe32;
+    public static final String GHOSTBOT_GUILD = "https://discord.gg/NKM9Xtk";
+    public static final String GHOSTBOT_INVITE = "https://discordapp.com/oauth2/authorize?client_id=397297702150602752&scope=bot&permissions=36817984";
+    
 }

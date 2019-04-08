@@ -142,9 +142,9 @@ class FylCommicCommand extends ReactionCommand {
 
     private MessageEmbed getEmbed(int numChapter, int numPage) {
         def chapter = comic.chapters.get(numChapter)
-        def page = chapter.pages_url.get(numPage)
+        def page = chapter.pagesUrl.get(numPage)
 
-        def url = "$comic.baseUrl$chapter.page_id/$page"
+        def url = "$comic.baseUrl$chapter.pageId/$page"
 
         if (comic.useWixUrl) {
             url = comic.wixUrl + page.substring(2)
@@ -153,7 +153,7 @@ class FylCommicCommand extends ReactionCommand {
         return EmbedUtils.defaultEmbed()
             .setImage(url)
             .setThumbnail(FYL_ICON)
-            .setTitle("Chapter: $chapter.name", chapter.chapter_url)
+            .setTitle("Chapter: $chapter.name", chapter.chapterUrl)
             .setTimestamp(null)
             .setFooter("Chapter: ${numChapter + 1}, Page: ${numPage + 1}/$chapter.pages", Variables.FOOTER_ICON)
             .build()
@@ -169,7 +169,7 @@ class FylCommicCommand extends ReactionCommand {
     }
 
     @Override
-    String[] getAliases() {
+    List<String> getAliases() {
         [
             '5ylcomic',
             'fiveyearslater',

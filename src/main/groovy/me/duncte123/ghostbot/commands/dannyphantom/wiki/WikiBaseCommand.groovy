@@ -65,9 +65,9 @@ abstract class WikiBaseCommand extends Command {
                     return
                 }
 
-                def wikiSearchResultSet = gson.fromJson(json.toString(), LocalWikiSearchResultSet.class)
+                def wikiSearchResultSet = gson.fromJson(json.toString(), LocalWikiSearchResultSet.class) as LocalWikiSearchResultSet
 
-                def items = wikiSearchResultSet.getItems()
+                def items = wikiSearchResultSet.items
 
                 if (items.size() > 10) {
                     def temp = new ArrayList<LocalWikiSearchResult>()

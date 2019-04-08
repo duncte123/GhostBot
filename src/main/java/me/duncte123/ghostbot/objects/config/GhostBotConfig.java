@@ -16,23 +16,39 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.fandomapi.search
+package me.duncte123.ghostbot.objects.config;
 
-class LocalWikiSearchResultSet {
+import com.google.gson.JsonElement;
 
-    final int batches
-    final List<LocalWikiSearchResult> items
-    final int total
-    final int currentBatch
-    final int nextBatch
-    final int next
+public class GhostBotConfig {
 
-    LocalWikiSearchResultSet(int batches, List<LocalWikiSearchResult> items, int total, int currentBatch, int next) {
-        this.batches = batches
-        this.items = items
-        this.total = total
-        this.currentBatch = currentBatch
-        this.nextBatch = currentBatch + 1
-        this.next = next
+    public Discord discord;
+    public String api_token;
+    public Lavalink lavalink;
+    public Api api;
+    public boolean running_local;
+    public boolean shouldPostStats;
+    public JsonElement botLists;
+
+    public static class Discord {
+        public String prefix;
+        public int totalShards;
+        public String token;
     }
+
+    public static class Lavalink {
+        public Node[] nodes;
+        public boolean enable;
+
+        public static class Node {
+            public String wsUrl;
+            public String pass;
+        }
+    }
+
+    public static class Api {
+        public String google;
+        public String tumblr;
+    }
+
 }

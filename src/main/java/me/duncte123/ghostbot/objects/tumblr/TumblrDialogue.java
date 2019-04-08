@@ -16,39 +16,28 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostbot.objects.config
+package me.duncte123.ghostbot.objects.tumblr;
 
-import com.google.gson.JsonElement
+public class TumblrDialogue {
+    private final String name;
+    private final String label;
+    private final String phrase;
 
-class GhostBotConfig {
-
-    Discord discord
-    String api_token
-    Lavalink lavalink
-    Api api
-    boolean running_local
-    boolean shouldPostStats
-    JsonElement botLists
-
-    static class Discord {
-        String prefix
-        int totalShards
-        String token
+    public TumblrDialogue(String name, String label, String phrase) {
+        this.name = name;
+        this.label = label;
+        this.phrase = phrase;
     }
 
-    static class Lavalink {
-        Node[] nodes
-        boolean enable
-
-        static class Node {
-            String wsUrl
-            String pass
-        }
+    public String getName() {
+        return name;
     }
 
-    static class Api {
-        String google
-        String tumblr
+    public String getLabel() {
+        return label;
     }
 
+    public String getPhrase() {
+        return phrase;
+    }
 }
