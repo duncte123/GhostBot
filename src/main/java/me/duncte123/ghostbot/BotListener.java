@@ -42,6 +42,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -50,7 +51,7 @@ import static me.duncte123.botcommons.web.WebUtils.EncodingType.APPLICATION_JSON
 
 public class BotListener extends ListenerAdapter {
 
-    public static final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+    private static final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
     private final Logger logger = LoggerFactory.getLogger(BotListener.class);
     private final TLongList botLists = new TLongArrayList(new long[]{
         110373943822540800L, // Dbots
@@ -90,7 +91,7 @@ public class BotListener extends ListenerAdapter {
         if (content.equalsIgnoreCase(Variables.PREFIX + "shutdown") &&
             event.getAuthor().getIdLong() == Variables.OWNER_ID) {
             logger.info("Shutting down!!");
-            service.shutdownNow();
+            service.shutdown();
             SpoopyUtils.getCommandManager().getCommandService().shutdown();
             event.getJDA().asBot().getShardManager().shutdown();
             System.exit(0);
@@ -193,9 +194,8 @@ public class BotListener extends ListenerAdapter {
                         .post(RequestBody.create(null, jsonString))
                         .addHeader("Content-Type", APPLICATION_JSON.getType())
                         .build(),
-                    (it) -> it.body().string())
+                    (it) -> Objects.requireNonNull(it.body()).string())
                     .async(
-
                         (it) -> logger.info("Posted stats to botblock api (${})", it)
                         ,
                         (it) -> {

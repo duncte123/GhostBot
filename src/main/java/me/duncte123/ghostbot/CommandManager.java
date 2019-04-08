@@ -50,7 +50,7 @@ public class CommandManager {
     private final ExecutorService commandService = Executors.newCachedThreadPool((it) -> new Thread(it, "Command-Thread"));
     final ReactionListenerRegistry reactListReg = new ReactionListenerRegistry();
 
-    CommandManager() {
+    public CommandManager() {
         this.addCommand(new GoingGhostCommand());
         this.addCommand(new WailCommand());
         this.addCommand(new FruitloopCommand());
@@ -128,7 +128,7 @@ public class CommandManager {
         return found;
     }
 
-    public void handleCommand(GuildMessageReceivedEvent event) {
+    void handleCommand(GuildMessageReceivedEvent event) {
         handleCommand(event.getMessage().getContentRaw(), event);
     }
 
@@ -163,7 +163,7 @@ public class CommandManager {
         });
     }
 
-    public ExecutorService getCommandService() {
+    ExecutorService getCommandService() {
         return commandService;
     }
 
@@ -190,7 +190,7 @@ public class CommandManager {
             }
         }
 
-        public void handle(final MessageReactionAddEvent event) {
+        void handle(final MessageReactionAddEvent event) {
             synchronized (this.listeners) {
                 for (final ReactionCommand.ReactionListener listener : this.listeners) {
                     listener.handle(event);
