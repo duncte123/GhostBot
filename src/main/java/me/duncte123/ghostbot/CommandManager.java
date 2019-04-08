@@ -139,18 +139,18 @@ public class CommandManager {
             .split("\\s+");
 
         final String invoke = split[0].toLowerCase();
-        final String[] args = Arrays.copyOfRange(split, 1, split.length);
+        final List<String> args = Arrays.asList(split).subList(1, split.length);
 
         final Command cmd = getCommand(invoke);
         final String guild = event.getGuild().toString();
 
         if (cmd == null) {
-            logger.info("Unknown command: \"{}\" in \"{}\" with {}", invoke, guild, Arrays.toString(args));
+            logger.info("Unknown command: \"{}\" in \"{}\" with {}", invoke, guild, args);
 
             return;
         }
 
-        logger.info("Dispatching command \"{}\" in \"{}\" with {}", invoke, guild, Arrays.toString(args));
+        logger.info("Dispatching command \"{}\" in \"{}\" with {}", invoke, guild, args);
 
         commandService.submit(() -> {
             try {
@@ -162,6 +162,7 @@ public class CommandManager {
             }
         });
     }
+
     /**
      * Taken from:
      * https://github.com/Almighty-Alpaca/JDA-Butler/blob/master/src/main/java/com/almightyalpaca/discord/jdabutler/commands/Dispatcher.java#L135-L168
@@ -193,5 +194,5 @@ public class CommandManager {
             }
         }
     }
-    
+
 }

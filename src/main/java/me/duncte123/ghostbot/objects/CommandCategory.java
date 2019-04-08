@@ -16,9 +16,9 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostbot.objects
+package me.duncte123.ghostbot.objects;
 
-enum CommandCategory {
+public enum CommandCategory {
     AUDIO,
     IMAGE,
     WIKI,
