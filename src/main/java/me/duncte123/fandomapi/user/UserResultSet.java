@@ -16,30 +16,25 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.fandomapi.user
+package me.duncte123.fandomapi.user;
 
-class UserElement {
+import java.util.List;
 
-    final String name
-    final String avatar
-    final String url
-    final int userId
-    final int numberofedits
-    final String title
+public class UserResultSet {
 
-    String basePath
+    private final String basepath;
+    private final List<UserElement> items;
 
-    UserElement(String name, String avatar, String relativeUrl, int userId, int numberofedits, String title, String basePath) {
-        this.name = name
-        this.avatar = avatar
-        this.url = relativeUrl
-        this.userId = userId
-        this.numberofedits = numberofedits
-        this.title = title
-        this.basePath = basePath
+    UserResultSet(String basePath, List<UserElement> items) {
+        this.basepath = basePath;
+        this.items = items;
     }
 
-    String getAbsoluteUrl() {
-        basePath + url
+    public String getBasepath() {
+        return basepath;
+    }
+
+    public List<UserElement> getItems() {
+        return items;
     }
 }

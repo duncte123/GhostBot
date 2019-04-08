@@ -16,27 +16,48 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.fandomapi
+package me.duncte123.fandomapi;
 
-class FandomException {
+public class FandomException {
 
-    final String type
-    final String message
-    final int code
-    final String details
+    private final String type;
+    private final String message;
+    private final int code;
+    private final String details;
 
-    final String trace_id
+    private final String trace_id;
 
-    FandomException(String type, String message, int code, String details, String trace_id) {
-        this.type = type
-        this.message = message
-        this.code = code
-        this.details = details
-        this.trace_id = trace_id
+    public FandomException(String type, String message, int code, String details, String trace_id) {
+        this.type = type;
+        this.message = message;
+        this.code = code;
+        this.details = details;
+        this.trace_id = trace_id;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public String getTraceId() {
+        return trace_id;
     }
 
     @Override
-    String toString() {
-        "$type: $message ($details)"
+    public String toString() {
+        return "$type: $message ($details)";
     }
+
 }
