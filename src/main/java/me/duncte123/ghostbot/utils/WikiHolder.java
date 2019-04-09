@@ -16,20 +16,30 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostbot.utils
+package me.duncte123.ghostbot.utils;
 
-class WikiHolder {
+public class WikiHolder {
 
-    final String domain
-    final String apiBase
-    final String searchListEndpoint
-    final String userDetailsEndpoint
+    private final String domain;
+    private final String searchListEndpoint;
+    private final String userDetailsEndpoint;
 
-    WikiHolder(String domain) {
-        this.domain = domain
-        this.apiBase = "$domain/api/v1"
-        this.searchListEndpoint = "$apiBase/Search/List"
-        this.userDetailsEndpoint = "$apiBase/User/Details"
+    public WikiHolder(String domain) {
+        this.domain = domain;
+        final String apiBase = this.domain + "/api/v1";
+        this.searchListEndpoint = apiBase + "/Search/List";
+        this.userDetailsEndpoint = apiBase + "/User/Details";
     }
 
+    public String getDomain() {
+        return domain;
+    }
+
+    public String getSearchListEndpoint() {
+        return searchListEndpoint;
+    }
+
+    public String getUserDetailsEndpoint() {
+        return userDetailsEndpoint;
+    }
 }

@@ -35,11 +35,6 @@ class GuildMusicManager {
     final TrackScheduler scheduler
 
     /**
-     * This is what actually sends the audio
-     */
-    private final AudioPlayerSenderHandler sendHandler
-
-    /**
      * Constructor
      *
      * @param g
@@ -48,7 +43,6 @@ class GuildMusicManager {
     GuildMusicManager(Guild g) {
         player = LavalinkManager.ins.createPlayer(g.id)
         scheduler = new TrackScheduler(player)
-        sendHandler = new AudioPlayerSenderHandler(player)
         player.addListener(scheduler)
     }
 
@@ -58,6 +52,6 @@ class GuildMusicManager {
      * @return The{@link AudioPlayerSenderHandler thing} that sends our audio
      */
     AudioPlayerSenderHandler getSendHandler() {
-        return sendHandler
+        return new AudioPlayerSenderHandler(player)
     }
 }

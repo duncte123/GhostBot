@@ -62,7 +62,7 @@ dependencies {
         exclude(module = "opus-java")
     }
     //LavaPlayer/Lavalink
-    implementation(group = "com.sedmelluq", name = "lavaplayer", version = "1.3.11")
+    implementation(group = "com.sedmelluq", name = "lavaplayer", version = "1.3.16")
     implementation(group = "com.github.FredBoat", name = "Lavalink-Client", version = "1a4b0f5")
 
     // Logback classic

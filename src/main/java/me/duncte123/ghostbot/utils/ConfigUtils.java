@@ -16,30 +16,40 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostbot.utils
+package me.duncte123.ghostbot.utils;
 
-import org.json.JSONObject
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-class ConfigUtils {
+import java.io.File;
+import java.nio.file.Files;
 
-    private static final Logger logger = LoggerFactory.getLogger(ConfigUtils.class)
+public class ConfigUtils {
 
-    JSONObject images
+    private static final Logger logger = LoggerFactory.getLogger(ConfigUtils.class);
+
+    private JSONObject images;
 
     /**
      * This will try to load the bot config and kill the program if it fails
      */
-    ConfigUtils() {
+    public ConfigUtils() {
         try {
-            logger.info('Loading images.json')
-            def file = new File('images.json').text
-            this.images = new JSONObject(file)
-            logger.info('Loaded images.json')
+            logger.info("Loading images.json");
+
+            final String file = Files.readString(new File("images.json").toPath());
+
+            this.images = new JSONObject(file);
+
+            logger.info("Loaded images.json");
         } catch (Exception e) {
-            logger.error('Could not load config, aborting', e)
-            System.exit(-1)
+            logger.error("Could not load config, aborting", e);
+            System.exit(-1);
         }
+    }
+
+    public JSONObject getImages() {
+        return images;
     }
 }
