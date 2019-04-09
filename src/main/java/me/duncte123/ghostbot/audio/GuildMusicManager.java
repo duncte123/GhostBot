@@ -16,23 +16,23 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostbot.audio
+package me.duncte123.ghostbot.audio;
 
-import fredboat.audio.player.LavalinkManager
-import lavalink.client.player.IPlayer
-import net.dv8tion.jda.core.entities.Guild
+import fredboat.audio.player.LavalinkManager;
+import lavalink.client.player.IPlayer;
+import net.dv8tion.jda.core.entities.Guild;
 
-class GuildMusicManager {
+public class GuildMusicManager {
 
     /**
      * This is our player
      */
-    final IPlayer player
+    private final IPlayer player;
 
     /**
      * This is the scheduler
      */
-    final TrackScheduler scheduler
+    private final TrackScheduler scheduler;
 
     /**
      * Constructor
@@ -40,10 +40,18 @@ class GuildMusicManager {
      * @param g
      *         The guild that we wannt the manager for
      */
-    GuildMusicManager(Guild g) {
-        player = LavalinkManager.ins.createPlayer(g.id)
-        scheduler = new TrackScheduler(player)
-        player.addListener(scheduler)
+    public GuildMusicManager(Guild g) {
+        player = LavalinkManager.ins.createPlayer(g.getId());
+        scheduler = new TrackScheduler(player);
+        player.addListener(scheduler);
+    }
+
+    public IPlayer getPlayer() {
+        return player;
+    }
+
+    public TrackScheduler getScheduler() {
+        return scheduler;
     }
 
     /**
@@ -51,7 +59,8 @@ class GuildMusicManager {
      *
      * @return The{@link AudioPlayerSenderHandler thing} that sends our audio
      */
-    AudioPlayerSenderHandler getSendHandler() {
-        return new AudioPlayerSenderHandler(player)
+    public AudioPlayerSenderHandler getSendHandler() {
+        return new AudioPlayerSenderHandler(player);
     }
+
 }

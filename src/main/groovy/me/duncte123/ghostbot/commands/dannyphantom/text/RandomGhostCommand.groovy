@@ -80,7 +80,7 @@ class RandomGhostCommand extends Command {
     String getHelp() { 'Get a random ghost from the wiki' }
 
     @Override
-    String[] getAliases() { ['ghost'] }
+    java.util.List<String> getAliases() { ['ghost'] }
 
     @Override
     CommandCategory getCategory() {

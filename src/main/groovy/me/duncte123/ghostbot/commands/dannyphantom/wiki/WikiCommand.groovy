@@ -39,7 +39,7 @@ class WikiCommand extends WikiBaseCommand {
     String getName() { 'wiki' }
 
     @Override
-    String[] getAliases() {
+    java.util.List<String> getAliases() {
         [
             'wikia',
             'wikisearch',

@@ -93,7 +93,7 @@ class OtherGhostCommands extends ImageBase {
     String getHelp() { '' }
 
     @Override
-    String[] getAliases() {
+    java.util.List<String> getAliases() {
         return ['ember', 'dan', 'vlad',
                 'sam', 'tucker', 'danny', 'clockwork', 'pitchpearl', 'valerie', 'dani', 'skulker', 'jack', 'jazz',
                 'maddie', 'desiree', 'poindexter', 'wes']

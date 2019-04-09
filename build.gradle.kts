@@ -71,7 +71,7 @@ dependencies {
     implementation(group = "net.sf.trove4j", name = "trove4j", version = "3.0.3")
 }
 
-val compileGroovy: GroovyCompile by tasks
+//val compileGroovy: GroovyCompile by tasks
 val compileJava: JavaCompile by tasks
 val shadowJar: ShadowJar by tasks
 val clean: Task by tasks
@@ -123,13 +123,13 @@ compileJava.apply {
     dependsOn(generateJavaSources)
 }
 
-compileGroovy.apply {
+/*compileGroovy.apply {
     source = generateJavaSources.source
 
     options.encoding = "UTF-8"
 
     dependsOn(generateJavaSources)
-}
+}*/
 
 tasks.withType<Wrapper> {
     gradleVersion = "5.2.1"

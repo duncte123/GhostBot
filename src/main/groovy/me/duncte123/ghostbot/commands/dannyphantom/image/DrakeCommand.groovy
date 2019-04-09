@@ -67,7 +67,7 @@ class DrakeCommand extends ImageBase {
     String getName() { 'drake' }
 
     @Override
-    String[] getAliases() {[
+    java.util.List<String> getAliases() {[
         'ddrake'
     ]}
 

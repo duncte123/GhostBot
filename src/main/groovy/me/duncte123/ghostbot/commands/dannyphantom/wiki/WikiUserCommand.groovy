@@ -102,7 +102,7 @@ class WikiUserCommand extends WikiBaseCommand {
     String getName() { 'wikiuser' }
 
     @Override
-    String[] getAliases() { ['wikiusersearch'] }
+    java.util.List<String> getAliases() { ['wikiusersearch'] }
 
     @Override
     String getHelp() {

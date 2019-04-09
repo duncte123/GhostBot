@@ -16,40 +16,27 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostbot.audio
+package me.duncte123.ghostbot.audio;
 
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayer
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack
-import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason
-import lavalink.client.player.IPlayer
-import lavalink.client.player.event.AudioEventAdapterWrapped
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
+import lavalink.client.player.IPlayer;
+import lavalink.client.player.event.AudioEventAdapterWrapped;
 
-class TrackScheduler extends AudioEventAdapterWrapped {
+import java.util.LinkedList;
+import java.util.Queue;
 
+public class TrackScheduler extends AudioEventAdapterWrapped {
     /**
      * This stores our queue
      */
-    final Queue<AudioTrack> queue
+    private final Queue<AudioTrack> queue;
 
     /**
      * Hey look at that, it's our player
      */
-    private final IPlayer player
-
-    /**
-     * This is the last playing track
-     */
-    private AudioTrack lastTrack
-
-    /**
-     * Are we repeating the track
-     */
-    private boolean repeating = false
-
-    /**
-     * Are we repeating playlists
-     */
-    private boolean repeatPlayList = false
+    private final IPlayer player;
 
     /**
      * This instantiates our player
@@ -58,8 +45,12 @@ class TrackScheduler extends AudioEventAdapterWrapped {
      *         Our audio player
      */
     TrackScheduler(IPlayer player) {
-        this.player = player
-        this.queue = new LinkedList<>()
+        this.player = player;
+        this.queue = new LinkedList<>();
+    }
+
+    public Queue<AudioTrack> getQueue() {
+        return queue;
     }
 
     /**
@@ -68,20 +59,20 @@ class TrackScheduler extends AudioEventAdapterWrapped {
      * @param track
      *         The {@link AudioTrack AudioTrack} to queue
      */
-    void queue(AudioTrack track) {
+    public void queue(AudioTrack track) {
         if (player.getPlayingTrack() != null) {
-            queue.offer(track)
+            queue.offer(track);
         } else {
-            player.playTrack(track)
+            player.playTrack(track);
         }
     }
 
     /**
      * Starts the next track
      */
-    void nextTrack() {
+    private void nextTrack() {
         if (queue.peek() != null) {
-            player.playTrack(queue.poll())
+            player.playTrack(queue.poll());
         }
     }
 
@@ -96,19 +87,10 @@ class TrackScheduler extends AudioEventAdapterWrapped {
      *         Why did this track end?
      */
     @Override
-    void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
-        this.lastTrack = track
-
+    public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
         if (endReason.mayStartNext) {
-            if (repeating) {
-                if (!repeatPlayList) {
-                    player.playTrack(lastTrack.makeClone())
-                } else {
-                    queue(lastTrack.makeClone())
-                }
-            } else {
-                nextTrack()
-            }
+            nextTrack();
         }
     }
+
 }

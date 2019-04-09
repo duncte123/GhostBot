@@ -22,7 +22,7 @@ import me.duncte123.ghostbot.utils.SpoopyUtils;
 
 public class Variables {
 
-    public static final String PREFIX = SpoopyUtils.getConfig().getDiscord().getPrefix();
+    public static final String PREFIX = SpoopyUtils.getConfig().discord.prefix;
     public static final String OTHER_PREFIX = "gb!";
     public static final long OWNER_ID = 191231307290771456L;
     public static final String VERSION = "@ghostBotVersion@";

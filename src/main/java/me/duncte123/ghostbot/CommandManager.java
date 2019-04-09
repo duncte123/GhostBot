@@ -19,15 +19,6 @@
 package me.duncte123.ghostbot;
 
 import me.duncte123.ghostbot.commands.ReactionCommand;
-import me.duncte123.ghostbot.commands.dannyphantom.audio.*;
-import me.duncte123.ghostbot.commands.dannyphantom.image.*;
-import me.duncte123.ghostbot.commands.dannyphantom.text.*;
-import me.duncte123.ghostbot.commands.dannyphantom.wiki.WikiCommand;
-import me.duncte123.ghostbot.commands.dannyphantom.wiki.WikiUserCommand;
-import me.duncte123.ghostbot.commands.fiveyearslater.FylCommicCommand;
-import me.duncte123.ghostbot.commands.fiveyearslater.FylWikiCommand;
-import me.duncte123.ghostbot.commands.main.*;
-import me.duncte123.ghostbot.commands.space.ISSCommand;
 import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.CommandEvent;
 import me.duncte123.ghostbot.variables.Variables;
@@ -51,7 +42,7 @@ public class CommandManager {
     final ReactionListenerRegistry reactListReg = new ReactionListenerRegistry();
 
     public CommandManager() {
-        this.addCommand(new GoingGhostCommand());
+        /*this.addCommand(new GoingGhostCommand());
         this.addCommand(new WailCommand());
         this.addCommand(new FruitloopCommand());
         this.addCommand(new EmberCommand());
@@ -85,7 +76,7 @@ public class CommandManager {
         this.addCommand(new PingCommand());
 
         this.addCommand(new ISSCommand());
-        this.addCommand(new DrakeCommand());
+        this.addCommand(new DrakeCommand());*/
     }
 
     private void addCommand(Command command) {

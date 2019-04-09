@@ -89,7 +89,7 @@ class AuCommand extends Command {
     String getName() { 'au' }
 
     @Override
-    String[] getAliases() {
+    java.util.List<String> getAliases() {
         [
             'reallydumbdannyphantomaus',
             'dumbau',

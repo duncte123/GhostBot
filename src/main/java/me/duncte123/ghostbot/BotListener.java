@@ -180,7 +180,7 @@ public class BotListener extends ListenerAdapter {
     private void postServerCount() {
         if (SpoopyUtils.getConfig().shouldPostStats) {
             service.scheduleWithFixedDelay(() -> {
-                final ShardManager manager = GhostBot.instance.getShardManager();
+                final ShardManager manager = GhostBot.getInstance().getShardManager();
 
                 final String jsonString = new JSONObject(SpoopyUtils.getConfig().botLists.toString())
                     .put("server_count", manager.getGuildCache().size())

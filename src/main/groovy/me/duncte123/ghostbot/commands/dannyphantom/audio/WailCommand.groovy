@@ -23,5 +23,5 @@ class WailCommand extends AudioBaseCommand {
     String getHelp() { 'Gives you a nice ghostly wail' }
 
     @Override
-    String[] getAliases() { ['ghostlywail'] }
+    java.util.List<String> getAliases() { ['ghostlywail'] }
 }

@@ -50,7 +50,7 @@ public class GhostBot {
         String.format("GhostBot 3.0 | Now with popup blocker (shard %s)", it + 1)
     );*/
 
-    public static GhostBot instance;
+    private static GhostBot instance;
     private final ShardManager shardManager;
 
     private GhostBot() throws LoginException {

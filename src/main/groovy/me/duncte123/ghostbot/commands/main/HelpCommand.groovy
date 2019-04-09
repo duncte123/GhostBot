@@ -108,7 +108,7 @@ class HelpCommand extends Command {
     String getHelp() { 'Shows a list of all the commands' }
 
     @Override
-    String[] getAliases() { ['commands'] }
+    java.util.List<String> getAliases() { ['commands'] }
 
     private static String buildCommands(List<String> commands) {
         return "`${Variables.PREFIX + commands.join("`, `${Variables.PREFIX}")}`"

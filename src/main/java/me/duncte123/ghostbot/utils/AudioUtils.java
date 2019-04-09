@@ -110,7 +110,7 @@ public class AudioUtils {
             }
         }
 
-//        guild.getAudioManager().setSendingHandler(mng.getSendHandler());
+        guild.getAudioManager().setSendingHandler(mng.getSendHandler());
 
         return mng;
     }

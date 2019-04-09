@@ -130,7 +130,7 @@ class DoppelgangerComicCommand extends ReactionCommand {
     }
 
     @Override
-    String[] getAliases() { ['doppelgangercomic'] }
+    java.util.List<String> getAliases() { ['doppelgangercomic'] }
 
     @Override
     CommandCategory getCategory() {

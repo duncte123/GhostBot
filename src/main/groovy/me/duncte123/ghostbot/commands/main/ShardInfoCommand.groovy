@@ -90,7 +90,7 @@ class ShardInfoCommand extends Command {
     String getHelp() { 'Shows some shardinfo' }
 
     @Override
-    String[] getAliases() { ['shards'] }
+    java.util.List<String> getAliases() { ['shards'] }
 
     @Override
     CommandCategory getCategory() {
