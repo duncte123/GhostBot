@@ -19,6 +19,7 @@
 package me.duncte123.ghostbot;
 
 import me.duncte123.ghostbot.commands.ReactionCommand;
+import me.duncte123.ghostbot.commands.space.ISSCommand;
 import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.CommandEvent;
 import me.duncte123.ghostbot.variables.Variables;
@@ -75,8 +76,8 @@ public class CommandManager {
         this.addCommand(new RestartCommand());
         this.addCommand(new PingCommand());
 
-        this.addCommand(new ISSCommand());
         this.addCommand(new DrakeCommand());*/
+        this.addCommand(new ISSCommand());
     }
 
     private void addCommand(Command command) {
