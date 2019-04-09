@@ -62,7 +62,7 @@ public abstract class Command {
             return;
         }
 
-        logger.info("Path: $audioPath");
+        logger.info("Path: {}", audioPath);
         final File folder = new File(audioPath);
         final File[] listOfFiles = folder.listFiles();
         final List<String> filesFound = new ArrayList<>();
@@ -81,7 +81,7 @@ public abstract class Command {
         audioFiles = filesFound;
     }
 
-    public String getRandomTrack() {
+    protected String getRandomTrack() {
         if (getCategory() != CommandCategory.AUDIO) {
             return null;
         }
@@ -91,7 +91,7 @@ public abstract class Command {
         );
     }
 
-    private boolean preAudioChecks(CommandEvent event) {
+    protected boolean preAudioChecks(CommandEvent event) {
 
         final GuildVoiceState voiceState = event.getMember().getVoiceState();
 
@@ -123,11 +123,11 @@ public abstract class Command {
         return true;
     }
 
-    private GuildMusicManager getMusicManager(Guild guild) {
+    protected GuildMusicManager getMusicManager(Guild guild) {
         return AudioUtils.getInstance().getMusicManager(guild);
     }
 
-    public void doAudioStuff(CommandEvent event) {
+    protected void doAudioStuff(CommandEvent event) {
 
         if (getCategory() != CommandCategory.AUDIO) {
             return;

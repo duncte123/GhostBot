@@ -16,12 +16,35 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostbot.commands.dannyphantom.audio
+package me.duncte123.ghostbot.commands.dannyphantom.audio;
 
-class WailCommand extends AudioBaseCommand {
-    @Override
-    String getHelp() { 'Gives you a nice ghostly wail' }
+import me.duncte123.ghostbot.objects.Command;
+import me.duncte123.ghostbot.objects.CommandCategory;
+import me.duncte123.ghostbot.objects.CommandEvent;
+import me.duncte123.ghostbot.utils.AudioUtils;
+
+public abstract class AudioBaseCommand extends Command {
+    private final String commandName;
+
+    public AudioBaseCommand() {
+        this.commandName = getClass().getSimpleName().replaceFirst("Command", "").toLowerCase();
+        this.audioPath = AudioUtils.getInstance().getBaseAudioDir() + commandName + '/';
+        reloadAudioFiles();
+    }
 
     @Override
-    java.util.List<String> getAliases() { ['ghostlywail'] }
+    public void execute(CommandEvent event) {
+        doAudioStuff(event);
+    }
+
+    @Override
+    public CommandCategory getCategory() {
+        return CommandCategory.AUDIO;
+    }
+
+    @Override
+    public String getName() {
+        return commandName;
+    }
+
 }

@@ -16,35 +16,11 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostbot.commands.dannyphantom.audio
+package me.duncte123.ghostbot.commands.dannyphantom.audio;
 
-import me.duncte123.ghostbot.objects.Command
-import me.duncte123.ghostbot.objects.CommandCategory
-import me.duncte123.ghostbot.objects.CommandEvent
-import me.duncte123.ghostbot.utils.AudioUtils
-
-abstract class AudioBaseCommand extends Command {
-
-    private final String commandName
-
-    AudioBaseCommand() {
-        this.commandName = getClass().simpleName.replaceFirst('Command', '').toLowerCase()
-        this.audioPath = "$AudioUtils.instance.BASE_AUDIO_DIR$commandName/"
-        reloadAudioFiles()
-    }
-
+public class BoxGhostCommand extends AudioBaseCommand {
     @Override
-    void execute(CommandEvent event) {
-        doAudioStuff(event)
-    }
-
-    @Override
-    CommandCategory getCategory() {
-        return CommandCategory.AUDIO
-    }
-
-    @Override
-    String getName() {
-        return commandName
+    public String getHelp() {
+        return "BWEARE";
     }
 }

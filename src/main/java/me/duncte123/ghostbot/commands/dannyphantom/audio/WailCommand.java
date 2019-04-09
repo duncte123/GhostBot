@@ -16,9 +16,18 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostbot.commands.dannyphantom.audio
+package me.duncte123.ghostbot.commands.dannyphantom.audio;
 
-class BoxGhostCommand extends AudioBaseCommand {
+import java.util.List;
+
+public class WailCommand extends AudioBaseCommand {
     @Override
-    String getHelp() { 'BWEARE' }
+    public String getHelp() {
+        return "Gives you a nice ghostly wail";
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return List.of("ghostlywail");
+    }
 }

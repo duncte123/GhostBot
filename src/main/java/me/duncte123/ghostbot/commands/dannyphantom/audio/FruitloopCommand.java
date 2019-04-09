@@ -16,9 +16,11 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostbot.commands.dannyphantom.audio
+package me.duncte123.ghostbot.commands.dannyphantom.audio;
 
-class FruitloopCommand extends AudioBaseCommand {
+public class FruitloopCommand extends AudioBaseCommand {
     @Override
-    String getHelp() { 'You\'re one crazed up fruitloop' }
+    public String getHelp() {
+        return "You're one crazed up fruitloop";
+    }
 }
