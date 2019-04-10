@@ -22,7 +22,6 @@ import java.io.ByteArrayOutputStream
 
 plugins {
     java
-    groovy
     application
     idea
 
@@ -55,7 +54,7 @@ dependencies {
     //My little utils
     implementation(group = "com.github.duncte123", name = "botCommons", version = "2e43820")
     
-    implementation(group = "org.codehaus.groovy", name = "groovy", version = "2.5.6")
+    implementation(group = "org.codehaus.groovy", name = "groovy-jsr223", version = "2.5.6")
 
     //JDA
     implementation(group = "net.dv8tion", name = "JDA", version = "3.8.3_462") {
@@ -71,7 +70,6 @@ dependencies {
     implementation(group = "net.sf.trove4j", name = "trove4j", version = "3.0.3")
 }
 
-//val compileGroovy: GroovyCompile by tasks
 val compileJava: JavaCompile by tasks
 val shadowJar: ShadowJar by tasks
 val clean: Task by tasks
@@ -122,14 +120,6 @@ compileJava.apply {
 
     dependsOn(generateJavaSources)
 }
-
-/*compileGroovy.apply {
-    source = generateJavaSources.source
-
-    options.encoding = "UTF-8"
-
-    dependsOn(generateJavaSources)
-}*/
 
 tasks.withType<Wrapper> {
     gradleVersion = "5.2.1"

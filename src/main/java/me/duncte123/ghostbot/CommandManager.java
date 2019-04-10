@@ -21,12 +21,12 @@ package me.duncte123.ghostbot;
 import me.duncte123.ghostbot.commands.ReactionCommand;
 import me.duncte123.ghostbot.commands.dannyphantom.audio.*;
 import me.duncte123.ghostbot.commands.dannyphantom.image.*;
-import me.duncte123.ghostbot.commands.dannyphantom.text.PetitionCommand;
-import me.duncte123.ghostbot.commands.dannyphantom.text.QuotesCommand;
+import me.duncte123.ghostbot.commands.dannyphantom.text.*;
 import me.duncte123.ghostbot.commands.dannyphantom.wiki.WikiCommand;
 import me.duncte123.ghostbot.commands.dannyphantom.wiki.WikiUserCommand;
 import me.duncte123.ghostbot.commands.fiveyearslater.FylCommicCommand;
 import me.duncte123.ghostbot.commands.fiveyearslater.FylWikiCommand;
+import me.duncte123.ghostbot.commands.main.*;
 import me.duncte123.ghostbot.commands.space.ISSCommand;
 import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.CommandEvent;
@@ -70,7 +70,7 @@ public class CommandManager {
         this.addCommand(new PetitionCommand());
 
         this.addCommand(new QuotesCommand());
-        /*this.addCommand(new AuCommand());
+        this.addCommand(new AuCommand());
         this.addCommand(new RandomGhostCommand());
         this.addCommand(new GamesCommand());
 
@@ -84,7 +84,7 @@ public class CommandManager {
         this.addCommand(new RestartCommand());
         this.addCommand(new PingCommand());
 
-        this.addCommand(new DrakeCommand());*/
+        this.addCommand(new DrakeCommand());
         this.addCommand(new ISSCommand());
     }
 
@@ -114,7 +114,7 @@ public class CommandManager {
         return this.commands.values();
     }
 
-    private Command getCommand(String name) {
+    public Command getCommand(String name) {
         Command found = this.commands.get(name);
 
         if (found == null) {

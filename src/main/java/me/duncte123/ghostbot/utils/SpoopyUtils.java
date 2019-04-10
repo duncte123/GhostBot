@@ -35,8 +35,6 @@ public class SpoopyUtils {
 
     private static final GhostBotConfig config;
     private static final String GOOGLE_URL;
-    private static final AudioUtils audio = AudioUtils.getInstance();
-    private static final CommandManager commandManager = new CommandManager();
 
     static {
         String tempGoogle;
@@ -64,6 +62,9 @@ public class SpoopyUtils {
         GOOGLE_URL = tempGoogle;
         config = tempConfig;
     }
+
+    private static final AudioUtils audio = AudioUtils.getInstance();
+    private static final CommandManager commandManager = new CommandManager();
 
     public static GhostBotConfig getConfig() {
         return config;

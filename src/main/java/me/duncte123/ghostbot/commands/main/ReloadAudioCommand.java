@@ -16,36 +16,39 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostbot.commands.main
+package me.duncte123.ghostbot.commands.main;
 
-import me.duncte123.ghostbot.objects.Command
-import me.duncte123.ghostbot.objects.CommandCategory
-import me.duncte123.ghostbot.objects.CommandEvent
-import me.duncte123.ghostbot.utils.SpoopyUtils
-import me.duncte123.ghostbot.variables.Variables
+import me.duncte123.ghostbot.objects.Command;
+import me.duncte123.ghostbot.objects.CommandCategory;
+import me.duncte123.ghostbot.objects.CommandEvent;
+import me.duncte123.ghostbot.utils.SpoopyUtils;
+import me.duncte123.ghostbot.variables.Variables;
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendSuccess
+import static me.duncte123.botcommons.messaging.MessageUtils.sendSuccess;
 
-class ReloadAudioCommand extends Command {
+public class ReloadAudioCommand extends Command {
     @Override
-    void execute(CommandEvent event) {
-        if (event.author.idLong != Variables.OWNER_ID) return
+    public void execute(CommandEvent event) {
+        if (event.getAuthor().getIdLong() != Variables.OWNER_ID) {
+            return;
+        }
 
-        SpoopyUtils.commandManager.commands.forEach { it.reloadAudioFiles() }
-
-        sendSuccess(event.message)
+        SpoopyUtils.getCommandManager().getCommands().forEach(Command::reloadAudioFiles);
+        sendSuccess(event.getMessage());
     }
 
     @Override
-    String getName() { "reloadaudio" }
-
-    @Override
-    String getHelp() {
-        return null
+    public String getName() {
+        return "reloadaudio";
     }
 
     @Override
-    CommandCategory getCategory() {
-        return CommandCategory.HIDDEN
+    public String getHelp() {
+        return null;
+    }
+
+    @Override
+    public CommandCategory getCategory() {
+        return CommandCategory.HIDDEN;
     }
 }

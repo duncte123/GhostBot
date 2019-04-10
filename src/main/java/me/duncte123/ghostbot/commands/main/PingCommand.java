@@ -16,33 +16,31 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostbot.commands.main
+package me.duncte123.ghostbot.commands.main;
 
-import me.duncte123.ghostbot.objects.Command
-import me.duncte123.ghostbot.objects.CommandEvent
+import me.duncte123.ghostbot.objects.Command;
+import me.duncte123.ghostbot.objects.CommandEvent;
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
+import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
-class PingCommand extends Command {
+public class PingCommand extends Command {
     @Override
-    void execute(CommandEvent event) {
+    public void execute(CommandEvent event) {
+        final long startTime = System.currentTimeMillis();
 
-        def botEvent = event.event
-        def startTime = System.currentTimeMillis()
-
-        sendMsg(botEvent, 'PONG!') {
-
-            it.editMessage("""\
-                            | PONG!
-                            | Ping is: ${System.currentTimeMillis() - startTime}ms
-                            | """.stripMargin()).queue()
-        }
-
+        sendMsg(event, "PONG!", (it) ->
+            it.editMessageFormat("PONG!\n" +
+                "Ping is: %sms", System.currentTimeMillis() - startTime).queue()
+        );
     }
 
     @Override
-    String getName() { 'ping' }
+    public String getName() {
+        return "ping";
+    }
 
     @Override
-    String getHelp() { 'PONG' }
+    public String getHelp() {
+        return "PONG";
+    }
 }

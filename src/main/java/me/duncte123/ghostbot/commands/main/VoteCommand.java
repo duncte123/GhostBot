@@ -16,30 +16,31 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostbot.commands.main
+package me.duncte123.ghostbot.commands.main;
 
-import me.duncte123.botcommons.messaging.EmbedUtils
-import me.duncte123.ghostbot.objects.Command
-import me.duncte123.ghostbot.objects.CommandEvent
+import me.duncte123.botcommons.messaging.EmbedUtils;
+import me.duncte123.ghostbot.objects.Command;
+import me.duncte123.ghostbot.objects.CommandEvent;
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed
+import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed;
 
-class VoteCommand extends Command {
-
+public class VoteCommand extends Command {
     @Override
-    void execute(CommandEvent event) {
+    public void execute(CommandEvent event) {
+        final String message = "Help the bot grow bigger by upvoting it on one of these sites:\n" +
+            "https://botsfordiscord.com/bots/397297702150602752/vote\n" +
+            "https://discordbots.org/bot/397297702150602752/vote";
 
-        def message = '''\
-Help the bot grow bigger by upvoting it on one of these sites:
-https://botsfordiscord.com/bots/397297702150602752/vote
-https://discordbots.org/bot/397297702150602752/vote
-'''
-        sendEmbed(event.event, EmbedUtils.embedMessage(message))
+        sendEmbed(event, EmbedUtils.embedMessage(message));
     }
 
     @Override
-    String getName() { 'vote' }
+    public String getName() {
+        return "vote";
+    }
 
     @Override
-    String getHelp() { 'Shows a list of places where you can vote for the bot' }
+    public String getHelp() {
+        return "Shows a list of places where you can vote for the bot";
+    }
 }
