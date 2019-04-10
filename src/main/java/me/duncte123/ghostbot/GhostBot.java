@@ -42,15 +42,14 @@ import java.util.function.IntFunction;
 
 public class GhostBot {
 
-    private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
-    private final IntFunction<? extends Game> gameProvider = (it) -> Game.watching(
-        String.format("%shelp | #GoGhostAgain (shard %s)", Variables.PREFIX, it)
-    );
-    /*private final IntFunction<? extends Game> gameProvider = (it) -> Game.playing(
-        String.format("GhostBot 3.0 | Now with popup blocker (shard %s)", it + 1)
-    );*/
-
     private static GhostBot instance;
+    private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+    private final IntFunction<? extends Game> gameProvider = (it) -> Game.playing(
+        String.format("GhostBot 3.0 | Now with popup blocker (shard %s)", it + 1)
+    );
+    /*private final IntFunction<? extends Game> gameProvider = (it) -> Game.watching(
+        String.format("%shelp | #GoGhostAgain (shard %s)", Variables.PREFIX, it)
+    );*/
     private final ShardManager shardManager;
 
     private GhostBot() throws LoginException {
@@ -61,12 +60,12 @@ public class GhostBot {
         final String token = SpoopyUtils.getConfig().discord.token;
         final int totalShards = SpoopyUtils.getConfig().discord.totalShards;
 
-        WebUtils.setUserAgent("Mozilla/5.0 (compatible; GhostBot/v${Variables.VERSION}; +https://github.com/duncte123/GhostBot)");
+        WebUtils.setUserAgent("Mozilla/5.0 (compatible; GhostBot/v" + Variables.VERSION + "; +https://github.com/duncte123/GhostBot)");
         EmbedUtils.setEmbedBuilder(
             () -> new EmbedBuilder()
-            .setColor(Variables.EMBED_COLOR)
-            .setFooter("GhostBot", Variables.FOOTER_ICON)
-            .setTimestamp(Instant.now())
+                .setColor(Variables.EMBED_COLOR)
+                .setFooter("GhostBot", Variables.FOOTER_ICON)
+                .setTimestamp(Instant.now())
         );
 
         LavalinkManager.ins.start();
@@ -89,15 +88,6 @@ public class GhostBot {
         initGameLoop();
     }
 
-
-    public static void main(String[] args) throws LoginException {
-        instance = new GhostBot();
-    }
-
-    public static synchronized GhostBot getInstance() {
-        return instance;
-    }
-
     public ShardManager getShardManager() {
         return shardManager;
     }
@@ -109,6 +99,14 @@ public class GhostBot {
     private void initGameLoop() {
         service.scheduleAtFixedRate(
             () -> this.shardManager.setGameProvider(this.gameProvider)
-        , 1, 1, TimeUnit.DAYS);
+            , 1, 1, TimeUnit.DAYS);
+    }
+
+    public static void main(String[] args) throws LoginException {
+        instance = new GhostBot();
+    }
+
+    public static synchronized GhostBot getInstance() {
+        return instance;
     }
 }

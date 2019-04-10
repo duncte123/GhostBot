@@ -27,6 +27,7 @@ import me.duncte123.ghostbot.utils.SpoopyUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jsoup.nodes.Element;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
@@ -72,10 +73,10 @@ public class DPArtistsCommand extends ImageBase {
     @Override
     public void execute(CommandEvent event) {
 
-        final List<String> args = event.getArgs();
+        final List<String> args = new ArrayList<>(event.getArgs());
 
         if (!getName().equalsIgnoreCase(event.getInvoke())) {
-            args .clear();
+            args.clear();
             args.add(event.getInvoke());
         }
 

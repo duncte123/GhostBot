@@ -154,6 +154,8 @@ public class CommandManager {
 
         commandService.submit(() -> {
             try {
+                event.getChannel().sendTyping().queue();
+
                 final CommandEvent commandEvent = new CommandEvent(invoke, args, event);
 
                 cmd.execute(commandEvent);

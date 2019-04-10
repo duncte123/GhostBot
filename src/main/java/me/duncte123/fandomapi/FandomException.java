@@ -57,7 +57,7 @@ public class FandomException {
 
     @Override
     public String toString() {
-        return "$type: $message ($details)";
+        return String.format("%s: %s (%s)", type, message, details);
     }
 
 }
