@@ -16,26 +16,30 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostbot.commands.dannyphantom.image
+package me.duncte123.ghostbot.commands.dannyphantom.image;
 
-import me.duncte123.ghostbot.objects.CommandEvent
+import me.duncte123.ghostbot.objects.CommandEvent;
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg
+import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
-class GifCommand extends ImageBase {
-
-    private final String keyword = 'Danny Phantom gif'
+public class GifCommand extends ImageBase {
+    private final String keyword = "Danny Phantom gif";
 
     @Override
-    void execute(CommandEvent event) {
+    public void execute(CommandEvent event) {
         requestSearch(keyword,
-            { sendMessageFromData(event, it, keyword) },
-            { sendMsg(event.event, "Error while looking up image: $it") })
+            (it) -> sendMessageFromData(event, it, keyword) ,
+            (it) -> sendMsg(event, "Error while looking up image: " + it)
+        );
     }
 
     @Override
-    String getName() { 'gif' }
+    public String getName() {
+        return "gif";
+    }
 
     @Override
-    String getHelp() { 'Gives you a random Danny Phantom gif' }
+    public  String getHelp() { return
+        "Gives you a random Danny Phantom gif";
+    }
 }

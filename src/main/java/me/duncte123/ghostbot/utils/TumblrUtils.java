@@ -35,14 +35,15 @@ public class TumblrUtils {
 
     private static final TumblrUtils instance = new TumblrUtils();
     private final String API_URL = "https://api.tumblr.com/v2/blog/%s/posts%s?limit=20" +
-        "&api_key=" + SpoopyUtils.getConfig().api.tumblr;
+        "&api_key=%s";
     private final Gson gson = new Gson();
 
     public void fetchAllFromAccount(String domain, String type, @NotNull Consumer<List<TumblrPost>> cb) {
         final List<TumblrPost> response = new ArrayList<>();
         final String url = String.format(API_URL,
             domain,
-            (type != null && !type.isEmpty() ? "/" + type : "")
+            (type != null && !type.isEmpty() ? "/" + type : ""),
+            SpoopyUtils.getConfig().api.tumblr
         );
 
         WebUtils.ins.getJSONObject(url).async((it) -> {
@@ -68,7 +69,7 @@ public class TumblrUtils {
     }
 
     public void fetchSinglePost(String domain, long id, @NotNull Consumer<TumblrPost> cb, Consumer<RequestException> error) {
-        final String url = String.format(API_URL + "&id=%s", domain, "", id);
+        final String url = String.format(API_URL + "&id=%s", domain, "", SpoopyUtils.getConfig().api.tumblr, id);
 
         WebUtils.ins.getJSONObject(url).async((it) -> cb.accept(
             gson.fromJson(

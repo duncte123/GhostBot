@@ -119,10 +119,6 @@ public class AudioUtils {
         return playerManager;
     }
 
-    public String getBASE_AUDIO_DIR() {
-        return baseAudioDir;
-    }
-
     public String getBaseAudioDir() {
         return baseAudioDir;
     }

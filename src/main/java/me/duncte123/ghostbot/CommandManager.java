@@ -20,6 +20,10 @@ package me.duncte123.ghostbot;
 
 import me.duncte123.ghostbot.commands.ReactionCommand;
 import me.duncte123.ghostbot.commands.dannyphantom.audio.*;
+import me.duncte123.ghostbot.commands.dannyphantom.image.*;
+import me.duncte123.ghostbot.commands.dannyphantom.wiki.WikiCommand;
+import me.duncte123.ghostbot.commands.dannyphantom.wiki.WikiUserCommand;
+import me.duncte123.ghostbot.commands.fiveyearslater.FylCommicCommand;
 import me.duncte123.ghostbot.commands.space.ISSCommand;
 import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.CommandEvent;
@@ -50,7 +54,7 @@ public class CommandManager {
         this.addCommand(new EmberCommand());
         this.addCommand(new BoxGhostCommand());
 
-        /*this.addCommand(new ImageCommand());
+        this.addCommand(new ImageCommand());
         this.addCommand(new GifCommand());
         this.addCommand(new OtherGhostCommands());
         this.addCommand(new DoppelgangerComicCommand(this.reactListReg));
@@ -59,7 +63,7 @@ public class CommandManager {
 
         this.addCommand(new WikiCommand());
         this.addCommand(new WikiUserCommand());
-        this.addCommand(new FylWikiCommand());
+        /*this.addCommand(new FylWikiCommand());
         this.addCommand(new PetitionCommand());
 
         this.addCommand(new QuotesCommand());

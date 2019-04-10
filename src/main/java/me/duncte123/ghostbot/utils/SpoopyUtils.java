@@ -35,6 +35,8 @@ public class SpoopyUtils {
 
     private static final GhostBotConfig config;
     private static final String GOOGLE_URL;
+    private static final AudioUtils audio = AudioUtils.getInstance();
+    private static final CommandManager commandManager = new CommandManager();
 
     static {
         String tempGoogle;
@@ -56,15 +58,12 @@ public class SpoopyUtils {
         } catch (IOException e) {
             tempConfig = null;
             tempGoogle = "";
-                e.printStackTrace();
+            e.printStackTrace();
         }
 
         GOOGLE_URL = tempGoogle;
         config = tempConfig;
     }
-
-    private static final AudioUtils audio = AudioUtils.getInstance();
-    private static final CommandManager commandManager = new CommandManager();
 
     public static GhostBotConfig getConfig() {
         return config;
@@ -87,12 +86,12 @@ public class SpoopyUtils {
         final double userCount = totalCount - botCount;
 
         //percent in users
-        double userCountP = (userCount / totalCount) * 100;
+        final double userCountP = (userCount / totalCount) * 100;
 
         //percent in bots
-        double botCountP = (botCount / totalCount) * 100;
+        final double botCountP = (botCount / totalCount) * 100;
 
-        return new double[] {Math.round(userCountP), Math.round(botCountP)};
+        return new double[]{Math.round(userCountP), Math.round(botCountP)};
     }
 
     public static TextChannel getPublicChannel(Guild guild) {
@@ -114,7 +113,7 @@ public class SpoopyUtils {
         return URLEncoder.encode(inp, StandardCharsets.UTF_8);
     }
 
-    public static TLongSet newLongSet(long ... ids) {
+    public static TLongSet newLongSet(long... ids) {
         return new TLongHashSet(ids);
     }
 
@@ -127,5 +126,5 @@ public class SpoopyUtils {
             return false;
         }
     }
-    
+
 }

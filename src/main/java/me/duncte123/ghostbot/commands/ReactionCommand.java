@@ -41,16 +41,16 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public abstract class ReactionCommand extends Command {
-    static final String LEFT_ARROW = "\u2B05";
-    static final String RIGHT_ARROW = "\u27A1";
-    static final String CANCEL = "\u274C";
+    private static final String LEFT_ARROW = "\u2B05";
+    private static final String RIGHT_ARROW = "\u27A1";
+    private static final String CANCEL = "\u274C";
     public static final List<String> LEFT_RIGHT_CANCEL = List.of(LEFT_ARROW, RIGHT_ARROW, CANCEL);
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(100);
 
 
     private final CommandManager.ReactionListenerRegistry listenerRegistry;
 
-    ReactionCommand(CommandManager.ReactionListenerRegistry registry) {
+    public ReactionCommand(CommandManager.ReactionListenerRegistry registry) {
         this.listenerRegistry = registry;
     }
 
@@ -132,6 +132,7 @@ public abstract class ReactionCommand extends Command {
         private void stop(boolean removeReactions) {
             this.shouldDeleteReactions = removeReactions;
             this.timeoutFuture.cancel(true);
+            this.cleanup();
         }
 
         private void addReactions(Message message) {
