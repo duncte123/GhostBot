@@ -22,17 +22,21 @@ import java.util.List;
 
 public class FylChapter {
 
-    private final String page_id;
-    private final int pages;
-    private final String name;
-    private final String chapter_url;
-    private final List<String> pages_url;
+    private String page_id;
+    private int pages;
+    private String name;
+    private String chapter_url;
+    private List<String> pages_url;
 
-    public FylChapter(String page_id, int pages, String name, String chapter_url, List<String> pages_url) {
+    public void setPage_id(String page_id) {
         this.page_id = page_id;
-        this.pages = pages;
-        this.name = name;
+    }
+
+    public void setChapter_url(String chapter_url) {
         this.chapter_url = chapter_url;
+    }
+
+    public void setPages_url(List<String> pages_url) {
         this.pages_url = pages_url;
     }
 
@@ -44,8 +48,16 @@ public class FylChapter {
         return pages;
     }
 
+    public void setPages(int pages) {
+        this.pages = pages;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getChapterUrl() {

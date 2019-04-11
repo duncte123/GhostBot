@@ -18,8 +18,11 @@
 
 package me.duncte123.ghostbot.objects.tumblr;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class TumblrPost {
     public String blog_name;
     public long id;
@@ -56,6 +59,114 @@ public class TumblrPost {
     public int width;
     public int height;
     public List<TumblrPhoto> photos;
+
+    public void setBlog_name(String blog_name) {
+        this.blog_name = blog_name;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setPost_url(String post_url) {
+        this.post_url = post_url;
+    }
+
+    public void setShort_url(String short_url) {
+        this.short_url = short_url;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
+    }
+
+    public void setReblog_key(String reblog_key) {
+        this.reblog_key = reblog_key;
+    }
+
+    public void setTags(String[] tags) {
+        this.tags = tags;
+    }
+
+    public void setBookmarklet(boolean bookmarklet) {
+        this.bookmarklet = bookmarklet;
+    }
+
+    public void setMobile(boolean mobile) {
+        this.mobile = mobile;
+    }
+
+    public void setSource_url(String source_url) {
+        this.source_url = source_url;
+    }
+
+    public void setSource_title(String source_title) {
+        this.source_title = source_title;
+    }
+
+    public void setLiked(boolean liked) {
+        this.liked = liked;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public void setTotal_posts(String total_posts) {
+        this.total_posts = total_posts;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    public void setDialogue(List<TumblrDialogue> dialogue) {
+        this.dialogue = dialogue;
+    }
+
+    public void setCaption(String caption) {
+        this.caption = caption;
+    }
+
+    public void setImage_permalink(String image_permalink) {
+        this.image_permalink = image_permalink;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public void setPhotos(List<TumblrPhoto> photos) {
+        this.photos = photos;
+    }
 
     @Override
     public boolean equals(Object obj) {

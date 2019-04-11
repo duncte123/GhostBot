@@ -16,45 +16,23 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostbot.objects.fyl;
+package me.duncte123.ghostbot.utils;
 
-import java.util.List;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class FylComic {
-    private String baseUrl;
-    private List<FylChapter> chapters;
-    private boolean useWixUrl;
-    private String wixUrl;
+import java.io.IOException;
 
-    public String getBaseUrl() {
-        return baseUrl;
-    }
+public class RawJsonDeserializer extends JsonDeserializer<String> {
 
-    public void setBaseUrl(String baseUrl) {
-        this.baseUrl = baseUrl;
-    }
+    @Override
+    public String deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
+        final ObjectMapper mapper = (ObjectMapper) jp.getCodec();
+        final JsonNode node = mapper.readTree(jp);
 
-    public List<FylChapter> getChapters() {
-        return chapters;
-    }
-
-    public void setChapters(List<FylChapter> chapters) {
-        this.chapters = chapters;
-    }
-
-    public boolean isUseWixUrl() {
-        return useWixUrl;
-    }
-
-    public void setUseWixUrl(boolean useWixUrl) {
-        this.useWixUrl = useWixUrl;
-    }
-
-    public String getWixUrl() {
-        return wixUrl;
-    }
-
-    public void setWixUrl(String wixUrl) {
-        this.wixUrl = wixUrl;
+        return mapper.writeValueAsString(node);
     }
 }

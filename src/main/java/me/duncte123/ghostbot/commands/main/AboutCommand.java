@@ -34,7 +34,7 @@ public class AboutCommand extends Command {
 
         sendEmbed(event, EmbedUtils.embedMessage(String.format(
             "Hey there, my name is GhostBot, I am the must have bot for your spooky server.\n" +
-                "I am manly themed around Danny Phantom but other spooky stuff that you have for me can be suggested to %2$s.\n" +
+                "I am mainly themed around Danny Phantom but other spooky stuff that you have for me can be suggested to %2$s.\n" +
                 "If you want to stay in contact with my developer you can join [this server](%1$s).\n\n" +
                 "**Extra information:**\n" +
                 "My twitter: [Click here](https://twitter.com/GhostBotDiscord)\n" +

@@ -22,18 +22,24 @@ import java.util.List;
 
 public class TumblrPhoto {
 
-    private final String caption;
-    private final TumblrPhotoElement original_size;
-    private final List<TumblrPhotoElement> alt_sizes;
+    private String caption;
+    private TumblrPhotoElement original_size;
+    private List<TumblrPhotoElement> alt_sizes;
 
-    public TumblrPhoto(String caption, TumblrPhotoElement original_size, List<TumblrPhotoElement> alt_sizes) {
-        this.caption = caption;
+    public void setOriginal_size(TumblrPhotoElement original_size) {
         this.original_size = original_size;
+    }
+
+    public void setAlt_sizes(List<TumblrPhotoElement> alt_sizes) {
         this.alt_sizes = alt_sizes;
     }
 
     public String getCaption() {
         return caption;
+    }
+
+    public void setCaption(String caption) {
+        this.caption = caption;
     }
 
     public TumblrPhotoElement getOriginalSize() {
@@ -45,26 +51,32 @@ public class TumblrPhoto {
     }
 
     public final static class TumblrPhotoElement {
-        private final String url;
-        private final int width;
-        private final int height;
-
-        public TumblrPhotoElement(String url, int width, int height) {
-            this.url = url;
-            this.width = width;
-            this.height = height;
-        }
+        private String url;
+        private int width;
+        private int height;
 
         public String getUrl() {
             return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
         }
 
         public int getWidth() {
             return width;
         }
 
+        public void setWidth(int width) {
+            this.width = width;
+        }
+
         public int getHeight() {
             return height;
+        }
+
+        public void setHeight(int height) {
+            this.height = height;
         }
     }
 

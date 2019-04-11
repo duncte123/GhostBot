@@ -182,7 +182,7 @@ public class BotListener extends ListenerAdapter {
             service.scheduleWithFixedDelay(() -> {
                 final ShardManager manager = GhostBot.getInstance().getShardManager();
 
-                final String jsonString = new JSONObject(SpoopyUtils.getConfig().botLists.toString())
+                final String jsonString = new JSONObject(SpoopyUtils.getConfig().botLists)
                     .put("server_count", manager.getGuildCache().size())
                     .put("shard_count", manager.getShardsTotal())
                     .put("bot_id", 397297702150602752L)

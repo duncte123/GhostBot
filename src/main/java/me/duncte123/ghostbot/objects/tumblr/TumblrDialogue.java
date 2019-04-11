@@ -19,25 +19,31 @@
 package me.duncte123.ghostbot.objects.tumblr;
 
 public class TumblrDialogue {
-    private final String name;
-    private final String label;
-    private final String phrase;
-
-    public TumblrDialogue(String name, String label, String phrase) {
-        this.name = name;
-        this.label = label;
-        this.phrase = phrase;
-    }
+    private String name;
+    private String label;
+    private String phrase;
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getLabel() {
         return label;
     }
 
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
     public String getPhrase() {
         return phrase;
+    }
+
+    public void setPhrase(String phrase) {
+        this.phrase = phrase;
     }
 }
