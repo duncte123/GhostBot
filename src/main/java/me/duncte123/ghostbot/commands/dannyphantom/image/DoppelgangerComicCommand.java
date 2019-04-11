@@ -18,7 +18,7 @@
 
 package me.duncte123.ghostbot.commands.dannyphantom.image;
 
-import com.google.gson.reflect.TypeToken;
+import com.fasterxml.jackson.core.type.TypeReference;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.ghostbot.CommandManager;
 import me.duncte123.ghostbot.commands.ReactionCommand;
@@ -26,7 +26,7 @@ import me.duncte123.ghostbot.commands.dannyphantom.text.QuotesCommand;
 import me.duncte123.ghostbot.objects.CommandCategory;
 import me.duncte123.ghostbot.objects.CommandEvent;
 import me.duncte123.ghostbot.objects.tumblr.TumblrPost;
-import me.duncte123.ghostbot.utils.TumblrUtils;
+import me.duncte123.ghostbot.utils.SpoopyUtils;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
@@ -34,7 +34,6 @@ import net.dv8tion.jda.core.entities.User;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -175,11 +174,7 @@ public class DoppelgangerComicCommand extends ReactionCommand {
 
         List<TumblrPost> posts = null;
         try {
-            posts = TumblrUtils.getInstance().getGson().fromJson(
-                new String(Files.readAllBytes(new File("doppelganger.json").toPath())),
-                new TypeToken<List<TumblrPost>>() {
-                }.getType()
-            );
+            posts = SpoopyUtils.getJackson().readValue(new File("doppelganger.json"), new TypeReference<List<TumblrPost>>() {});
         } catch (IOException e) {
             logger.error("Failed to load doppelganger", e);
         }

@@ -18,6 +18,7 @@
 
 package me.duncte123.ghostbot.utils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import gnu.trove.set.TLongSet;
 import gnu.trove.set.hash.TLongHashSet;
 import me.duncte123.botcommons.config.ConfigUtils;
@@ -63,6 +64,7 @@ public class SpoopyUtils {
         config = tempConfig;
     }
 
+    private static final ObjectMapper jackson = new ObjectMapper();
     private static final AudioUtils audio = AudioUtils.getInstance();
     private static final CommandManager commandManager = new CommandManager();
 
@@ -72,6 +74,10 @@ public class SpoopyUtils {
 
     public static AudioUtils getAudio() {
         return audio;
+    }
+
+    public static ObjectMapper getJackson() {
+        return jackson;
     }
 
     public static CommandManager getCommandManager() {

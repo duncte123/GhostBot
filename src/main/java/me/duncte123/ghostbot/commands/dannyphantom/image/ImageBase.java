@@ -19,7 +19,6 @@
 package me.duncte123.ghostbot.commands.dannyphantom.image;
 
 import com.github.natanbc.reliqua.request.RequestException;
-import com.google.gson.Gson;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.ghostbot.objects.Command;
@@ -37,6 +36,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +51,6 @@ public abstract class ImageBase extends Command {
     private final Map<String, GoogleSearchResults> searchCache = new HashMap<>();
     private static final Logger logger = LoggerFactory.getLogger(ImageBase.class);
     private static final JSONObject IMAGES = new ConfigUtils().getImages();
-    protected static final Gson gson = new Gson();
 
     void requestSearch(String query, Consumer<GoogleSearchResults> success, Consumer<RequestException> error) {
 
@@ -63,11 +62,16 @@ public abstract class ImageBase extends Command {
 
         logger.info("MAKING IMAGE REQUEST: " + query);
 
-        WebUtils.ins.getJSONObject(SpoopyUtils.getGoogleSearchUrl(query)).async(
+        WebUtils.ins.getText(SpoopyUtils.getGoogleSearchUrl(query)).async(
             (it) -> {
-                final GoogleSearchResults data = gson.fromJson(it.toString(), GoogleSearchResults.class);
-                success.accept(data);
-                searchCache.put(query, data);
+                try {
+                    final GoogleSearchResults data = SpoopyUtils.getJackson().readValue(it, GoogleSearchResults.class);
+                    success.accept(data);
+                    searchCache.put(query, data);
+                }
+                catch (IOException e){
+                    error.accept(new RequestException(e));
+                }
             }, error
         );
     }
@@ -78,7 +82,12 @@ public abstract class ImageBase extends Command {
         final JSONArray items = IMAGES.getJSONArray(query);
         final JSONObject item = items.getJSONObject(ThreadLocalRandom.current().nextInt(items.length()));
 
-        return gson.fromJson(item.toString(), ImageData.class);
+        try {
+            return SpoopyUtils.getJackson().readValue(item.toString(), ImageData.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     void sendMessageFromName(CommandEvent event, @NotNull ImageData i) {

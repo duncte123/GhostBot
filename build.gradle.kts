@@ -52,7 +52,7 @@ repositories {
 
 dependencies {
     //My little utils
-    implementation(group = "com.github.duncte123", name = "botCommons", version = "2e43820")
+    implementation(group = "com.github.duncte123", name = "botCommons", version = "c8ce3a5")
     
     implementation(group = "org.codehaus.groovy", name = "groovy-jsr223", version = "2.5.6")
 

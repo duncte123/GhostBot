@@ -18,7 +18,7 @@
 
 package me.duncte123.ghostbot.commands.dannyphantom.text;
 
-import com.google.gson.reflect.TypeToken;
+import com.fasterxml.jackson.core.type.TypeReference;
 import gnu.trove.list.TLongList;
 import gnu.trove.list.array.TLongArrayList;
 import gnu.trove.map.TLongObjectMap;
@@ -29,6 +29,7 @@ import me.duncte123.ghostbot.objects.CommandCategory;
 import me.duncte123.ghostbot.objects.CommandEvent;
 import me.duncte123.ghostbot.objects.tumblr.TumblrDialogue;
 import me.duncte123.ghostbot.objects.tumblr.TumblrPost;
+import me.duncte123.ghostbot.utils.SpoopyUtils;
 import me.duncte123.ghostbot.utils.TumblrUtils;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.core.EmbedBuilder;
@@ -38,7 +39,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -174,17 +174,11 @@ public class QuotesCommand extends Command {
 
         if (quotesFile.exists()) {
             try {
-                final String fileText = new String(Files.readAllBytes(quotesFile.toPath()));
-
-                List<TumblrPost> quotes = TumblrUtils.getInstance().getGson().fromJson(
-                    fileText,
-                    new TypeToken<List<TumblrPost>>() {
-                    }.getType()
-                );
+                final List<TumblrPost> quotes = SpoopyUtils.getJackson().readValue(quotesFile, new TypeReference<List<TumblrPost>>() {});
 
                 allQuotes.addAll(quotes);
                 logger.info("Loading quotes from file");
-        } catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 
@@ -202,27 +196,26 @@ public class QuotesCommand extends Command {
 
             TumblrUtils.getInstance().fetchAllFromAccount(DOMAIN, type,
                 (posts) -> {
-                try {
-                    counter.incrementAndGet();
+                    try {
+                        counter.incrementAndGet();
 
-                    final List<TumblrPost> filteredPosts = posts.stream().filter((it) -> !badPostIds.contains(it.id)).collect(Collectors.toList());
+                        final List<TumblrPost> filteredPosts = posts.stream().filter((it) -> !badPostIds.contains(it.id)).collect(Collectors.toList());
 
-                    allQuotes.addAll(filteredPosts);
-                    logger.info("Fetched {} quotes from type {}", filteredPosts.size(), type);
+                        allQuotes.addAll(filteredPosts);
+                        logger.info("Fetched {} quotes from type {}", filteredPosts.size(), type);
 
-                    if (counter.get() == types.length) {
-                        quotesFile.createNewFile();
+                        if (counter.get() == types.length) {
+                            quotesFile.createNewFile();
 
-                        final BufferedWriter writer = new BufferedWriter(new FileWriter(quotesFile));
-                        writer.write(TumblrUtils.getInstance().getGson().toJson(allQuotes));
-                        writer.close();
+                            final BufferedWriter writer = new BufferedWriter(new FileWriter(quotesFile));
+                            writer.write(SpoopyUtils.getJackson().writeValueAsString(allQuotes));
+                            writer.close();
 
-                        logger.info("Wrote quotes to file");
+                            logger.info("Wrote quotes to file");
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                }
-                catch (IOException e) {
-                    e.printStackTrace();
-                }
                 }
             );
         }
@@ -261,7 +254,7 @@ public class QuotesCommand extends Command {
         }
 
         raw = StringEscapeUtils.unescapeHtml4(raw);
-        
+
         final String input = raw.replaceAll(Pattern.quote("<br/>"), "\n");
         final String replacePWith = input.contains("</p>\n") ? "" : "\n";
 

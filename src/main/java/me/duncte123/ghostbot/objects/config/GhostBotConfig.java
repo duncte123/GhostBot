@@ -18,8 +18,6 @@
 
 package me.duncte123.ghostbot.objects.config;
 
-import com.google.gson.JsonElement;
-
 public class GhostBotConfig {
 
     public Discord discord;
@@ -28,7 +26,7 @@ public class GhostBotConfig {
     public Api api;
     public boolean running_local;
     public boolean shouldPostStats;
-    public JsonElement botLists;
+    public String botLists;
 
     public static class Discord {
         public String prefix;

@@ -18,15 +18,15 @@
 
 package me.duncte123.ghostbot.utils;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.natanbc.reliqua.request.RequestException;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.ghostbot.objects.tumblr.TumblrPost;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -36,7 +36,6 @@ public class TumblrUtils {
     private static final TumblrUtils instance = new TumblrUtils();
     private final String API_URL = "https://api.tumblr.com/v2/blog/%s/posts%s?limit=20" +
         "&api_key=%s";
-    private final Gson gson = new Gson();
 
     public void fetchAllFromAccount(String domain, String type, @NotNull Consumer<List<TumblrPost>> cb) {
         final List<TumblrPost> response = new ArrayList<>();
@@ -47,39 +46,46 @@ public class TumblrUtils {
         );
 
         WebUtils.ins.getJSONObject(url).async((it) -> {
-            final JSONObject res = it.getJSONObject("response");
-            final int total = res.getInt("total_posts");
-            final JSONArray postsJson = res.getJSONArray("posts");
-            final List<TumblrPost> firstPosts = gson.fromJson(postsJson.toString(),
-                new TypeToken<List<TumblrPost>>() {}.getType());
+            try {
+                final JSONObject res = it.getJSONObject("response");
+                final int total = res.getInt("total_posts");
+                final JSONArray postsJson = res.getJSONArray("posts");
+                final List<TumblrPost> firstPosts = SpoopyUtils.getJackson()
+                    .readValue(postsJson.toString(), new TypeReference<List<TumblrPost>>() {});
 
-            response.addAll(firstPosts);
+                response.addAll(firstPosts);
 
-            for (int i = 20; i <= total; i += 20) {
-                final String nextPageUrl = String.format("%s&offset=%s", url, i);
-                final JSONObject j = WebUtils.ins.getJSONObject(nextPageUrl).execute();
-                final JSONArray fetched = j.getJSONObject("response").getJSONArray("posts");
-                final List<TumblrPost> posts = gson.fromJson(fetched.toString(), new TypeToken<List<TumblrPost>>() {}.getType());
+                for (int i = 20; i <= total; i += 20) {
+                    final String nextPageUrl = String.format("%s&offset=%s", url, i);
+                    final JSONObject j = WebUtils.ins.getJSONObject(nextPageUrl).execute();
+                    final JSONArray fetched = j.getJSONObject("response").getJSONArray("posts");
+                    final List<TumblrPost> posts = SpoopyUtils.getJackson()
+                        .readValue(fetched.toString(), new TypeReference<List<TumblrPost>>() {});
 
-                response.addAll(posts);
+                    response.addAll(posts);
+                }
+
+                cb.accept(response);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-
-            cb.accept(response);
         });
     }
 
     public void fetchSinglePost(String domain, long id, @NotNull Consumer<TumblrPost> cb, Consumer<RequestException> error) {
         final String url = String.format(API_URL + "&id=%s", domain, "", SpoopyUtils.getConfig().api.tumblr, id);
 
-        WebUtils.ins.getJSONObject(url).async((it) -> cb.accept(
-            gson.fromJson(
-                it.getJSONObject("response").getJSONArray("posts").getJSONObject(0).toString()
-                , TumblrPost.class)
-        ), error);
-    }
-
-    public Gson getGson() {
-        return gson;
+        WebUtils.ins.getJSONObject(url).async((it) -> {
+            try {
+                cb.accept(
+                    SpoopyUtils.getJackson().readValue(
+                        it.getJSONObject("response").getJSONArray("posts").getJSONObject(0).toString()
+                        , TumblrPost.class)
+                );
+            } catch (IOException e) {
+                error.accept(new RequestException(e));
+            }
+        }, error);
     }
 
     public static TumblrUtils getInstance() {

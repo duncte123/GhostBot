@@ -18,13 +18,13 @@
 
 package me.duncte123.ghostbot.commands.fiveyearslater;
 
-import com.google.gson.Gson;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.ghostbot.CommandManager;
 import me.duncte123.ghostbot.commands.ReactionCommand;
 import me.duncte123.ghostbot.objects.CommandEvent;
 import me.duncte123.ghostbot.objects.fyl.FylChapter;
 import me.duncte123.ghostbot.objects.fyl.FylComic;
+import me.duncte123.ghostbot.utils.SpoopyUtils;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
@@ -54,7 +54,7 @@ public class FylCommicCommand extends ReactionCommand {
 
         try {
             final String text = new String(Files.readAllBytes(new File("5yearslater_NEW.json").toPath()));
-            tempComic = new Gson().fromJson(text, FylComic.class);
+            tempComic = SpoopyUtils.getJackson().readValue(text, FylComic.class);
         } catch (IOException e) {
             tempComic = null;
             e.printStackTrace();

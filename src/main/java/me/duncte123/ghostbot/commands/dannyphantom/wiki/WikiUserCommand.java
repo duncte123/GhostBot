@@ -27,6 +27,7 @@ import me.duncte123.ghostbot.utils.SpoopyUtils;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.core.EmbedBuilder;
 
+import java.io.IOException;
 import java.util.List;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed;
@@ -53,40 +54,45 @@ public class WikiUserCommand extends WikiBaseCommand {
                     return;
                 }
 
-                final UserResultSet userResultSet = gson.fromJson(json.toString(), UserResultSet.class);
+                try {
+                    final UserResultSet userResultSet = SpoopyUtils.getJackson().readValue(json.toString(), UserResultSet.class);
 
-                if (userResultSet.getItems().size() == 1) {
-                    final UserElement user = userResultSet.getItems().get(0);
+                    if (userResultSet.getItems().size() == 1) {
+                        final UserElement user = userResultSet.getItems().get(0);
 
-                    user.setBasePath(userResultSet.getBasepath());
+                        user.setBasePath(userResultSet.getBasepath());
 
-                    final EmbedBuilder embed = EmbedUtils.defaultEmbed()
-                        .setThumbnail(user.getAvatar())
-                        .setTitle("Profile link", user.getAbsoluteUrl())
-                        .setAuthor(user.getName(), user.getAbsoluteUrl(), user.getAvatar())
-                        .addField("User Info:", "**Name:** " + user.getName() +
-                            "\n**Id:** " + user.getUserId() +
-                            "\n**Title:** " + user.getTitle() +
-                            "**Number of edits:** " + user.getNumberofedits(), false);
+                        final EmbedBuilder embed = EmbedUtils.defaultEmbed()
+                            .setThumbnail(user.getAvatar())
+                            .setTitle("Profile link", user.getAbsoluteUrl())
+                            .setAuthor(user.getName(), user.getAbsoluteUrl(), user.getAvatar())
+                            .addField("User Info:", "**Name:** " + user.getName() +
+                                "\n**Id:** " + user.getUserId() +
+                                "\n**Title:** " + user.getTitle() +
+                                "**Number of edits:** " + user.getNumberofedits(), false);
 
-                    sendEmbed(event, embed);
+                        sendEmbed(event, embed);
 
-                    return;
+                        return;
+                    }
+
+                    final EmbedBuilder eb = EmbedUtils.defaultEmbed()
+                        .setTitle("I found the following users:");
+
+                    for (UserElement user : userResultSet.getItems()) {
+                        eb.appendDescription("[")
+                            .appendDescription(user.getName())
+                            .appendDescription("](")
+                            .appendDescription(userResultSet.getBasepath() + user.getUrl())
+                            .appendDescription(")\n");
+
+                    }
+
+                    sendEmbed(event, eb);
                 }
-
-                final EmbedBuilder eb = EmbedUtils.defaultEmbed()
-                    .setTitle("I found the following users:");
-
-                for (UserElement user : userResultSet.getItems()) {
-                    eb.appendDescription("[")
-                        .appendDescription(user.getName())
-                        .appendDescription("](")
-                        .appendDescription(userResultSet.getBasepath() + user.getUrl())
-                        .appendDescription(")\n");
-
+                catch (IOException e) {
+                    sendMsg(event, "Something went wrong: " + e.getMessage());
                 }
-
-                sendEmbed(event, eb);
 
             },
             (it) -> sendMsg(event, "Something went wrong: " + it.getMessage())

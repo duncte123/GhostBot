@@ -27,6 +27,7 @@ import me.duncte123.ghostbot.utils.SpoopyUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jsoup.nodes.Element;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -81,7 +82,7 @@ public class DPArtistsCommand extends ImageBase {
         }
 
         if (args.size() < 1) {
-            sendMsg(event, "Correct usage is `gb."+getName()+" <artist name>`");
+            sendMsg(event, "Correct usage is `gb." + getName() + " <artist name>`");
             return;
         }
 
@@ -112,12 +113,12 @@ public class DPArtistsCommand extends ImageBase {
                 break;
 
             case "list":
-                sendMsg(event, "The current list of artists is: `"+String.join("`, `", artists) + '`');
+                sendMsg(event, "The current list of artists is: `" + String.join("`, `", artists) + '`');
                 break;
 
             default:
                 sendMsg(event, "This artist is not in the list of artists that have approved their art to be in this bot.\n" +
-                    "Use `gb."+getName()+" list` for a list of artists.");
+                    "Use `gb." + getName() + " list` for a list of artists.");
                 break;
 
         }
@@ -125,7 +126,7 @@ public class DPArtistsCommand extends ImageBase {
     }
 
     @Override
-    public String getName() { return"artist"; }
+    public String getName() { return "artist"; }
 
     @Override
     public String getHelp() { return "Get the latest post of a GhostBotApproved™ artist"; }
@@ -135,32 +136,26 @@ public class DPArtistsCommand extends ImageBase {
         return Arrays.asList(artists);
     }
 
-    private static String[] extractInfo(String a) {
-        return a.replaceAll("https?://", "").split("\\.");
-    }
-
-    private static String getTumblrProfilePictureUrl(String domain) {
-        return "https://api.tumblr.com/v2/blog/"+domain+"/avatar/48";
-    }
-
     private void extractPictureFromTumblr(String username, @NotNull Consumer<TumblrPost> cb) {
         final String url = String.format(
             "https://api.tumblr.com/v2/blog/%s.tumblr.com/posts?api_key=%s&type=photo&limit=1",
             username, SpoopyUtils.getConfig().api.tumblr
         );
 
-        WebUtils.ins.getJSONObject(url).async((it) ->
-            cb.accept(
-                gson.fromJson(it.getJSONObject("response")
-                    .getJSONArray("posts").getJSONObject(0).toString(), TumblrPost.class)
-            )
+        WebUtils.ins.getJSONObject(url).async((it) -> {
+                try {
+                    cb.accept(
+                        SpoopyUtils.getJackson().readValue(it.getJSONObject("response")
+                            .getJSONArray("posts").getJSONObject(0).toString(), TumblrPost.class)
+                    );
+                } catch (IOException ignored) { }
+            }
         );
-
     }
 
     private void getDeviantartDataXmlOnly(String usn, Consumer<LocalDeviantData> cb) {
         WebUtils.ins.scrapeWebPage("https://backend.deviantart.com/rss.xml" +
-            "?type=deviation&q=by%3A"+usn+"+sort%3Atime+meta%3Aall").async((it) ->{
+            "?type=deviation&q=by%3A" + usn + "+sort%3Atime+meta%3Aall").async((it) -> {
             //get an item
             final Element item = it.selectFirst("item");
 
@@ -214,6 +209,14 @@ public class DPArtistsCommand extends ImageBase {
                 )
             );
         }
+    }
+
+    private static String[] extractInfo(String a) {
+        return a.replaceAll("https?://", "").split("\\.");
+    }
+
+    private static String getTumblrProfilePictureUrl(String domain) {
+        return "https://api.tumblr.com/v2/blog/" + domain + "/avatar/48";
     }
 
     private class LocalDeviantData {

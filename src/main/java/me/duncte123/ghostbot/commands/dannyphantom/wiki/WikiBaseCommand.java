@@ -18,7 +18,6 @@
 
 package me.duncte123.ghostbot.commands.dannyphantom.wiki;
 
-import com.google.gson.Gson;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.fandomapi.FandomException;
@@ -34,6 +33,7 @@ import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,8 +42,7 @@ import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
 public abstract class WikiBaseCommand extends Command {
     //shortcut to the wiki
-    protected final WikiHolder wiki = new WikiHolder("https://dannyphantom.fandom.com");
-    protected final Gson gson = new Gson();
+    final WikiHolder wiki = new WikiHolder("https://dannyphantom.fandom.com");
 
     protected void handleWikiSearch(WikiHolder wiki, String searchQuery, GuildMessageReceivedEvent event) {
         WebUtils.ins.getJSONObject(String.format(
@@ -67,47 +66,52 @@ public abstract class WikiBaseCommand extends Command {
                     return;
                 }
 
-                final LocalWikiSearchResultSet wikiSearchResultSet = gson.fromJson(json.toString(), LocalWikiSearchResultSet.class);
+                try {
+                    final LocalWikiSearchResultSet wikiSearchResultSet = SpoopyUtils.getJackson()
+                        .readValue(json.toString(), LocalWikiSearchResultSet.class);
+                    final List<LocalWikiSearchResult> items = wikiSearchResultSet.getItems();
 
-                final List<LocalWikiSearchResult> items = wikiSearchResultSet.getItems();
+                    if (items.size() > 10) {
+                        final List<LocalWikiSearchResult> temp = new ArrayList<>();
 
-                if (items.size() > 10) {
-                    final List<LocalWikiSearchResult> temp = new ArrayList<>();
+                        for (int i = 0; i < 10; i++) {
+                            temp.add(items.get(i));
+                        }
 
-                    for (int i = 0; i < 10; i++) {
-                        temp.add(items.get(i));
+                        items.clear();
+                        items.addAll(temp);
                     }
 
-                    items.clear();
-                    items.addAll(temp);
+                    final User author = event.getAuthor();
+                    final String authorName = author.getAsTag();
+                    final String authorIcon = author.getEffectiveAvatarUrl();
+
+
+                    final EmbedBuilder eb = EmbedUtils.defaultEmbed()
+                        .setTitle("Query: " + searchQuery,
+                            wiki.getDomain() + "/wiki/Special:Search?query=" + searchQuery.replaceAll(" ", "%20"))
+                        .setAuthor("Requester: " + authorName,
+                            "https://ghostbot.duncte123.me/", authorIcon)
+                        .setDescription("Total results: " + wikiSearchResultSet.getTotal() +
+                            "\nCurrent Listed: " + items.size() + "\n\n");
+
+
+                    for (LocalWikiSearchResult localWikiSearchResult : items) {
+                        eb.appendDescription("[")
+                            .appendDescription(localWikiSearchResult.getTitle())
+                            .appendDescription(" - ")
+                            .appendDescription(StringUtils.abbreviate(safeUrl(localWikiSearchResult.getSnippet()), 50))
+                            .appendDescription("](")
+                            .appendDescription(safeUrl(localWikiSearchResult.getUrl()))
+                            .appendDescription(")\n");
+
+                    }
+
+                    sendEmbed(event, eb);
                 }
-
-                final User author = event.getAuthor();
-                final String authorName = author.getAsTag();
-                final String authorIcon = author.getEffectiveAvatarUrl();
-
-
-                final EmbedBuilder eb = EmbedUtils.defaultEmbed()
-                    .setTitle("Query: " + searchQuery,
-                        wiki.getDomain() + "/wiki/Special:Search?query=" + searchQuery.replaceAll(" ", "%20"))
-                    .setAuthor("Requester: " + authorName,
-                        "https://ghostbot.duncte123.me/", authorIcon)
-                    .setDescription("Total results: " + wikiSearchResultSet.getTotal() +
-                        "\nCurrent Listed: " + items.size() + "\n\n");
-
-
-                for (LocalWikiSearchResult localWikiSearchResult : items) {
-                    eb.appendDescription("[")
-                        .appendDescription(localWikiSearchResult.getTitle())
-                        .appendDescription(" - ")
-                        .appendDescription(StringUtils.abbreviate(safeUrl(localWikiSearchResult.getSnippet()), 50))
-                        .appendDescription("](")
-                        .appendDescription(safeUrl(localWikiSearchResult.getUrl()))
-                        .appendDescription(")\n");
-
+                catch (IOException e) {
+                    sendMsg(event, "Something went wrong, please report the following to my developer: " + e.getMessage());
                 }
-
-                sendEmbed(event, eb);
             },
             (it) -> sendMsg(event, "Something went wrong: " + it.getMessage())
         );
@@ -118,7 +122,7 @@ public abstract class WikiBaseCommand extends Command {
         return CommandCategory.WIKI;
     }
 
-    public static FandomException toEx(JSONObject json) {
+     static FandomException toEx(JSONObject json) {
         final JSONObject ex = json.getJSONObject("exception");
 
         return new FandomException(
