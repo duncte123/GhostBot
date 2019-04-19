@@ -136,7 +136,7 @@ public abstract class ImageBase extends Command {
         return CommandCategory.IMAGE;
     }
 
-    public class ImageData {
+    public static class ImageData {
         public String title;
         public String url;
         public  String website;
