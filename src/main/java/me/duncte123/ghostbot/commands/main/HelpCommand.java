@@ -76,7 +76,7 @@ public class HelpCommand extends Command {
         final List<String> characterCommands = getCommandsForCategory(CommandCategory.CHARACTERS);
 
         final EmbedBuilder helpEmbed = EmbedUtils.defaultEmbed()
-            .setDescription("Use `${Variables.PREFIX}help [command]` for more info about a command")
+            .setDescription("Use `" + Variables.PREFIX + "help [command]` for more info about a command")
             .addField("Commands for all you space nerds", buildCommands(spaceCommands), false)
             .addField("Audio commands", buildCommands(audioCommands), false)
             .addField("Image commands", buildCommands(imageCommands), false)
@@ -87,7 +87,7 @@ public class HelpCommand extends Command {
 
         event.getAuthor().openPrivateChannel().queue((it) ->
             it.sendMessage(helpEmbed.build()).queue(
-                (m) -> sendMsg(event, "$event.author.asMention, check your dms"),
+                (m) -> sendMsg(event, event.getAuthor().getAsMention() + ", check your dms"),
                 (e) -> sendEmbed(event, helpEmbed)
             ), (e) -> sendEmbed(event, helpEmbed)
         );

@@ -44,12 +44,12 @@ public class GhostBot {
 
     private static GhostBot instance;
     private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
-    private final IntFunction<? extends Game> gameProvider = (it) -> Game.playing(
+    /*private final IntFunction<? extends Game> gameProvider = (it) -> Game.playing(
         String.format("GhostBot 3.0 | Now with popup blocker (shard %s)", it + 1)
-    );
-    /*private final IntFunction<? extends Game> gameProvider = (it) -> Game.watching(
-        String.format("%shelp | #GoGhostAgain (shard %s)", Variables.PREFIX, it)
     );*/
+    private final IntFunction<? extends Game> gameProvider = (it) -> Game.watching(
+        String.format("%shelp | #GoGhostAgain (shard %s)", Variables.PREFIX, it)
+    );
     private final ShardManager shardManager;
 
     private GhostBot() throws LoginException {

@@ -180,7 +180,7 @@ public class DPArtistsCommand extends ImageBase {
             extractPictureFromTumblr(usn, (it) -> {
 
                 if (!it.type.equalsIgnoreCase("photo")) {
-                    sendMsg(event, "Got a post of type `$it.type` for the type `photo`\n" +
+                    sendMsg(event, "Got a post of type `" + it.type + "` for the type `photo`\n" +
                         "WTF tumblr?\n" +
                         "Here\'s the link anyway: <" + it.post_url + '>');
 
