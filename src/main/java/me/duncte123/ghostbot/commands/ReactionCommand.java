@@ -115,7 +115,9 @@ public abstract class ReactionCommand extends Command {
                 return;
             }
 
-            event.getReaction().removeReaction(event.getUser()).queue();
+            if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) {
+                event.getReaction().removeReaction(event.getUser()).queue(null, (__) -> {});
+            }
 
             if (!allowedUsers.isEmpty() && !allowedUsers.contains(event.getUser().getIdLong())) {
                 return;
