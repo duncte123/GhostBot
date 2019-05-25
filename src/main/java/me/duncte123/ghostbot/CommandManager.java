@@ -61,6 +61,7 @@ public class CommandManager {
         this.addCommand(new GifCommand());
         this.addCommand(new OtherGhostCommands());
         this.addCommand(new DoppelgangerComicCommand(this.reactListReg));
+        this.addCommand(new TheelectricundeadCommand(this.reactListReg));
         this.addCommand(new FylCommicCommand(this.reactListReg));
         this.addCommand(new DPArtistsCommand());
 

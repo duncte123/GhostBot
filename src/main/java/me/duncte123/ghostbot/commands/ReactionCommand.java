@@ -155,7 +155,7 @@ public abstract class ReactionCommand extends Command {
             if (shouldDeleteReactions) {
                 final TextChannel channel = GhostBot.getInstance().getShardManager().getTextChannelById(channelId);
 
-                if (channel != null) {
+                if (channel != null && channel.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) {
                     channel.getMessageById(messageId).queue(
                         (it) ->  it.clearReactions().queue(null, (t) -> {})
                     );
