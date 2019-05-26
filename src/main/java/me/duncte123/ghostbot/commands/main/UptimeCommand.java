@@ -46,12 +46,12 @@ public class UptimeCommand extends Command {
         This code has been inspired from JDA-Butler <https://github.com/Almighty-Alpaca/JDA-Butler/>
          */
         //Like it's ever gonna be up for more then a week
-        final int years = (int) (time / 31104000000L);
-        final int months = (int) (time / 2592000000L % 12);
-        final int days = (int) (time / 86400000L % 30);
-        final int hours = (int) (time / 3600000L % 24);
-        final int minutes = (int) (time / 60000L % 60);
-        final int seconds = (int) (time / 1000L % 60);
+        final long years = time / 31104000000L;
+        final long months = time / 2592000000L % 12;
+        final long days = time / 86400000L % 30;
+        final long hours = time / 3600000L % 24;
+        final long minutes = time / 60000L % 60;
+        final long seconds = time / 1000L % 60;
 
         final String uptimeString = formatTimeWord("Year", years, true) +
             formatTimeWord("Month", months, true) +
@@ -63,7 +63,7 @@ public class UptimeCommand extends Command {
         return uptimeString.startsWith(", ") ? uptimeString.replaceFirst(", ", "") : uptimeString;
     }
 
-    private String formatTimeWord(String word, int amount, boolean withComma) {
+    private String formatTimeWord(String word, long amount, boolean withComma) {
         if (amount == 0) {
             return "";
         }
