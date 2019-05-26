@@ -18,8 +18,11 @@
 
 package me.duncte123.ghostbot.objects.tumblr;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class TumblrPhoto {
 
     private String caption;
@@ -30,7 +33,14 @@ public class TumblrPhoto {
         this.original_size = original_size;
     }
 
+    public void setOriginalsize(TumblrPhotoElement original_size) {
+        this.original_size = original_size;
+    }
+
     public void setAlt_sizes(List<TumblrPhotoElement> alt_sizes) {
+        this.alt_sizes = alt_sizes;
+    }
+    public void setAltSizes(List<TumblrPhotoElement> alt_sizes) {
         this.alt_sizes = alt_sizes;
     }
 
@@ -49,6 +59,8 @@ public class TumblrPhoto {
     public List<TumblrPhotoElement> getAltSizes() {
         return alt_sizes;
     }
+
+
 
     public final static class TumblrPhotoElement {
         private String url;

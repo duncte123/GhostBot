@@ -274,6 +274,9 @@ public class QuotesCommand extends Command {
             .replaceAll(Pattern.quote("</b>"), "**")
             .replaceAll(Pattern.quote("<strong>"), "**")
             .replaceAll(Pattern.quote("</strong>"), "**")
+            // strikethrough
+            .replaceAll(Pattern.quote("<strike>"), "~~")
+            .replaceAll(Pattern.quote("</strike>"), "~~")
             //useless crap that we don"t need
             .replaceAll(Pattern.quote("<small>"), "")
             .replaceAll(Pattern.quote("</small>"), "")

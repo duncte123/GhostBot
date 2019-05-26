@@ -19,11 +19,14 @@
 package me.duncte123.ghostbot.commands.dannyphantom.image;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.google.common.collect.Lists;
 import me.duncte123.ghostbot.CommandManager;
 import me.duncte123.ghostbot.commands.ReactionCommand;
+import me.duncte123.ghostbot.objects.CommandCategory;
 import me.duncte123.ghostbot.objects.CommandEvent;
 import me.duncte123.ghostbot.objects.tumblr.TumblrPost;
 import me.duncte123.ghostbot.utils.SpoopyUtils;
+import me.duncte123.ghostbot.utils.TumblrUtils;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.entities.User;
@@ -35,6 +38,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 import static me.duncte123.ghostbot.utils.SpoopyUtils.newLongSet;
@@ -127,6 +132,13 @@ abstract class TumblrComicBase extends ReactionCommand {
     @Nonnull
     abstract MessageEmbed getEmbed(int page);
 
+    abstract Predicate<TumblrPost> getFilter();
+
+    @Override
+    public CommandCategory getCategory() {
+        return CommandCategory.IMAGE;
+    }
+
     void loadPages() {
         final String clsName = getClass().getSimpleName();
 
@@ -144,8 +156,32 @@ abstract class TumblrComicBase extends ReactionCommand {
 
             if (posts != null) {
                 pages.addAll(posts);
-                logger.info("Loaded {} pages from the {} comic.", pages.size(), clsName);
+                logger.info("(cached) Loaded {} pages from the {} comic.", pages.size(), clsName);
             }
+
+            return;
         }
+
+        final Predicate<TumblrPost> postFilter = getFilter();
+
+        TumblrUtils.getInstance().fetchAllFromAccount(blogUrl, "photo", (posts) -> {
+            final List<TumblrPost> ps = Lists.reverse(posts.stream()
+                .filter(postFilter)
+                .collect(Collectors.toList()));
+
+            pages.addAll(ps);
+            logger.info("Loaded {} pages from the {} comic.", pages.size(), clsName);
+
+            try {
+                if (!comicFile.exists()) {
+                    comicFile.createNewFile();
+                }
+
+                SpoopyUtils.getJackson().writeValue(comicFile, ps);
+                logger.info("Wrote {} to json", clsName);
+            } catch (Exception e) {
+                logger.error("Failed to write " + clsName, e);
+            }
+        });
     }
 }

@@ -18,6 +18,8 @@
 
 package me.duncte123.ghostbot.commands.dannyphantom.image;
 
+import gnu.trove.list.TLongList;
+import gnu.trove.list.array.TLongArrayList;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.ghostbot.CommandManager;
 import me.duncte123.ghostbot.commands.dannyphantom.text.QuotesCommand;
@@ -28,14 +30,20 @@ import net.dv8tion.jda.core.entities.MessageEmbed;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 public class TheelectricundeadCommand extends TumblrComicBase {
+    private final TLongList badPosts = new TLongArrayList(new long[] {
+        183827754213L,
+    });
+
     public TheelectricundeadCommand(CommandManager.ReactionListenerRegistry registry) {
         super(registry);
         this.filename = "bzzt.json";
         this.blogUrl = "theelectricundead.tumblr.com";
         this.chapters = new int[]{
-            1 // Chapter 1
+            1,  // Chapter 1
+            14, // Chapter 2
         };
         loadPages();
     }
@@ -55,6 +63,15 @@ public class TheelectricundeadCommand extends TumblrComicBase {
             .setTimestamp(null)
             .setFooter(String.format("Page: %s/%s", page + 1, pages.size()), Variables.FOOTER_ICON)
             .build();
+    }
+
+    @Override
+    Predicate<TumblrPost> getFilter() {
+        return (post) -> !badPosts.contains(post.id) &&
+            post.source_url == null && // source_url is set when it's a reblog
+            !post.caption.contains("blockquote") &&
+            post.summary != null &&
+            (post.summary.contains("Page") || post.summary.contains("Chapter"));
     }
 
     @Override

@@ -41,6 +41,7 @@ public class TumblrPost {
     public boolean liked;
     public String state;
     public String total_posts;
+    public String summary;
 
     /*Text posts*/
     public String title;
@@ -166,6 +167,10 @@ public class TumblrPost {
 
     public void setPhotos(List<TumblrPhoto> photos) {
         this.photos = photos;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 
     @Override
