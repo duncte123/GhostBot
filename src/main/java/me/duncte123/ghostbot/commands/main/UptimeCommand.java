@@ -55,8 +55,7 @@ public class UptimeCommand extends Command {
 
         final String uptimeString = formatTimeWord("Year", years, true) +
             formatTimeWord("Month", months, true) +
-            formatTimeWord("Day", days, false) +
-            ", " +
+            formatTimeWord("Day", days, true) +
             formatTimeWord("Hour", hours, true) +
             formatTimeWord("Minute", minutes, true) +
             formatTimeWord("Second", seconds, false);
