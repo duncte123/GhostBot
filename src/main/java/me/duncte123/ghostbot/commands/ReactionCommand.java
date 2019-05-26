@@ -25,9 +25,7 @@ import me.duncte123.ghostbot.GhostBot;
 import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.Emote;
 import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.MessageReaction;
 import net.dv8tion.jda.core.entities.MessageReaction.ReactionEmote;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
@@ -55,7 +53,7 @@ public abstract class ReactionCommand extends Command {
     }
 
     public final void addReactions(Message message, List<String> reactions, TLongSet allowedUsers,
-                            int timeout, TimeUnit timeUnit, Consumer<Integer> callback) {
+                                   int timeout, TimeUnit timeUnit, Consumer<Integer> callback) {
 
         if (!ReactionListener.instances.containsKey(message.getIdLong())) {
             new ReactionListener(message, reactions, allowedUsers, listenerRegistry, timeout, timeUnit, callback);
@@ -88,8 +86,8 @@ public abstract class ReactionCommand extends Command {
         private boolean shouldDeleteReactions = true;
 
         public ReactionListener(Message message, List<String> allowedReactions, TLongSet allowedUsers,
-                         CommandManager.ReactionListenerRegistry registry, int timeout, TimeUnit timeUnit,
-                         Consumer<Integer> callback) {
+                                CommandManager.ReactionListenerRegistry registry, int timeout, TimeUnit timeUnit,
+                                Consumer<Integer> callback) {
 
             instances.put(message.getIdLong(), this);
 
@@ -157,7 +155,7 @@ public abstract class ReactionCommand extends Command {
 
                 if (channel != null && channel.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) {
                     channel.getMessageById(messageId).queue(
-                        (it) ->  it.clearReactions().queue(null, (t) -> {})
+                        (it) -> it.clearReactions().queue(null, (t) -> {})
                     );
                 }
             }

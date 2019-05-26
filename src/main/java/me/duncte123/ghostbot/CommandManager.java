@@ -84,6 +84,7 @@ public class CommandManager {
         this.addCommand(new ShardInfoCommand());
         this.addCommand(new RestartCommand());
         this.addCommand(new PingCommand());
+        this.addCommand(new UptimeCommand());
 
         this.addCommand(new DrakeCommand());
         this.addCommand(new ISSCommand());
