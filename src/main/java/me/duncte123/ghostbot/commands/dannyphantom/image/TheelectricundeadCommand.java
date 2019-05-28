@@ -23,7 +23,6 @@ import gnu.trove.list.array.TLongArrayList;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.ghostbot.CommandManager;
 import me.duncte123.ghostbot.commands.dannyphantom.text.QuotesCommand;
-import me.duncte123.ghostbot.objects.CommandCategory;
 import me.duncte123.ghostbot.objects.tumblr.TumblrPost;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.core.entities.MessageEmbed;
@@ -82,11 +81,6 @@ public class TheelectricundeadCommand extends TumblrComicBase {
     @Override
     public List<String> getAliases() {
         return List.of("bzzt");
-    }
-
-    @Override
-    public CommandCategory getCategory() {
-        return CommandCategory.IMAGE;
     }
 
     @Override
