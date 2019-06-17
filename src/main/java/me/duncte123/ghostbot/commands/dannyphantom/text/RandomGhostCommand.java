@@ -22,7 +22,7 @@ import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.CommandCategory;
 import me.duncte123.ghostbot.objects.CommandEvent;
-import me.duncte123.ghostbot.utils.SpoopyUtils;
+import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -36,8 +36,8 @@ public class RandomGhostCommand extends Command {
     private final List<String> ghosts = new ArrayList<>();
     private final String wikiUrl = "https://dannyphantom.fandom.com";
 
-    public RandomGhostCommand() {
-        if (SpoopyUtils.getConfig().running_local) {
+    public RandomGhostCommand(GhostBotConfig config) {
+        if (config.running_local) {
             return;
         }
 

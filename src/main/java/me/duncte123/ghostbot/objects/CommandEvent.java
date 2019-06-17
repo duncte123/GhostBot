@@ -19,6 +19,7 @@
 package me.duncte123.ghostbot.objects;
 
 import me.duncte123.botcommons.commands.ICommandContext;
+import me.duncte123.ghostbot.utils.Container;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
@@ -29,13 +30,17 @@ public class CommandEvent implements ICommandContext {
     private final String invoke;
     private final List<String> args;
     private final GuildMessageReceivedEvent event;
-    private final Guild guild;
+    private final Container container;
 
-    public CommandEvent(String invoke, List<String> args, GuildMessageReceivedEvent event) {
+    public CommandEvent(String invoke, List<String> args, GuildMessageReceivedEvent event, Container container) {
         this.invoke = invoke;
         this.args = args;
         this.event = event;
-        this.guild = event.getGuild();
+        this.container = container;
+    }
+
+    public Container getContainer() {
+        return container;
     }
 
     public String getInvoke() {
@@ -48,7 +53,7 @@ public class CommandEvent implements ICommandContext {
 
     @Override
     public Guild getGuild() {
-        return this.guild;
+        return getEvent().getGuild();
     }
 
     @Override

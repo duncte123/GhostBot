@@ -21,7 +21,6 @@ package me.duncte123.ghostbot.commands.main;
 import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.CommandCategory;
 import me.duncte123.ghostbot.objects.CommandEvent;
-import me.duncte123.ghostbot.utils.SpoopyUtils;
 import me.duncte123.ghostbot.variables.Variables;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendSuccess;
@@ -33,7 +32,7 @@ public class ReloadAudioCommand extends Command {
             return;
         }
 
-        SpoopyUtils.getCommandManager().getCommands().forEach(Command::reloadAudioFiles);
+        event.getContainer().getCommandManager().getCommands().forEach(Command::reloadAudioFiles);
         sendSuccess(event.getMessage());
     }
 

@@ -26,6 +26,11 @@ import java.util.concurrent.ThreadLocalRandom;
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
 public class GoingGhostCommand extends AudioBaseCommand {
+
+    public GoingGhostCommand(AudioUtils audioUtils) {
+        super(audioUtils);
+    }
+
     @Override
     public void execute(CommandEvent event) {
         if (!preAudioChecks(event)) {
@@ -41,8 +46,10 @@ public class GoingGhostCommand extends AudioBaseCommand {
 
         sendMsg(event, "Selected track: _" + selectedTrack.replace("_", "\\_") + '_');
 
-        AudioUtils.getInstance().loadAndPlay(
-            getMusicManager(event.getGuild()), event.getChannel(),
+        final AudioUtils audioUtils = event.getContainer().getAudio();
+
+        audioUtils.loadAndPlay(
+            getMusicManager(audioUtils, event.getGuild()), event.getChannel(),
             audioPath + selectedTrack,
             false
         );

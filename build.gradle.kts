@@ -37,8 +37,8 @@ application {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_10
-    targetCompatibility = JavaVersion.VERSION_1_10
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 }
 
 repositories {
@@ -61,7 +61,7 @@ dependencies {
         exclude(module = "opus-java")
     }
     //LavaPlayer/Lavalink
-    implementation(group = "com.sedmelluq", name = "lavaplayer", version = "1.3.16")
+    implementation(group = "com.sedmelluq", name = "lavaplayer", version = "1.3.17")
     implementation(group = "com.github.FredBoat", name = "Lavalink-Client", version = "1a4b0f5")
 
     // Logback classic

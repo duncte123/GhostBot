@@ -18,71 +18,27 @@
 
 package me.duncte123.ghostbot.utils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import gnu.trove.set.TLongSet;
 import gnu.trove.set.hash.TLongHashSet;
-import me.duncte123.botcommons.config.ConfigUtils;
-import me.duncte123.ghostbot.CommandManager;
-import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.utils.cache.MemberCacheView;
 
-import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 public class SpoopyUtils {
 
-    private static final GhostBotConfig config;
-    private static final String GOOGLE_URL;
-
-    static {
-        String tempGoogle;
-        GhostBotConfig tempConfig;
-
-        try {
-            tempConfig = ConfigUtils.loadFromFile("config.json", GhostBotConfig.class);
-            tempGoogle = "https://www.googleapis.com/customsearch/v1" +
-                "?q=%s" +
-                "&prettyPrint=false" +
-                "&cx=012048784535646064391:v-fxkttbw54" +
-                "&num=10" +
-                "&hl=en" +
-                "&searchType=image" +
-                "&filter=1" +
-                "&safe=medium" +
-                "&key=" + tempConfig.api.google;
-
-        } catch (IOException e) {
-            tempConfig = null;
-            tempGoogle = "";
-            e.printStackTrace();
-        }
-
-        GOOGLE_URL = tempGoogle;
-        config = tempConfig;
-    }
-
-    private static final ObjectMapper jackson = new ObjectMapper();
-    private static final AudioUtils audio = AudioUtils.getInstance();
-    private static final CommandManager commandManager = new CommandManager();
-
-    public static GhostBotConfig getConfig() {
-        return config;
-    }
-
-    public static AudioUtils getAudio() {
-        return audio;
-    }
-
-    public static ObjectMapper getJackson() {
-        return jackson;
-    }
-
-    public static CommandManager getCommandManager() {
-        return commandManager;
-    }
+    private static final String GOOGLE_URL = "https://www.googleapis.com/customsearch/v1" +
+        "?q=%s" +
+        "&prettyPrint=false" +
+        "&cx=012048784535646064391:v-fxkttbw54" +
+        "&num=10" +
+        "&hl=en" +
+        "&searchType=image" +
+        "&filter=1" +
+        "&safe=medium" +
+        "&key=%s";
 
     // [0] = users, [1] = bots
     public static double[] getBotRatio(Guild g) {
@@ -112,8 +68,8 @@ public class SpoopyUtils {
         return pubChann;
     }
 
-    public static String getGoogleSearchUrl(String query) {
-        return String.format(GOOGLE_URL, encodeUrl(query));
+    public static String getGoogleSearchUrl(String query, String key) {
+        return String.format(GOOGLE_URL, encodeUrl(query), key);
     }
 
     public static String encodeUrl(String inp) {

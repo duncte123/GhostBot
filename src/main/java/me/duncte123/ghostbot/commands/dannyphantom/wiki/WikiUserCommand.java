@@ -55,7 +55,8 @@ public class WikiUserCommand extends WikiBaseCommand {
                 }
 
                 try {
-                    final UserResultSet userResultSet = SpoopyUtils.getJackson().readValue(json.toString(), UserResultSet.class);
+                    final UserResultSet userResultSet = event.getContainer().getJackson()
+                        .readValue(json.toString(), UserResultSet.class);
 
                     if (userResultSet.getItems().size() == 1) {
                         final UserElement user = userResultSet.getItems().get(0);

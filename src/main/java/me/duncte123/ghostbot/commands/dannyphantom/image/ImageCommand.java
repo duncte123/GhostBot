@@ -49,7 +49,7 @@ public class ImageCommand extends ImageBase {
     @Override
     public void execute(CommandEvent event) {
         final String keyword = keywords[ThreadLocalRandom.current().nextInt(keywords.length)];
-        final ImageData file = requestImage(keyword);
+        final ImageData file = requestImage(keyword, event.getContainer().getJackson());
 
         sendMessageFromName(event, file);
     }

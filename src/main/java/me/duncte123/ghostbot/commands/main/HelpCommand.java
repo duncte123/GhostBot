@@ -23,7 +23,6 @@ import me.duncte123.ghostbot.CommandManager;
 import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.CommandCategory;
 import me.duncte123.ghostbot.objects.CommandEvent;
-import me.duncte123.ghostbot.utils.SpoopyUtils;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.core.EmbedBuilder;
 
@@ -38,6 +37,7 @@ public class HelpCommand extends Command {
     @Override
     public void execute(CommandEvent event) {
         final List<String> args = event.getArgs();
+        final CommandManager manager = event.getContainer().getCommandManager();
 
         if (args.size() > 0) {
             String toSearch = String.join(" ", args);
@@ -50,30 +50,30 @@ public class HelpCommand extends Command {
                 toSearch = toSearch.replaceFirst(Pattern.quote(Variables.OTHER_PREFIX), "");
             }
 
-            final Command cmd = SpoopyUtils.getCommandManager().getCommand(toSearch);
+            final Command cmd = manager.getCommand(toSearch);
 
             if (cmd != null) {
-                    sendMsg(event, String.format(
-                        "Command help for `%s`:%n%s%s",
-                        cmd.getName(),
-                        cmd.getHelp(),
-                        cmd.getAliases().isEmpty() ? "" : "\nAliases: " + String.join(", ", cmd.getAliases())
-                    ));
+                sendMsg(event, String.format(
+                    "Command help for `%s`:%n%s%s",
+                    cmd.getName(),
+                    cmd.getHelp(),
+                    cmd.getAliases().isEmpty() ? "" : "\nAliases: " + String.join(", ", cmd.getAliases())
+                ));
 
-                    return;
+                return;
             }
-            sendMsg(event, "That command could not be found, try "+Variables.PREFIX+"help for a list of commands");
+            sendMsg(event, "That command could not be found, try " + Variables.PREFIX + "help for a list of commands");
 
             return;
         }
 
-        final List<String> spaceCommands = getCommandsForCategory(CommandCategory.SPACE);
-        final List<String> audioCommands = getCommandsForCategory(CommandCategory.AUDIO);
-        final List<String> imageCommands = getCommandsForCategory(CommandCategory.IMAGE);
-        final List<String> wikiCommands = getCommandsForCategory(CommandCategory.WIKI);
-        final List<String> textCommands = getCommandsForCategory(CommandCategory.TEXT);
-        final List<String> otherCommands = getCommandsForCategory(CommandCategory.NONE);
-        final List<String> characterCommands = getCommandsForCategory(CommandCategory.CHARACTERS);
+        final List<String> spaceCommands = getCommandsForCategory(CommandCategory.SPACE, manager);
+        final List<String> audioCommands = getCommandsForCategory(CommandCategory.AUDIO, manager);
+        final List<String> imageCommands = getCommandsForCategory(CommandCategory.IMAGE, manager);
+        final List<String> wikiCommands = getCommandsForCategory(CommandCategory.WIKI, manager);
+        final List<String> textCommands = getCommandsForCategory(CommandCategory.TEXT, manager);
+        final List<String> otherCommands = getCommandsForCategory(CommandCategory.NONE, manager);
+        final List<String> characterCommands = getCommandsForCategory(CommandCategory.CHARACTERS, manager);
 
         final EmbedBuilder helpEmbed = EmbedUtils.defaultEmbed()
             .setDescription("Use `" + Variables.PREFIX + "help [command]` for more info about a command")
@@ -104,12 +104,10 @@ public class HelpCommand extends Command {
     public List<String> getAliases() { return List.of("commands"); }
 
     private static String buildCommands(List<String> commands) {
-        return String.format("`%s%s`", Variables.PREFIX, String.join("`, `" +Variables.PREFIX, commands));
+        return String.format("`%s%s`", Variables.PREFIX, String.join("`, `" + Variables.PREFIX, commands));
     }
 
-    private static List<String> getCommandsForCategory(CommandCategory commandCategory) {
-        final CommandManager manager = SpoopyUtils.getCommandManager();
-
+    private static List<String> getCommandsForCategory(CommandCategory commandCategory, CommandManager manager) {
         final List<String> temp = manager.getCommands().stream()
             .filter((it) -> it.getCategory() == commandCategory)
             .map(Command::getName).collect(Collectors.toList());

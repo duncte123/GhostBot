@@ -19,8 +19,10 @@
 package me.duncte123.ghostbot.utils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.natanbc.reliqua.request.RequestException;
 import me.duncte123.botcommons.web.WebUtils;
+import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.objects.tumblr.TumblrPost;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -37,12 +39,13 @@ public class TumblrUtils {
     private final String API_URL = "https://api.tumblr.com/v2/blog/%s/posts%s?limit=20" +
         "&api_key=%s";
 
-    public void fetchAllFromAccount(String domain, String type, @NotNull Consumer<List<TumblrPost>> cb) {
+    public void fetchAllFromAccount(String domain, String type, GhostBotConfig config,
+                                    ObjectMapper jackson, @NotNull Consumer<List<TumblrPost>> cb) {
         final List<TumblrPost> response = new ArrayList<>();
         final String url = String.format(API_URL,
             domain,
             (type != null && !type.isEmpty() ? "/" + type : ""),
-            SpoopyUtils.getConfig().api.tumblr
+            config.api.tumblr
         );
 
         WebUtils.ins.getJSONObject(url).async((it) -> {
@@ -50,8 +53,7 @@ public class TumblrUtils {
                 final JSONObject res = it.getJSONObject("response");
                 final int total = res.getInt("total_posts");
                 final JSONArray postsJson = res.getJSONArray("posts");
-                final List<TumblrPost> firstPosts = SpoopyUtils.getJackson()
-                    .readValue(postsJson.toString(), new TypeReference<List<TumblrPost>>() {});
+                final List<TumblrPost> firstPosts = jackson.readValue(postsJson.toString(), new TypeReference<List<TumblrPost>>() {});
 
                 response.addAll(firstPosts);
 
@@ -59,8 +61,7 @@ public class TumblrUtils {
                     final String nextPageUrl = String.format("%s&offset=%s", url, i);
                     final JSONObject j = WebUtils.ins.getJSONObject(nextPageUrl).execute();
                     final JSONArray fetched = j.getJSONObject("response").getJSONArray("posts");
-                    final List<TumblrPost> posts = SpoopyUtils.getJackson()
-                        .readValue(fetched.toString(), new TypeReference<List<TumblrPost>>() {});
+                    final List<TumblrPost> posts = jackson.readValue(fetched.toString(), new TypeReference<List<TumblrPost>>() {});
 
                     response.addAll(posts);
                 }
@@ -72,13 +73,14 @@ public class TumblrUtils {
         });
     }
 
-    public void fetchSinglePost(String domain, long id, @NotNull Consumer<TumblrPost> cb, Consumer<RequestException> error) {
-        final String url = String.format(API_URL + "&id=%s", domain, "", SpoopyUtils.getConfig().api.tumblr, id);
+    public void fetchSinglePost(String domain, long id, GhostBotConfig config,
+                                ObjectMapper jackson, @NotNull Consumer<TumblrPost> cb, Consumer<RequestException> error) {
+        final String url = String.format(API_URL + "&id=%s", domain, "", config.api.tumblr, id);
 
         WebUtils.ins.getJSONObject(url).async((it) -> {
             try {
                 cb.accept(
-                    SpoopyUtils.getJackson().readValue(
+                    jackson.readValue(
                         it.getJSONObject("response").getJSONArray("posts").getJSONObject(0).toString()
                         , TumblrPost.class)
                 );

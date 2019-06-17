@@ -73,8 +73,10 @@ public abstract class Command {
 
         for (final File file : listOfFiles) {
             if (file.isFile()) {
-                logger.info("File found: {}{}", audioPath, file.getName());
-                filesFound.add(file.getName());
+                final String name = file.getName();
+
+                logger.info("File found: {}{}", audioPath, name);
+                filesFound.add(name);
             }
         }
 
@@ -123,8 +125,8 @@ public abstract class Command {
         return true;
     }
 
-    protected GuildMusicManager getMusicManager(Guild guild) {
-        return AudioUtils.getInstance().getMusicManager(guild);
+    protected GuildMusicManager getMusicManager(AudioUtils audio, Guild guild) {
+        return audio.getMusicManager(guild);
     }
 
     protected void doAudioStuff(CommandEvent event) {
@@ -134,11 +136,12 @@ public abstract class Command {
         }
 
         if (preAudioChecks(event)) {
+            final AudioUtils audioUtils = event.getContainer().getAudio();
             final String selectedTrack = getRandomTrack();
 
-            sendMsg(event, "Selected track: _" + selectedTrack.replaceAll("_", "\\_") + '_');
+            sendMsg(event, "Selected track: _" + selectedTrack.replaceAll("_", "\\\\_") + '_');
 
-            AudioUtils.getInstance().loadAndPlay(getMusicManager(event.getGuild()), event.getChannel(),
+            audioUtils.loadAndPlay(getMusicManager(audioUtils, event.getGuild()), event.getChannel(),
                 audioPath + selectedTrack, false);
         }
 

@@ -22,6 +22,7 @@ import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.ghostbot.CommandManager;
 import me.duncte123.ghostbot.commands.dannyphantom.text.QuotesCommand;
 import me.duncte123.ghostbot.objects.tumblr.TumblrPost;
+import me.duncte123.ghostbot.utils.Container;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import org.jetbrains.annotations.NotNull;
@@ -31,7 +32,7 @@ import java.util.function.Predicate;
 
 public class DoppelgangerComicCommand extends TumblrComicBase {
 
-    public DoppelgangerComicCommand(CommandManager.ReactionListenerRegistry registry) {
+    public DoppelgangerComicCommand(CommandManager.ReactionListenerRegistry registry, Container container) {
         super(registry);
         this.blogUrl = "doppelgangercomic.tumblr.com";
         this.filename = "doppelganger.json";
@@ -44,7 +45,7 @@ public class DoppelgangerComicCommand extends TumblrComicBase {
             127, // Chapter 6
         };
 
-        loadPages();
+        loadPages(container);
     }
 
     @Override

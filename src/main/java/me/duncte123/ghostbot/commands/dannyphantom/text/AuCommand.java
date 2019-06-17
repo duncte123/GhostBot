@@ -18,14 +18,15 @@
 
 package me.duncte123.ghostbot.commands.dannyphantom.text;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import gnu.trove.map.TLongObjectMap;
 import gnu.trove.map.hash.TLongObjectHashMap;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.CommandCategory;
 import me.duncte123.ghostbot.objects.CommandEvent;
+import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.objects.tumblr.TumblrPost;
-import me.duncte123.ghostbot.utils.SpoopyUtils;
 import me.duncte123.ghostbot.utils.TumblrUtils;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.core.EmbedBuilder;
@@ -45,8 +46,8 @@ public class AuCommand extends Command {
     private final List<TumblrPost> allAus = new ArrayList<>();
     private final TLongObjectMap<List<TumblrPost>> guildAus = new TLongObjectHashMap<>();
 
-    public AuCommand() {
-        loadAus();
+    public AuCommand(GhostBotConfig config, ObjectMapper mapper) {
+        loadAus(config, mapper);
     }
 
     @Override
@@ -54,7 +55,7 @@ public class AuCommand extends Command {
         final List<String> args = event.getArgs();
 
         if (args.size() == 1 && "reload".equalsIgnoreCase(args.get(0)) && event.getAuthor().getIdLong() == Variables.OWNER_ID) {
-            loadAus();
+            loadAus(event.getContainer().getConfig(), event.getContainer().getJackson());
             sendMsg(event, "Reloading");
 
             return;
@@ -113,8 +114,8 @@ public class AuCommand extends Command {
         return CommandCategory.TEXT;
     }
 
-    private void loadAus() {
-        if (SpoopyUtils.getConfig().running_local) {
+    private void loadAus(GhostBotConfig config, ObjectMapper jackson) {
+        if (config.running_local) {
             return;
         }
 
@@ -126,7 +127,7 @@ public class AuCommand extends Command {
 
         logger.info("Loading the best aus ever");
 
-        TumblrUtils.getInstance().fetchAllFromAccount(domain, "text", (it) -> {
+        TumblrUtils.getInstance().fetchAllFromAccount(domain, "text", config, jackson, (it) -> {
 
             final List<TumblrPost> filtered = it.stream().filter(
                 (p) -> {

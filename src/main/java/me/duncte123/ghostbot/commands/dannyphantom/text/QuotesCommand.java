@@ -19,6 +19,7 @@
 package me.duncte123.ghostbot.commands.dannyphantom.text;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import gnu.trove.list.TLongList;
 import gnu.trove.list.array.TLongArrayList;
 import gnu.trove.map.TLongObjectMap;
@@ -27,9 +28,10 @@ import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.CommandCategory;
 import me.duncte123.ghostbot.objects.CommandEvent;
+import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.objects.tumblr.TumblrDialogue;
 import me.duncte123.ghostbot.objects.tumblr.TumblrPost;
-import me.duncte123.ghostbot.utils.SpoopyUtils;
+import me.duncte123.ghostbot.utils.Container;
 import me.duncte123.ghostbot.utils.TumblrUtils;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.core.EmbedBuilder;
@@ -89,8 +91,8 @@ public class QuotesCommand extends Command {
         174190854511L
     });
 
-    public QuotesCommand() {
-        reloadQuotes();
+    public QuotesCommand(Container container) {
+        reloadQuotes(container.getConfig(), container.getJackson());
     }
 
     @Override
@@ -106,7 +108,7 @@ public class QuotesCommand extends Command {
                 if (!id.isEmpty()) {
                     final long idLong = Long.parseLong(id);
 
-                    getPostFromId(idLong, (it) -> sendQuote(event, it), (it) -> sendMsg(event, it));
+                    getPostFromId(idLong, event.getContainer() ,(it) -> sendQuote(event, it), (it) -> sendMsg(event, it));
                 }
 
                 return;
@@ -150,7 +152,7 @@ public class QuotesCommand extends Command {
         return CommandCategory.TEXT;
     }
 
-    private void getPostFromId(long id, Consumer<TumblrPost> cb, Consumer<String> fail) {
+    private void getPostFromId(long id, Container container, Consumer<TumblrPost> cb, Consumer<String> fail) {
         final Optional<TumblrPost> opt = allQuotes.stream().filter((it) -> it.id == id).findFirst();
 
         if (opt.isPresent()) {
@@ -159,7 +161,7 @@ public class QuotesCommand extends Command {
             return;
         }
 
-        TumblrUtils.getInstance().fetchSinglePost(DOMAIN, id,
+        TumblrUtils.getInstance().fetchSinglePost(DOMAIN, id, container.getConfig(), container.getJackson(),
             (it) -> {
                 allQuotes.add(it);
                 cb.accept(it);
@@ -169,12 +171,12 @@ public class QuotesCommand extends Command {
 
     }
 
-    private void reloadQuotes() {
+    private void reloadQuotes(GhostBotConfig config, ObjectMapper jackson) {
         final File quotesFile = new File("quotes.json");
 
         if (quotesFile.exists()) {
             try {
-                final List<TumblrPost> quotes = SpoopyUtils.getJackson().readValue(quotesFile, new TypeReference<List<TumblrPost>>() {});
+                final List<TumblrPost> quotes = jackson.readValue(quotesFile, new TypeReference<List<TumblrPost>>() {});
 
                 allQuotes.addAll(quotes);
                 logger.info("Loading quotes from file");
@@ -194,7 +196,7 @@ public class QuotesCommand extends Command {
 
             logger.info("Getting quotes from type {}", type);
 
-            TumblrUtils.getInstance().fetchAllFromAccount(DOMAIN, type,
+            TumblrUtils.getInstance().fetchAllFromAccount(DOMAIN, type, config, jackson,
                 (posts) -> {
                     try {
                         counter.incrementAndGet();
@@ -208,7 +210,7 @@ public class QuotesCommand extends Command {
                             quotesFile.createNewFile();
 
                             final BufferedWriter writer = new BufferedWriter(new FileWriter(quotesFile));
-                            writer.write(SpoopyUtils.getJackson().writeValueAsString(allQuotes));
+                            writer.write(jackson.writeValueAsString(allQuotes));
                             writer.close();
 
                             logger.info("Wrote quotes to file");

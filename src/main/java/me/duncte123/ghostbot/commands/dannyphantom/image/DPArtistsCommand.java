@@ -18,12 +18,13 @@
 
 package me.duncte123.ghostbot.commands.dannyphantom.image;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.ghostbot.commands.dannyphantom.text.QuotesCommand;
 import me.duncte123.ghostbot.objects.CommandEvent;
+import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.objects.tumblr.TumblrPost;
-import me.duncte123.ghostbot.utils.SpoopyUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jsoup.nodes.Element;
 
@@ -136,16 +137,17 @@ public class DPArtistsCommand extends ImageBase {
         return Arrays.asList(artists);
     }
 
-    private void extractPictureFromTumblr(String username, @NotNull Consumer<TumblrPost> cb) {
+    private void extractPictureFromTumblr(String username, GhostBotConfig config,
+                                          ObjectMapper mapper, @NotNull Consumer<TumblrPost> cb) {
         final String url = String.format(
             "https://api.tumblr.com/v2/blog/%s.tumblr.com/posts?api_key=%s&type=photo&limit=1",
-            username, SpoopyUtils.getConfig().api.tumblr
+            username, config.api.tumblr
         );
 
         WebUtils.ins.getJSONObject(url).async((it) -> {
                 try {
                     cb.accept(
-                        SpoopyUtils.getJackson().readValue(it.getJSONObject("response")
+                        mapper.readValue(it.getJSONObject("response")
                             .getJSONArray("posts").getJSONObject(0).toString(), TumblrPost.class)
                     );
                 } catch (IOException ignored) { }
@@ -173,11 +175,13 @@ public class DPArtistsCommand extends ImageBase {
         final String[] info = extractInfo(url);
         final String usn = info[0];
         final String type = info[1];
+        final GhostBotConfig config = event.getContainer().getConfig();
+        final ObjectMapper jackson = event.getContainer().getJackson();
 
         if (type.equalsIgnoreCase("tumblr")) {
             final String profilePicture = getTumblrProfilePictureUrl(url);
 
-            extractPictureFromTumblr(usn, (it) -> {
+            extractPictureFromTumblr(usn, config, jackson, (it) -> {
 
                 if (!it.type.equalsIgnoreCase("photo")) {
                     sendMsg(event, "Got a post of type `" + it.type + "` for the type `photo`\n" +

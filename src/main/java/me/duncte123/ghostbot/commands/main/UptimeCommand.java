@@ -21,14 +21,33 @@ package me.duncte123.ghostbot.commands.main;
 import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.CommandEvent;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.management.ManagementFactory;
+import java.nio.file.Files;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
 public class UptimeCommand extends Command {
+
+    private final long oldUptime;
+
+    public UptimeCommand() {
+        long time = -1;
+
+        try {
+            time = Long.parseLong(Files.readString(new File("uptime.txt").toPath()).trim());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        this.oldUptime = time;
+    }
+
     @Override
     public void execute(CommandEvent event) {
-        sendMsg(event, "My current uptime: " + getUptime(ManagementFactory.getRuntimeMXBean().getUptime()));
+        sendMsg(event, "My current uptime: " + getUptime(ManagementFactory.getRuntimeMXBean().getUptime()) +
+            "\nPrevious uptime was: " + getUptime(this.oldUptime));
     }
 
     @Override

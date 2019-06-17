@@ -19,7 +19,6 @@
 package me.duncte123.ghostbot.commands.main;
 
 import me.duncte123.botcommons.messaging.EmbedUtils;
-import me.duncte123.ghostbot.GhostBot;
 import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.CommandEvent;
 import me.duncte123.ghostbot.variables.Variables;
@@ -30,7 +29,7 @@ public class AboutCommand extends Command {
     @Override
     public void execute(CommandEvent event) {
         final String devName = "<@191231307290771456> (duncte123#1245)";
-        final long guildCountDiscord = GhostBot.getInstance().getShardManager().getGuildCache().size();
+        final long guildCountDiscord = event.getShardManager().getGuildCache().size();
 
         sendEmbed(event, EmbedUtils.embedMessage(String.format(
             "Hey there, my name is GhostBot, I am the must have bot for your spooky server.\n" +

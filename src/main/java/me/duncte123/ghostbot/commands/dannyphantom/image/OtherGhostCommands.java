@@ -18,6 +18,7 @@
 
 package me.duncte123.ghostbot.commands.dannyphantom.image;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import me.duncte123.ghostbot.objects.CommandCategory;
 import me.duncte123.ghostbot.objects.CommandEvent;
 
@@ -25,6 +26,12 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class OtherGhostCommands extends ImageBase {
+    private final ObjectMapper mapper;
+
+    public OtherGhostCommands(ObjectMapper mapper) {
+        this.mapper = mapper;
+    }
+
     @Override
     public void execute(CommandEvent event) {
 
@@ -110,6 +117,6 @@ public class OtherGhostCommands extends ImageBase {
     }
 
     private void sendFromKeywords(CommandEvent event, String... words) {
-        sendMessageFromName(event, requestImage(words[ThreadLocalRandom.current().nextInt(words.length)]));
+        sendMessageFromName(event, requestImage(words[ThreadLocalRandom.current().nextInt(words.length)], mapper));
     }
 }

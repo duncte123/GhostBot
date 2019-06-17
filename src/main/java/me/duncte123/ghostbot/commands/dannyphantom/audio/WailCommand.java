@@ -18,9 +18,15 @@
 
 package me.duncte123.ghostbot.commands.dannyphantom.audio;
 
+import me.duncte123.ghostbot.utils.AudioUtils;
+
 import java.util.List;
 
 public class WailCommand extends AudioBaseCommand {
+    public WailCommand(AudioUtils audioUtils) {
+        super(audioUtils);
+    }
+
     @Override
     public String getHelp() {
         return "Gives you a nice ghostly wail";

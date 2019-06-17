@@ -42,17 +42,15 @@ import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed;
 
 public class AudioUtils {
 
-    private static final AudioUtils instance = new AudioUtils();
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(AudioUtils.class);
 
-    private final String baseAudioDir = "../GhostBot/audioFiles/";
     private static final int DEFAULT_VOLUME = 35; //(0-150, where 100 is the default max volume)
     private final String embedTitle = "Spoopy-Luma-Player";
 
     private final TLongObjectMap<GuildMusicManager> musicManagers;
     private final AudioPlayerManager playerManager;
 
-    private AudioUtils() {
+    AudioUtils() {
         Logger.getLogger("org.apache.http.client.protocol.ResponseProcessCookies").setLevel(Level.OFF);
 
         playerManager = new DefaultAudioPlayerManager();
@@ -119,11 +117,12 @@ public class AudioUtils {
         return playerManager;
     }
 
-    public String getBaseAudioDir() {
-        return baseAudioDir;
+    public TLongObjectMap<GuildMusicManager> getMusicManagers() {
+        return musicManagers;
     }
 
-    public static AudioUtils getInstance() {
-        return instance;
+    public String getBaseAudioDir() {
+        return "../GhostBot/audioFiles/";
+//        return "audioFiles/";
     }
 }

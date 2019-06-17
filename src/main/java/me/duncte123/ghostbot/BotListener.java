@@ -23,6 +23,9 @@ import gnu.trove.list.TLongList;
 import gnu.trove.list.array.TLongArrayList;
 import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.ghostbot.audio.GuildMusicManager;
+import me.duncte123.ghostbot.objects.config.GhostBotConfig;
+import me.duncte123.ghostbot.utils.AudioUtils;
+import me.duncte123.ghostbot.utils.Container;
 import me.duncte123.ghostbot.utils.SpoopyUtils;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.bot.sharding.ShardManager;
@@ -42,6 +45,11 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -66,6 +74,17 @@ public class BotListener extends ListenerAdapter {
         477792727577395210L, // discordbotlist.xyz
         475571221946171393L, // bots.discordlist.app
     });
+    private final CommandManager commandManager;
+    private final GhostBotConfig config;
+    private final AudioUtils audio;
+    private final Container container;
+
+    BotListener(Container container) {
+        this.commandManager = container.getCommandManager();
+        this.config = container.getConfig();
+        this.audio = container.getAudio();
+        this.container = container;
+    }
 
     @Override
     public void onReady(ReadyEvent event) {
@@ -92,14 +111,34 @@ public class BotListener extends ListenerAdapter {
             event.getAuthor().getIdLong() == Variables.OWNER_ID) {
             logger.info("Shutting down!!");
             service.shutdown();
-            SpoopyUtils.getCommandManager().getCommandService().shutdown();
+            this.commandManager.getCommandService().shutdown();
+
+            this.audio.getMusicManagers().forEachEntry((gid, mngr) -> {
+
+                mngr.getPlayer().stopTrack();
+                LavalinkManager.ins.closeConnection(event.getJDA().asBot().getShardManager().getGuildById(gid));
+
+                return true;
+            });
+
             event.getJDA().asBot().getShardManager().shutdown();
+
+            try {
+                Files.write(
+                    new File("uptime.txt").toPath(),
+                    String.valueOf(ManagementFactory.getRuntimeMXBean().getUptime()).getBytes(),
+                    StandardOpenOption.TRUNCATE_EXISTING
+                );
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             System.exit(0);
 
             return;
         }
 
-        SpoopyUtils.getCommandManager().handleCommand(event);
+        this.commandManager.handleCommand(event, container);
     }
 
     @Override
@@ -134,15 +173,15 @@ public class BotListener extends ListenerAdapter {
     @Override
     public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
         if (LavalinkManager.ins.isConnected(event.getGuild()) &&
-            !event.getVoiceState().getMember().equals(event.getGuild().getSelfMember())) {
+            !event.getMember().equals(event.getGuild().getSelfMember())) {
             final VoiceChannel vc = LavalinkManager.ins.getConnectedChannel(event.getGuild());
 
             if (vc != null) {
-                if (event.getChannelLeft().equals(vc)) {
+                if (!event.getChannelLeft().equals(vc)) {
                     return;
                 }
 
-                channelCheckThing(event.getGuild(), event.getChannelLeft());
+                channelCheckThing(event.getGuild(), event.getChannelLeft(), this.audio);
             }
         }
     }
@@ -160,13 +199,10 @@ public class BotListener extends ListenerAdapter {
                 !event.getMember().equals(event.getGuild().getSelfMember())) {
                 return;
             } else {
-                channelCheckThing(event.getGuild(), connected);
+                channelCheckThing(event.getGuild(), connected, this.audio);
             }
 
-            if (event.getChannelLeft().equals(connected)) {
-                channelCheckThing(event.getGuild(), event.getChannelLeft());
-                //return;
-            }
+            channelCheckThing(event.getGuild(), event.getChannelLeft(), this.audio);
 
         } catch (NullPointerException ignored) {
         }
@@ -174,15 +210,15 @@ public class BotListener extends ListenerAdapter {
 
     @Override
     public void onMessageReactionAdd(MessageReactionAddEvent event) {
-        SpoopyUtils.getCommandManager().reactListReg.handle(event);
+        this.commandManager.reactListReg.handle(event);
     }
 
     private void postServerCount() {
-        if (SpoopyUtils.getConfig().shouldPostStats) {
+        if (this.config.shouldPostStats) {
             service.scheduleWithFixedDelay(() -> {
                 final ShardManager manager = GhostBot.getInstance().getShardManager();
 
-                final String jsonString = new JSONObject(SpoopyUtils.getConfig().botLists)
+                final String jsonString = new JSONObject(this.config.botLists)
                     .put("server_count", manager.getGuildCache().size())
                     .put("shard_count", manager.getShardsTotal())
                     .put("bot_id", 397297702150602752L)
@@ -208,9 +244,9 @@ public class BotListener extends ListenerAdapter {
 
     }
 
-    private static void channelCheckThing(Guild g, VoiceChannel vc) {
+    private static void channelCheckThing(Guild g, VoiceChannel vc, AudioUtils audio) {
         if (vc.getMembers().stream().filter((it) -> !it.getUser().isBot()).count() < 1) {
-            final GuildMusicManager manager = SpoopyUtils.getAudio().getMusicManager(g);
+            final GuildMusicManager manager = audio.getMusicManager(g);
 
             manager.getPlayer().stopTrack();
             manager.getPlayer().setPaused(false);

@@ -26,7 +26,6 @@ import lavalink.client.player.LavaplayerPlayerWrapper;
 import me.duncte123.ghostbot.GhostBot;
 import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.utils.AudioUtils;
-import me.duncte123.ghostbot.utils.SpoopyUtils;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 
@@ -38,21 +37,26 @@ import java.util.Base64;
 public class LavalinkManager {
     public static final LavalinkManager ins = new LavalinkManager();
     private JdaLavalink lavalink = null;
+    private GhostBotConfig config;
+    private AudioUtils audio;
 
     private LavalinkManager() {}
 
-    public void start() {
+    public void start(GhostBotConfig config, AudioUtils audio) {
+        this.config = config;
+        this.audio = audio;
+
         if (isEnabled()) {
 
-            final String userId = getIdFromToken(SpoopyUtils.getConfig().discord.token);
+            final String userId = getIdFromToken(this.config.discord.token);
 
             lavalink = new JdaLavalink(
                 userId,
-                SpoopyUtils.getConfig().discord.totalShards,
+                this.config.discord.totalShards,
                 (it) -> GhostBot.getInstance().getShard(it)
             );
 
-            for (final GhostBotConfig.Lavalink.Node it : SpoopyUtils.getConfig().lavalink.nodes) {
+            for (final GhostBotConfig.Lavalink.Node it : this.config.lavalink.nodes) {
                 try {
                     lavalink.addNode(new URI(it.wsUrl), it.pass);
                 } catch (URISyntaxException e) {
@@ -63,12 +67,12 @@ public class LavalinkManager {
     }
 
     public boolean isEnabled() {
-        return SpoopyUtils.getConfig().lavalink.enable;
+        return false;
     }
 
     public IPlayer createPlayer(String guildId) {
         return isEnabled() ? lavalink.getLink(guildId).getPlayer()
-            : new LavaplayerPlayerWrapper(AudioUtils.getInstance().getPlayerManager().createPlayer());
+            : new LavaplayerPlayerWrapper(this.audio.getPlayerManager().createPlayer());
     }
 
     public void openConnection(VoiceChannel channel) {

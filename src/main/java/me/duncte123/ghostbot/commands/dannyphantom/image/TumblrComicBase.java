@@ -19,12 +19,15 @@
 package me.duncte123.ghostbot.commands.dannyphantom.image;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import me.duncte123.ghostbot.CommandManager;
 import me.duncte123.ghostbot.commands.ReactionCommand;
 import me.duncte123.ghostbot.objects.CommandCategory;
 import me.duncte123.ghostbot.objects.CommandEvent;
+import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.objects.tumblr.TumblrPost;
+import me.duncte123.ghostbot.utils.Container;
 import me.duncte123.ghostbot.utils.SpoopyUtils;
 import me.duncte123.ghostbot.utils.TumblrUtils;
 import net.dv8tion.jda.core.MessageBuilder;
@@ -139,8 +142,10 @@ abstract class TumblrComicBase extends ReactionCommand {
         return CommandCategory.IMAGE;
     }
 
-    void loadPages() {
+    void loadPages(Container container) {
         final String clsName = getClass().getSimpleName();
+        final GhostBotConfig config = container.getConfig();
+        final ObjectMapper mapper = container.getJackson();
 
         logger.info("Loading {} pages", clsName);
 
@@ -149,7 +154,7 @@ abstract class TumblrComicBase extends ReactionCommand {
         if (comicFile.exists()) {
             List<TumblrPost> posts = null;
             try {
-                posts = SpoopyUtils.getJackson().readValue(comicFile, new TypeReference<List<TumblrPost>>() {});
+                posts = mapper.readValue(comicFile, new TypeReference<List<TumblrPost>>() {});
             } catch (IOException e) {
                 logger.error("Failed to load " + clsName + " comic", e);
             }
@@ -164,7 +169,7 @@ abstract class TumblrComicBase extends ReactionCommand {
 
         final Predicate<TumblrPost> postFilter = getFilter();
 
-        TumblrUtils.getInstance().fetchAllFromAccount(blogUrl, "photo", (posts) -> {
+        TumblrUtils.getInstance().fetchAllFromAccount(blogUrl, "photo", config, mapper, (posts) -> {
             final List<TumblrPost> ps = Lists.reverse(posts.stream()
                 .filter(postFilter)
                 .collect(Collectors.toList()));
@@ -177,7 +182,7 @@ abstract class TumblrComicBase extends ReactionCommand {
                     comicFile.createNewFile();
                 }
 
-                SpoopyUtils.getJackson().writeValue(comicFile, ps);
+                mapper.writeValue(comicFile, ps);
                 logger.info("Wrote {} to json", clsName);
             } catch (Exception e) {
                 logger.error("Failed to write " + clsName, e);

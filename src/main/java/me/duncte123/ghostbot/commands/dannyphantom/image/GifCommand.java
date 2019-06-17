@@ -27,7 +27,7 @@ public class GifCommand extends ImageBase {
 
     @Override
     public void execute(CommandEvent event) {
-        requestSearch(keyword,
+        requestSearch(keyword, event.getContainer().getJackson(), event.getContainer().getConfig().api.google,
             (it) -> sendMessageFromData(event, it, keyword) ,
             (it) -> sendMsg(event, "Error while looking up image: " + it)
         );

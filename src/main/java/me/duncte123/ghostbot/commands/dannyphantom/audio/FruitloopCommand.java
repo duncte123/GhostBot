@@ -18,7 +18,13 @@
 
 package me.duncte123.ghostbot.commands.dannyphantom.audio;
 
+import me.duncte123.ghostbot.utils.AudioUtils;
+
 public class FruitloopCommand extends AudioBaseCommand {
+    public FruitloopCommand(AudioUtils audioUtils) {
+        super(audioUtils);
+    }
+
     @Override
     public String getHelp() {
         return "You're one crazed up fruitloop";

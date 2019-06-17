@@ -18,6 +18,7 @@
 
 package me.duncte123.ghostbot.commands.dannyphantom.wiki;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.fandomapi.FandomException;
@@ -44,7 +45,7 @@ public abstract class WikiBaseCommand extends Command {
     //shortcut to the wiki
     final WikiHolder wiki = new WikiHolder("https://dannyphantom.fandom.com");
 
-    protected void handleWikiSearch(WikiHolder wiki, String searchQuery, GuildMessageReceivedEvent event) {
+    protected void handleWikiSearch(WikiHolder wiki, String searchQuery, ObjectMapper jackson, GuildMessageReceivedEvent event) {
         WebUtils.ins.getJSONObject(String.format(
             "%s?query=%s",
             wiki.getSearchListEndpoint(),
@@ -67,8 +68,7 @@ public abstract class WikiBaseCommand extends Command {
                 }
 
                 try {
-                    final LocalWikiSearchResultSet wikiSearchResultSet = SpoopyUtils.getJackson()
-                        .readValue(json.toString(), LocalWikiSearchResultSet.class);
+                    final var wikiSearchResultSet = jackson.readValue(json.toString(), LocalWikiSearchResultSet.class);
                     final List<LocalWikiSearchResult> items = wikiSearchResultSet.getItems();
 
                     if (items.size() > 10) {

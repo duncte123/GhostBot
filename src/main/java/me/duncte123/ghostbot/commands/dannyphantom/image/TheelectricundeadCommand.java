@@ -24,6 +24,7 @@ import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.ghostbot.CommandManager;
 import me.duncte123.ghostbot.commands.dannyphantom.text.QuotesCommand;
 import me.duncte123.ghostbot.objects.tumblr.TumblrPost;
+import me.duncte123.ghostbot.utils.Container;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +37,7 @@ public class TheelectricundeadCommand extends TumblrComicBase {
         183827754213L,
     });
 
-    public TheelectricundeadCommand(CommandManager.ReactionListenerRegistry registry) {
+    public TheelectricundeadCommand(CommandManager.ReactionListenerRegistry registry, Container container) {
         super(registry);
         this.filename = "bzzt.json";
         this.blogUrl = "theelectricundead.tumblr.com";
@@ -44,7 +45,7 @@ public class TheelectricundeadCommand extends TumblrComicBase {
             1,  // Chapter 1
             14, // Chapter 2
         };
-        loadPages();
+        loadPages(container);
     }
 
     @NotNull

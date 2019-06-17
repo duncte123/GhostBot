@@ -21,7 +21,7 @@ package me.duncte123.ghostbot.commands.dannyphantom.image;
 import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.botcommons.web.WebUtilsErrorUtils;
 import me.duncte123.ghostbot.objects.CommandEvent;
-import me.duncte123.ghostbot.utils.SpoopyUtils;
+import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.utils.IOUtil;
@@ -62,7 +62,7 @@ public class DrakeCommand extends ImageBase {
 
         final boolean shouldDab = event.getInvoke().equalsIgnoreCase("ddrake");
 
-        genDanny(split[0], split[1], shouldDab, (it) -> sendImage(event, it));
+        genDanny(split[0], split[1], shouldDab, event.getContainer().getConfig(), (it) -> sendImage(event, it));
     }
 
     @Override
@@ -79,14 +79,14 @@ public class DrakeCommand extends ImageBase {
             "Usage: `"+ Variables.PREFIX+getName() +" <top text>|<bottom text>`";
     }
 
-    private static void genDanny(String top, String bottom, boolean dabbing, Consumer<byte[]> callback) {
+    private static void genDanny(String top, String bottom, boolean dabbing, GhostBotConfig config, Consumer<byte[]> callback) {
         final JSONObject json = new JSONObject().put("top", top).put("bottom", bottom).put("dabbing", dabbing);
         final RequestBody body = RequestBody.create(null, json.toString());
 
         final Request.Builder request = WebUtils.defaultRequest()
             .url("https://apis.duncte123.me/memes/dannyphantomdrake")
             .post(body)
-            .addHeader("Authorization", SpoopyUtils.getConfig().api_token)
+            .addHeader("Authorization", config.api_token)
             .addHeader("Content-Type", APPLICATION_JSON.getType());
 
         WebUtils.ins.prepareRaw(request.build(),

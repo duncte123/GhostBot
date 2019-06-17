@@ -18,6 +18,7 @@
 
 package me.duncte123.ghostbot;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import me.duncte123.ghostbot.commands.ReactionCommand;
 import me.duncte123.ghostbot.commands.dannyphantom.audio.*;
 import me.duncte123.ghostbot.commands.dannyphantom.image.*;
@@ -30,6 +31,9 @@ import me.duncte123.ghostbot.commands.main.*;
 import me.duncte123.ghostbot.commands.space.ISSCommand;
 import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.CommandEvent;
+import me.duncte123.ghostbot.objects.config.GhostBotConfig;
+import me.duncte123.ghostbot.utils.AudioUtils;
+import me.duncte123.ghostbot.utils.Container;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
@@ -50,19 +54,23 @@ public class CommandManager {
     private final ExecutorService commandService = Executors.newCachedThreadPool((it) -> new Thread(it, "Command-Thread"));
     final ReactionListenerRegistry reactListReg = new ReactionListenerRegistry();
 
-    public CommandManager() {
-        this.addCommand(new GoingGhostCommand());
-        this.addCommand(new WailCommand());
-        this.addCommand(new FruitloopCommand());
+    public CommandManager(Container container) {
+        final ObjectMapper jackson = container.getJackson();
+        final GhostBotConfig config = container.getConfig();
+        final AudioUtils audio = container.getAudio();
+
+        this.addCommand(new GoingGhostCommand(audio));
+        this.addCommand(new WailCommand(audio));
+        this.addCommand(new FruitloopCommand(audio));
         this.addCommand(new EmberCommand());
-        this.addCommand(new BoxGhostCommand());
+        this.addCommand(new BoxGhostCommand(audio));
 
         this.addCommand(new ImageCommand());
         this.addCommand(new GifCommand());
-        this.addCommand(new OtherGhostCommands());
-        this.addCommand(new DoppelgangerComicCommand(this.reactListReg));
-        this.addCommand(new TheelectricundeadCommand(this.reactListReg));
-        this.addCommand(new FylCommicCommand(this.reactListReg));
+        this.addCommand(new OtherGhostCommands(jackson));
+        this.addCommand(new DoppelgangerComicCommand(this.reactListReg, container));
+        this.addCommand(new TheelectricundeadCommand(this.reactListReg, container));
+        this.addCommand(new FylCommicCommand(this.reactListReg, jackson));
         this.addCommand(new DPArtistsCommand());
 
         this.addCommand(new WikiCommand());
@@ -70,9 +78,9 @@ public class CommandManager {
         this.addCommand(new FylWikiCommand());
         this.addCommand(new PetitionCommand());
 
-        this.addCommand(new QuotesCommand());
-        this.addCommand(new AuCommand());
-        this.addCommand(new RandomGhostCommand());
+        this.addCommand(new QuotesCommand(container));
+        this.addCommand(new AuCommand(config, jackson));
+        this.addCommand(new RandomGhostCommand(config));
         this.addCommand(new GamesCommand());
 
         this.addCommand(new HelpCommand());
@@ -130,11 +138,11 @@ public class CommandManager {
         return found;
     }
 
-    void handleCommand(GuildMessageReceivedEvent event) {
-        handleCommand(event.getMessage().getContentRaw(), event);
+    void handleCommand(GuildMessageReceivedEvent event, Container container) {
+        handleCommand(event.getMessage().getContentRaw(), event, container);
     }
 
-    private void handleCommand(String rw, GuildMessageReceivedEvent event) {
+    private void handleCommand(String rw, GuildMessageReceivedEvent event, Container container) {
         final String[] split = rw.replaceFirst("(?i)" +
             Pattern.quote(Variables.PREFIX) + "|" +
             Pattern.quote(Variables.OTHER_PREFIX), "")
@@ -158,7 +166,7 @@ public class CommandManager {
             try {
                 event.getChannel().sendTyping().queue();
 
-                final CommandEvent commandEvent = new CommandEvent(invoke, args, event);
+                final CommandEvent commandEvent = new CommandEvent(invoke, args, event, container);
 
                 cmd.execute(commandEvent);
             } catch (Exception e) {

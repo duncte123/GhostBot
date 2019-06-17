@@ -18,9 +18,12 @@
 
 package me.duncte123.ghostbot;
 
+import com.google.errorprone.annotations.Var;
 import fredboat.audio.player.LavalinkManager;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.botcommons.web.WebUtils;
+import me.duncte123.ghostbot.objects.config.GhostBotConfig;
+import me.duncte123.ghostbot.utils.Container;
 import me.duncte123.ghostbot.utils.SpoopyUtils;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.bot.sharding.DefaultShardManagerBuilder;
@@ -33,6 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.security.auth.login.LoginException;
+import java.io.IOException;
 import java.time.Instant;
 import java.util.EnumSet;
 import java.util.concurrent.Executors;
@@ -52,13 +56,17 @@ public class GhostBot {
     );
     private final ShardManager shardManager;
 
-    private GhostBot() throws LoginException {
+    private GhostBot() throws LoginException, IOException {
         final Logger logger = LoggerFactory.getLogger(GhostBot.class);
 
         logger.info("Booting GhostBot");
 
-        final String token = SpoopyUtils.getConfig().discord.token;
-        final int totalShards = SpoopyUtils.getConfig().discord.totalShards;
+        final Container container = new Container();
+        final GhostBotConfig config = container.getConfig();
+        final String token = config.discord.token;
+        final int totalShards = config.discord.totalShards;
+
+        Variables.PREFIX = config.discord.prefix;
 
         WebUtils.setUserAgent("Mozilla/5.0 (compatible; GhostBot/v" + Variables.VERSION + "; +https://github.com/duncte123/GhostBot)");
         EmbedUtils.setEmbedBuilder(
@@ -68,9 +76,9 @@ public class GhostBot {
                 .setTimestamp(Instant.now())
         );
 
-        LavalinkManager.ins.start();
+        LavalinkManager.ins.start(config, container.getAudio());
 
-        final BotListener botListener = new BotListener();
+        final BotListener botListener = new BotListener(container);
 
         final DefaultShardManagerBuilder builder = new DefaultShardManagerBuilder()
             .setShardsTotal(totalShards)
@@ -102,7 +110,7 @@ public class GhostBot {
             , 1, 1, TimeUnit.DAYS);
     }
 
-    public static void main(String[] args) throws LoginException {
+    public static void main(String[] args) throws LoginException, IOException {
         instance = new GhostBot();
     }
 

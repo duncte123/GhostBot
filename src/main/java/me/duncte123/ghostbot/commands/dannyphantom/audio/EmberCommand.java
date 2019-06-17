@@ -34,8 +34,10 @@ public class EmberCommand extends Command {
 
         sendMsg(event, "Selected track: _Ember McLain - Remember_");
 
-        AudioUtils.getInstance().loadAndPlay(
-            getMusicManager(event.getGuild()),
+        final AudioUtils audio = event.getContainer().getAudio();
+
+        audio.loadAndPlay(
+            getMusicManager(audio, event.getGuild()),
             event.getChannel(),
             "wBMOc24_aIw",
             false

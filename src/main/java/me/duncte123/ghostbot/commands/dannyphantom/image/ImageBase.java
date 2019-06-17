@@ -18,6 +18,7 @@
 
 package me.duncte123.ghostbot.commands.dannyphantom.image;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.natanbc.reliqua.request.RequestException;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.botcommons.web.WebUtils;
@@ -52,7 +53,7 @@ public abstract class ImageBase extends Command {
     private static final Logger logger = LoggerFactory.getLogger(ImageBase.class);
     private static final JSONObject IMAGES = new ConfigUtils().getImages();
 
-    void requestSearch(String query, Consumer<GoogleSearchResults> success, Consumer<RequestException> error) {
+    void requestSearch(String query, ObjectMapper jackson, String googleKey, Consumer<GoogleSearchResults> success, Consumer<RequestException> error) {
 
         if (searchCache.containsKey(query)) {
             success.accept(searchCache.get(query));
@@ -62,10 +63,10 @@ public abstract class ImageBase extends Command {
 
         logger.info("MAKING IMAGE REQUEST: " + query);
 
-        WebUtils.ins.getText(SpoopyUtils.getGoogleSearchUrl(query)).async(
+        WebUtils.ins.getText(SpoopyUtils.getGoogleSearchUrl(query, googleKey)).async(
             (it) -> {
                 try {
-                    final GoogleSearchResults data = SpoopyUtils.getJackson().readValue(it, GoogleSearchResults.class);
+                    final GoogleSearchResults data = jackson.readValue(it, GoogleSearchResults.class);
                     success.accept(data);
                     searchCache.put(query, data);
                 }
@@ -76,14 +77,14 @@ public abstract class ImageBase extends Command {
         );
     }
 
-    ImageData requestImage(String query) {
+    ImageData requestImage(String query, ObjectMapper jackson) {
         logger.debug("Getting image for '" + query + '\'');
 
         final JSONArray items = IMAGES.getJSONArray(query);
         final JSONObject item = items.getJSONObject(ThreadLocalRandom.current().nextInt(items.length()));
 
         try {
-            return SpoopyUtils.getJackson().readValue(item.toString(), ImageData.class);
+            return jackson.readValue(item.toString(), ImageData.class);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
