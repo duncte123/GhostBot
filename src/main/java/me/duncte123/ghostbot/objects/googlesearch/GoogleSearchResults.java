@@ -61,10 +61,10 @@ public class GoogleSearchResults {
     }
 
     public static class SearchInformationField {
-        double searchTime;
         public String formattedSearchTime;
         public String totalResults;
         public String formattedTotalResults;
+        double searchTime;
     }
 
     public static class SearchItem {

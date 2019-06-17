@@ -47,7 +47,7 @@ public class DrakeCommand extends ImageBase {
         }
 
         if (args.isEmpty()) {
-            sendMsg(event, "Missing arguments, usage: `"+ Variables.PREFIX+getName() +" <top text>|<bottom text>`");
+            sendMsg(event, "Missing arguments, usage: `" + Variables.PREFIX + getName() + " <top text>|<bottom text>`");
 
             return;
         }
@@ -55,7 +55,7 @@ public class DrakeCommand extends ImageBase {
         final String[] split = String.join(" ", args).split("\\|");
 
         if (split.length < 2 || split[0].isEmpty() || split[1].isEmpty()) {
-            sendMsg(event, "Missing arguments, usage: `"+ Variables.PREFIX+getName() +" <top text>|<bottom text>`");
+            sendMsg(event, "Missing arguments, usage: `" + Variables.PREFIX + getName() + " <top text>|<bottom text>`");
 
             return;
         }
@@ -76,7 +76,7 @@ public class DrakeCommand extends ImageBase {
     @Override
     public String getHelp() {
         return "Generates a drake meme with Danny\n" +
-            "Usage: `"+ Variables.PREFIX+getName() +" <top text>|<bottom text>`";
+            "Usage: `" + Variables.PREFIX + getName() + " <top text>|<bottom text>`";
     }
 
     private static void genDanny(String top, String bottom, boolean dabbing, GhostBotConfig config, Consumer<byte[]> callback) {

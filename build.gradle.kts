@@ -62,7 +62,6 @@ dependencies {
     }
     //LavaPlayer/Lavalink
     implementation(group = "com.sedmelluq", name = "lavaplayer", version = "1.3.17")
-    implementation("com.sedmelluq:jda-nas:1.0.6")
     implementation(group = "com.github.FredBoat", name = "Lavalink-Client", version = "8c20d57")
 
     // Logback classic

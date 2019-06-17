@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class TheelectricundeadCommand extends TumblrComicBase {
-    private final TLongList badPosts = new TLongArrayList(new long[] {
+    private final TLongList badPosts = new TLongArrayList(new long[]{
         183827754213L,
     });
 

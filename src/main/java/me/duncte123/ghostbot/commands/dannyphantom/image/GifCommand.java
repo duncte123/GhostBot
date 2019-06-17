@@ -28,7 +28,7 @@ public class GifCommand extends ImageBase {
     @Override
     public void execute(CommandEvent event) {
         requestSearch(keyword, event.getContainer().getJackson(), event.getContainer().getConfig().api.google,
-            (it) -> sendMessageFromData(event, it, keyword) ,
+            (it) -> sendMessageFromData(event, it, keyword),
             (it) -> sendMsg(event, "Error while looking up image: " + it)
         );
     }
@@ -39,7 +39,8 @@ public class GifCommand extends ImageBase {
     }
 
     @Override
-    public  String getHelp() { return
-        "Gives you a random Danny Phantom gif";
+    public String getHelp() {
+        return
+            "Gives you a random Danny Phantom gif";
     }
 }

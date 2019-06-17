@@ -28,5 +28,5 @@ public class Variables {
     public static final int EMBED_COLOR = 0x6ffe32;
     public static final String GHOSTBOT_GUILD = "https://discord.gg/va4kMS7";
     public static final String GHOSTBOT_INVITE = "https://discordapp.com/oauth2/authorize?client_id=397297702150602752&scope=bot&permissions=36817984";
-    
+
 }

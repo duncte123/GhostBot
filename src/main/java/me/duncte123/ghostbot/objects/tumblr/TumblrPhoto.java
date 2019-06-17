@@ -40,9 +40,6 @@ public class TumblrPhoto {
     public void setAlt_sizes(List<TumblrPhotoElement> alt_sizes) {
         this.alt_sizes = alt_sizes;
     }
-    public void setAltSizes(List<TumblrPhotoElement> alt_sizes) {
-        this.alt_sizes = alt_sizes;
-    }
 
     public String getCaption() {
         return caption;
@@ -60,7 +57,9 @@ public class TumblrPhoto {
         return alt_sizes;
     }
 
-
+    public void setAltSizes(List<TumblrPhotoElement> alt_sizes) {
+        this.alt_sizes = alt_sizes;
+    }
 
     public final static class TumblrPhotoElement {
         private String url;

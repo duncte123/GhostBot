@@ -34,7 +34,7 @@ public class WikiCommand extends WikiBaseCommand {
             return;
         }
 
-        handleWikiSearch(wiki, String.join(" ", event.getArgs()), event.getContainer().getJackson(),event.getEvent());
+        handleWikiSearch(wiki, String.join(" ", event.getArgs()), event.getContainer().getJackson(), event.getEvent());
     }
 
     @Override

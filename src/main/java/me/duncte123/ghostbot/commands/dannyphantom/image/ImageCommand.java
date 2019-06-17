@@ -63,5 +63,5 @@ public class ImageCommand extends ImageBase {
     public String getHelp() {
         return "Gives you a random Danny Phantom <:DPEmblemInvertStroke:402746292788264960> related image from google";
     }
-    
+
 }

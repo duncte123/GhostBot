@@ -95,8 +95,9 @@ public class OtherGhostCommands extends ImageBase {
     }
 
     @Override
-    public String getName() { return
-        "cujo";
+    public String getName() {
+        return
+            "cujo";
     }
 
     @Override

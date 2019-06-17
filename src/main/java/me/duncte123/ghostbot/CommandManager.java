@@ -32,7 +32,6 @@ import me.duncte123.ghostbot.commands.space.ISSCommand;
 import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.CommandEvent;
 import me.duncte123.ghostbot.objects.config.GhostBotConfig;
-import me.duncte123.ghostbot.utils.AudioUtils;
 import me.duncte123.ghostbot.utils.Container;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
@@ -57,13 +56,12 @@ public class CommandManager {
     public CommandManager(Container container) {
         final ObjectMapper jackson = container.getJackson();
         final GhostBotConfig config = container.getConfig();
-        final AudioUtils audio = container.getAudio();
 
-        this.addCommand(new GoingGhostCommand(audio));
-        this.addCommand(new WailCommand(audio));
-        this.addCommand(new FruitloopCommand(audio));
+        this.addCommand(new GoingGhostCommand());
+        this.addCommand(new WailCommand());
+        this.addCommand(new FruitloopCommand());
         this.addCommand(new EmberCommand());
-        this.addCommand(new BoxGhostCommand(audio));
+        this.addCommand(new BoxGhostCommand());
 
         this.addCommand(new ImageCommand());
         this.addCommand(new GifCommand());

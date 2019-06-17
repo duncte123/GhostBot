@@ -18,6 +18,8 @@
 
 package me.duncte123.ghostbot.objects;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import fredboat.audio.player.LavalinkManager;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.ghostbot.audio.GuildMusicManager;
@@ -30,9 +32,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Supplier;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed;
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
@@ -40,7 +44,7 @@ import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 public abstract class Command {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
-    protected String audioPath = "";
+    protected final Supplier<String> httpPath = () -> "https://i.duncte123.me/ghostbotaudio/" + getName() + '/';
     private List<String> audioFiles = new ArrayList<>();
 
     public abstract void execute(CommandEvent event);
@@ -62,25 +66,26 @@ public abstract class Command {
             return;
         }
 
-        logger.info("Path: {}", audioPath);
-        final File folder = new File(audioPath);
-        final File[] listOfFiles = folder.listFiles();
-        final List<String> filesFound = new ArrayList<>();
+        try {
+            final JsonNode audioList = new ObjectMapper().readTree(new File("audioList.json"));
 
-        if (listOfFiles == null || listOfFiles.length == 0) {
-            return;
-        }
-
-        for (final File file : listOfFiles) {
-            if (file.isFile()) {
-                final String name = file.getName();
-
-                logger.info("File found: {}{}", audioPath, name);
-                filesFound.add(name);
+            if (!audioList.has(getName())) {
+                return;
             }
-        }
 
-        audioFiles = filesFound;
+            logger.info("Path: {}", getName());
+
+            final List<String> filesFound = new ArrayList<>();
+
+            for (final JsonNode name : audioList.get(getName())) {
+                logger.info("File found: {}/{}", getName(), name.asText());
+                filesFound.add(name.asText());
+            }
+
+            audioFiles = filesFound;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     protected String getRandomTrack() {
@@ -142,7 +147,7 @@ public abstract class Command {
             sendMsg(event, "Selected track: _" + selectedTrack.replaceAll("_", "\\\\_") + '_');
 
             audioUtils.loadAndPlay(getMusicManager(audioUtils, event.getGuild()), event.getChannel(),
-                audioPath + selectedTrack, false);
+                this.httpPath.get() + selectedTrack, false);
         }
 
     }

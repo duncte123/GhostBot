@@ -52,7 +52,7 @@ public class TumblrPost {
     public String source;
 
     /*Chat post*/
-   public List<TumblrDialogue> dialogue;
+    public List<TumblrDialogue> dialogue;
 
     /*Photo post*/
     public String caption;

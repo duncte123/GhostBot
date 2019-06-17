@@ -108,8 +108,7 @@ public abstract class WikiBaseCommand extends Command {
                     }
 
                     sendEmbed(event, eb);
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                     sendMsg(event, "Something went wrong, please report the following to my developer: " + e.getMessage());
                 }
             },
@@ -122,7 +121,7 @@ public abstract class WikiBaseCommand extends Command {
         return CommandCategory.WIKI;
     }
 
-     static FandomException toEx(JSONObject json) {
+    static FandomException toEx(JSONObject json) {
         final JSONObject ex = json.getJSONObject("exception");
 
         return new FandomException(

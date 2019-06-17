@@ -108,7 +108,7 @@ public class QuotesCommand extends Command {
                 if (!id.isEmpty()) {
                     final long idLong = Long.parseLong(id);
 
-                    getPostFromId(idLong, event.getContainer() ,(it) -> sendQuote(event, it), (it) -> sendMsg(event, it));
+                    getPostFromId(idLong, event.getContainer(), (it) -> sendQuote(event, it), (it) -> sendMsg(event, it));
                 }
 
                 return;

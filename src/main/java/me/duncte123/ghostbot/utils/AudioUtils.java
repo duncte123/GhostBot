@@ -22,6 +22,7 @@ import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
+import com.sedmelluq.discord.lavaplayer.source.http.HttpAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
@@ -54,9 +55,9 @@ public class AudioUtils {
         Logger.getLogger("org.apache.http.client.protocol.ResponseProcessCookies").setLevel(Level.OFF);
 
         playerManager = new DefaultAudioPlayerManager();
-        
+
         playerManager.registerSourceManager(new YoutubeAudioSourceManager(false));
-        AudioSourceManagers.registerLocalSource(playerManager);
+        playerManager.registerSourceManager(new HttpAudioSourceManager());
 
         musicManagers = new TLongObjectHashMap<>();
     }
@@ -119,10 +120,5 @@ public class AudioUtils {
 
     public TLongObjectMap<GuildMusicManager> getMusicManagers() {
         return musicManagers;
-    }
-
-    public String getBaseAudioDir() {
-        return "../GhostBot/audioFiles/";
-//        return "audioFiles/";
     }
 }

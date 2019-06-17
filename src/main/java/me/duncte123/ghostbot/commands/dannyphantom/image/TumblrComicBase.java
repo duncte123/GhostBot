@@ -28,7 +28,6 @@ import me.duncte123.ghostbot.objects.CommandEvent;
 import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.objects.tumblr.TumblrPost;
 import me.duncte123.ghostbot.utils.Container;
-import me.duncte123.ghostbot.utils.SpoopyUtils;
 import me.duncte123.ghostbot.utils.TumblrUtils;
 import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.MessageEmbed;

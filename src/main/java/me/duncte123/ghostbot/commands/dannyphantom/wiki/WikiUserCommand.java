@@ -90,8 +90,7 @@ public class WikiUserCommand extends WikiBaseCommand {
                     }
 
                     sendEmbed(event, eb);
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                     sendMsg(event, "Something went wrong: " + e.getMessage());
                 }
 

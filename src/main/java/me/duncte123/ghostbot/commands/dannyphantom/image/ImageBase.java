@@ -49,9 +49,9 @@ import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
 public abstract class ImageBase extends Command {
 
-    private final Map<String, GoogleSearchResults> searchCache = new HashMap<>();
     private static final Logger logger = LoggerFactory.getLogger(ImageBase.class);
     private static final JSONObject IMAGES = new ConfigUtils().getImages();
+    private final Map<String, GoogleSearchResults> searchCache = new HashMap<>();
 
     void requestSearch(String query, ObjectMapper jackson, String googleKey, Consumer<GoogleSearchResults> success, Consumer<RequestException> error) {
 
@@ -69,8 +69,7 @@ public abstract class ImageBase extends Command {
                     final GoogleSearchResults data = jackson.readValue(it, GoogleSearchResults.class);
                     success.accept(data);
                     searchCache.put(query, data);
-                }
-                catch (IOException e){
+                } catch (IOException e) {
                     error.accept(new RequestException(e));
                 }
             }, error
@@ -116,6 +115,11 @@ public abstract class ImageBase extends Command {
         }
     }
 
+    @Override
+    public CommandCategory getCategory() {
+        return CommandCategory.IMAGE;
+    }
+
     static void sendMessageFromData(CommandEvent event, GoogleSearchResults data, String key) {
         final List<SearchItem> arr = data.items;
 
@@ -132,14 +136,9 @@ public abstract class ImageBase extends Command {
             .setImage(randomItem.link));
     }
 
-    @Override
-    public CommandCategory getCategory() {
-        return CommandCategory.IMAGE;
-    }
-
     public static class ImageData {
         public String title;
         public String url;
-        public  String website;
+        public String website;
     }
 }

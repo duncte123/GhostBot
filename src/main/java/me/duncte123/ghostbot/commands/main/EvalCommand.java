@@ -31,7 +31,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.*;
-import static me.duncte123.botcommons.messaging.MessageUtils.sendErrorWithMessage;
 
 public class EvalCommand extends Command {
     private final GroovyShell engine = new GroovyShell();
@@ -80,7 +79,7 @@ public class EvalCommand extends Command {
         );
 
         try {
-            service.submit(() ->{
+            service.submit(() -> {
                 final Object result = engine.evaluate(script);
 
                 if (result != null) {

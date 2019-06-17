@@ -18,13 +18,7 @@
 
 package me.duncte123.ghostbot.commands.dannyphantom.audio;
 
-import me.duncte123.ghostbot.utils.AudioUtils;
-
 public class BoxGhostCommand extends AudioBaseCommand {
-    public BoxGhostCommand(AudioUtils audioUtils) {
-        super(audioUtils);
-    }
-
     @Override
     public String getHelp() {
         return "BWEARE";

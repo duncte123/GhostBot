@@ -67,7 +67,7 @@ public class LavalinkManager {
     }
 
     public boolean isEnabled() {
-        return false;
+        return this.config.lavalink.enable;
     }
 
     public IPlayer createPlayer(String guildId) {

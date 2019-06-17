@@ -26,9 +26,8 @@ import me.duncte123.ghostbot.utils.AudioUtils;
 public abstract class AudioBaseCommand extends Command {
     private final String commandName;
 
-    public AudioBaseCommand(AudioUtils audioUtils) {
+    public AudioBaseCommand() {
         this.commandName = getClass().getSimpleName().replaceFirst("Command", "").toLowerCase();
-        this.audioPath = audioUtils.getBaseAudioDir() + commandName + '/';
         reloadAudioFiles();
     }
 
