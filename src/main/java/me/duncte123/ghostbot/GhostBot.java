@@ -19,6 +19,7 @@
 package me.duncte123.ghostbot;
 
 import com.google.errorprone.annotations.Var;
+import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
 import fredboat.audio.player.LavalinkManager;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.botcommons.web.WebUtils;
@@ -84,6 +85,7 @@ public class GhostBot {
             .setShardsTotal(totalShards)
             .setToken(token)
             .setGameProvider(this.gameProvider)
+            .setAudioSendFactory(new NativeAudioSendFactory())
             .setDisabledCacheFlags(EnumSet.of(CacheFlag.EMOTE, CacheFlag.GAME))
             .addEventListeners(botListener);
 

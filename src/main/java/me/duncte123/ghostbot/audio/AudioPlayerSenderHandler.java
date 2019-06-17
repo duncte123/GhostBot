@@ -28,11 +28,7 @@ public class AudioPlayerSenderHandler implements AudioSendHandler {
      * This is our audio player
      */
     private final IPlayer audioPlayer;
-
-    /**
-     * I don't know what this does but it seems important
-     */
-    private AudioFrame lastFrame;
+    private AudioFrame lastFrame = null;
 
     AudioPlayerSenderHandler(IPlayer audioPlayer) {
         this.audioPlayer = audioPlayer;

@@ -44,7 +44,7 @@ public class GoingGhostCommand extends AudioBaseCommand {
             selectedTrack = "extra/its going ghost.mp3";
         }
 
-        sendMsg(event, "Selected track: _" + selectedTrack.replace("_", "\\_") + '_');
+        sendMsg(event, "Selected track: _" + selectedTrack.replace("_", "\\\\_") + '_');
 
         final AudioUtils audioUtils = event.getContainer().getAudio();
 

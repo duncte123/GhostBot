@@ -57,12 +57,13 @@ dependencies {
     implementation(group = "org.codehaus.groovy", name = "groovy-jsr223", version = "2.5.6")
 
     //JDA
-    implementation(group = "net.dv8tion", name = "JDA", version = "3.8.3_462") {
+    implementation(group = "net.dv8tion", name = "JDA", version = "3.8.3_463") {
         exclude(module = "opus-java")
     }
     //LavaPlayer/Lavalink
     implementation(group = "com.sedmelluq", name = "lavaplayer", version = "1.3.17")
-    implementation(group = "com.github.FredBoat", name = "Lavalink-Client", version = "1a4b0f5")
+    implementation("com.sedmelluq:jda-nas:1.0.6")
+    implementation(group = "com.github.FredBoat", name = "Lavalink-Client", version = "8c20d57")
 
     // Logback classic
     implementation(group = "ch.qos.logback", name = "logback-classic", version = "1.2.3")
