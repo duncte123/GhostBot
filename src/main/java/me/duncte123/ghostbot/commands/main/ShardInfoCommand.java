@@ -21,11 +21,11 @@ package me.duncte123.ghostbot.commands.main;
 import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.CommandCategory;
 import me.duncte123.ghostbot.objects.CommandEvent;
-import net.dv8tion.jda.bot.sharding.ShardManager;
-import net.dv8tion.jda.bot.utils.cache.ShardCacheView;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.core.utils.tuple.Pair;
+import net.dv8tion.jda.api.sharding.ShardManager;
+import net.dv8tion.jda.api.utils.cache.ShardCacheView;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.internal.utils.tuple.Pair;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.WordUtils;
 
@@ -50,7 +50,7 @@ public class ShardInfoCommand extends Command {
         final GuildMessageReceivedEvent event = ctx.getEvent();
 
         List<List<String>> table = new ArrayList<>();
-        final ShardManager shardManager = ctx.getJDA().asBot().getShardManager();
+        final ShardManager shardManager = ctx.getJDA().getShardManager();
         final List<JDA> shards = new ArrayList<>(shardManager.getShards());
         Collections.reverse(shards);
 
@@ -61,7 +61,7 @@ public class ShardInfoCommand extends Command {
                 (ctx.getJDA().getShardInfo().getShardId() == shard.getShardInfo().getShardId() ? " (current)" : ""));
 
             row.add(WordUtils.capitalizeFully(shard.getStatus().toString().replace("_", " ")));
-            row.add(String.valueOf(shard.getPing()));
+            row.add(String.valueOf(shard.getGatewayPing()));
             row.add(String.valueOf(shard.getGuilds().size()));
 
             final Pair<Long, Long> channelStats = getConnectedVoiceChannels(shard);
@@ -149,7 +149,7 @@ public class ShardInfoCommand extends Command {
         final ShardCacheView shardCache = shardManager.getShardCache();
 
         final String connectedShards = String.valueOf(shardCache.stream().filter(shard -> shard.getStatus() == JDA.Status.CONNECTED).count());
-        final String avgPing = new DecimalFormat("###").format(shardManager.getAveragePing());
+        final String avgPing = new DecimalFormat("###").format(shardManager.getAverageGatewayPing());
         final String guilds = String.valueOf(shardManager.getGuildCache().size());
 
         sb.append(String.format(

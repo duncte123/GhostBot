@@ -20,7 +20,7 @@ package me.duncte123.ghostbot.audio;
 
 import fredboat.audio.player.LavalinkManager;
 import lavalink.client.player.IPlayer;
-import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.api.entities.Guild;
 
 public class GuildMusicManager {
 

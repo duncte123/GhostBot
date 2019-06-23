@@ -20,8 +20,8 @@ package me.duncte123.ghostbot.objects;
 
 import me.duncte123.botcommons.commands.ICommandContext;
 import me.duncte123.ghostbot.utils.Container;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.List;
 

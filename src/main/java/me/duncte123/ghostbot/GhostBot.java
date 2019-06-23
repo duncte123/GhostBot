@@ -24,12 +24,12 @@ import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.utils.Container;
 import me.duncte123.ghostbot.variables.Variables;
-import net.dv8tion.jda.bot.sharding.DefaultShardManagerBuilder;
-import net.dv8tion.jda.bot.sharding.ShardManager;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.entities.Game;
-import net.dv8tion.jda.core.utils.cache.CacheFlag;
+import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
+import net.dv8tion.jda.api.sharding.ShardManager;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,10 +46,10 @@ public class GhostBot {
 
     private static GhostBot instance;
     private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
-    /*private final IntFunction<? extends Game> gameProvider = (it) -> Game.playing(
+    /*private final IntFunction<? extends Activity> activityProvider = (it) -> Activity.playing(
         String.format("GhostBot 3.0 | Now with popup blocker (shard %s)", it + 1)
     );*/
-    private final IntFunction<? extends Game> gameProvider = (it) -> Game.watching(
+    private final IntFunction<? extends Activity> activityProvider = (it) -> Activity.watching(
         String.format("%shelp | #GoGhostAgain (shard %s)", Variables.PREFIX, it)
     );
     private final ShardManager shardManager;
@@ -74,20 +74,23 @@ public class GhostBot {
                 .setTimestamp(Instant.now())
         );
 
-        LavalinkManager.ins.start(config, container.getAudio());
+        final LavalinkManager llm = LavalinkManager.ins;
+
+        llm.start(config, container.getAudio());
 
         final BotListener botListener = new BotListener(container);
 
         final DefaultShardManagerBuilder builder = new DefaultShardManagerBuilder()
             .setShardsTotal(totalShards)
             .setToken(token)
-            .setGameProvider(this.gameProvider)
-            .setDisabledCacheFlags(EnumSet.of(CacheFlag.EMOTE, CacheFlag.GAME))
+            .setActivityProvider(this.activityProvider)
+            .setEnabledCacheFlags(EnumSet.of(CacheFlag.VOICE_STATE))
             .addEventListeners(botListener);
 
 
-        if (LavalinkManager.ins.isEnabled()) {
-            builder.addEventListeners(LavalinkManager.ins.getLavalink());
+        if (llm.isEnabled()) {
+            builder.addEventListeners(llm.getLavalink());
+            builder.setVoiceDispatchInterceptor(llm.getLavalink().getVoiceInterceptor());
         }
 
         shardManager = builder.build();
@@ -104,7 +107,7 @@ public class GhostBot {
 
     private void initGameLoop() {
         service.scheduleAtFixedRate(
-            () -> this.shardManager.setGameProvider(this.gameProvider)
+            () -> this.shardManager.setActivityProvider(this.activityProvider)
             , 1, 1, TimeUnit.DAYS);
     }
 

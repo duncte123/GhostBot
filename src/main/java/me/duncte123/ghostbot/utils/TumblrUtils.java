@@ -19,14 +19,13 @@
 package me.duncte123.ghostbot.utils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.natanbc.reliqua.request.RequestException;
 import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.objects.tumblr.TumblrPost;
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,18 +49,18 @@ public class TumblrUtils {
 
         WebUtils.ins.getJSONObject(url).async((it) -> {
             try {
-                final JSONObject res = it.getJSONObject("response");
-                final int total = res.getInt("total_posts");
-                final JSONArray postsJson = res.getJSONArray("posts");
-                final List<TumblrPost> firstPosts = jackson.readValue(postsJson.toString(), new TypeReference<List<TumblrPost>>() {});
+                final JsonNode res = it.get("response");
+                final int total = res.get("total_posts").asInt();
+                final JsonNode postsJson = res.get("posts");
+                final List<TumblrPost> firstPosts = jackson.readValue(postsJson.traverse(), new TypeReference<List<TumblrPost>>() {});
 
                 response.addAll(firstPosts);
 
                 for (int i = 20; i <= total; i += 20) {
                     final String nextPageUrl = String.format("%s&offset=%s", url, i);
-                    final JSONObject j = WebUtils.ins.getJSONObject(nextPageUrl).execute();
-                    final JSONArray fetched = j.getJSONObject("response").getJSONArray("posts");
-                    final List<TumblrPost> posts = jackson.readValue(fetched.toString(), new TypeReference<List<TumblrPost>>() {});
+                    final JsonNode j = WebUtils.ins.getJSONObject(nextPageUrl).execute();
+                    final JsonNode fetched = j.get("response").get("posts");
+                    final List<TumblrPost> posts = jackson.readValue(fetched.traverse(), new TypeReference<List<TumblrPost>>() {});
 
                     response.addAll(posts);
                 }
@@ -80,9 +79,7 @@ public class TumblrUtils {
         WebUtils.ins.getJSONObject(url).async((it) -> {
             try {
                 cb.accept(
-                    jackson.readValue(
-                        it.getJSONObject("response").getJSONArray("posts").getJSONObject(0).toString()
-                        , TumblrPost.class)
+                    jackson.readValue(it.get("response").get("posts").get(0).traverse(), TumblrPost.class)
                 );
             } catch (IOException e) {
                 error.accept(new RequestException(e));

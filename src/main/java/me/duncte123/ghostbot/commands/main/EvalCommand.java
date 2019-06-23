@@ -23,7 +23,7 @@ import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.CommandCategory;
 import me.duncte123.ghostbot.objects.CommandEvent;
 import me.duncte123.ghostbot.variables.Variables;
-import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.api.entities.Message;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -39,12 +39,12 @@ public class EvalCommand extends Command {
         "java.io",
         "java.lang",
         "java.util",
-        "net.dv8tion.jda.core",
-        "net.dv8tion.jda.core.entities",
-        "net.dv8tion.jda.core.entities.impl",
-        "net.dv8tion.jda.core.managers",
-        "net.dv8tion.jda.core.managers.impl",
-        "net.dv8tion.jda.core.utils",
+        "net.dv8tion.jda.api",
+        "net.dv8tion.jda.api.entities",
+        "net.dv8tion.jda.api.entities.impl",
+        "net.dv8tion.jda.api.managers",
+        "net.dv8tion.jda.api.managers.impl",
+        "net.dv8tion.jda.api.utils",
         "me.duncte123.ghostBot.utils",
         "me.duncte123.ghostBot.commands.main",
         "me.duncte123.ghostBot.commands.dannyPhantom",

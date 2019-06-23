@@ -22,7 +22,7 @@ import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.CommandCategory;
 import me.duncte123.ghostbot.objects.CommandEvent;
 import me.duncte123.ghostbot.variables.Variables;
-import net.dv8tion.jda.bot.sharding.ShardManager;
+import net.dv8tion.jda.api.sharding.ShardManager;
 
 import java.util.List;
 
@@ -39,7 +39,7 @@ public class RestartCommand extends Command {
             return;
         }
 
-        final ShardManager manager = event.getJDA().asBot().getShardManager();
+        final ShardManager manager = event.getJDA().getShardManager();
 
         if (args.isEmpty()) {
             sendMsg(event, "Restarting all shards",

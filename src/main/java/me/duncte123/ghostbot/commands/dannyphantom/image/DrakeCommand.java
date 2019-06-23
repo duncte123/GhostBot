@@ -18,13 +18,13 @@
 
 package me.duncte123.ghostbot.commands.dannyphantom.image;
 
+import me.duncte123.botcommons.web.WebParserUtils;
 import me.duncte123.botcommons.web.WebUtils;
-import me.duncte123.botcommons.web.WebUtilsErrorUtils;
 import me.duncte123.ghostbot.objects.CommandEvent;
 import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.variables.Variables;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.utils.IOUtil;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.internal.utils.IOUtil;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import org.json.JSONObject;
@@ -90,7 +90,7 @@ public class DrakeCommand extends ImageBase {
             .addHeader("Content-Type", APPLICATION_JSON.getType());
 
         WebUtils.ins.prepareRaw(request.build(),
-            (it) -> IOUtil.readFully(WebUtilsErrorUtils.getInputStream(it))
+            (it) -> IOUtil.readFully(WebParserUtils.getInputStream(it))
         ).async(callback);
     }
 }

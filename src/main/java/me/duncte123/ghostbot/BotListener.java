@@ -28,19 +28,20 @@ import me.duncte123.ghostbot.utils.AudioUtils;
 import me.duncte123.ghostbot.utils.Container;
 import me.duncte123.ghostbot.utils.SpoopyUtils;
 import me.duncte123.ghostbot.variables.Variables;
-import net.dv8tion.jda.bot.sharding.ShardManager;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.VoiceChannel;
-import net.dv8tion.jda.core.events.ReadyEvent;
-import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
-import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
-import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
-import net.dv8tion.jda.core.events.guild.voice.GuildVoiceMoveEvent;
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.sharding.ShardManager;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.events.ReadyEvent;
+import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
+import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import okhttp3.RequestBody;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -113,15 +114,19 @@ public class BotListener extends ListenerAdapter {
             service.shutdown();
             this.commandManager.getCommandService().shutdown();
 
+            final ShardManager shardManager = Objects.requireNonNull(event.getJDA().getShardManager());
+
             this.audio.getMusicManagers().forEachEntry((gid, mngr) -> {
 
                 mngr.getPlayer().stopTrack();
-                LavalinkManager.ins.closeConnection(event.getJDA().asBot().getShardManager().getGuildById(gid));
+                LavalinkManager.ins.closeConnection(
+                    shardManager.getGuildById(gid)
+                );
 
                 return true;
             });
 
-            event.getJDA().asBot().getShardManager().shutdown();
+            shardManager.shutdown();
 
             try {
                 Files.write(
@@ -149,8 +154,7 @@ public class BotListener extends ListenerAdapter {
         if (botToUserRatio[1] > 80 && !botLists.contains(event.getGuild().getIdLong())) {
             SpoopyUtils.getPublicChannel(event.getGuild()).sendMessage(
                 String.format(
-                    "Hey %s, %s%s of this server are bots (%s is the total btw). I'm outta here.",
-                    event.getGuild().getOwner().getAsMention(),
+                    "Hey there, %s%s of this server are bots (%s is the total btw). I'm outta here.",
                     botToUserRatio[1],
                     '%',
                     event.getGuild().getMemberCache().size()
@@ -187,7 +191,7 @@ public class BotListener extends ListenerAdapter {
     }
 
     @Override
-    public void onGuildVoiceMove(GuildVoiceMoveEvent event) {
+    public void onGuildVoiceMove(@NotNull GuildVoiceMoveEvent event) {
         try {
             if (!LavalinkManager.ins.isConnected(event.getGuild())) {
                 return;
@@ -209,7 +213,7 @@ public class BotListener extends ListenerAdapter {
     }
 
     @Override
-    public void onMessageReactionAdd(MessageReactionAddEvent event) {
+    public void onMessageReactionAdd(@NotNull MessageReactionAddEvent event) {
         this.commandManager.reactListReg.handle(event);
     }
 

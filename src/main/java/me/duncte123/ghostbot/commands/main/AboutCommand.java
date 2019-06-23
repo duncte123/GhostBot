@@ -22,6 +22,10 @@ import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.CommandEvent;
 import me.duncte123.ghostbot.variables.Variables;
+import net.dv8tion.jda.api.JDAInfo;
+
+import java.util.Collections;
+import java.util.List;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed;
 
@@ -39,15 +43,17 @@ public class AboutCommand extends Command {
                 "My twitter: [Click here](https://twitter.com/GhostBotDiscord)\n" +
                 "My invite link: [Click here](%3$s)\n" +
                 "My prefixes: `%4$s` and `%5$s`\n" +
-                "My home: [%1$s](%1$s)\n" +
+                "My lair: [%1$s](%1$s)\n" +
                 "My version: `%6$s`\n" +
-                "The amount of Discord servers that I am in: %7$s",
+                "JDA version: `%7$s`\n" +
+                "The amount of Discord servers that I am in: %8$s",
             Variables.GHOSTBOT_GUILD,
             devName,
             Variables.GHOSTBOT_INVITE,
             Variables.PREFIX,
             Variables.OTHER_PREFIX,
             Variables.VERSION,
+            JDAInfo.VERSION,
             guildCountDiscord
         )));
     }
@@ -57,4 +63,9 @@ public class AboutCommand extends Command {
 
     @Override
     public String getHelp() { return "Get some info about the bot"; }
+
+    @Override
+    public List<String> getAliases() {
+        return Collections.singletonList("botinfo");
+    }
 }

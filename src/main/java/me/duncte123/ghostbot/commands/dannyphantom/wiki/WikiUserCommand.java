@@ -25,7 +25,7 @@ import me.duncte123.fandomapi.user.UserResultSet;
 import me.duncte123.ghostbot.objects.CommandEvent;
 import me.duncte123.ghostbot.utils.SpoopyUtils;
 import me.duncte123.ghostbot.variables.Variables;
-import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.io.IOException;
 import java.util.List;

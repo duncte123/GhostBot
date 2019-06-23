@@ -18,6 +18,7 @@
 
 package me.duncte123.ghostbot.commands.dannyphantom.wiki;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.botcommons.web.WebUtils;
@@ -28,11 +29,10 @@ import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.CommandCategory;
 import me.duncte123.ghostbot.utils.SpoopyUtils;
 import me.duncte123.ghostbot.utils.WikiHolder;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -121,15 +121,15 @@ public abstract class WikiBaseCommand extends Command {
         return CommandCategory.WIKI;
     }
 
-    static FandomException toEx(JSONObject json) {
-        final JSONObject ex = json.getJSONObject("exception");
+    static FandomException toEx(JsonNode json) {
+        final JsonNode ex = json.get("exception");
 
         return new FandomException(
-            ex.getString("type"),
-            ex.getString("message"),
-            ex.getInt("code"),
-            ex.getString("details"),
-            json.getString("trace_id")
+            ex.get("type").asText(),
+            ex.get("message").asText(),
+            ex.get("code").asInt(),
+            ex.get("details").asText(),
+            json.get("trace_id").asText()
         );
     }
 

@@ -147,8 +147,8 @@ public class DPArtistsCommand extends ImageBase {
         WebUtils.ins.getJSONObject(url).async((it) -> {
                 try {
                     cb.accept(
-                        mapper.readValue(it.getJSONObject("response")
-                            .getJSONArray("posts").getJSONObject(0).toString(), TumblrPost.class)
+                        mapper.readValue(it.get("response")
+                            .get("posts").get(0).traverse(), TumblrPost.class)
                     );
                 } catch (IOException ignored) { }
             }

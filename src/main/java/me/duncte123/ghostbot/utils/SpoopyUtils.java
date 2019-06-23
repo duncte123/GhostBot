@@ -20,9 +20,9 @@ package me.duncte123.ghostbot.utils;
 
 import gnu.trove.set.TLongSet;
 import gnu.trove.set.hash.TLongHashSet;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.utils.cache.MemberCacheView;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.utils.cache.MemberCacheView;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;

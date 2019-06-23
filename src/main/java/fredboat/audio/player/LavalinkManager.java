@@ -26,8 +26,8 @@ import lavalink.client.player.LavaplayerPlayerWrapper;
 import me.duncte123.ghostbot.GhostBot;
 import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.utils.AudioUtils;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.VoiceChannel;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.VoiceChannel;
 
 import javax.annotation.Nonnull;
 import java.net.URI;
@@ -105,7 +105,7 @@ public class LavalinkManager {
         return guild.getSelfMember().getVoiceState().getChannel();
     }
 
-    public Lavalink getLavalink() {
+    public JdaLavalink getLavalink() {
         return lavalink;
     }
 

@@ -18,25 +18,26 @@
 
 package me.duncte123.ghostbot.commands.space;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.CommandCategory;
 import me.duncte123.ghostbot.objects.CommandEvent;
-import net.dv8tion.jda.core.EmbedBuilder;
-import org.json.JSONObject;
+import net.dv8tion.jda.api.EmbedBuilder;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed;
 
 public class ISSCommand extends Command {
     @Override
     public void execute(CommandEvent event) {
-        final JSONObject data = WebUtils.ins.getJSONObject("http://api.open-notify.org/iss-now.json").execute();
+        final ObjectNode data = WebUtils.ins.getJSONObject("http://api.open-notify.org/iss-now.json").execute();
 
-        final JSONObject position = data.getJSONObject("iss_position");
+        final JsonNode position = data.get("iss_position");
 
-        final String latitude = position.getString("latitude");
-        final String longitude = position.getString("longitude");
+        final String latitude = position.get("latitude").asText();
+        final String longitude = position.get("longitude").asText();
         final String mapsUrl = "https://google.com/maps/search/" + latitude + ',' + longitude;
 
         EmbedBuilder embed = EmbedUtils.embedField("International Space Station",

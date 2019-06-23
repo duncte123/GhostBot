@@ -24,12 +24,12 @@ import me.duncte123.ghostbot.CommandManager;
 import me.duncte123.ghostbot.GhostBot;
 import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.utils.SpoopyUtils;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.MessageReaction.ReactionEmote;
-import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
-import net.dv8tion.jda.core.utils.MiscUtil;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageReaction.ReactionEmote;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
+import net.dv8tion.jda.api.utils.MiscUtil;
 
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -154,7 +154,7 @@ public abstract class ReactionCommand extends Command {
                 final TextChannel channel = GhostBot.getInstance().getShardManager().getTextChannelById(channelId);
 
                 if (channel != null && channel.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) {
-                    channel.getMessageById(messageId).queue(
+                    channel.retrieveMessageById(messageId).queue(
                         (it) -> it.clearReactions().queue(null, (t) -> {})
                     );
                 }

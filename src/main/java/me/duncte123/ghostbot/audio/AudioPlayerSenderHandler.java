@@ -18,65 +18,55 @@
 
 package me.duncte123.ghostbot.audio;
 
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame;
+import com.sedmelluq.discord.lavaplayer.track.playback.MutableAudioFrame;
 import lavalink.client.player.IPlayer;
 import lavalink.client.player.LavaplayerPlayerWrapper;
-import net.dv8tion.jda.core.audio.AudioSendHandler;
+import net.dv8tion.jda.api.audio.AudioSendHandler;
+
+import java.lang.reflect.Field;
+import java.nio.ByteBuffer;
 
 public class AudioPlayerSenderHandler implements AudioSendHandler {
-    /**
-     * This is our audio player
-     */
-    private final IPlayer audioPlayer;
-    private AudioFrame lastFrame = null;
+    private final AudioPlayer audioPlayer;
+    private final MutableAudioFrame frame = new MutableAudioFrame();
+    private final ByteBuffer buffer = ByteBuffer.allocate(1024);
 
     AudioPlayerSenderHandler(IPlayer audioPlayer) {
-        this.audioPlayer = audioPlayer;
+        this.audioPlayer = getLavaplayerPlayer(audioPlayer);
+        this.frame.setBuffer(buffer);
     }
 
-    /**
-     * Checks if the player can provide the song
-     *
-     * @return true if we can provide something
-     */
+
     @Override
     public boolean canProvide() {
-        final LavaplayerPlayerWrapper lavaplayerPlayer = (LavaplayerPlayerWrapper) audioPlayer;
-
-        if (lastFrame == null) {
-            lastFrame = lavaplayerPlayer.provide();
-        }
-
-        return lastFrame != null;
+        return audioPlayer.provide(frame);
     }
 
-    /**
-     * This <em>should</em> gives us our audio
-     *
-     * @return The audio in some nice bytes
-     */
     @Override
-    public byte[] provide20MsAudio() {
-        final LavaplayerPlayerWrapper lavaplayerPlayer = (LavaplayerPlayerWrapper) audioPlayer;
-
-        if (lastFrame == null) {
-            lastFrame = lavaplayerPlayer.provide();
-        }
-
-        final byte[] data = lastFrame != null ? lastFrame.getData() : null;
-
-        lastFrame = null;
-
-        return data;
+    public ByteBuffer provide20MsAudio() {
+        return buffer.flip();
     }
 
-    /**
-     * "Checks" if this audio is opus
-     *
-     * @return always true
-     */
     @Override
     public boolean isOpus() {
         return true;
+    }
+
+    private AudioPlayer getLavaplayerPlayer(IPlayer audioPlayer) {
+        final LavaplayerPlayerWrapper lavaplayerPlayer = (LavaplayerPlayerWrapper) audioPlayer;
+
+        try {
+            final Field playerField = lavaplayerPlayer.getClass().getDeclaredField("player");
+            playerField.setAccessible(true);
+
+            return (AudioPlayer) playerField.get(lavaplayerPlayer);
+        }
+        catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }
