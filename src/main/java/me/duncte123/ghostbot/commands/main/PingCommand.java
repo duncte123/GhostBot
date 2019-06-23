@@ -20,17 +20,15 @@ package me.duncte123.ghostbot.commands.main;
 
 import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.CommandEvent;
-
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
+import net.dv8tion.jda.api.JDA;
 
 public class PingCommand extends Command {
     @Override
     public void execute(CommandEvent event) {
-        final long startTime = System.currentTimeMillis();
+        final JDA jda = event.getJDA();
 
-        sendMsg(event, "PONG!", (it) ->
-            it.editMessageFormat("PONG!\n" +
-                "Ping is: %sms", System.currentTimeMillis() - startTime).queue()
+        jda.getRestPing().queue((ping) ->
+            event.getChannel().sendMessageFormat("PONG!\n\u23F3 %d\n\uD83D\uDC93 %d", ping, jda.getGatewayPing()).queue()
         );
     }
 

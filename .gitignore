@@ -104,3 +104,4 @@ bin/
 
 *.json
 !audioList.json
+uptime.txt
