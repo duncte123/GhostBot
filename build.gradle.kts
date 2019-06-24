@@ -52,7 +52,6 @@ repositories {
 
 dependencies {
     //My little utils
-//    implementation(group = "com.github.duncte123", name = "botCommons", version = "c8ce3a5")
     implementation(group = "me.duncte123", name = "botCommons", version = "JDA_4_1.0.20")
 
     implementation(group = "org.codehaus.groovy", name = "groovy-jsr223", version = "2.5.6")
@@ -64,7 +63,7 @@ dependencies {
     //LavaPlayer/Lavalink
     implementation(group = "com.sedmelluq", name = "lavaplayer", version = "1.3.17")
 //    implementation(group = "com.github.FredBoat", name = "Lavalink-Client", version = "8c20d57")
-    implementation(group = "com.github.DuncteBot", name = "Lavalink-Client", version = "2ff7aab")
+    implementation(group = "com.github.DuncteBot", name = "Lavalink-Client", version = "4f3924fb51")
 
     // Logback classic
     implementation(group = "ch.qos.logback", name = "logback-classic", version = "1.2.3")

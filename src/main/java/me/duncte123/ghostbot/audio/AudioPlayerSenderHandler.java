@@ -18,26 +18,22 @@
 
 package me.duncte123.ghostbot.audio;
 
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
-import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame;
 import com.sedmelluq.discord.lavaplayer.track.playback.MutableAudioFrame;
 import lavalink.client.player.IPlayer;
 import lavalink.client.player.LavaplayerPlayerWrapper;
 import net.dv8tion.jda.api.audio.AudioSendHandler;
 
-import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 
 public class AudioPlayerSenderHandler implements AudioSendHandler {
-    private final AudioPlayer audioPlayer;
+    private final LavaplayerPlayerWrapper audioPlayer;
     private final MutableAudioFrame frame = new MutableAudioFrame();
     private final ByteBuffer buffer = ByteBuffer.allocate(1024);
 
     AudioPlayerSenderHandler(IPlayer audioPlayer) {
-        this.audioPlayer = getLavaplayerPlayer(audioPlayer);
+        this.audioPlayer = (LavaplayerPlayerWrapper) audioPlayer;
         this.frame.setBuffer(buffer);
     }
-
 
     @Override
     public boolean canProvide() {
@@ -52,21 +48,5 @@ public class AudioPlayerSenderHandler implements AudioSendHandler {
     @Override
     public boolean isOpus() {
         return true;
-    }
-
-    private AudioPlayer getLavaplayerPlayer(IPlayer audioPlayer) {
-        final LavaplayerPlayerWrapper lavaplayerPlayer = (LavaplayerPlayerWrapper) audioPlayer;
-
-        try {
-            final Field playerField = lavaplayerPlayer.getClass().getDeclaredField("player");
-            playerField.setAccessible(true);
-
-            return (AudioPlayer) playerField.get(lavaplayerPlayer);
-        }
-        catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-
-        return null;
     }
 }
