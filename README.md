@@ -12,5 +12,5 @@ a picture used in the bot please contact me to remove it.
   <img src="https://discordbots.org/api/widget/397297702150602752.svg" alt="GhostBot" />
 </a>
 
-[invite_link]: https://bots.discord.pw/bots/397297702150602752
+[invite_link]: https://discord.bots.gg/bots/397297702150602752
 [dp_link]: http://dannyphantom.wikia.com/wiki/Danny_Phantom_Wiki
