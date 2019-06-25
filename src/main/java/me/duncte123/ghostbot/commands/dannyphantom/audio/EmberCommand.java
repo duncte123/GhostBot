@@ -39,8 +39,7 @@ public class EmberCommand extends Command {
         audio.loadAndPlay(
             getMusicManager(audio, event.getGuild()),
             event.getChannel(),
-            "wBMOc24_aIw",
-            false
+            "wBMOc24_aIw"
         );
     }
 

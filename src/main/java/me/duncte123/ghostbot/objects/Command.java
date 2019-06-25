@@ -27,6 +27,7 @@ import me.duncte123.ghostbot.utils.AudioUtils;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
+import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +37,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed;
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
@@ -44,7 +45,7 @@ import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 public abstract class Command {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
-    protected final Supplier<String> httpPath = () -> "https://i.duncte123.me/ghostbotaudio/" + getName() + '/';
+    protected final Function<String, String> httpPath = (item) -> "https://i.duncte123.me/ghostbotaudio/" + getName() + '/' + item;
     private List<String> audioFiles = new ArrayList<>();
 
     public abstract void execute(CommandEvent event);
@@ -102,24 +103,27 @@ public abstract class Command {
 
         final GuildVoiceState voiceState = event.getMember().getVoiceState();
 
-        if (!voiceState.inVoiceChannel()) {
+        if (voiceState == null || !voiceState.inVoiceChannel()) {
             sendEmbed(event, EmbedUtils.embedMessage("Please join a voice channel first"));
 
             return false;
         }
 
+        final VoiceChannel channel = voiceState.getChannel();
+        assert channel != null;
+
         try {
-            LavalinkManager.ins.openConnection(voiceState.getChannel());
+            LavalinkManager.ins.openConnection(channel);
         } catch (PermissionException e) {
 
             if (e.getPermission() == Permission.VOICE_CONNECT) {
                 sendEmbed(event,
-                    EmbedUtils.embedMessage("I don't have permission to join " + voiceState.getChannel().getName())
+                    EmbedUtils.embedMessage("I don't have permission to join " + channel.getName())
                 );
             } else {
                 sendEmbed(event, EmbedUtils.embedMessage(String.format(
                     "Error while joining channel `%s`: %s",
-                    voiceState.getChannel().getName(),
+                    channel.getName(),
                     e.getMessage()
                 )));
             }
@@ -147,7 +151,7 @@ public abstract class Command {
             sendMsg(event, "Selected track: _" + selectedTrack.replaceAll("_", "\\\\_") + '_');
 
             audioUtils.loadAndPlay(getMusicManager(audioUtils, event.getGuild()), event.getChannel(),
-                this.httpPath.get() + selectedTrack, false);
+                this.httpPath.apply(selectedTrack));
         }
 
     }

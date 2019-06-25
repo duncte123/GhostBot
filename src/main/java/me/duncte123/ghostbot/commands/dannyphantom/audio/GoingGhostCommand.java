@@ -45,8 +45,7 @@ public class GoingGhostCommand extends AudioBaseCommand {
 
         audioUtils.loadAndPlay(
             getMusicManager(audioUtils, event.getGuild()), event.getChannel(),
-            this.httpPath.get() + selectedTrack,
-            false
+            this.httpPath.apply(selectedTrack)
         );
     }
 

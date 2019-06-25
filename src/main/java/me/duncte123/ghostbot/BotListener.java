@@ -254,7 +254,6 @@ public class BotListener extends ListenerAdapter {
 
             manager.getPlayer().stopTrack();
             manager.getPlayer().setPaused(false);
-            manager.getScheduler().getQueue().clear();
 
             if (LavalinkManager.ins.isConnected(g)) {
                 LavalinkManager.ins.closeConnection(g);

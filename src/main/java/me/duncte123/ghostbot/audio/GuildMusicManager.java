@@ -24,43 +24,17 @@ import net.dv8tion.jda.api.entities.Guild;
 
 public class GuildMusicManager {
 
-    /**
-     * This is our player
-     */
     private final IPlayer player;
 
-    /**
-     * This is the scheduler
-     */
-    private final TrackScheduler scheduler;
-
-    /**
-     * Constructor
-     *
-     * @param g
-     *         The guild that we wannt the manager for
-     */
     public GuildMusicManager(Guild g) {
         player = LavalinkManager.ins.createPlayer(g.getId());
-        scheduler = new TrackScheduler(player);
-        player.addListener(scheduler);
     }
 
     public IPlayer getPlayer() {
         return player;
     }
 
-    public TrackScheduler getScheduler() {
-        return scheduler;
-    }
-
-    /**
-     * This will get our sendings handler
-     *
-     * @return The{@link AudioPlayerSenderHandler thing} that sends our audio
-     */
     public AudioPlayerSenderHandler getSendHandler() {
         return new AudioPlayerSenderHandler(player);
     }
-
 }

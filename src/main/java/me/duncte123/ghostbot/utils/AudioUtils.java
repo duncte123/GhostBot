@@ -21,7 +21,6 @@ package me.duncte123.ghostbot.utils;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
-import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.source.http.HttpAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
@@ -63,7 +62,7 @@ public class AudioUtils {
         musicManagers = new TLongObjectHashMap<>();
     }
 
-    public void loadAndPlay(GuildMusicManager mng, final TextChannel channel, final String trackUrl, final boolean addPlayList) {
+    public void loadAndPlay(GuildMusicManager mng, final TextChannel channel, final String trackUrl) {
         playerManager.loadItemOrdered(mng, trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
@@ -71,7 +70,7 @@ public class AudioUtils {
                     mng.getPlayer().stopTrack();
                 }
 
-                mng.getScheduler().queue(track);
+                mng.getPlayer().playTrack(track);
             }
 
             @Override
