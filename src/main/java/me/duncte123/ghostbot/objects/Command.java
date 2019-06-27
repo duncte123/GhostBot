@@ -62,6 +62,10 @@ public abstract class Command {
         return List.of();
     }
 
+    public void shutdown() {
+        // May be implemented
+    }
+
     public void reloadAudioFiles() {
         if (getCategory() != CommandCategory.AUDIO) {
             return;
