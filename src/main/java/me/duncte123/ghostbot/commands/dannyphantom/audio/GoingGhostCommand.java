@@ -36,7 +36,7 @@ public class GoingGhostCommand extends AudioBaseCommand {
         final int p = ThreadLocalRandom.current().nextInt(100);
 
         if (p >= 50 && p <= 55) {
-            selectedTrack = "extra/its going ghost.mp3";
+            selectedTrack = "extra/its_going_ghost.mp3";
         }
 
         sendMsg(event, "Selected track: _" + selectedTrack.replace("_", "\\\\_") + '_');
