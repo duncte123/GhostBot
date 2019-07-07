@@ -28,25 +28,15 @@ import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 public class GoingGhostCommand extends AudioBaseCommand {
     @Override
     public void execute(CommandEvent event) {
-        if (!preAudioChecks(event)) {
-            return;
-        }
-
-        String selectedTrack = getRandomTrack();
         final int p = ThreadLocalRandom.current().nextInt(100);
 
         if (p >= 50 && p <= 55) {
-            selectedTrack = "extra/its_going_ghost.mp3";
+            doAudioStuff(event, "extra/its_going_ghost.mp3");
+
+            return;
         }
 
-        sendMsg(event, "Selected track: _" + selectedTrack.replace("_", "\\\\_") + '_');
-
-        final AudioUtils audioUtils = event.getContainer().getAudio();
-
-        audioUtils.loadAndPlay(
-            getMusicManager(audioUtils, event.getGuild()), event.getChannel(),
-            this.httpPath.apply(selectedTrack)
-        );
+        doAudioStuff(event);
     }
 
     @Override
