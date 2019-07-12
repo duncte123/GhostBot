@@ -1,6 +1,6 @@
 /*
  *     GhostBot, a Discord bot made for all your Danny Phantom needs
- *     Copyright (C) 2018 - 2019  Duncan "duncte123" Sterken
+ *     Copyright (C) 2019  Duncan "duncte123" Sterken
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostbot.commands.dannyphantom.audio;
+package me.duncte123.ghostbot.commands.main;
 
 import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.CommandCategory;
@@ -25,28 +25,27 @@ import me.duncte123.ghostbot.utils.AudioUtils;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
-public class EmberCommand extends Command {
+public class DespacitoCommand extends Command {
     @Override
     public void execute(CommandEvent event) {
         if (!preAudioChecks(event)) {
             return;
         }
 
-        sendMsg(event, "Selected track: _Ember McLain - Remember_");
+        sendMsg(event, "Now playing: _Despacito_");
 
         final AudioUtils audio = event.getContainer().getAudio();
 
         audio.loadAndPlay(
             getMusicManager(audio, event.getGuild()),
             event.getChannel(),
-            "https://www.youtube.com/watch?v=wBMOc24_aIw"
+            "https://www.youtube.com/watch?v=72UO0v5ESUo"
         );
     }
 
-
     @Override
     public String getName() {
-        return "remember";
+        return "despacito";
     }
 
     @Override
@@ -56,6 +55,6 @@ public class EmberCommand extends Command {
 
     @Override
     public String getHelp() {
-        return "Plays the song \"Remember\" in the voice channel that you are in";
+        return "Plays Despacito in your voice channel";
     }
 }

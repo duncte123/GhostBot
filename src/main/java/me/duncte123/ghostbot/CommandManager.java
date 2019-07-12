@@ -61,6 +61,7 @@ public class CommandManager {
         this.addCommand(new WailCommand());
         this.addCommand(new FruitloopCommand());
         this.addCommand(new EmberCommand());
+        this.addCommand(new DespacitoCommand());
         this.addCommand(new BoxGhostCommand());
 
         this.addCommand(new ImageCommand());
