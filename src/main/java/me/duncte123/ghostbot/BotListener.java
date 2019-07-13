@@ -23,6 +23,7 @@ import gnu.trove.list.TLongList;
 import gnu.trove.list.array.TLongArrayList;
 import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.ghostbot.audio.GuildMusicManager;
+import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.utils.AudioUtils;
 import me.duncte123.ghostbot.utils.Container;
@@ -113,6 +114,7 @@ public class BotListener extends ListenerAdapter {
             logger.info("Shutting down!!");
             service.shutdown();
             this.commandManager.getCommandService().shutdown();
+            this.commandManager.getCommands().forEach(Command::shutdown);
 
             final ShardManager shardManager = Objects.requireNonNull(event.getJDA().getShardManager());
 

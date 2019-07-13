@@ -25,12 +25,17 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
 public class UptimeCommand extends Command {
 
     private final long oldUptime;
+    private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
 
     public UptimeCommand() {
         long time = -1;
@@ -42,6 +47,8 @@ public class UptimeCommand extends Command {
         }
 
         this.oldUptime = time;
+
+        service.scheduleAtFixedRate(this::writeUptimeToFile, 1L, 1L, TimeUnit.DAYS);
     }
 
     @Override
@@ -58,6 +65,11 @@ public class UptimeCommand extends Command {
     @Override
     public String getHelp() {
         return "Shows the bots uptime";
+    }
+
+    @Override
+    public void shutdown() {
+        this.service.shutdown();
     }
 
     private String getUptime(long time) {
@@ -99,5 +111,20 @@ public class UptimeCommand extends Command {
         }
 
         return builder.toString();
+    }
+
+    private void writeUptimeToFile() {
+        final long uptime = ManagementFactory.getRuntimeMXBean().getUptime();
+        final String uptimeString = Long.toString(uptime);
+
+        try {
+            Files.write(
+                new File("uptime.txt").toPath(),
+                uptimeString.getBytes(),
+                StandardOpenOption.TRUNCATE_EXISTING
+            );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

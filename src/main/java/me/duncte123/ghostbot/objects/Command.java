@@ -62,6 +62,10 @@ public abstract class Command {
         return List.of();
     }
 
+    public void shutdown() {
+        // May be implemented
+    }
+
     public void reloadAudioFiles() {
         if (getCategory() != CommandCategory.AUDIO) {
             return;
@@ -139,6 +143,10 @@ public abstract class Command {
     }
 
     protected void doAudioStuff(CommandEvent event) {
+        doAudioStuff(event, null);
+    }
+
+    protected void doAudioStuff(CommandEvent event, String track) {
 
         if (getCategory() != CommandCategory.AUDIO) {
             return;
@@ -146,13 +154,12 @@ public abstract class Command {
 
         if (preAudioChecks(event)) {
             final AudioUtils audioUtils = event.getContainer().getAudio();
-            final String selectedTrack = getRandomTrack();
+            final String selectedTrack = track == null ? getRandomTrack() : track;
 
-            sendMsg(event, "Selected track: _" + selectedTrack.replaceAll("_", "\\\\_") + '_');
+            sendMsg(event, "Selected track: _" + selectedTrack.replaceAll("_", "\\_") + '_');
 
             audioUtils.loadAndPlay(getMusicManager(audioUtils, event.getGuild()), event.getChannel(),
                 this.httpPath.apply(selectedTrack));
         }
-
     }
 }
