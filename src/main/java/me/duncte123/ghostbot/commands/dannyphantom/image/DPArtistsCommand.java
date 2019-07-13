@@ -65,6 +65,7 @@ public class DPArtistsCommand extends ImageBase {
     private final String[] artists = {
         "earthphantom",
         "allyphantomrush",
+        "scarletghostx",
         "umbrihearts",
         "amethystocean-adr",
         "amethystocean",
@@ -93,7 +94,8 @@ public class DPArtistsCommand extends ImageBase {
                 break;
 
             case "allyphantomrush":
-                doStuff("https://allyphantomrush.deviantart.com/", event);
+            case "scarletghostx":
+                doStuff("https://scarletghostx.deviantart.com/", event);
                 break;
 
             case "umbrihearts":
