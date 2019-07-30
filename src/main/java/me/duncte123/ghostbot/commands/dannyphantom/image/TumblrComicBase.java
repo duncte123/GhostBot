@@ -20,7 +20,6 @@ package me.duncte123.ghostbot.commands.dannyphantom.image;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Lists;
 import me.duncte123.ghostbot.CommandManager;
 import me.duncte123.ghostbot.commands.ReactionCommand;
 import me.duncte123.ghostbot.objects.CommandCategory;
@@ -37,6 +36,7 @@ import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -169,9 +169,11 @@ abstract class TumblrComicBase extends ReactionCommand {
         final Predicate<TumblrPost> postFilter = getFilter();
 
         TumblrUtils.getInstance().fetchAllFromAccount(blogUrl, "photo", config, mapper, (posts) -> {
-            final List<TumblrPost> ps = Lists.reverse(posts.stream()
+            final List<TumblrPost> ps = posts.stream()
                 .filter(postFilter)
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
+
+            Collections.reverse(ps);
 
             pages.addAll(ps);
             logger.info("Loaded {} pages from the {} comic.", pages.size(), clsName);

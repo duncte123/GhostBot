@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
-import static me.duncte123.botcommons.web.WebUtils.EncodingType.APPLICATION_JSON;
+import static me.duncte123.botcommons.web.ContentType.JSON;
 
 public class DrakeCommand extends ImageBase {
     @Override
@@ -81,13 +81,13 @@ public class DrakeCommand extends ImageBase {
 
     private static void genDanny(String top, String bottom, boolean dabbing, GhostBotConfig config, Consumer<byte[]> callback) {
         final JSONObject json = new JSONObject().put("top", top).put("bottom", bottom).put("dabbing", dabbing);
-        final RequestBody body = RequestBody.create(null, json.toString());
+        final RequestBody body = RequestBody.create(json.toString().getBytes());
 
         final Request.Builder request = WebUtils.defaultRequest()
             .url("https://apis.duncte123.me/memes/dannyphantomdrake")
             .post(body)
             .addHeader("Authorization", config.api_token)
-            .addHeader("Content-Type", APPLICATION_JSON.getType());
+            .addHeader("Content-Type", JSON.getType());
 
         WebUtils.ins.prepareRaw(request.build(),
             (it) -> IOUtil.readFully(WebParserUtils.getInputStream(it))

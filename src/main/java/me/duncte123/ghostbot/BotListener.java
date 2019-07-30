@@ -57,7 +57,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import static me.duncte123.botcommons.web.WebUtils.EncodingType.APPLICATION_JSON;
+import static me.duncte123.botcommons.web.ContentType.JSON;
 
 public class BotListener extends ListenerAdapter {
 
@@ -233,8 +233,8 @@ public class BotListener extends ListenerAdapter {
                 WebUtils.ins.prepareRaw(
                     WebUtils.defaultRequest()
                         .url("https://botblock.org/api/count")
-                        .post(RequestBody.create(null, jsonString))
-                        .addHeader("Content-Type", APPLICATION_JSON.getType())
+                        .post(RequestBody.create(jsonString.getBytes()))
+                        .addHeader("Content-Type", JSON.getType())
                         .build(),
                     (it) -> Objects.requireNonNull(it.body()).string())
                     .async(

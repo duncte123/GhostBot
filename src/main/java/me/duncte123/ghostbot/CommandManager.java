@@ -45,6 +45,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Pattern;
 
+import static me.duncte123.botcommons.messaging.MessageUtils.sendMsgFormat;
+
 public class CommandManager {
 
     private static final Logger logger = LoggerFactory.getLogger(CommandManager.class);
@@ -159,7 +161,7 @@ public class CommandManager {
             return;
         }
 
-        logger.info("Dispatching command \"{}\" in \"{}\" with {}", invoke, guild, args);
+        logger.info("Dispatching command \"{}\" in \"{}\" with {}", cmd.getClass().getSimpleName(), guild, args);
 
         commandService.submit(() -> {
             try {
@@ -170,6 +172,7 @@ public class CommandManager {
                 cmd.execute(commandEvent);
             } catch (Exception e) {
                 e.printStackTrace();
+                sendMsgFormat(event, "Something went wrong when processing your command");
             }
         });
     }

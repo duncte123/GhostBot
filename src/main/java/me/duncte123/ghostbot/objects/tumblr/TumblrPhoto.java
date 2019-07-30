@@ -33,7 +33,7 @@ public class TumblrPhoto {
         this.original_size = original_size;
     }
 
-    public void setOriginalsize(TumblrPhotoElement original_size) {
+    public void setOriginalSize(TumblrPhotoElement original_size) {
         this.original_size = original_size;
     }
 
