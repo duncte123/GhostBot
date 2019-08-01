@@ -57,9 +57,14 @@ dependencies {
     implementation(group = "org.codehaus.groovy", name = "groovy-jsr223", version = "2.5.6")
 
     //JDA
-    implementation(group = "net.dv8tion", name = "JDA", version = "4.BETA.0_32") {
+    /*implementation(group = "net.dv8tion", name = "JDA", version = "4.BETA.0_32") {
+        exclude(module = "opus-java")
+    }*/
+
+    implementation(group = "com.github.DV8FromTheWorld", name = "JDA", version = "d05d707") {
         exclude(module = "opus-java")
     }
+
     //LavaPlayer/Lavalink
     implementation(group = "com.sedmelluq", name = "lavaplayer", version = "1.3.19")
 //    implementation(group = "com.github.FredBoat", name = "Lavalink-Client", version = "8c20d57")

@@ -24,11 +24,11 @@ import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.utils.Container;
 import me.duncte123.ghostbot.variables.Variables;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
-import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,10 +68,7 @@ public class GhostBot {
 
         WebUtils.setUserAgent("Mozilla/5.0 (compatible; GhostBot/v" + Variables.VERSION + "; +https://github.com/duncte123/GhostBot)");
         EmbedUtils.setEmbedBuilder(
-            () -> new EmbedBuilder()
-                .setColor(Variables.EMBED_COLOR)
-                .setFooter("GhostBot", Variables.FOOTER_ICON)
-                .setTimestamp(Instant.now())
+            () -> new EmbedBuilder().setColor(Variables.EMBED_COLOR)
         );
 
         final LavalinkManager llm = LavalinkManager.ins;
@@ -84,7 +81,9 @@ public class GhostBot {
             .setShardsTotal(totalShards)
             .setToken(token)
             .setActivityProvider(this.activityProvider)
-            .setEnabledCacheFlags(EnumSet.of(CacheFlag.VOICE_STATE))
+            .setGuildSubscriptionsEnabled(false)
+//            .setEnabledCacheFlags(EnumSet.of(CacheFlag.VOICE_STATE))
+            .setEnabledCacheFlags(EnumSet.allOf(CacheFlag.class))
             .addEventListeners(botListener);
 
 
