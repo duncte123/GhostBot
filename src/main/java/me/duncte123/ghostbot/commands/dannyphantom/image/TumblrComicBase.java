@@ -42,6 +42,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 import static me.duncte123.ghostbot.utils.SpoopyUtils.newLongSet;
@@ -169,9 +170,13 @@ abstract class TumblrComicBase extends ReactionCommand {
         final Predicate<TumblrPost> postFilter = getFilter();
 
         TumblrUtils.getInstance().fetchAllFromAccount(blogUrl, "photo", config, mapper, (posts) -> {
-            final List<TumblrPost> ps = posts.stream()
-                .filter(postFilter)
-                .collect(Collectors.toList());
+            Stream<TumblrPost> stream  = posts.stream();
+
+            if (postFilter != null) {
+                stream = stream.filter(postFilter);
+            }
+
+            final List<TumblrPost> ps = stream.collect(Collectors.toList());
 
             Collections.reverse(ps);
 
