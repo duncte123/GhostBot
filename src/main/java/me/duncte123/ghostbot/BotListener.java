@@ -21,6 +21,7 @@ package me.duncte123.ghostbot;
 import fredboat.audio.player.LavalinkManager;
 import gnu.trove.list.TLongList;
 import gnu.trove.list.array.TLongArrayList;
+import lavalink.client.player.IPlayer;
 import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.ghostbot.audio.GuildMusicManager;
 import me.duncte123.ghostbot.objects.Command;
@@ -29,7 +30,6 @@ import me.duncte123.ghostbot.utils.AudioUtils;
 import me.duncte123.ghostbot.utils.Container;
 import me.duncte123.ghostbot.utils.SpoopyUtils;
 import me.duncte123.ghostbot.variables.Variables;
-import net.dv8tion.jda.api.sharding.ShardManager;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.VoiceChannel;
@@ -41,6 +41,7 @@ import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.sharding.ShardManager;
 import okhttp3.RequestBody;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
@@ -120,10 +121,19 @@ public class BotListener extends ListenerAdapter {
 
             this.audio.getMusicManagers().forEachEntry((gid, mngr) -> {
 
-                mngr.getPlayer().stopTrack();
-                LavalinkManager.ins.closeConnection(
-                    shardManager.getGuildById(gid)
-                );
+                if (mngr.getPlayer().getPlayingTrack() != null) {
+                    mngr.getPlayer().stopTrack();
+                }
+
+                final Guild guild = shardManager.getGuildById(gid);
+
+                if (guild == null) {
+                    return true;
+                }
+
+                if (LavalinkManager.ins.isConnected(guild)){
+                    LavalinkManager.ins.closeConnection(guild);
+                }
 
                 return true;
             });
@@ -253,9 +263,11 @@ public class BotListener extends ListenerAdapter {
     private static void channelCheckThing(Guild g, VoiceChannel vc, AudioUtils audio) {
         if (vc.getMembers().stream().filter((it) -> !it.getUser().isBot()).count() < 1) {
             final GuildMusicManager manager = audio.getMusicManager(g);
+            final IPlayer player = manager.getPlayer();
 
-            manager.getPlayer().stopTrack();
-            manager.getPlayer().setPaused(false);
+            if (player.getPlayingTrack() != null) {
+                player.stopTrack();
+            }
 
             if (LavalinkManager.ins.isConnected(g)) {
                 LavalinkManager.ins.closeConnection(g);
