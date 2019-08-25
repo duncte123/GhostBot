@@ -75,7 +75,6 @@ public class GhostBot {
         llm.start(config, container.getAudio());
 
         final BotListener botListener = new BotListener(container);
-
         final DefaultShardManagerBuilder builder = new DefaultShardManagerBuilder()
             .setShardsTotal(totalShards)
             .setToken(token)
@@ -84,7 +83,6 @@ public class GhostBot {
             .setEnabledCacheFlags(EnumSet.of(CacheFlag.VOICE_STATE))
 //            .setEnabledCacheFlags(EnumSet.allOf(CacheFlag.class))
             .addEventListeners(botListener);
-
 
         if (llm.isEnabled()) {
             builder.addEventListeners(llm.getLavalink());

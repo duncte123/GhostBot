@@ -195,14 +195,6 @@ public class ShardInfoCommand extends Command {
         return Pair.of(connectedVC.get(), listeningVC.get());
     }
 
-    /**
-     * @param shard
-     *         the current shard
-     *
-     * @return a pair where
-     * first  = connected channels
-     * second = users listening in channel
-     */
     private Pair<Long, Long> getConnectedVoiceChannels(JDA shard) {
 
         final long connectedVC = shard.getVoiceChannelCache().stream()

@@ -31,9 +31,6 @@ public class ConfigUtils {
 
     private JSONObject images;
 
-    /**
-     * This will try to load the bot config and kill the program if it fails
-     */
     public ConfigUtils() {
         try {
             logger.info("Loading images.json");
