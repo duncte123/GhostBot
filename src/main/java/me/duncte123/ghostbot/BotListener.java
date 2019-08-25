@@ -95,7 +95,8 @@ public class BotListener extends ListenerAdapter {
         final JDA jda = event.getJDA();
 
         logger.info("Logged in as {} ({})", jda.getSelfUser(), jda.getShardInfo());
-        postServerCount();
+        // Disabled for now because of guild chunking
+//        postServerCount();
     }
 
     @Override
@@ -252,7 +253,7 @@ public class BotListener extends ListenerAdapter {
                         .build(),
                     (it) -> Objects.requireNonNull(it.body()).string())
                     .async(
-                        (it) -> logger.info("Posted stats to botblock api (${})", it)
+                        (it) -> logger.info("Posted stats to botblock api ({})", it)
                         ,
                         (it) -> {
                             logger.info("something borked");

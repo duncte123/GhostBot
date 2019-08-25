@@ -29,6 +29,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
+import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,7 +80,8 @@ public class GhostBot {
             .setShardsTotal(totalShards)
             .setToken(token)
             .setActivityProvider(this.activityProvider)
-            .setGuildSubscriptionsEnabled(false)
+            .setChunkingFilter(ChunkingFilter.NONE) // Lazy loading :)
+            .setGuildSubscriptionsEnabled(true) // Needed for reactions
             .setEnabledCacheFlags(EnumSet.of(CacheFlag.VOICE_STATE))
 //            .setEnabledCacheFlags(EnumSet.allOf(CacheFlag.class))
             .addEventListeners(botListener);
