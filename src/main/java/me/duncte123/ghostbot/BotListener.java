@@ -22,6 +22,7 @@ import fredboat.audio.player.LavalinkManager;
 import gnu.trove.list.TLongList;
 import gnu.trove.list.array.TLongArrayList;
 import lavalink.client.player.IPlayer;
+import me.duncte123.botcommons.BotCommons;
 import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.ghostbot.audio.GuildMusicManager;
 import me.duncte123.ghostbot.objects.Command;
@@ -120,25 +121,28 @@ public class BotListener extends ListenerAdapter {
             final ShardManager shardManager = Objects.requireNonNull(event.getJDA().getShardManager());
 
             this.audio.getMusicManagers().forEachEntry((gid, mngr) -> {
+                try {
+                    if (mngr.getPlayer().getPlayingTrack() != null) {
+                        mngr.getPlayer().stopTrack();
+                    }
 
-                if (mngr.getPlayer().getPlayingTrack() != null) {
-                    mngr.getPlayer().stopTrack();
-                }
+                    final Guild guild = shardManager.getGuildById(gid);
 
-                final Guild guild = shardManager.getGuildById(gid);
+                    if (guild == null) {
+                        return true;
+                    }
 
-                if (guild == null) {
-                    return true;
-                }
-
-                if (LavalinkManager.ins.isConnected(guild)){
-                    LavalinkManager.ins.closeConnection(guild);
+                    if (LavalinkManager.ins.isConnected(guild)) {
+                        LavalinkManager.ins.closeConnection(guild);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
 
                 return true;
             });
 
-            shardManager.shutdown();
+            BotCommons.shutdown(shardManager);
 
             try {
                 Files.write(
@@ -149,8 +153,6 @@ public class BotListener extends ListenerAdapter {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            System.exit(0);
 
             return;
         }
@@ -226,6 +228,8 @@ public class BotListener extends ListenerAdapter {
 
     @Override
     public void onMessageReactionAdd(@NotNull MessageReactionAddEvent event) {
+        System.out.println(event);
+
         this.commandManager.reactListReg.handle(event);
     }
 

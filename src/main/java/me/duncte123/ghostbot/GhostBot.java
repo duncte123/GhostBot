@@ -35,7 +35,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
-import java.time.Instant;
 import java.util.EnumSet;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -82,8 +81,8 @@ public class GhostBot {
             .setToken(token)
             .setActivityProvider(this.activityProvider)
             .setGuildSubscriptionsEnabled(false)
-//            .setEnabledCacheFlags(EnumSet.of(CacheFlag.VOICE_STATE))
-            .setEnabledCacheFlags(EnumSet.allOf(CacheFlag.class))
+            .setEnabledCacheFlags(EnumSet.of(CacheFlag.VOICE_STATE))
+//            .setEnabledCacheFlags(EnumSet.allOf(CacheFlag.class))
             .addEventListeners(botListener);
 
 

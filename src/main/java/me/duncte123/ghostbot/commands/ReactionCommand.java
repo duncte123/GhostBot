@@ -42,7 +42,7 @@ public abstract class ReactionCommand extends Command {
     private static final String LEFT_ARROW = "\u2B05";
     private static final String RIGHT_ARROW = "\u27A1";
     private static final String CANCEL = "\u274C";
-    public static final List<String> LEFT_RIGHT_CANCEL = List.of(LEFT_ARROW, RIGHT_ARROW, CANCEL);
+    protected static final List<String> LEFT_RIGHT_CANCEL = List.of(LEFT_ARROW, RIGHT_ARROW, CANCEL);
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(100);
 
 
@@ -52,8 +52,9 @@ public abstract class ReactionCommand extends Command {
         this.listenerRegistry = registry;
     }
 
-    public final void addReactions(Message message, List<String> reactions, TLongSet allowedUsers,
-                                   int timeout, TimeUnit timeUnit, Consumer<Integer> callback) {
+    @SuppressWarnings("SameParameterValue")
+    protected final void addReactions(Message message, List<String> reactions, TLongSet allowedUsers,
+                                      int timeout, TimeUnit timeUnit, Consumer<Integer> callback) {
 
         if (!ReactionListener.instances.containsKey(message.getIdLong())) {
             new ReactionListener(message, reactions, allowedUsers, listenerRegistry, timeout, timeUnit, callback);
@@ -85,7 +86,7 @@ public abstract class ReactionCommand extends Command {
 
         private boolean shouldDeleteReactions = true;
 
-        public ReactionListener(Message message, List<String> allowedReactions, TLongSet allowedUsers,
+        ReactionListener(Message message, List<String> allowedReactions, TLongSet allowedUsers,
                                 CommandManager.ReactionListenerRegistry registry, int timeout, TimeUnit timeUnit,
                                 Consumer<Integer> callback) {
 

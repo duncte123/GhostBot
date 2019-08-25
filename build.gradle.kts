@@ -52,23 +52,23 @@ repositories {
 
 dependencies {
     //My little utils
-    implementation(group = "me.duncte123", name = "botCommons", version = "JDA_4_1.0.39")
+    implementation(group = "me.duncte123", name = "botCommons", version = "1.0.49")
 
     implementation(group = "org.codehaus.groovy", name = "groovy-jsr223", version = "2.5.6")
 
     //JDA
-    /*implementation(group = "net.dv8tion", name = "JDA", version = "4.BETA.0_32") {
+    /*implementation(group = "net.dv8tion", name = "JDA", version = "4.0.0_45") {
         exclude(module = "opus-java")
     }*/
 
-    implementation(group = "com.github.DV8FromTheWorld", name = "JDA", version = "d05d707") {
+    implementation(group = "com.github.DV8FromTheWorld", name = "JDA", version = "79319e9") {
         exclude(module = "opus-java")
     }
 
     //LavaPlayer/Lavalink
-    implementation(group = "com.sedmelluq", name = "lavaplayer", version = "1.3.19")
-//    implementation(group = "com.github.FredBoat", name = "Lavalink-Client", version = "8c20d57")
-    implementation(group = "com.github.DuncteBot", name = "Lavalink-Client", version = "4f3924fb51")
+    implementation(group = "com.sedmelluq", name = "lavaplayer", version = "1.3.20")
+    implementation(group = "com.github.FredBoat", name = "Lavalink-Client", version = "9bda4ea")
+//    implementation(group = "com.github.DuncteBot", name = "Lavalink-Client", version = "4f3924fb51")
 
     // Logback classic
     implementation(group = "ch.qos.logback", name = "logback-classic", version = "1.2.3")
