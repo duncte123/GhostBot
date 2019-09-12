@@ -34,6 +34,7 @@ import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
@@ -41,14 +42,16 @@ import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.hooks.EventListener;
 import net.dv8tion.jda.api.sharding.ShardManager;
+import net.dv8tion.jda.internal.JDAImpl;
+import net.dv8tion.jda.internal.handle.SocketHandler;
 import okhttp3.RequestBody;
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
@@ -61,7 +64,7 @@ import java.util.concurrent.TimeUnit;
 
 import static me.duncte123.botcommons.web.ContentType.JSON;
 
-public class BotListener extends ListenerAdapter {
+public class BotListener implements EventListener {
 
     private static final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
     private final Logger logger = LoggerFactory.getLogger(BotListener.class);
@@ -91,16 +94,34 @@ public class BotListener extends ListenerAdapter {
     }
 
     @Override
-    public void onReady(ReadyEvent event) {
+    public void onEvent(@Nonnull GenericEvent event) {
+        if (event instanceof ReadyEvent) {
+            this.onReady((ReadyEvent) event);
+        } else if (event instanceof GuildMessageReceivedEvent) {
+            this.onGuildMessageReceived((GuildMessageReceivedEvent) event);
+        } else if (event instanceof GuildJoinEvent) {
+            this.onGuildJoin((GuildJoinEvent) event);
+        } else if (event instanceof GuildLeaveEvent) {
+            this.onGuildLeave((GuildLeaveEvent) event);
+        } else if (event instanceof GuildVoiceLeaveEvent) {
+            this.onGuildVoiceLeave((GuildVoiceLeaveEvent) event);
+        } else if (event instanceof GuildVoiceMoveEvent) {
+            this.onGuildVoiceMove((GuildVoiceMoveEvent) event);
+        } else if (event instanceof MessageReactionAddEvent) {
+            this.onMessageReactionAdd((MessageReactionAddEvent) event);
+        }
+    }
+
+    private void onReady(@Nonnull ReadyEvent event) {
         final JDA jda = event.getJDA();
+        killUnusedEvents(jda);
 
         logger.info("Logged in as {} ({})", jda.getSelfUser(), jda.getShardInfo());
         // Disabled for now because of guild chunking
 //        postServerCount();
     }
 
-    @Override
-    public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+    private void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
         if (event.getAuthor().isBot() || event.getAuthor().isFake()) {
             return;
         }
@@ -161,8 +182,7 @@ public class BotListener extends ListenerAdapter {
         this.commandManager.handleCommand(event, container);
     }
 
-    @Override
-    public void onGuildJoin(GuildJoinEvent event) {
+    private void onGuildJoin(@Nonnull GuildJoinEvent event) {
         //if 70 of a guild is bots, we'll leave it
         final double[] botToUserRatio = SpoopyUtils.getBotRatio(event.getGuild());
 
@@ -184,13 +204,11 @@ public class BotListener extends ListenerAdapter {
         logger.info("Joining guild: {}", event.getGuild());
     }
 
-    @Override
-    public void onGuildLeave(GuildLeaveEvent event) {
+    private void onGuildLeave(@Nonnull GuildLeaveEvent event) {
         logger.info("Leaving guild: {}", event.getGuild());
     }
 
-    @Override
-    public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
+    private void onGuildVoiceLeave(@Nonnull GuildVoiceLeaveEvent event) {
         if (LavalinkManager.ins.isConnected(event.getGuild()) &&
             !event.getMember().equals(event.getGuild().getSelfMember())) {
             final VoiceChannel vc = LavalinkManager.ins.getConnectedChannel(event.getGuild());
@@ -205,8 +223,7 @@ public class BotListener extends ListenerAdapter {
         }
     }
 
-    @Override
-    public void onGuildVoiceMove(@NotNull GuildVoiceMoveEvent event) {
+    private void onGuildVoiceMove(@Nonnull GuildVoiceMoveEvent event) {
         try {
             if (!LavalinkManager.ins.isConnected(event.getGuild())) {
                 return;
@@ -227,8 +244,7 @@ public class BotListener extends ListenerAdapter {
         }
     }
 
-    @Override
-    public void onMessageReactionAdd(@NotNull MessageReactionAddEvent event) {
+    private void onMessageReactionAdd(@Nonnull MessageReactionAddEvent event) {
         System.out.println(event);
 
         this.commandManager.reactListReg.handle(event);
@@ -263,6 +279,25 @@ public class BotListener extends ListenerAdapter {
             }, 0L, 1L, TimeUnit.DAYS);
         }
 
+    }
+
+    private void killUnusedEvents(JDA jda) {
+        final JDAImpl api = (JDAImpl) jda;
+        final SocketHandler.NOPHandler nopHandler = new SocketHandler.NOPHandler(api);
+        final var handlers = api.getClient().getHandlers();
+
+        handlers.put("CHANNEL_CREATE", nopHandler);
+        handlers.put("CHANNEL_DELETE", nopHandler);
+        handlers.put("CHANNEL_UPDATE", nopHandler);
+        handlers.put("GUILD_BAN_ADD", nopHandler);
+        handlers.put("GUILD_BAN_REMOVE", nopHandler);
+        handlers.put("GUILD_ROLE_CREATE", nopHandler);
+        handlers.put("GUILD_ROLE_DELETE", nopHandler);
+        handlers.put("GUILD_ROLE_UPDATE", nopHandler);
+        handlers.put("MESSAGE_DELETE", nopHandler);
+        handlers.put("MESSAGE_DELETE_BULK", nopHandler);
+        handlers.put("TYPING_START", nopHandler);
+        handlers.put("USER_UPDATE", nopHandler);
     }
 
     private static void channelCheckThing(Guild g, VoiceChannel vc, AudioUtils audio) {
