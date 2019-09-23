@@ -135,6 +135,16 @@ public class BotListener implements EventListener {
 
         if (content.equalsIgnoreCase(Variables.PREFIX + "shutdown") &&
             event.getAuthor().getIdLong() == Variables.OWNER_ID) {
+            try {
+                Files.write(
+                    new File("uptime.txt").toPath(),
+                    String.valueOf(ManagementFactory.getRuntimeMXBean().getUptime()).getBytes(),
+                    StandardOpenOption.TRUNCATE_EXISTING
+                );
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             logger.info("Shutting down!!");
             service.shutdown();
             this.commandManager.getCommandService().shutdown();
@@ -154,9 +164,7 @@ public class BotListener implements EventListener {
                         return true;
                     }
 
-                    if (LavalinkManager.ins.isConnected(guild)) {
-                        LavalinkManager.ins.closeConnection(guild);
-                    }
+                    LavalinkManager.ins.closeConnection(guild);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -165,16 +173,6 @@ public class BotListener implements EventListener {
             });
 
             BotCommons.shutdown(shardManager);
-
-            try {
-                Files.write(
-                    new File("uptime.txt").toPath(),
-                    String.valueOf(ManagementFactory.getRuntimeMXBean().getUptime()).getBytes(),
-                    StandardOpenOption.TRUNCATE_EXISTING
-                );
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
 
             return;
         }
