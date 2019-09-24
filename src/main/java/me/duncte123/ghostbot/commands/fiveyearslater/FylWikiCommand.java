@@ -26,7 +26,8 @@ import me.duncte123.ghostbot.variables.Variables;
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
 public class FylWikiCommand extends WikiBaseCommand {
-    private final WikiHolder FYL_WIKI_HOLDER = new WikiHolder("https://5yl.wikia.com");
+//    private static final WikiHolder FYL_WIKI_HOLDER = new WikiHolder("https://5yl.fandom.com");
+    private static final WikiHolder FYL_WIKI_HOLDER = new WikiHolder("https://5yl.wiki");
 
     @Override
     public void execute(CommandEvent event) {
