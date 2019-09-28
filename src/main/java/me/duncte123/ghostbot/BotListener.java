@@ -284,14 +284,8 @@ public class BotListener implements EventListener {
         final SocketHandler.NOPHandler nopHandler = new SocketHandler.NOPHandler(api);
         final var handlers = api.getClient().getHandlers();
 
-        handlers.put("CHANNEL_CREATE", nopHandler);
-        handlers.put("CHANNEL_DELETE", nopHandler);
-        handlers.put("CHANNEL_UPDATE", nopHandler);
         handlers.put("GUILD_BAN_ADD", nopHandler);
         handlers.put("GUILD_BAN_REMOVE", nopHandler);
-        handlers.put("GUILD_ROLE_CREATE", nopHandler);
-        handlers.put("GUILD_ROLE_DELETE", nopHandler);
-        handlers.put("GUILD_ROLE_UPDATE", nopHandler);
         handlers.put("MESSAGE_DELETE", nopHandler);
         handlers.put("MESSAGE_DELETE_BULK", nopHandler);
         handlers.put("TYPING_START", nopHandler);
