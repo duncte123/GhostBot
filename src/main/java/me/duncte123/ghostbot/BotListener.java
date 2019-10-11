@@ -122,7 +122,7 @@ public class BotListener implements EventListener {
     }
 
     private void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
-        if (event.getAuthor().isBot() || event.getAuthor().isFake()) {
+        if (event.getAuthor().isBot() || event.getMessage().isWebhookMessage()) {
             return;
         }
 
