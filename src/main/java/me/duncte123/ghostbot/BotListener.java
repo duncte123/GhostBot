@@ -164,7 +164,9 @@ public class BotListener implements EventListener {
                         return true;
                     }
 
-                    LavalinkManager.ins.closeConnection(guild);
+                    if (LavalinkManager.ins.isConnected(guild)) {
+                        LavalinkManager.ins.closeConnection(guild);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -243,8 +245,6 @@ public class BotListener implements EventListener {
     }
 
     private void onMessageReactionAdd(@Nonnull MessageReactionAddEvent event) {
-        System.out.println(event);
-
         this.commandManager.reactListReg.handle(event);
     }
 
