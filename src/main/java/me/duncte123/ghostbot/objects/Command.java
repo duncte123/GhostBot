@@ -29,6 +29,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.exceptions.PermissionException;
+import net.dv8tion.jda.api.utils.MarkdownSanitizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -156,7 +157,7 @@ public abstract class Command {
             final AudioUtils audioUtils = event.getContainer().getAudio();
             final String selectedTrack = track == null ? getRandomTrack() : track;
 
-            sendMsg(event, "Selected track: _" + selectedTrack.replaceAll("_", "\\_") + '_');
+            sendMsg(event, "Selected track: _" + MarkdownSanitizer.escape(selectedTrack) + '_');
 
             audioUtils.loadAndPlay(getMusicManager(audioUtils, event.getGuild()), event.getChannel(),
                 this.httpPath.apply(selectedTrack));
