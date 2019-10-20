@@ -18,7 +18,6 @@
 
 package fredboat.audio.player;
 
-import lavalink.client.io.Lavalink;
 import lavalink.client.io.Link;
 import lavalink.client.io.jda.JdaLavalink;
 import lavalink.client.player.IPlayer;
@@ -98,10 +97,11 @@ public class LavalinkManager {
     }
 
     public VoiceChannel getConnectedChannel(@Nonnull Guild guild) {
-        //NOTE: never use the local audio manager, since the audio connection may be remote
+        // NOTE: never use the local audio manager, since the audio connection may be remote
         // there is also no reason to look the channel up remotely from lavalink, if we have access to a real guild
         // object here, since we can use the voice state of ourselves (and lavalink 1.x is buggy in keeping up with the
         // current voice channel if the bot is moved around in the client)
+        // noinspection ConstantConditions
         return guild.getSelfMember().getVoiceState().getChannel();
     }
 

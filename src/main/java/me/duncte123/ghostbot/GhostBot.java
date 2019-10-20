@@ -46,12 +46,16 @@ public class GhostBot {
 
     private static GhostBot instance;
     private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
-    /*private final IntFunction<? extends Activity> activityProvider = (it) -> Activity.playing(
-        String.format("GhostBot 3.0 | Now with popup blocker (shard %s)", it + 1)
-    );*/
-    private final IntFunction<? extends Activity> activityProvider = (it) -> Activity.watching(
-        String.format("%shelp | #GoGhostAgain (shard %s)", Variables.PREFIX, it)
-    );
+    private final IntFunction<? extends Activity> activityProvider = (it) -> {
+        final Activity[] activities = {
+            Activity.playing("Doomed"),
+            Activity.watching(String.format("%shelp | #GoGhostAgain (shard %s)", Variables.PREFIX, it + 1)),
+            Activity.playing(String.format("GhostBot 3.0 | Now with popup blocker (shard %s)", it + 1)),
+        };
+
+
+        return activities[(int) Math.floor(Math.random() * activities.length)];
+    };
     private final ShardManager shardManager;
 
     private GhostBot() throws LoginException, IOException {

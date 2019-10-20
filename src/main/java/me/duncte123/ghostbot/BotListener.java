@@ -122,7 +122,7 @@ public class BotListener implements EventListener {
     }
 
     private void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
-        if (event.getAuthor().isBot() || event.getAuthor().isFake()) {
+        if (event.getAuthor().isBot() || event.getMessage().isWebhookMessage()) {
             return;
         }
 
@@ -135,6 +135,16 @@ public class BotListener implements EventListener {
 
         if (content.equalsIgnoreCase(Variables.PREFIX + "shutdown") &&
             event.getAuthor().getIdLong() == Variables.OWNER_ID) {
+            try {
+                Files.write(
+                    new File("uptime.txt").toPath(),
+                    String.valueOf(ManagementFactory.getRuntimeMXBean().getUptime()).getBytes(),
+                    StandardOpenOption.TRUNCATE_EXISTING
+                );
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             logger.info("Shutting down!!");
             service.shutdown();
             this.commandManager.getCommandService().shutdown();
@@ -165,16 +175,6 @@ public class BotListener implements EventListener {
             });
 
             BotCommons.shutdown(shardManager);
-
-            try {
-                Files.write(
-                    new File("uptime.txt").toPath(),
-                    String.valueOf(ManagementFactory.getRuntimeMXBean().getUptime()).getBytes(),
-                    StandardOpenOption.TRUNCATE_EXISTING
-                );
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
 
             return;
         }
@@ -245,8 +245,6 @@ public class BotListener implements EventListener {
     }
 
     private void onMessageReactionAdd(@Nonnull MessageReactionAddEvent event) {
-        System.out.println(event);
-
         this.commandManager.reactListReg.handle(event);
     }
 
@@ -286,14 +284,8 @@ public class BotListener implements EventListener {
         final SocketHandler.NOPHandler nopHandler = new SocketHandler.NOPHandler(api);
         final var handlers = api.getClient().getHandlers();
 
-        handlers.put("CHANNEL_CREATE", nopHandler);
-        handlers.put("CHANNEL_DELETE", nopHandler);
-        handlers.put("CHANNEL_UPDATE", nopHandler);
         handlers.put("GUILD_BAN_ADD", nopHandler);
         handlers.put("GUILD_BAN_REMOVE", nopHandler);
-        handlers.put("GUILD_ROLE_CREATE", nopHandler);
-        handlers.put("GUILD_ROLE_DELETE", nopHandler);
-        handlers.put("GUILD_ROLE_UPDATE", nopHandler);
         handlers.put("MESSAGE_DELETE", nopHandler);
         handlers.put("MESSAGE_DELETE_BULK", nopHandler);
         handlers.put("TYPING_START", nopHandler);
