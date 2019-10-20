@@ -83,6 +83,7 @@ public class CommandManager {
         this.addCommand(new AuCommand(config, jackson));
         this.addCommand(new RandomGhostCommand(config));
         this.addCommand(new GamesCommand());
+        this.addCommand(new TheJCommand());
 
         this.addCommand(new HelpCommand());
         this.addCommand(new AboutCommand());
