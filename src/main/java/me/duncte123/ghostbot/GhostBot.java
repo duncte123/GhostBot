@@ -85,7 +85,7 @@ public class GhostBot {
             .setToken(token)
             .setActivityProvider(this.activityProvider)
             .setChunkingFilter(ChunkingFilter.NONE) // Lazy loading :)
-            .setGuildSubscriptionsEnabled(true) // Needed for reactions
+            .setGuildSubscriptionsEnabled(true) // Needed for reactions, 29/10/2019 - still broken
             .setEnabledCacheFlags(EnumSet.of(CacheFlag.VOICE_STATE))
 //            .setEnabledCacheFlags(EnumSet.allOf(CacheFlag.class))
             .addEventListeners(botListener);
