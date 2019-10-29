@@ -62,14 +62,10 @@ public class AudioUtils {
         musicManagers = new TLongObjectHashMap<>();
     }
 
-    public void loadAndPlay(GuildMusicManager mng, final TextChannel channel, final String trackUrl) {
-        playerManager.loadItemOrdered(mng, trackUrl, new AudioLoadResultHandler() {
+    public void loadAndPlay(GuildMusicManager mng, final TextChannel channel, final Object trackUrl) {
+        final AudioLoadResultHandler handler = new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
-                if (mng.getPlayer().getPlayingTrack() != null) {
-                    mng.getPlayer().stopTrack();
-                }
-
                 mng.getPlayer().playTrack(track);
             }
 
@@ -91,7 +87,14 @@ public class AudioUtils {
                     exception.getMessage(), Variables.GHOSTBOT_GUILD
                 )));
             }
-        });
+        };
+
+        if (trackUrl instanceof String) {
+            playerManager.loadItemOrdered(mng, (String) trackUrl, handler);
+            return;
+        }
+
+        handler.trackLoaded((AudioTrack) trackUrl);
     }
 
     public GuildMusicManager getMusicManager(Guild guild) {
