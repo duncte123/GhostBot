@@ -23,6 +23,7 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.http.HttpAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
+import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioTrack;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -36,6 +37,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.slf4j.LoggerFactory;
 
+import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -94,7 +96,16 @@ public class AudioUtils {
             return;
         }
 
-        handler.trackLoaded((AudioTrack) trackUrl);
+        if (!(trackUrl instanceof Function)) {
+            throw new IllegalArgumentException("Track should be A function");
+        }
+
+        //noinspection unchecked
+        final Function<YoutubeAudioSourceManager, YoutubeAudioTrack> fn = (Function<YoutubeAudioSourceManager, YoutubeAudioTrack>) trackUrl;
+
+        handler.trackLoaded(
+            fn.apply(playerManager.source(YoutubeAudioSourceManager.class))
+        );
     }
 
     public GuildMusicManager getMusicManager(Guild guild) {

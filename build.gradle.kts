@@ -61,12 +61,12 @@ dependencies {
         exclude(module = "opus-java")
     }*/
 
-    implementation(group = "com.github.DV8FromTheWorld", name = "JDA", version = "acaf4b6") {
+    implementation(group = "com.github.DV8FromTheWorld", name = "JDA", version = "10552a4") {
         exclude(module = "opus-java")
     }
 
     //LavaPlayer/Lavalink
-    implementation(group = "com.sedmelluq", name = "lavaplayer", version = "1.3.22")
+    implementation(group = "com.sedmelluq", name = "lavaplayer", version = "1.3.23")
     implementation(group = "com.github.FredBoat", name = "Lavalink-Client", version = "9bda4ea")
 //    implementation(group = "com.github.DuncteBot", name = "Lavalink-Client", version = "4f3924fb51")
 
