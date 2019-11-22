@@ -114,7 +114,7 @@ public class BotListener implements EventListener {
 
     private void onReady(@Nonnull ReadyEvent event) {
         final JDA jda = event.getJDA();
-        killUnusedEvents(jda);
+//        killUnusedEvents(jda);
 
         logger.info("Logged in as {} ({})", jda.getSelfUser(), jda.getShardInfo());
         // Disabled for now because of guild chunking
