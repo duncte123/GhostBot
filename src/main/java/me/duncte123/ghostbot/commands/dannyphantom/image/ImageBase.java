@@ -31,12 +31,12 @@ import me.duncte123.ghostbot.utils.ConfigUtils;
 import me.duncte123.ghostbot.utils.SpoopyUtils;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -76,10 +76,16 @@ public abstract class ImageBase extends Command {
         );
     }
 
+    @Nullable
     ImageData requestImage(String query, ObjectMapper jackson) {
         logger.debug("Getting image for '" + query + '\'');
 
         final JSONArray items = IMAGES.getJSONArray(query);
+
+        if (items.length() == 0) {
+            return null;
+        }
+
         final JSONObject item = items.getJSONObject(ThreadLocalRandom.current().nextInt(items.length()));
 
         try {
@@ -90,7 +96,12 @@ public abstract class ImageBase extends Command {
         }
     }
 
-    void sendMessageFromName(CommandEvent event, @NotNull ImageData i) {
+    void sendMessageFromName(CommandEvent event, @Nullable ImageData i) {
+        if (i == null) {
+            sendMsg(event, "No images found");
+            return;
+        }
+
         if (i.title == null || i.title.isEmpty()) {
             sendMsg(event, "Nothing was found for the search query: `" + i.title + '`');
 
