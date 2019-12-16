@@ -81,7 +81,7 @@ public class DrakeCommand extends ImageBase {
 
     private static void genDanny(String top, String bottom, boolean dabbing, GhostBotConfig config, Consumer<byte[]> callback) {
         final JSONObject json = new JSONObject().put("top", top).put("bottom", bottom).put("dabbing", dabbing);
-        final RequestBody body = RequestBody.create(json.toString().getBytes());
+        final RequestBody body = RequestBody.create(null, json.toString().getBytes());
 
         final Request.Builder request = WebUtils.defaultRequest()
             .url("https://apis.duncte123.me/memes/dannyphantomdrake")

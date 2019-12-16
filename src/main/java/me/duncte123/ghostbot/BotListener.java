@@ -262,7 +262,7 @@ public class BotListener implements EventListener {
                 WebUtils.ins.prepareRaw(
                     WebUtils.defaultRequest()
                         .url("https://botblock.org/api/count")
-                        .post(RequestBody.create(jsonString.getBytes()))
+                        .post(RequestBody.create(null, jsonString.getBytes()))
                         .addHeader("Content-Type", JSON.getType())
                         .build(),
                     (it) -> Objects.requireNonNull(it.body()).string())

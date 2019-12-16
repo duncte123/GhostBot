@@ -51,12 +51,14 @@ repositories {
 }
 
 dependencies {
-    implementation(group = "me.duncte123", name = "botCommons", version = "1.0.58")
+    implementation(group = "me.duncte123", name = "botCommons", version = "1.0.65")
+//    implementation(group = "com.github.duncte123", name = "botCommons", version = "62560bf")
+    implementation(group = "org.apache.commons", name = "commons-text", version = "1.6")
     implementation(group = "org.codehaus.groovy", name = "groovy-jsr223", version = "2.5.6")
-    implementation(group = "net.dv8tion", name = "JDA", version = "4.0.0_69") {
+    implementation(group = "net.dv8tion", name = "JDA", version = "4.0.0_77") {
         exclude(module = "opus-java")
     }
-    implementation(group = "com.sedmelluq", name = "lavaplayer", version = "1.3.29")
+    implementation(group = "com.sedmelluq", name = "lavaplayer", version = "1.3.32")
     implementation(group = "com.github.FredBoat", name = "Lavalink-Client", version = "9bda4ea")
 //    implementation(group = "com.github.DuncteBot", name = "Lavalink-Client", version = "4f3924fb51")
     implementation(group = "ch.qos.logback", name = "logback-classic", version = "1.2.3")
