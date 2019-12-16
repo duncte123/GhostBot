@@ -62,7 +62,6 @@ dependencies {
     implementation(group = "com.github.FredBoat", name = "Lavalink-Client", version = "9bda4ea")
 //    implementation(group = "com.github.DuncteBot", name = "Lavalink-Client", version = "4f3924fb51")
     implementation(group = "ch.qos.logback", name = "logback-classic", version = "1.2.3")
-    implementation(group = "net.sf.trove4j", name = "trove4j", version = "3.0.3")
 }
 
 val compileJava: JavaCompile by tasks
