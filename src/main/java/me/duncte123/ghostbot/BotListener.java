@@ -176,6 +176,8 @@ public class BotListener implements EventListener {
 
             BotCommons.shutdown(shardManager);
 
+            System.exit(0);
+
             return;
         }
 

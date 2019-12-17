@@ -157,7 +157,7 @@ public abstract class Command {
             final AudioUtils audioUtils = event.getContainer().getAudio();
             final String selectedTrack = track == null ? getRandomTrack() : track;
 
-            sendMsg(event, "Selected track: _" + MarkdownSanitizer.escape(selectedTrack) + '_');
+            sendMsg(event, "Selected track: _" + selectedTrack.replace("_", "\\_") + '_');
 
             audioUtils.loadAndPlay(getMusicManager(audioUtils, event.getGuild()), event.getChannel(),
                 this.httpPath.apply(selectedTrack));

@@ -18,3 +18,8 @@
 
 rootProject.name = "GhostBot"
 
+/*includeBuild("../Lavalink-Client") {
+    dependencySubstitution {
+        substitute(module("lavalink:local")).with(project(":"))
+    }
+}*/
