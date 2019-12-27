@@ -55,7 +55,7 @@ dependencies {
 //    implementation(group = "com.github.duncte123", name = "botCommons", version = "62560bf")
     implementation(group = "org.apache.commons", name = "commons-text", version = "1.6")
     implementation(group = "org.codehaus.groovy", name = "groovy-jsr223", version = "2.5.6")
-    implementation(group = "net.dv8tion", name = "JDA", version = "4.0.0_79") {
+    implementation(group = "net.dv8tion", name = "JDA", version = "4.1.0_87") {
         exclude(module = "opus-java")
     }
     implementation(group = "com.sedmelluq", name = "lavaplayer", version = "1.3.32")

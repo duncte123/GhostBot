@@ -22,82 +22,56 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import me.duncte123.ghostbot.objects.CommandCategory;
 import me.duncte123.ghostbot.objects.CommandEvent;
 
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+
+import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
 public class OtherGhostCommands extends ImageBase {
     private final ObjectMapper mapper;
+    private final Map<String, String[]> keywordsMapped = new LinkedHashMap<>();
 
     public OtherGhostCommands(ObjectMapper mapper) {
         this.mapper = mapper;
+        this.initMap();
     }
 
     @Override
     public void execute(CommandEvent event) {
+        final String invoke = event.getInvoke();
 
-        switch (event.getInvoke()) {
-            case "cujo":
-                sendFromKeywords(event, "Cujo Danny Phantom");
-                break;
-            case "ember":
-                sendFromKeywords(event, "Ember Mclain");
-                break;
-            case "dan":
-                sendFromKeywords(event, "Dan Phantom", "Dark Danny");
-                break;
-            case "vlad":
-                sendFromKeywords(event, "Vlad Plasmius", "Vlad masters");
-                break;
-            case "sam":
-                sendFromKeywords(event, "Sam Manson");
-                break;
-            case "tucker":
-                sendFromKeywords(event, "Tucker Foley");
-                break;
-            case "danny":
-                sendFromKeywords(event, "Danny Fenton", "Danny Phantom");
-                break;
-            case "clockwork":
-                sendFromKeywords(event, "Clockwork Danny Phantom");
-                break;
-            case "pitchpearl":
-                sendFromKeywords(event, "pitchpearl");
-                break;
-            case "valerie":
-                sendFromKeywords(event, "valerie gray");
-                break;
-            case "dani":
-                sendFromKeywords(event, "Dani Fenton", "Dani Phantom");
-                break;
-            case "skulker":
-                sendFromKeywords(event, "Skulker Danny Phantom");
-                break;
-            case "jack":
-                sendFromKeywords(event, "Jack Fenton");
-                break;
-            case "jazz":
-                sendFromKeywords(event, "Jazz Fenton");
-                break;
-            case "maddie":
-                sendFromKeywords(event, "Maddie Fenton");
-                break;
-            case "desiree":
-                sendFromKeywords(event, "Danny Phantom desiree");
-                break;
-            case "poindexter":
-                sendFromKeywords(event, "Sidney Poindexter");
-                break;
-            case "wes":
-                sendFromKeywords(event, "Wes Weston Danny Phantom");
-                break;
+        if (this.keywordsMapped.containsKey(invoke)) {
+            this.sendFromKeywords(event, this.keywordsMapped.get(invoke));
+        } else {
+            sendMsg(event, "Whut? How did this part of the code even execute?");
+            sendMsg(event, "But for real, if this code runs something is 100% broken");
         }
+    }
 
+    private void initMap() {
+        this.keywordsMapped.put("cujo", new String[]{"Cujo Danny Phantom"});
+        this.keywordsMapped.put("ember", new String[]{"Ember Mclain"});
+        this.keywordsMapped.put("dan", new String[]{"Dan Phantom", "Dark Danny"});
+        this.keywordsMapped.put("vlad", new String[]{"Vlad Plasmius", "Vlad masters"});
+        this.keywordsMapped.put("sam", new String[]{"Sam Manson"});
+        this.keywordsMapped.put("tucker", new String[]{"Tucker Foley"});
+        this.keywordsMapped.put("danny", new String[]{"Danny Fenton", "Danny Phantom"});
+        this.keywordsMapped.put("clockwork", new String[]{"Clockwork Danny Phantom"});
+        this.keywordsMapped.put("pitchpearl", new String[]{"pitchpearl"});
+        this.keywordsMapped.put("valerie", new String[]{"valerie gray"});
+        this.keywordsMapped.put("dani", new String[]{"Dani Fenton", "Dani Phantom"});
+        this.keywordsMapped.put("skulker", new String[]{"Skulker Danny Phantom"});
+        this.keywordsMapped.put("jack", new String[]{"Jack Fenton"});
+        this.keywordsMapped.put("jazz", new String[]{"Jazz Fenton"});
+        this.keywordsMapped.put("maddie", new String[]{"Maddie Fenton"});
+        this.keywordsMapped.put("desiree", new String[]{"Danny Phantom desiree"});
+        this.keywordsMapped.put("poindexter", new String[]{"Sidney Poindexter"});
+        this.keywordsMapped.put("wes", new String[]{"Wes Weston Danny Phantom"});
     }
 
     @Override
     public String getName() {
-        return
-            "cujo";
+        return "cujo";
     }
 
     @Override
@@ -107,9 +81,10 @@ public class OtherGhostCommands extends ImageBase {
 
     @Override
     public List<String> getAliases() {
-        return List.of("ember", "dan", "vlad",
-            "sam", "tucker", "danny", "clockwork", "pitchpearl", "valerie", "dani", "skulker", "jack", "jazz",
-            "maddie", "desiree", "poindexter", "wes");
+        // yes
+        final Set<String> strings = this.keywordsMapped.keySet();
+
+        return new ArrayList<>(strings).subList(1, strings.size());
     }
 
     @Override
@@ -117,7 +92,7 @@ public class OtherGhostCommands extends ImageBase {
         return CommandCategory.CHARACTERS;
     }
 
-    private void sendFromKeywords(CommandEvent event, String... words) {
+    private void sendFromKeywords(CommandEvent event, String[] words) {
         sendMessageFromName(event, requestImage(words[ThreadLocalRandom.current().nextInt(words.length)], mapper));
     }
 }
