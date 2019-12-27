@@ -35,4 +35,13 @@ public class StoredTracks {
         .setIsStream(false)
         .build(), manager);
 
+    public static final Function<YoutubeAudioSourceManager, YoutubeAudioTrack> DESPACITO = (manager) -> new YoutubeAudioTrack(AudioTrackInfoBuilder.empty()
+        .setIdentifier("72UO0v5ESUo")
+        .setAuthor("LuisFonsiVEVO")
+        .setTitle("Despacito")
+        .setLength(229000L)
+        .setUri("https://www.youtube.com/watch?v=72UO0v5ESUo")
+        .setIsStream(false)
+        .build(), manager);
+
 }

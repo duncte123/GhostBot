@@ -18,7 +18,6 @@
 
 package me.duncte123.ghostbot.objects.config;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import me.duncte123.ghostbot.utils.RawJsonDeserializer;
 
@@ -33,7 +32,6 @@ public class GhostBotConfig {
     @JsonDeserialize(using = RawJsonDeserializer.class)
     public String botLists;
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Discord {
         public String prefix;
         public int totalShards;

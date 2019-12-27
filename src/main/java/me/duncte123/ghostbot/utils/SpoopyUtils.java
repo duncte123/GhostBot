@@ -18,6 +18,7 @@
 
 package me.duncte123.ghostbot.utils;
 
+import gnu.trove.impl.sync.TSynchronizedLongSet;
 import gnu.trove.set.TLongSet;
 import gnu.trove.set.hash.TLongHashSet;
 import net.dv8tion.jda.api.entities.Guild;
@@ -62,7 +63,10 @@ public class SpoopyUtils {
         final TextChannel pubChann = guild.getTextChannelById(guild.getId());
 
         if (pubChann == null || !pubChann.canTalk()) {
-            return guild.getTextChannelCache().stream().filter(TextChannel::canTalk).findFirst().orElse(null);
+            return guild.getTextChannelCache()
+                .applyStream(
+                    (stream) -> stream.filter(TextChannel::canTalk).findFirst().orElse(null)
+                );
         }
 
         return pubChann;
@@ -77,7 +81,7 @@ public class SpoopyUtils {
     }
 
     public static TLongSet newLongSet(long... ids) {
-        return new TLongHashSet(ids);
+        return new TSynchronizedLongSet(new TLongHashSet(ids), new Object());
     }
 
     public static boolean isLong(String input) {

@@ -51,7 +51,7 @@ repositories {
 }
 
 dependencies {
-    implementation(group = "me.duncte123", name = "botCommons", version = "1.0.65")
+    implementation(group = "me.duncte123", name = "botCommons", version = "1.0.73")
 //    implementation(group = "com.github.duncte123", name = "botCommons", version = "62560bf")
     implementation(group = "org.apache.commons", name = "commons-text", version = "1.6")
     implementation(group = "org.codehaus.groovy", name = "groovy-jsr223", version = "2.5.6")

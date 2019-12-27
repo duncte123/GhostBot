@@ -23,7 +23,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gnu.trove.list.TLongList;
 import gnu.trove.list.array.TLongArrayList;
 import gnu.trove.map.TLongObjectMap;
-import gnu.trove.map.hash.TLongObjectHashMap;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.CommandCategory;
@@ -35,6 +34,7 @@ import me.duncte123.ghostbot.utils.Container;
 import me.duncte123.ghostbot.utils.TumblrUtils;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.utils.MiscUtil;
 import org.apache.commons.text.StringEscapeUtils;
 
 import java.io.BufferedWriter;
@@ -57,7 +57,7 @@ public class QuotesCommand extends Command {
     private static final String DOMAIN = "totallycorrectdannyphantomquotes.tumblr.com";
     private final String[] types = {"chat", "text", "quote"};
     private final List<TumblrPost> allQuotes = new ArrayList<>();
-    private final TLongObjectMap<List<TumblrPost>> guildQuotes = new TLongObjectHashMap<>();
+    private final TLongObjectMap<List<TumblrPost>> guildQuotes = MiscUtil.newLongMap();
     private final TLongList badPostIds = new TLongArrayList(new long[]{
         156199508936L,
         141701068521L,

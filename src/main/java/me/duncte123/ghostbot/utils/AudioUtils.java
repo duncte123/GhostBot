@@ -28,6 +28,7 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import fredboat.audio.player.LavalinkManager;
+import gnu.trove.impl.sync.TSynchronizedLongObjectMap;
 import gnu.trove.map.TLongObjectMap;
 import gnu.trove.map.hash.TLongObjectHashMap;
 import me.duncte123.botcommons.messaging.EmbedUtils;
@@ -48,7 +49,7 @@ public class AudioUtils {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(AudioUtils.class);
 
     private static final int DEFAULT_VOLUME = 35; //(0-150, where 100 is the default max volume)
-    private final String embedTitle = "Spoopy-Luma-Player";
+    private static final String EMBED_TITLE = "Spoopy-Luma-Player";
 
     private final TLongObjectMap<GuildMusicManager> musicManagers;
     private final AudioPlayerManager playerManager;
@@ -61,7 +62,7 @@ public class AudioUtils {
         playerManager.registerSourceManager(new YoutubeAudioSourceManager(false));
         playerManager.registerSourceManager(new HttpAudioSourceManager());
 
-        musicManagers = new TLongObjectHashMap<>();
+        musicManagers = new TSynchronizedLongObjectMap<>(new TLongObjectHashMap<>(), new Object());
     }
 
     public void loadAndPlay(GuildMusicManager mng, final TextChannel channel, final Object trackUrl) {
@@ -78,14 +79,14 @@ public class AudioUtils {
 
             @Override
             public void noMatches() {
-                sendEmbed(channel, EmbedUtils.embedField(embedTitle, "Nothing found by _" + trackUrl + '_'));
+                sendEmbed(channel, EmbedUtils.embedField(EMBED_TITLE, "Nothing found by _" + trackUrl + '_'));
             }
 
             @Override
             public void loadFailed(FriendlyException exception) {
-                sendEmbed(channel, EmbedUtils.embedField(embedTitle, String.format(
+                sendEmbed(channel, EmbedUtils.embedField(EMBED_TITLE, String.format(
                     "Could not play: %s\n" +
-                        "If this happens often try another link or join our [support guild](%s) for more!",
+                        "Please contact a developer [here](%s) to inform them of this issue",
                     exception.getMessage(), Variables.GHOSTBOT_GUILD
                 )));
             }
@@ -97,7 +98,7 @@ public class AudioUtils {
         }
 
         if (!(trackUrl instanceof Function)) {
-            throw new IllegalArgumentException("Track should be A function");
+            throw new IllegalArgumentException("Track should be a function instead");
         }
 
         //noinspection unchecked
@@ -113,14 +114,9 @@ public class AudioUtils {
         GuildMusicManager mng = musicManagers.get(guildId);
 
         if (mng == null) {
-            synchronized (musicManagers) {
-                mng = musicManagers.get(guildId);
-                if (mng == null) {
-                    mng = new GuildMusicManager(guild);
-                    mng.getPlayer().setVolume(DEFAULT_VOLUME);
-                    musicManagers.put(guildId, mng);
-                }
-            }
+            mng = new GuildMusicManager(guild);
+            mng.getPlayer().setVolume(DEFAULT_VOLUME);
+            musicManagers.put(guildId, mng);
         }
 
         if (!LavalinkManager.ins.isEnabled()) {

@@ -22,6 +22,7 @@ import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.CommandCategory;
 import me.duncte123.ghostbot.objects.CommandEvent;
 import me.duncte123.ghostbot.utils.AudioUtils;
+import me.duncte123.ghostbot.utils.StoredTracks;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
@@ -39,7 +40,7 @@ public class DespacitoCommand extends Command {
         audio.loadAndPlay(
             getMusicManager(audio, event.getGuild()),
             event.getChannel(),
-            "https://www.youtube.com/watch?v=72UO0v5ESUo"
+            StoredTracks.DESPACITO
         );
     }
 

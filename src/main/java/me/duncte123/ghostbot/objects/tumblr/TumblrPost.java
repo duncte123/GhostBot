@@ -18,11 +18,8 @@
 
 package me.duncte123.ghostbot.objects.tumblr;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import java.util.List;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class TumblrPost {
     public String blog_name;
     public long id;

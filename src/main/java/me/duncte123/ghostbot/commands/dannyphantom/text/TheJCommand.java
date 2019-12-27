@@ -54,7 +54,7 @@ public class TheJCommand extends Command {
             return content.get((int)Math.floor(Math.random() * content.size()));
         } catch (IOException e) {
             e.printStackTrace();
-            return "null";
+            return e.toString();
         }
     }
 }

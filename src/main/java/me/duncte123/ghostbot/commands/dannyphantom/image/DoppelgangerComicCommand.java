@@ -82,6 +82,6 @@ public class DoppelgangerComicCommand extends TumblrComicBase {
 
     @Override
     Predicate<TumblrPost> getFilter() {
-        return null;
+        return (p) -> true;
     }
 }

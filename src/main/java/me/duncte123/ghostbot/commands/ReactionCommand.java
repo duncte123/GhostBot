@@ -38,6 +38,9 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
+import static net.dv8tion.jda.api.exceptions.ErrorResponseException.ignore;
+import static net.dv8tion.jda.api.requests.ErrorResponse.UNKNOWN_MESSAGE;
+
 public abstract class ReactionCommand extends Command {
     private static final String LEFT_ARROW = "\u2B05";
     private static final String RIGHT_ARROW = "\u27A1";
@@ -110,15 +113,15 @@ public abstract class ReactionCommand extends Command {
                 return;
             }
 
-            if (event.getUser().equals(event.getJDA().getSelfUser())) {
+            if (event.getUserIdLong() == event.getJDA().getSelfUser().getIdLong()) {
                 return;
             }
 
             if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) {
-                event.getReaction().removeReaction(event.getUser()).queue(null, (__) -> {});
+                event.getReaction().removeReaction(event.getUser()).queue(null, ignore(UNKNOWN_MESSAGE));
             }
 
-            if (!allowedUsers.isEmpty() && !allowedUsers.contains(event.getUser().getIdLong())) {
+            if (!allowedUsers.isEmpty() && !allowedUsers.contains(event.getUserIdLong())) {
                 return;
             }
 
@@ -155,9 +158,7 @@ public abstract class ReactionCommand extends Command {
                 final TextChannel channel = GhostBot.getInstance().getShardManager().getTextChannelById(channelId);
 
                 if (channel != null && channel.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) {
-                    channel.retrieveMessageById(messageId).queue(
-                        (it) -> it.clearReactions().queue(null, (t) -> {})
-                    );
+                    channel.clearReactionsById(messageId).queue(null, ignore(UNKNOWN_MESSAGE));
                 }
             }
 

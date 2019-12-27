@@ -18,9 +18,6 @@
 
 package me.duncte123.ghostbot.objects.tumblr;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class TumblrDialogue {
     private String name;
     private String label;
