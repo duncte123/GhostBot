@@ -114,7 +114,10 @@ public class FylCommicCommand extends ReactionCommand {
             (m) -> this.addReactions(m, LEFT_RIGHT_CANCEL,
                 newLongSet(author.getIdLong()), 30, TimeUnit.MINUTES, (index) -> {
 
-                    if (index >= 2) { //cancel button or other error
+                    if (index == 2) { //cancel button
+                        stopReactions(m, true);
+                        return;
+                    } else if (index > 2) { // other error
                         stopReactions(m, false);
                         return;
                     }
