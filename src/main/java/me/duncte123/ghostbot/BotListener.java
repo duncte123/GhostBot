@@ -29,7 +29,6 @@ import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.utils.AudioUtils;
 import me.duncte123.ghostbot.utils.Container;
-import me.duncte123.ghostbot.utils.SpoopyUtils;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
@@ -68,7 +67,7 @@ public class BotListener implements EventListener {
 
     private static final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
     private final Logger logger = LoggerFactory.getLogger(BotListener.class);
-    private final TLongList botLists = new TLongArrayList(new long[]{
+    /*private final TLongList botLists = new TLongArrayList(new long[]{
         110373943822540800L, // Dbots
         264445053596991498L, // Dbl
         374071874222686211L, // Bots for discord
@@ -80,7 +79,7 @@ public class BotListener implements EventListener {
         446682534135201793L, // Discords best bots
         477792727577395210L, // discordbotlist.xyz
         475571221946171393L, // bots.discordlist.app
-    });
+    });*/
     private final CommandManager commandManager;
     private final GhostBotConfig config;
     private final AudioUtils audio;
@@ -118,7 +117,7 @@ public class BotListener implements EventListener {
 
         logger.info("Logged in as {} ({})", jda.getSelfUser(), jda.getShardInfo());
         // Disabled for now because of guild chunking
-//        postServerCount();
+        postServerCount();
     }
 
     private void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
@@ -185,24 +184,6 @@ public class BotListener implements EventListener {
     }
 
     private void onGuildJoin(@Nonnull GuildJoinEvent event) {
-        //if 70 of a guild is bots, we'll leave it
-        final double[] botToUserRatio = SpoopyUtils.getBotRatio(event.getGuild());
-
-        if (botToUserRatio[1] > 80 && !botLists.contains(event.getGuild().getIdLong())) {
-            SpoopyUtils.getPublicChannel(event.getGuild()).sendMessage(
-                String.format(
-                    "Hey there, %s%s of this server are bots (%s is the total btw). I'm outta here.",
-                    botToUserRatio[1],
-                    '%',
-                    event.getGuild().getMemberCache().size()
-                )).queue(
-                (message) -> message.getGuild().leave().queue()
-            );
-
-            logger.info("Joining guild: {}, and leaving it after. BOT ALERT", event.getGuild());
-            return;
-        }
-
         logger.info("Joining guild: {}", event.getGuild());
     }
 
@@ -258,7 +239,7 @@ public class BotListener implements EventListener {
                 final String jsonString = new JSONObject(this.config.botLists)
                     .put("server_count", manager.getGuildCache().size())
                     .put("shard_count", manager.getShardsTotal())
-                    .put("bot_id", 397297702150602752L)
+                    .put("bot_id", "397297702150602752")
                     .toString();
 
                 WebUtils.ins.prepareRaw(

@@ -21,9 +21,6 @@ package me.duncte123.ghostbot.utils;
 import gnu.trove.impl.sync.TSynchronizedLongSet;
 import gnu.trove.set.TLongSet;
 import gnu.trove.set.hash.TLongHashSet;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.utils.cache.MemberCacheView;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -40,37 +37,6 @@ public class SpoopyUtils {
         "&filter=1" +
         "&safe=medium" +
         "&key=%s";
-
-    // [0] = users, [1] = bots
-    public static double[] getBotRatio(Guild g) {
-
-        final MemberCacheView memberCache = g.getMemberCache();
-        final double totalCount = memberCache.size();
-        final double botCount = memberCache.stream().filter((it) -> it.getUser().isBot()).count();
-        final double userCount = totalCount - botCount;
-
-        //percent in users
-        final double userCountP = (userCount / totalCount) * 100;
-
-        //percent in bots
-        final double botCountP = (botCount / totalCount) * 100;
-
-        return new double[]{Math.round(userCountP), Math.round(botCountP)};
-    }
-
-    public static TextChannel getPublicChannel(Guild guild) {
-
-        final TextChannel pubChann = guild.getTextChannelById(guild.getId());
-
-        if (pubChann == null || !pubChann.canTalk()) {
-            return guild.getTextChannelCache()
-                .applyStream(
-                    (stream) -> stream.filter(TextChannel::canTalk).findFirst().orElse(null)
-                );
-        }
-
-        return pubChann;
-    }
 
     public static String getGoogleSearchUrl(String query, String key) {
         return String.format(GOOGLE_URL, encodeUrl(query), key);
