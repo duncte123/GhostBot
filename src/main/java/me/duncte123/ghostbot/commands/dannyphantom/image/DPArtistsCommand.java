@@ -18,6 +18,7 @@
 
 package me.duncte123.ghostbot.commands.dannyphantom.image;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.botcommons.web.WebUtils;
@@ -29,9 +30,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed;
@@ -62,16 +61,12 @@ public class DPArtistsCommand extends ImageBase {
      *    (and some more useless info)
      */
 
-    private final String[] artists = {
-        "earthphantom",
-        "allyphantomrush",
-        "scarletghostx",
-        "umbrihearts",
-        "amethystocean-adr",
-        "amethystocean",
-        "amethyst-ocean",
-        "ceciliaspen"
-    };
+
+    private final Map<String, String> artistMap = new LinkedHashMap<>();
+
+    public DPArtistsCommand() {
+        this.initMap();
+    }
 
     @Override
     public void execute(CommandEvent event) {
@@ -88,44 +83,37 @@ public class DPArtistsCommand extends ImageBase {
             return;
         }
 
-        switch (args.get(0)) {
-            case "earthphantom":
-                doStuff("earthphantom.tumblr.com", event);
-                break;
+        final String arg = args.get(0);
 
-            case "allyphantomrush":
-            case "scarletghostx":
-                doStuff("https://scarletghostx.deviantart.com/", event);
-                break;
-
-            case "umbrihearts":
-                doStuff("https://umbrihearts.deviantart.com/", event);
-                break;
-
-            case "amethystocean-adr":
-                doStuff("amethystocean-adr.tumblr.com", event);
-                break;
-
-            case "amethystocean":
-            case "amethyst-ocean":
-                doStuff("amethyst-ocean.deviantart.com", event);
-                break;
-
-            case "ceciliaspen":
-                doStuff("ceciliaspen.tumblr.com", event);
-                break;
-
-            case "list":
-                sendMsg(event, "The current list of artists is: `" + String.join("`, `", artists) + '`');
-                break;
-
-            default:
-                sendMsg(event, "This artist is not in the list of artists that have approved their art to be in this bot.\n" +
-                    "Use `gb." + getName() + " list` for a list of artists.");
-                break;
-
+        if (arg.equals("list")) {
+            sendMsg(event, "The current list of artists is: `" + String.join("`, `", this.artistMap.keySet()) + '`');
+            return;
         }
 
+        if (this.artistMap.containsKey(arg)) {
+            doStuff(this.artistMap.get(arg), event);
+            return;
+        }
+
+        sendMsg(event, "This artist is not in the list of artists that have approved their art to be in this bot.\n" +
+            "Use `gb." + getName() + " list` for a list of artists.");
+
+    }
+
+    private void initMap() {
+        this.artistMap.put("earthphantom", "skyblob.tumblr.com");
+        this.artistMap.put("skyblob", "skyblob.tumblr.com");
+
+        this.artistMap.put("allyphantomrush", "https://scarletghostx.deviantart.com/");
+        this.artistMap.put("scarletghostx", "https://scarletghostx.deviantart.com/");
+
+        this.artistMap.put("umbrihearts", "https://umbrihearts.deviantart.com/");
+
+        this.artistMap.put("amethystocean-adr", "amethystocean-adr.tumblr.com");
+        this.artistMap.put("amethystocean", "amethyst-ocean.deviantart.com");
+        this.artistMap.put("amethyst-ocean", "amethyst-ocean.deviantart.com");
+
+        this.artistMap.put("ceciliaspen", "ceciliaspen.tumblr.com");
     }
 
     @Override
@@ -136,21 +124,29 @@ public class DPArtistsCommand extends ImageBase {
 
     @Override
     public List<String> getAliases() {
-        return Arrays.asList(artists);
+        final Set<String> strings = this.artistMap.keySet();
+
+        return new ArrayList<>(strings);
     }
 
     private void extractPictureFromTumblr(String username, GhostBotConfig config,
                                           ObjectMapper mapper, @NotNull Consumer<TumblrPost> cb) {
         final String url = String.format(
-            "https://api.tumblr.com/v2/blog/%s.tumblr.com/posts?api_key=%s&type=photo&limit=1",
+            "https://api.tumblr.com/v2/blog/%s.tumblr.com/posts/photo?api_key=%s&limit=1",
             username, config.api.tumblr
         );
 
         WebUtils.ins.getJSONObject(url).async((it) -> {
                 try {
+                    final JsonNode posts = it.get("response").get("posts");
+
+                    if (posts.size() == 0) {
+                        cb.accept(null);
+                        return;
+                    }
+
                     cb.accept(
-                        mapper.readValue(it.get("response")
-                            .get("posts").get(0).traverse(), TumblrPost.class)
+                        mapper.readValue(posts.get(0).traverse(), TumblrPost.class)
                     );
                 } catch (IOException ignored) { }
             }
@@ -185,10 +181,15 @@ public class DPArtistsCommand extends ImageBase {
 
             extractPictureFromTumblr(usn, config, jackson, (it) -> {
 
+                if (it == null) {
+                    sendMsg(event, "No posts found");
+                    return;
+                }
+
                 if (!it.type.equalsIgnoreCase("photo")) {
                     sendMsg(event, "Got a post of type `" + it.type + "` for the type `photo`\n" +
                         "WTF tumblr?\n" +
-                        "Here\'s the link anyway: <" + it.post_url + '>');
+                        "Here's the link anyway: <" + it.post_url + '>');
 
                     return;
                 }
@@ -225,7 +226,7 @@ public class DPArtistsCommand extends ImageBase {
         return "https://api.tumblr.com/v2/blog/" + domain + "/avatar/48";
     }
 
-    private class LocalDeviantData {
+    private static class LocalDeviantData {
 
         final String authorUrl;
         final String thumbnailUrl;
