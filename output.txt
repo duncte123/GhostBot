@@ -1,0 +1,166 @@
+Project: GhostBot
+/mnt/coding/java/GhostBot/src/main/java/fredboat
+/mnt/coding/java/GhostBot/src/main/java/fredboat/audio
+/mnt/coding/java/GhostBot/src/main/java/fredboat/audio/player
+/mnt/coding/java/GhostBot/src/main/java/fredboat/audio/player/LavalinkManager.java
+File LavalinkManager.java has 121 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/fandomapi
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/fandomapi/FandomException.java
+File FandomException.java has 63 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/fandomapi/search
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/fandomapi/search/LocalWikiSearchResult.java
+File LocalWikiSearchResult.java has 62 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/fandomapi/search/LocalWikiSearchResultSet.java
+File LocalWikiSearchResultSet.java has 64 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/fandomapi/user
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/fandomapi/user/UserElement.java
+File UserElement.java has 78 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/fandomapi/user/UserResultSet.java
+File UserResultSet.java has 40 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/audio
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/audio/AudioPlayerSenderHandler.java
+File AudioPlayerSenderHandler.java has 52 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/audio/GuildMusicManager.java
+File GuildMusicManager.java has 49 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/BotListener.java
+File BotListener.java has 294 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/CommandManager.java
+File CommandManager.java has 217 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/dannyphantom
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/dannyphantom/audio
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/dannyphantom/audio/AudioBaseCommand.java
+File AudioBaseCommand.java has 49 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/dannyphantom/audio/BoxGhostCommand.java
+File BoxGhostCommand.java has 26 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/dannyphantom/audio/EmberCommand.java
+File EmberCommand.java has 62 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/dannyphantom/audio/FruitloopCommand.java
+File FruitloopCommand.java has 26 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/dannyphantom/audio/GoingGhostCommand.java
+File GoingGhostCommand.java has 46 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/dannyphantom/audio/WailCommand.java
+File WailCommand.java has 33 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/dannyphantom/image
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/dannyphantom/image/DoppelgangerComicCommand.java
+File DoppelgangerComicCommand.java has 87 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/dannyphantom/image/DPArtistsCommand.java
+File DPArtistsCommand.java has 245 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/dannyphantom/image/DrakeCommand.java
+File DrakeCommand.java has 96 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/dannyphantom/image/GifCommand.java
+File GifCommand.java has 46 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/dannyphantom/image/ImageBase.java
+File ImageBase.java has 155 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/dannyphantom/image/ImageCommand.java
+File ImageCommand.java has 67 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/dannyphantom/image/OtherGhostCommands.java
+File OtherGhostCommands.java has 98 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/dannyphantom/image/TheelectricundeadCommand.java
+File TheelectricundeadCommand.java has 92 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/dannyphantom/image/TumblrComicBase.java
+File TumblrComicBase.java has 198 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/dannyphantom/text
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/dannyphantom/text/AuCommand.java
+File AuCommand.java has 145 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/dannyphantom/text/GamesCommand.java
+File GamesCommand.java has 64 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/dannyphantom/text/PetitionCommand.java
+File PetitionCommand.java has 67 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/dannyphantom/text/QuotesCommand.java
+File QuotesCommand.java has 293 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/dannyphantom/text/RandomGhostCommand.java
+File RandomGhostCommand.java has 96 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/dannyphantom/text/TheJCommand.java
+File TheJCommand.java has 60 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/dannyphantom/wiki
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/dannyphantom/wiki/WikiBaseCommand.java
+File WikiBaseCommand.java has 145 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/dannyphantom/wiki/WikiCommand.java
+File WikiCommand.java has 59 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/dannyphantom/wiki/WikiUserCommand.java
+File WikiUserCommand.java has 119 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/fiveyearslater
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/fiveyearslater/FylCommicCommand.java
+File FylCommicCommand.java has 201 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/fiveyearslater/FylWikiCommand.java
+File FylWikiCommand.java has 55 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/main
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/main/AboutCommand.java
+File AboutCommand.java has 71 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/main/DespacitoCommand.java
+File DespacitoCommand.java has 61 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/main/EvalCommand.java
+File EvalCommand.java has 112 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/main/HelpCommand.java
+File HelpCommand.java has 121 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/main/PingCommand.java
+File PingCommand.java has 44 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/main/ReloadAudioCommand.java
+File ReloadAudioCommand.java has 53 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/main/RestartCommand.java
+File RestartCommand.java has 79 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/main/ShardInfoCommand.java
+File ShardInfoCommand.java has 213 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/main/UptimeCommand.java
+File UptimeCommand.java has 130 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/main/VoteCommand.java
+File VoteCommand.java has 46 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/ReactionCommand.java
+File ReactionCommand.java has 168 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/space
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/commands/space/ISSCommand.java
+File ISSCommand.java has 63 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/GhostBot.java
+File GhostBot.java has 155 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/HackedBot.java
+File HackedBot.java has 71 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/objects
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/objects/Command.java
+File Command.java has 166 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/objects/CommandCategory.java
+File CommandCategory.java has 30 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/objects/CommandEvent.java
+File CommandEvent.java has 63 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/objects/config
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/objects/config/GhostBotConfig.java
+File GhostBotConfig.java has 56 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/objects/fyl
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/objects/fyl/FylChapter.java
+File FylChapter.java has 70 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/objects/fyl/FylComic.java
+File FylComic.java has 60 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/objects/googlesearch
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/objects/googlesearch/GoogleSearchResults.java
+File GoogleSearchResults.java has 87 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/objects/tumblr
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/objects/tumblr/TumblrDialogue.java
+File TumblrDialogue.java has 49 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/objects/tumblr/TumblrPhoto.java
+File TumblrPhoto.java has 91 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/objects/tumblr/TumblrPost.java
+File TumblrPost.java has 187 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/utils
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/utils/AudioUtils.java
+File AudioUtils.java has 136 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/utils/ConfigUtils.java
+File ConfigUtils.java has 52 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/utils/Container.java
+File Container.java has 58 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/utils/RawJsonDeserializer.java
+File RawJsonDeserializer.java has 38 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/utils/SpoopyUtils.java
+File SpoopyUtils.java has 63 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/utils/StoredTracks.java
+File StoredTracks.java has 47 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/utils/TumblrUtils.java
+File TumblrUtils.java has 93 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/utils/WikiHolder.java
+File WikiHolder.java has 45 lines of code.
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/variables
+/mnt/coding/java/GhostBot/src/main/java/me/duncte123/ghostbot/variables/Variables.java
+File Variables.java has 32 lines of code.
+Project GhostBot has a total line count of 6480 lines with a file total of 69 files
