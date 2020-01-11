@@ -8,6 +8,10 @@ I do not own any of the images and audio files used in this project and will nev
 a picture used in the bot please contact me to remove it.
 
 ### Widgets
+<a href="https://discord.boats/bot/397297702150602752" >
+  <img src="https://discord.boats/api/widget/397297702150602752" alt="GhostBot" />
+</a>
+
 <a href="https://discordbots.org/bot/397297702150602752" >
   <img src="https://discordbots.org/api/widget/397297702150602752.svg" alt="GhostBot" />
 </a>
