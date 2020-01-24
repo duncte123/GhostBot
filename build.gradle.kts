@@ -18,6 +18,7 @@
 
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.apache.tools.ant.filters.ReplaceTokens
+import org.gradle.api.tasks.wrapper.Wrapper.DistributionType
 import java.io.ByteArrayOutputStream
 
 plugins {
@@ -122,7 +123,8 @@ compileJava.apply {
 }
 
 tasks.withType<Wrapper> {
-    gradleVersion = "5.2.1"
+    distributionType = DistributionType.ALL
+    gradleVersion = "5.6.4"
 }
 
 shadowJar.apply {

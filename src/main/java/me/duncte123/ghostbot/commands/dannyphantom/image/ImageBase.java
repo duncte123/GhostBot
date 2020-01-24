@@ -50,7 +50,7 @@ import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 public abstract class ImageBase extends Command {
 
     private static final Logger logger = LoggerFactory.getLogger(ImageBase.class);
-    private static final JSONObject IMAGES = new ConfigUtils().getImages();
+    protected static JSONObject IMAGES = new ConfigUtils().getImages();
     private final Map<String, GoogleSearchResults> searchCache = new HashMap<>();
 
     void requestSearch(String query, ObjectMapper jackson, String googleKey, Consumer<GoogleSearchResults> success, Consumer<RequestException> error) {

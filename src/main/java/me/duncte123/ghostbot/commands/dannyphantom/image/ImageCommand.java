@@ -19,8 +19,18 @@
 package me.duncte123.ghostbot.commands.dannyphantom.image;
 
 import me.duncte123.ghostbot.objects.CommandEvent;
+import me.duncte123.ghostbot.utils.ConfigUtils;
+import me.duncte123.ghostbot.variables.Variables;
 
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+
+import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
 public class ImageCommand extends ImageBase {
     private final String[] keywords = {
@@ -45,9 +55,26 @@ public class ImageCommand extends ImageBase {
         "Danny Fenton",
         "Danny Phantom desiree"
     };
+    static boolean isReloading = false;
 
     @Override
     public void execute(CommandEvent event) {
+        final List<String> args = event.getArgs();
+
+        if (!args.isEmpty() && args.get(0).equals("reload") && event.getAuthor().getIdLong() == Variables.OWNER_ID) {
+            reloadImages(
+                event,
+                args.size() > 1 && args.get(1).equals("pretty")
+            );
+
+            return;
+        }
+
+        if (isReloading) {
+            sendMsg(event, "I'm looking for new images on the internet, please be wait.");
+            return;
+        }
+
         final String keyword = keywords[ThreadLocalRandom.current().nextInt(keywords.length)];
         final ImageData file = requestImage(keyword, event.getContainer().getJackson());
 
@@ -62,6 +89,34 @@ public class ImageCommand extends ImageBase {
     @Override
     public String getHelp() {
         return "Gives you a random Danny Phantom <:DPEmblemInvertStroke:402746292788264960> related image from google";
+    }
+
+    private void reloadImages(CommandEvent event, boolean pretty) {
+        isReloading = true;
+
+        final File jarFile = new File("ghostBotImages.jar");
+        final String className = "me.duncte123.ghostBotImages.ImageScraper2";
+
+        try {
+            final URL fileURL = jarFile.toURI().toURL();
+            final String jarURL = "jar:" + fileURL + "!/";
+            final URL[] urls = {new URL(jarURL)};
+            final URLClassLoader ucl = new URLClassLoader(urls);
+
+            Class.forName(className, true, ucl)
+                .getDeclaredConstructor(Boolean.TYPE)
+                .newInstance(pretty);
+
+            IMAGES = new ConfigUtils().getImages();
+
+            sendMsg(event, "done reloading");
+        } catch (MalformedURLException | InstantiationException | IllegalAccessException |
+            ClassNotFoundException | NoSuchMethodException | InvocationTargetException ex) {
+            ex.printStackTrace();
+            sendMsg(event, "An error occurred: " + ex.getMessage());
+        } finally {
+            isReloading = false;
+        }
     }
 
 }

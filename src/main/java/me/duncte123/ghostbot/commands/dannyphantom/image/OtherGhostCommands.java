@@ -38,6 +38,11 @@ public class OtherGhostCommands extends ImageBase {
 
     @Override
     public void execute(CommandEvent event) {
+        if (ImageCommand.isReloading) {
+            sendMsg(event, "I'm looking for new images on the internet, please be wait.");
+            return;
+        }
+
         final String invoke = event.getInvoke();
 
         if (this.keywordsMapped.containsKey(invoke)) {
