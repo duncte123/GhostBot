@@ -27,9 +27,11 @@ import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,9 +87,20 @@ public class GhostBot {
             .setToken(token)
             .setActivityProvider(this.activityProvider)
             .setChunkingFilter(ChunkingFilter.NONE) // Lazy loading :)
-            .setGuildSubscriptionsEnabled(false)
             .setEnabledCacheFlags(EnumSet.of(CacheFlag.VOICE_STATE))
 //            .setEnabledCacheFlags(EnumSet.allOf(CacheFlag.class))
+            .setMemberCachePolicy(MemberCachePolicy.VOICE)
+            .setDisabledIntents(
+                GatewayIntent.GUILD_PRESENCES,
+                GatewayIntent.GUILD_BANS,
+                GatewayIntent.GUILD_MESSAGE_TYPING,
+                GatewayIntent.GUILD_MEMBERS,
+                GatewayIntent.GUILD_EMOJIS,
+                GatewayIntent.GUILD_INVITES,
+                GatewayIntent.DIRECT_MESSAGES,
+                GatewayIntent.DIRECT_MESSAGE_REACTIONS,
+                GatewayIntent.DIRECT_MESSAGE_TYPING
+            )
             .addEventListeners(botListener);
 
         if (llm.isEnabled()) {

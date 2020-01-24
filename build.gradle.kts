@@ -55,13 +55,13 @@ dependencies {
     implementation(group = "org.apache.commons", name = "commons-text", version = "1.6")
     implementation(group = "org.codehaus.groovy", name = "groovy-jsr223", version = "2.5.6")
 
-    implementation(group = "net.dv8tion", name = "JDA", version = "4.1.0_97") {
-        exclude(module = "opus-java")
-    }
-
-    /*implementation(group = "com.github.dv8fromtheworld", name = "JDA", version = "79d7513") {
+    /*implementation(group = "net.dv8tion", name = "JDA", version = "4.1.0_97") {
         exclude(module = "opus-java")
     }*/
+
+    implementation(group = "com.github.dv8fromtheworld", name = "JDA", version = "83ad4da") {
+        exclude(module = "opus-java")
+    }
 
     implementation(group = "com.sedmelluq", name = "lavaplayer", version = "1.3.32")
 //    implementation("lavalink:local")
