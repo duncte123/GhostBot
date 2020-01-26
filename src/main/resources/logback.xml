@@ -31,5 +31,5 @@
         <appender-ref ref="STDOUT"/>
     </root>
 
-    <logger name="net.dv8tion.jda.internal.requests.RateLimiter" level="trace" />
+<!--    <logger name="net.dv8tion.jda.internal.requests.RateLimiter" level="trace" />-->
 </configuration>
