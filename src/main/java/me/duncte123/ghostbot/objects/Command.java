@@ -134,6 +134,8 @@ public abstract class Command {
             }
 
             return false;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return true;

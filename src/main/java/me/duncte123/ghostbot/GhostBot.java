@@ -88,6 +88,7 @@ public class GhostBot {
             .setActivityProvider(this.activityProvider)
             .setChunkingFilter(ChunkingFilter.NONE) // Lazy loading :)
             .setEnabledCacheFlags(EnumSet.of(CacheFlag.VOICE_STATE))
+//            .setGuildSubscriptionsEnabled(false)
 //            .setEnabledCacheFlags(EnumSet.allOf(CacheFlag.class))
             .setMemberCachePolicy(MemberCachePolicy.VOICE)
             .setDisabledIntents(

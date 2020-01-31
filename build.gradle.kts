@@ -56,7 +56,7 @@ dependencies {
     implementation(group = "org.apache.commons", name = "commons-text", version = "1.6")
     implementation(group = "org.codehaus.groovy", name = "groovy-jsr223", version = "2.5.6")
 
-    /*implementation(group = "net.dv8tion", name = "JDA", version = "4.1.0_97") {
+    /*implementation(group = "net.dv8tion", name = "JDA", version = "4.1.1_104") {
         exclude(module = "opus-java")
     }*/
 
@@ -66,7 +66,7 @@ dependencies {
 
     implementation(group = "com.sedmelluq", name = "lavaplayer", version = "1.3.32")
 //    implementation("lavalink:local")
-    implementation(group = "com.github.FredBoat", name = "Lavalink-Client", version = "9bda4ea")
+    implementation(group = "com.github.FredBoat", name = "Lavalink-Client", version = "f9ab37f")
 //    implementation(group = "com.github.DuncteBot", name = "Lavalink-Client", version = "4f3924fb51")
     implementation(group = "ch.qos.logback", name = "logback-classic", version = "1.2.3")
 }
