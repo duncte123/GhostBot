@@ -60,7 +60,7 @@ dependencies {
         exclude(module = "opus-java")
     }*/
 
-    implementation(group = "com.github.dv8fromtheworld", name = "JDA", version = "a318221") {
+    implementation(group = "com.github.dv8fromtheworld", name = "JDA", version = "b209c99") {
         exclude(module = "opus-java")
     }
 

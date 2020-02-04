@@ -82,9 +82,8 @@ public class GhostBot {
         llm.start(config, container.getAudio());
 
         final BotListener botListener = new BotListener(container);
-        final DefaultShardManagerBuilder builder = new DefaultShardManagerBuilder()
+        final DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(token)
             .setShardsTotal(totalShards)
-            .setToken(token)
             .setActivityProvider(this.activityProvider)
             .setChunkingFilter(ChunkingFilter.NONE) // Lazy loading :)
             .setEnabledCacheFlags(EnumSet.of(CacheFlag.VOICE_STATE))
