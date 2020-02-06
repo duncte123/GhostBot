@@ -51,6 +51,9 @@ repositories {
     }
 }
 
+//val jda = JDAVersionInfo("4.1.1_104")
+val jda = JDAVersionInfo("0685c92")
+
 dependencies {
     implementation(group = "me.duncte123", name = "botCommons", version = "1.0.73")
     implementation(group = "org.apache.commons", name = "commons-text", version = "1.6")
@@ -60,7 +63,7 @@ dependencies {
         exclude(module = "opus-java")
     }*/
 
-    implementation(group = "com.github.dv8fromtheworld", name = "JDA", version = "b209c99") {
+    implementation(group = jda.group, name = "JDA", version = jda.version) {
         exclude(module = "opus-java")
     }
 
@@ -131,6 +134,7 @@ shadowJar.apply {
     archiveClassifier.set("")
     archiveVersion.set("")
 }
+
 fun getGitHash(): String {
     return try {
         val stdout = ByteArrayOutputStream()
@@ -145,4 +149,18 @@ fun getGitHash(): String {
         // Probably ramidzkh"s problem
         "DEV"
     }
+}
+
+class JDAVersionInfo(val version: String) {
+    val group: String
+    val name: String = "JDA"
+
+    init {
+        if (version.contains(".")) {
+            this.group = "net.dv8tion"
+        } else {
+            this.group = "com.github.dv8fromtheworld"
+        }
+    }
+
 }

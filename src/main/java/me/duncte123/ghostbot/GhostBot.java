@@ -90,16 +90,11 @@ public class GhostBot {
 //            .setGuildSubscriptionsEnabled(false)
 //            .setEnabledCacheFlags(EnumSet.allOf(CacheFlag.class))
             .setMemberCachePolicy(MemberCachePolicy.VOICE)
-            .setDisabledIntents(
-                GatewayIntent.GUILD_PRESENCES,
-                GatewayIntent.GUILD_BANS,
-                GatewayIntent.GUILD_MESSAGE_TYPING,
+            .setEnabledIntents(
                 GatewayIntent.GUILD_MEMBERS,
-                GatewayIntent.GUILD_EMOJIS,
-                GatewayIntent.GUILD_INVITES,
-                GatewayIntent.DIRECT_MESSAGES,
-                GatewayIntent.DIRECT_MESSAGE_REACTIONS,
-                GatewayIntent.DIRECT_MESSAGE_TYPING
+                GatewayIntent.GUILD_MESSAGES,
+                GatewayIntent.GUILD_MESSAGE_REACTIONS,
+                GatewayIntent.GUILD_VOICE_STATES
             )
             .addEventListeners(botListener);
 
