@@ -91,7 +91,7 @@ public class GhostBot {
 //            .setEnabledCacheFlags(EnumSet.allOf(CacheFlag.class))
             .setMemberCachePolicy(MemberCachePolicy.VOICE)
             .setEnabledIntents(
-                GatewayIntent.GUILD_MEMBERS,
+//                GatewayIntent.GUILD_MEMBERS,
                 GatewayIntent.GUILD_MESSAGES,
                 GatewayIntent.GUILD_MESSAGE_REACTIONS,
                 GatewayIntent.GUILD_VOICE_STATES

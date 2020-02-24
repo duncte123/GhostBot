@@ -19,8 +19,6 @@
 package me.duncte123.ghostbot;
 
 import fredboat.audio.player.LavalinkManager;
-import gnu.trove.list.TLongList;
-import gnu.trove.list.array.TLongArrayList;
 import lavalink.client.player.IPlayer;
 import me.duncte123.botcommons.BotCommons;
 import me.duncte123.botcommons.web.WebUtils;
@@ -43,8 +41,6 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.EventListener;
 import net.dv8tion.jda.api.sharding.ShardManager;
-import net.dv8tion.jda.internal.JDAImpl;
-import net.dv8tion.jda.internal.handle.SocketHandler;
 import okhttp3.RequestBody;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -113,10 +109,8 @@ public class BotListener implements EventListener {
 
     private void onReady(@Nonnull ReadyEvent event) {
         final JDA jda = event.getJDA();
-//        killUnusedEvents(jda);
 
         logger.info("Logged in as {} ({})", jda.getSelfUser(), jda.getShardInfo());
-        // Disabled for now because of guild chunking
         postServerCount();
     }
 
@@ -125,7 +119,7 @@ public class BotListener implements EventListener {
             return;
         }
 
-        final String content = event.getMessage().getContentRaw().toLowerCase();
+        final String content = event.getMessage().getContentRaw().toLowerCase().trim();
 
         if (!content.startsWith(Variables.PREFIX.toLowerCase())
             && !content.startsWith(Variables.OTHER_PREFIX.toLowerCase())) {
@@ -260,19 +254,6 @@ public class BotListener implements EventListener {
             }, 0L, 1L, TimeUnit.DAYS);
         }
 
-    }
-
-    private void killUnusedEvents(JDA jda) {
-        final JDAImpl api = (JDAImpl) jda;
-        final SocketHandler.NOPHandler nopHandler = new SocketHandler.NOPHandler(api);
-        final var handlers = api.getClient().getHandlers();
-
-        handlers.put("GUILD_BAN_ADD", nopHandler);
-        handlers.put("GUILD_BAN_REMOVE", nopHandler);
-        handlers.put("MESSAGE_DELETE", nopHandler);
-        handlers.put("MESSAGE_DELETE_BULK", nopHandler);
-        handlers.put("TYPING_START", nopHandler);
-        handlers.put("USER_UPDATE", nopHandler);
     }
 
     private static void channelCheckThing(Guild g, VoiceChannel vc, AudioUtils audio) {
