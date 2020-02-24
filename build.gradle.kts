@@ -20,6 +20,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.apache.tools.ant.filters.ReplaceTokens
 import org.gradle.api.tasks.wrapper.Wrapper.DistributionType
 import java.io.ByteArrayOutputStream
+import com.fasterxml.jackson.databind.ObjectMapper
 
 plugins {
     java
@@ -27,6 +28,15 @@ plugins {
     idea
 
     id("com.github.johnrengelman.shadow") version "5.0.0"
+}
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        "classpath"(group = "com.fasterxml.jackson.core", name = "jackson-databind", version = "2.10.1")
+    }
 }
 
 project.group = "me.duncte123.ghostbot"
@@ -133,6 +143,34 @@ tasks.withType<Wrapper> {
 shadowJar.apply {
     archiveClassifier.set("")
     archiveVersion.set("")
+}
+
+tasks.register("generateAudioJson") {
+    val output = HashMap<String, List<String>>()
+    val audioFileDir = File("audioFiles")
+    val listOfFiles = audioFileDir.listFiles()
+
+    if (listOfFiles.isNullOrEmpty()) {
+        throw RuntimeException("Audio list is null or empty")
+    }
+
+    listOfFiles.forEach {
+        if (it.isDirectory) {
+            val filesFound = arrayListOf<String>()
+            it.listFiles()?.forEach { audioFile ->
+                if (audioFile.isFile) {
+                    filesFound.add(audioFile.name)
+                }
+            }
+
+            output[it.name] = filesFound
+        }
+    }
+
+    println(output)
+
+    ObjectMapper().writerWithDefaultPrettyPrinter()
+        .writeValue(File("audioList.json"), output)
 }
 
 fun getGitHash(): String {

@@ -123,39 +123,7 @@ public class GhostBot {
 
     public static void main(String[] args) throws LoginException, IOException {
         instance = new GhostBot();
-//        genAudioJson();
     }
-
-    // Helper method for when we add audio files
-    /*private static void genAudioJson() throws IOException {
-        final Map<String, List<String>> output = new HashMap<>();
-        final File audioFileDir = new File("audioFiles");
-
-        final File[] listOfFiles = audioFileDir.listFiles();
-
-        if (listOfFiles == null || listOfFiles.length == 0) {
-            return;
-        }
-
-        for (final File file : listOfFiles) {
-
-            if (file.isDirectory()) {
-                final List<String> filesFound = new ArrayList<>();
-
-                for (final File audioFile: file.listFiles()) {
-                    if (audioFile.isFile()) {
-                        final String name = audioFile.getName();
-
-                        filesFound.add(name);
-                    }
-                }
-
-                output.put(file.getName(), filesFound);
-            }
-        }
-
-        new ObjectMapper().writeValue(new File("audioList.json"), output);
-    }*/
 
     public static synchronized GhostBot getInstance() {
         return instance;
