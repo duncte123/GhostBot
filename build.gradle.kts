@@ -62,7 +62,7 @@ repositories {
 }
 
 //val jda = JDAVersionInfo("4.1.1_104")
-val jda = JDAVersionInfo("4208971")
+val jda = JDAVersionInfo("75c9b39")
 
 dependencies {
     implementation(group = "me.duncte123", name = "botCommons", version = "1.0.73")
