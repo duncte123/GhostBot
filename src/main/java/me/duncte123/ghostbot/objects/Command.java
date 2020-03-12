@@ -117,13 +117,19 @@ public abstract class Command {
         final VoiceChannel channel = voiceState.getChannel();
         assert channel != null;
 
+        if (!event.getSelfMember().hasPermission(channel, Permission.VOICE_CONNECT)) {
+            sendEmbed(event,
+                EmbedUtils.embedMessage("I don't have permission to join " + channel.getName())
+            );
+        }
+
         try {
             LavalinkManager.ins.openConnection(channel);
         } catch (PermissionException e) {
 
             if (e.getPermission() == Permission.VOICE_CONNECT) {
                 sendEmbed(event,
-                    EmbedUtils.embedMessage("I don't have permission to join " + channel.getName())
+                    EmbedUtils.embedMessage("Somehow got passed the permission check, this should never happen")
                 );
             } else {
                 sendEmbed(event, EmbedUtils.embedMessage(String.format(
