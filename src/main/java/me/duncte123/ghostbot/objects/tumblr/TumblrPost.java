@@ -18,6 +18,8 @@
 
 package me.duncte123.ghostbot.objects.tumblr;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
 public class TumblrPost {
@@ -58,7 +60,8 @@ public class TumblrPost {
     public int height;
     public List<TumblrPhoto> photos;
 
-    public void setBlog_name(String blog_name) {
+    @JsonProperty("blog_name")
+    public void setBlogName(String blog_name) {
         this.blog_name = blog_name;
     }
 
@@ -66,11 +69,13 @@ public class TumblrPost {
         this.id = id;
     }
 
-    public void setPost_url(String post_url) {
+    @JsonProperty("post_url")
+    public void setPostUrl(String post_url) {
         this.post_url = post_url;
     }
 
-    public void setShort_url(String short_url) {
+    @JsonProperty("short_url")
+    public void setShortUrl(String short_url) {
         this.short_url = short_url;
     }
 
@@ -90,7 +95,8 @@ public class TumblrPost {
         this.format = format;
     }
 
-    public void setReblog_key(String reblog_key) {
+    @JsonProperty("reblog_key")
+    public void setReblogKey(String reblog_key) {
         this.reblog_key = reblog_key;
     }
 
@@ -106,11 +112,13 @@ public class TumblrPost {
         this.mobile = mobile;
     }
 
-    public void setSource_url(String source_url) {
+    @JsonProperty("source_url")
+    public void setSourceUrl(String source_url) {
         this.source_url = source_url;
     }
 
-    public void setSource_title(String source_title) {
+    @JsonProperty("source_title")
+    public void setSourceTitle(String source_title) {
         this.source_title = source_title;
     }
 
@@ -122,7 +130,8 @@ public class TumblrPost {
         this.state = state;
     }
 
-    public void setTotal_posts(String total_posts) {
+    @JsonProperty("total_posts")
+    public void setTotalPosts(String total_posts) {
         this.total_posts = total_posts;
     }
 
@@ -150,7 +159,8 @@ public class TumblrPost {
         this.caption = caption;
     }
 
-    public void setImage_permalink(String image_permalink) {
+    @JsonProperty("image_permalink")
+    public void setImagePermalink(String image_permalink) {
         this.image_permalink = image_permalink;
     }
 

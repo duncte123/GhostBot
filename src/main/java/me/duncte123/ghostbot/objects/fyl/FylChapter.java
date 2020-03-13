@@ -18,6 +18,8 @@
 
 package me.duncte123.ghostbot.objects.fyl;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
 public class FylChapter {
@@ -28,15 +30,18 @@ public class FylChapter {
     private String chapter_url;
     private List<String> pages_url;
 
-    public void setPage_id(String page_id) {
+    @JsonProperty("page_id")
+    public void setPageId(String page_id) {
         this.page_id = page_id;
     }
 
-    public void setChapter_url(String chapter_url) {
+    @JsonProperty("chapter_url")
+    public void setChapterUrl(String chapter_url) {
         this.chapter_url = chapter_url;
     }
 
-    public void setPages_url(List<String> pages_url) {
+    @JsonProperty("pages_url")
+    public void setPagesUrl(List<String> pages_url) {
         this.pages_url = pages_url;
     }
 
