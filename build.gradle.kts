@@ -151,7 +151,7 @@ tasks.register("generateAudioJson") {
     val listOfFiles = audioFileDir.listFiles()
 
     if (listOfFiles.isNullOrEmpty()) {
-        throw RuntimeException("Audio list is null or empty")
+        throw UnsupportedOperationException("Audio list is null or empty")
     }
 
     listOfFiles.forEach {
@@ -189,9 +189,11 @@ fun getGitHash(): String {
     }
 }
 
+/**
+ * Helper class for getting the correct JDA group
+ */
 class JDAVersionInfo(val version: String) {
     val group: String
-    val name: String = "JDA"
 
     init {
         if (version.contains(".")) {
