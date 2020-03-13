@@ -21,7 +21,6 @@ package me.duncte123.ghostbot.commands.dannyphantom.audio;
 import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.CommandCategory;
 import me.duncte123.ghostbot.objects.CommandEvent;
-import me.duncte123.ghostbot.utils.AudioUtils;
 
 public abstract class AudioBaseCommand extends Command {
     private final String commandName;

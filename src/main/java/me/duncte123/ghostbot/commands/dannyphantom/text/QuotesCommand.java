@@ -244,18 +244,22 @@ public class QuotesCommand extends Command {
             case "quote":
                 eb.setDescription(String.format("\"%s\"\n\n - _%s_", parseText(post.text), parseText(post.source)));
                 break;
+
+            default:
+                eb.setDescription(String.format("Invalid post type`%s` found", post.type));
+                break;
         }
 
         sendEmbed(event, eb);
     }
 
-    public static String parseText(String raw) {
+    public static String parseText(String rawInput) {
 
-        if (raw == null || raw.isEmpty()) {
+        if (rawInput == null || rawInput.isEmpty()) {
             return "";
         }
 
-        raw = StringEscapeUtils.unescapeHtml4(raw);
+        String raw = StringEscapeUtils.unescapeHtml4(rawInput);
 
         final String input = raw.replaceAll(Pattern.quote("<br/>"), "\n");
         final String replacePWith = input.contains("</p>\n") ? "" : "\n";

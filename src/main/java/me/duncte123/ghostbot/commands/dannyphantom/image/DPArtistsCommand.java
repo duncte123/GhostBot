@@ -85,7 +85,7 @@ public class DPArtistsCommand extends ImageBase {
 
         final String arg = args.get(0);
 
-        if (arg.equals("list")) {
+        if ("list".equals(arg)) {
             sendMsg(event, "The current list of artists is: `" + String.join("`, `", this.artistMap.keySet()) + '`');
             return;
         }

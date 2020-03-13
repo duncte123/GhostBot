@@ -19,11 +19,8 @@
 package me.duncte123.ghostbot.commands.dannyphantom.audio;
 
 import me.duncte123.ghostbot.objects.CommandEvent;
-import me.duncte123.ghostbot.utils.AudioUtils;
 
 import java.util.concurrent.ThreadLocalRandom;
-
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
 public class GoingGhostCommand extends AudioBaseCommand {
     @Override
