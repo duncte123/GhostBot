@@ -40,7 +40,7 @@ buildscript {
 }
 
 project.group = "me.duncte123.ghostbot"
-project.version = "2.0.1_${getGitHash()}"
+project.version = "2.1.0_${getGitHash()}"
 
 
 application {
@@ -61,7 +61,7 @@ repositories {
     }
 }
 
-val jda = JDAVersionInfo("4.1.1_112")
+val jda = JDAVersionInfo("4.1.1_133")
 //val jda = JDAVersionInfo("75c9b39")
 
 dependencies {
@@ -77,9 +77,9 @@ dependencies {
         exclude(module = "opus-java")
     }
 
-    implementation(group = "com.sedmelluq", name = "lavaplayer", version = "1.3.32")
+    implementation(group = "com.sedmelluq", name = "lavaplayer", version = "1.3.46")
 //    implementation("lavalink:local")
-    implementation(group = "com.github.FredBoat", name = "Lavalink-Client", version = "f9ab37f")
+    implementation(group = "com.github.FredBoat", name = "Lavalink-Client", version = "bdac72f")
 //    implementation(group = "com.github.DuncteBot", name = "Lavalink-Client", version = "4f3924fb51")
     implementation(group = "ch.qos.logback", name = "logback-classic", version = "1.2.3")
 }

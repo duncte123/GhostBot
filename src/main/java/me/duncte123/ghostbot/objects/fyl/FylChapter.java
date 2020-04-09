@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class FylChapter {
 
     private String page_id;

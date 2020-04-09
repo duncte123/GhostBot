@@ -20,6 +20,7 @@ package me.duncte123.ghostbot.objects.fyl;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class FylComic {
     private String baseUrl;
     private List<FylChapter> chapters;

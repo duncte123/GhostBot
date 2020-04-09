@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class TumblrPost {
     public String blog_name;
     public long id;

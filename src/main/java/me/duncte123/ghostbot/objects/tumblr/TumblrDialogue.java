@@ -18,6 +18,7 @@
 
 package me.duncte123.ghostbot.objects.tumblr;
 
+@SuppressWarnings("unused")
 public class TumblrDialogue {
     private String name;
     private String label;

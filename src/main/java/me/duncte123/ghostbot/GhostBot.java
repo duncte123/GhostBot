@@ -32,17 +32,17 @@ import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
-import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
-import java.util.EnumSet;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.IntFunction;
+
+import static net.dv8tion.jda.api.utils.cache.CacheFlag.*;
 
 public class GhostBot {
 
@@ -86,10 +86,10 @@ public class GhostBot {
             .setShardsTotal(totalShards)
             .setActivityProvider(this.activityProvider)
             .setChunkingFilter(ChunkingFilter.NONE) // Lazy loading :)
-            .setEnabledCacheFlags(EnumSet.of(CacheFlag.VOICE_STATE))
+            .enableCache(VOICE_STATE, MEMBER_OVERRIDES)
+            .disableCache(ACTIVITY, EMOTE, CLIENT_STATUS)
             .setMemberCachePolicy(MemberCachePolicy.VOICE)
             .setEnabledIntents(
-//                GatewayIntent.GUILD_MEMBERS,
                 GatewayIntent.GUILD_MESSAGES,
                 GatewayIntent.GUILD_MESSAGE_REACTIONS,
                 GatewayIntent.GUILD_VOICE_STATES
