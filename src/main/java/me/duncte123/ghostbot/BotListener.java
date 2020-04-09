@@ -229,12 +229,16 @@ public class BotListener implements EventListener {
         if (this.config.shouldPostStats) {
             service.scheduleWithFixedDelay(() -> {
                 final ShardManager manager = GhostBot.getInstance().getShardManager();
+                final String ghostBot = "397297702150602752";
 
-                final String jsonString = new JSONObject(this.config.botLists)
+                final JSONObject theJson = new JSONObject(this.config.botLists)
                     .put("server_count", manager.getGuildCache().size())
                     .put("shard_count", manager.getShardsTotal())
-                    .put("bot_id", "397297702150602752")
-                    .toString();
+                    .put("bot_id", ghostBot);
+
+                final String dblKey = (String) theJson.remove("discordbots.org");
+
+                final String jsonString = theJson.toString();
 
                 WebUtils.ins.prepareRaw(
                     WebUtils.defaultRequest()
@@ -248,6 +252,28 @@ public class BotListener implements EventListener {
                         ,
                         (it) -> {
                             logger.info("something borked");
+                            logger.info(it.getMessage());
+                        }
+                    );
+
+                WebUtils.ins.prepareRaw(
+                    WebUtils.defaultRequest()
+                        .url("https://top.gg/api/bots/" + ghostBot + "/stats")
+                        .post(RequestBody.create(null, new JSONObject()
+                            .put("server_count", manager.getGuildCache().size())
+                            .put("shard_count", manager.getShardsTotal())
+                            .toString()
+                            .getBytes()
+                        ))
+                        .addHeader("Content-Type", JSON.getType())
+                        .addHeader("Authorization", dblKey)
+                        .build(),
+                    (it) -> Objects.requireNonNull(it.body()).string())
+                    .async(
+                        (it) -> logger.info("Posted stats to discordbots.org ({})", it)
+                        ,
+                        (it) -> {
+                            logger.info("Posting to dbl borked");
                             logger.info(it.getMessage());
                         }
                     );
