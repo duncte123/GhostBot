@@ -61,7 +61,7 @@ repositories {
     }
 }
 
-val jda = JDAVersionInfo("4.1.1_133")
+val jda = JDAVersionInfo("4.1.1_141")
 //val jda = JDAVersionInfo("75c9b39")
 
 dependencies {
@@ -79,7 +79,7 @@ dependencies {
 
     implementation(group = "com.sedmelluq", name = "lavaplayer", version = "1.3.46")
 //    implementation("lavalink:local")
-    implementation(group = "com.github.FredBoat", name = "Lavalink-Client", version = "bdac72f")
+    implementation(group = "com.github.FredBoat", name = "Lavalink-Client", version = "f84b333")
 //    implementation(group = "com.github.DuncteBot", name = "Lavalink-Client", version = "4f3924fb51")
     implementation(group = "ch.qos.logback", name = "logback-classic", version = "1.2.3")
 }
