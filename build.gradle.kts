@@ -61,7 +61,7 @@ repositories {
     }
 }
 
-val jda = JDAVersionInfo("4.1.1_133")
+val jda = JDAVersionInfo("4.1.1_148")
 //val jda = JDAVersionInfo("75c9b39")
 
 dependencies {

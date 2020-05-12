@@ -114,6 +114,8 @@ public class DPArtistsCommand extends ImageBase {
         this.artistMap.put("amethyst-ocean", "amethyst-ocean.deviantart.com");
 
         this.artistMap.put("ceciliaspen", "ceciliaspen.tumblr.com");
+
+        this.artistMap.put("thesoulspulse", "thesoulspulse.tumblr.com");
     }
 
     @Override
