@@ -88,7 +88,8 @@ public class QuotesCommand extends Command {
         150823532681L,
         173944925826L,
         127476921111L,
-        174190854511L
+        174190854511L,
+        189467049076L
     });
 
     public QuotesCommand(Container container) {
@@ -179,7 +180,7 @@ public class QuotesCommand extends Command {
                 final List<TumblrPost> quotes = jackson.readValue(quotesFile, new TypeReference<List<TumblrPost>>() {});
 
                 allQuotes.addAll(quotes);
-                logger.info("Loading quotes from file");
+                logger.info("Loaded {} quotes from file", allQuotes.size());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -225,7 +226,7 @@ public class QuotesCommand extends Command {
 
     private void sendQuote(CommandEvent event, TumblrPost post) {
         final EmbedBuilder eb = EmbedUtils.defaultEmbed()
-            .setTitle("Link to Post", post.post_url)
+            .setTitle("View original post", post.post_url)
             .setFooter("Quote id: " + post.id, Variables.FOOTER_ICON);
 
         switch (post.type) {
