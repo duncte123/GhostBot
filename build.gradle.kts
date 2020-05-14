@@ -61,7 +61,7 @@ repositories {
     }
 }
 
-val jda = JDAVersionInfo("4.1.1_149")
+val jda = JDAVersionInfo("4.1.1_150")
 //val jda = JDAVersionInfo("75c9b39")
 
 dependencies {
@@ -77,7 +77,7 @@ dependencies {
         exclude(module = "opus-java")
     }
 
-    implementation(group = "com.sedmelluq", name = "lavaplayer", version = "1.3.46")
+    implementation(group = "com.sedmelluq", name = "lavaplayer", version = "1.3.48")
 //    implementation("lavalink:local")
     implementation(group = "com.github.FredBoat", name = "Lavalink-Client", version = "bdac72f")
 //    implementation(group = "com.github.DuncteBot", name = "Lavalink-Client", version = "4f3924fb51")
