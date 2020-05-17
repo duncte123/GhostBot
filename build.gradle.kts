@@ -61,22 +61,16 @@ repositories {
     }
 }
 
-val jda = JDAVersionInfo("4.1.1_150")
+val jda = JDAVersionInfo("4.1.1_152")
 //val jda = JDAVersionInfo("75c9b39")
 
 dependencies {
     implementation(group = "me.duncte123", name = "botCommons", version = "1.0.73")
     implementation(group = "org.apache.commons", name = "commons-text", version = "1.6")
     implementation(group = "org.codehaus.groovy", name = "groovy-jsr223", version = "2.5.6")
-
-    /*implementation(group = "net.dv8tion", name = "JDA", version = "4.1.1_104") {
-        exclude(module = "opus-java")
-    }*/
-
     implementation(group = jda.group, name = "JDA", version = jda.version) {
         exclude(module = "opus-java")
     }
-
     implementation(group = "com.sedmelluq", name = "lavaplayer", version = "1.3.48")
 //    implementation("lavalink:local")
     implementation(group = "com.github.FredBoat", name = "Lavalink-Client", version = "bdac72f")
