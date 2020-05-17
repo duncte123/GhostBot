@@ -81,7 +81,7 @@ public class AuCommand extends Command {
         final String tags = String.join(" #", post.tags);
 
         final EmbedBuilder eb = EmbedUtils.defaultEmbed()
-            .setTitle("Link to Post", post.post_url)
+            .setTitle("Click to view original post", post.post_url)
             .setDescription(parseText(post.body))
             .setFooter("#" + tags, Variables.FOOTER_ICON)
             .setTimestamp(null);

@@ -145,7 +145,7 @@ public class QuotesCommand extends Command {
 
     @Override
     public List<String> getAliases() {
-        return List.of("'quotes'");
+        return List.of("quotes");
     }
 
     @Override
@@ -226,7 +226,7 @@ public class QuotesCommand extends Command {
 
     private void sendQuote(CommandEvent event, TumblrPost post) {
         final EmbedBuilder eb = EmbedUtils.defaultEmbed()
-            .setTitle("View original post", post.post_url)
+            .setTitle("Click to view original post", post.post_url)
             .setFooter("Quote id: " + post.id, Variables.FOOTER_ICON);
 
         switch (post.type) {
