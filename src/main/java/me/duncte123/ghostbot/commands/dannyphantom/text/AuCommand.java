@@ -18,6 +18,7 @@
 
 package me.duncte123.ghostbot.commands.dannyphantom.text;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gnu.trove.map.TLongObjectMap;
 import gnu.trove.map.hash.TLongObjectHashMap;
@@ -31,6 +32,11 @@ import me.duncte123.ghostbot.utils.TumblrUtils;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.EmbedBuilder;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -47,7 +53,7 @@ public class AuCommand extends Command {
     private final TLongObjectMap<List<TumblrPost>> guildAus = new TLongObjectHashMap<>();
 
     public AuCommand(GhostBotConfig config, ObjectMapper mapper) {
-        loadAus(config, mapper);
+        loadCachedAus(config, mapper);
     }
 
     @Override
@@ -55,7 +61,8 @@ public class AuCommand extends Command {
         final List<String> args = event.getArgs();
 
         if (args.size() == 1 && "reload".equalsIgnoreCase(args.get(0)) && event.getAuthor().getIdLong() == Variables.OWNER_ID) {
-            loadAus(event.getContainer().getConfig(), event.getContainer().getJackson());
+            // make sure to delete the file
+            loadCachedAus(event.getContainer().getConfig(), event.getContainer().getJackson());
             sendMsg(event, "Reloading");
 
             return;
@@ -114,7 +121,27 @@ public class AuCommand extends Command {
         return CommandCategory.TEXT;
     }
 
-    private void loadAus(GhostBotConfig config, ObjectMapper jackson) {
+    private void loadCachedAus(GhostBotConfig config, ObjectMapper jackson) {
+        allAus.clear();
+
+        final File ausFile = new File("aus.json");
+
+        if (!ausFile.exists()) {
+            this.loadAus(config, jackson, ausFile);
+            return;
+        }
+
+        try {
+            final List<TumblrPost> quotes = jackson.readValue(ausFile, new TypeReference<>() {});
+
+            allAus.addAll(quotes);
+            logger.info("Loaded {} aus from file", allAus.size());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadAus(GhostBotConfig config, ObjectMapper jackson, File ausFile) {
         if (config.running_local) {
             return;
         }
@@ -140,6 +167,23 @@ public class AuCommand extends Command {
             allAus.addAll(filtered);
 
             logger.info("Loaded {} aus", allAus.size());
+
+            try {
+                if (!ausFile.createNewFile()) {
+                    logger.error("Failed to create aus file");
+
+                    return;
+                }
+
+                try (final BufferedWriter writer = new BufferedWriter(new FileWriter(ausFile, StandardCharsets.UTF_8))) {
+
+                    writer.write(jackson.writeValueAsString(allAus));
+                }
+
+                logger.info("Wrote aus to file");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
     }
 }
