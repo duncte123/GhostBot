@@ -61,13 +61,13 @@ repositories {
     }
 }
 
-val jda = JDAVersionInfo("4.1.1_152")
+val jda = JDAVersionInfo("4.2.0_182")
 //val jda = JDAVersionInfo("75c9b39")
 
 dependencies {
     implementation(group = "me.duncte123", name = "botCommons", version = "1.0.73")
     implementation(group = "org.apache.commons", name = "commons-text", version = "1.6")
-    implementation(group = "org.codehaus.groovy", name = "groovy-jsr223", version = "2.5.6")
+    implementation(group = "org.codehaus.groovy", name = "groovy-jsr223", version = "2.5.13")
     implementation(group = jda.group, name = "JDA", version = jda.version) {
         exclude(module = "opus-java")
     }
