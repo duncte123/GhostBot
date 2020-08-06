@@ -177,7 +177,7 @@ public class QuotesCommand extends Command {
 
         if (quotesFile.exists()) {
             try {
-                final List<TumblrPost> quotes = jackson.readValue(quotesFile, new TypeReference<List<TumblrPost>>() {});
+                final List<TumblrPost> quotes = jackson.readValue(quotesFile, new TypeReference<>() {});
 
                 allQuotes.addAll(quotes);
                 logger.info("Loaded {} quotes from file", allQuotes.size());

@@ -25,6 +25,7 @@ import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.utils.Container;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.GatewayEncoding;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -89,6 +90,7 @@ public class GhostBot {
             .enableCache(VOICE_STATE, MEMBER_OVERRIDES)
             .disableCache(ACTIVITY, EMOTE, CLIENT_STATUS)
             .setMemberCachePolicy(MemberCachePolicy.VOICE)
+            .setGatewayEncoding(GatewayEncoding.ETF)
             .setEnabledIntents(
                 GatewayIntent.GUILD_MESSAGES,
                 GatewayIntent.GUILD_MESSAGE_REACTIONS,

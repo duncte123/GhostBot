@@ -71,7 +71,7 @@ dependencies {
     implementation(group = jda.group, name = "JDA", version = jda.version) {
         exclude(module = "opus-java")
     }
-    implementation(group = "com.sedmelluq", name = "lavaplayer", version = "1.3.48")
+    implementation(group = "com.sedmelluq", name = "lavaplayer", version = "1.3.50")
 //    implementation("lavalink:local")
     implementation(group = "com.github.FredBoat", name = "Lavalink-Client", version = "bdac72f")
 //    implementation(group = "com.github.DuncteBot", name = "Lavalink-Client", version = "4f3924fb51")
