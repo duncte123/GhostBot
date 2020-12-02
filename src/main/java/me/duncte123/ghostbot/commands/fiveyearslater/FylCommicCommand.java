@@ -44,7 +44,7 @@ import static me.duncte123.ghostbot.utils.SpoopyUtils.newLongSet;
 public class FylCommicCommand extends ReactionCommand {
     private static final String PAGE_SELECTOR = "page:";
     private static final String CHAPTER_SELECTOR = "chapter:";
-    private static final String FYL_ICON = "https://cdn.discordapp.com/emojis/374708234772283403.png?v=1";
+    private static final String FYL_ICON = "https://ghostbot.duncte123.me/img/5YL_Logo_2020.png";
     private final FylComic comic;
 
     public FylCommicCommand(CommandManager.ReactionListenerRegistry registry, ObjectMapper jackson) {
@@ -167,7 +167,7 @@ public class FylCommicCommand extends ReactionCommand {
             .setThumbnail(FYL_ICON)
             .setTitle("Chapter: " + chapter.getName(), chapter.getChapterUrl())
             .setTimestamp(null)
-            .setFooter(String.format("Chapter: %s, PageL %s/%s", numChapter + 1, numPage + 1, chapter.getPages()), Variables.FOOTER_ICON)
+            .setFooter(String.format("Chapter: %s, Page: %s/%s", numChapter + 1, numPage + 1, chapter.getPages()), Variables.FOOTER_ICON)
             .build();
     }
 
@@ -178,7 +178,7 @@ public class FylCommicCommand extends ReactionCommand {
 
     @Override
     public String getHelp() {
-        return "Read the Five years later comic within discord (comic website: <http://kurothewebsite.com/5yearslater>)\n" +
+        return "Read the Five years later comic within discord (comic website: <https://www.theinktank.co/5yearslater>)\n" +
             "Usage: `gb." + getName() + " [page:number/chapter:number]`";
     }
 
