@@ -73,7 +73,7 @@ dependencies {
     }
     implementation(group = "com.sedmelluq", name = "lavaplayer", version = "1.3.63")
 //    implementation("lavalink:local")
-    implementation(group = "com.github.FredBoat", name = "Lavalink-Client", version = "6ccbeb1")
+    implementation(group = "com.github.FredBoat", name = "Lavalink-Client", version = "eb26770")
 //    implementation(group = "com.github.DuncteBot", name = "Lavalink-Client", version = "4f3924fb51")
     implementation(group = "ch.qos.logback", name = "logback-classic", version = "1.2.3")
 }
