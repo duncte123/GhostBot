@@ -40,9 +40,9 @@ jobs:
             file: ./Dockerfile
             pull: true
             push: true
-            cache-from: type=registry,ref=duncte123/ghostbot:latest
+            cache-from: type=registry,ref=duncte123/GhostBot/ghostbot:latest
             cache-to: type=inline
-            tags: duncte123/ghostbot/ghostbot:latest
+            tags: duncte123/GhostBot/ghostbot:latest
 
 #        - name: Trigger dev webhook
 #          uses: zzzze/webhook-trigger@v1.0.0
