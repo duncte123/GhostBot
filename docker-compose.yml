@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+    ghostbot:
+        container_name: ghostbot
+        build:
+            context: .
+        volumes:
+            - ghostbot:/ghostbot/data/:rw
+        environment:
+            BOT_PREFIX: //
+            BOT_TOTAL_SHARDS: 1
+            BOT_TOKEN: ''
+            RUNNING_LOCAL: 'true'
+            SHOULD_POST_STATS: 'false'
+            BOT_LISTS_JSON: '{}'
+            API_TOKEN: ''
+            API_GOOGLE: ''
+            API_TUMBLR: ''
+            LAVALINK_ENABLE: 'false'
+            LAVALINK_NODE_COUNT: 1
+            LAVALINK_NODE_0_HOST: ''
+            LAVALINK_NODE_0_PASS: ''
+
+volumes:
+    ghostbot:
+        driver: local
+        driver_opts:
+            type: 'none'
+            o: 'bind'
+            device: './data/'

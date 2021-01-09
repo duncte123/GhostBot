@@ -90,7 +90,7 @@ public class LavalinkManager {
 
     public void closeConnection(Guild guild) {
         if (isEnabled()) {
-            lavalink.getLink(guild).disconnect();
+            lavalink.getLink(guild).destroy();
         } else {
             guild.getAudioManager().closeAudioConnection();
         }

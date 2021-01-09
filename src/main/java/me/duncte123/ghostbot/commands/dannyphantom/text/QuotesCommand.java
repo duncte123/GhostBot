@@ -173,7 +173,7 @@ public class QuotesCommand extends Command {
     }
 
     private void reloadQuotes(GhostBotConfig config, ObjectMapper jackson) {
-        final File quotesFile = new File("quotes.json");
+        final File quotesFile = new File("./data/quotes.json");
 
         if (quotesFile.exists()) {
             try {

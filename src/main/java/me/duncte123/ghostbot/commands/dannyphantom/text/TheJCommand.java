@@ -48,7 +48,7 @@ public class TheJCommand extends Command {
 
     private String getRandomJ() {
         try {
-            final File nameList = new File("nameList.txt");
+            final File nameList = new File("./data/nameList.txt");
             List<String> content = Files.readAllLines(nameList.toPath());
 
             return content.get((int)Math.floor(Math.random() * content.size()));

@@ -18,9 +18,6 @@
 
 package me.duncte123.ghostbot.objects.config;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import me.duncte123.ghostbot.utils.RawJsonDeserializer;
-
 public class GhostBotConfig {
 
     public Discord discord;
@@ -29,7 +26,6 @@ public class GhostBotConfig {
     public Api api;
     public boolean running_local;
     public boolean shouldPostStats;
-    @JsonDeserialize(using = RawJsonDeserializer.class)
     public String botLists;
 
     public static class Discord {
@@ -53,4 +49,41 @@ public class GhostBotConfig {
         public String tumblr;
     }
 
+    public static GhostBotConfig fromEnv() {
+        final GhostBotConfig config = new GhostBotConfig();
+        final Discord discord = new Discord();
+
+        discord.token = System.getenv("BOT_TOKEN");
+        discord.totalShards = Integer.parseInt(System.getenv("BOT_TOTAL_SHARDS"));
+        discord.prefix = System.getenv("BOT_PREFIX");
+        config.discord = discord;
+
+        config.api_token = System.getenv("API_TOKEN");
+
+        final Lavalink lavalink = new Lavalink();
+
+        lavalink.enable = Boolean.parseBoolean(System.getenv("LAVALINK_ENABLE"));
+        final int count = Integer.parseInt(System.getenv("LAVALINK_NODE_COUNT"));
+        lavalink.nodes = new Lavalink.Node[count];
+
+        for (int i = 0; i < count; i++) {
+            lavalink.nodes[i] = new Lavalink.Node();
+            lavalink.nodes[i].wsUrl = System.getenv("LAVALINK_NODE_"+i+"_HOST");
+            lavalink.nodes[i].pass = System.getenv("LAVALINK_NODE_"+i+"_PASS");
+        }
+
+        config.lavalink = lavalink;
+
+        final Api api = new Api();
+
+        api.google = System.getenv("API_GOOGLE");
+        api.tumblr = System.getenv("API_TUMBLR");
+        config.api = api;
+
+        config.running_local = Boolean.parseBoolean(System.getenv("RUNNING_LOCAL"));
+        config.shouldPostStats = Boolean.parseBoolean(System.getenv("SHOULD_POST_STATS"));
+        config.botLists = System.getenv("BOT_LISTS_JSON");
+
+        return config;
+    }
 }

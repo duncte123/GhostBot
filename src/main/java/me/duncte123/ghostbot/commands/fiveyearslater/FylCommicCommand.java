@@ -53,7 +53,7 @@ public class FylCommicCommand extends ReactionCommand {
         FylComic tempComic;
 
         try {
-            final String text = new String(Files.readAllBytes(new File("5yearslater_NEW.json").toPath()));
+            final String text = new String(Files.readAllBytes(new File("./data/5yearslater_NEW.json").toPath()));
             tempComic = jackson.readValue(text, FylComic.class);
         } catch (IOException e) {
             tempComic = null;

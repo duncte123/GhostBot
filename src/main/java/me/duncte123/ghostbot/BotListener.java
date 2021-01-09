@@ -23,6 +23,7 @@ import lavalink.client.player.IPlayer;
 import me.duncte123.botcommons.BotCommons;
 import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.ghostbot.audio.GuildMusicManager;
+import me.duncte123.ghostbot.commands.main.UptimeCommand;
 import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.utils.AudioUtils;
@@ -47,11 +48,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
-import java.io.File;
-import java.io.IOException;
-import java.lang.management.ManagementFactory;
-import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
 import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -128,15 +124,7 @@ public class BotListener implements EventListener {
 
         if (content.equalsIgnoreCase(Variables.PREFIX + "shutdown") &&
             event.getAuthor().getIdLong() == Variables.OWNER_ID) {
-            try {
-                Files.write(
-                    new File("uptime.txt").toPath(),
-                    String.valueOf(ManagementFactory.getRuntimeMXBean().getUptime()).getBytes(),
-                    StandardOpenOption.TRUNCATE_EXISTING
-                );
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            UptimeCommand.writeUptimeToFile();
 
             logger.info("Shutting down!!");
             service.shutdown();
@@ -170,6 +158,7 @@ public class BotListener implements EventListener {
             new Thread(() -> {
                 BotCommons.shutdown(shardManager);
 
+                // TODO: make threads deamon
                 System.exit(0);
             }).start();
 

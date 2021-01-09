@@ -46,7 +46,11 @@ public abstract class ReactionCommand extends Command {
     private static final String RIGHT_ARROW = "\u27A1";
     private static final String CANCEL = "\u274C";
     protected static final List<String> LEFT_RIGHT_CANCEL = List.of(LEFT_ARROW, RIGHT_ARROW, CANCEL);
-    private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(100);
+    private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(10, (r) -> {
+        final Thread t = new Thread(r, "Menu Thread");
+        t.setDaemon(true);
+        return t;
+    });
 
 
     private final CommandManager.ReactionListenerRegistry listenerRegistry;

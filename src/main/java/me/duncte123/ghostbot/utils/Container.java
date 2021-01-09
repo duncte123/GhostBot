@@ -20,7 +20,6 @@ package me.duncte123.ghostbot.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.duncte123.botcommons.JSONHelper;
-import me.duncte123.botcommons.config.ConfigUtils;
 import me.duncte123.ghostbot.CommandManager;
 import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 
@@ -34,7 +33,7 @@ public class Container {
     private final ObjectMapper jackson;
 
     public Container() throws IOException {
-        this.config = ConfigUtils.loadFromFile("config.json", GhostBotConfig.class);
+        this.config = GhostBotConfig.fromEnv();
         this.jackson = JSONHelper.createObjectMapper();
         this.audio = new AudioUtils();
         this.commandManager = new CommandManager(this);

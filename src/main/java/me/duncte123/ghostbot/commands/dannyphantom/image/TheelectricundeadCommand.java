@@ -39,7 +39,7 @@ public class TheelectricundeadCommand extends TumblrComicBase {
 
     public TheelectricundeadCommand(CommandManager.ReactionListenerRegistry registry, Container container) {
         super(registry);
-        this.filename = "bzzt.json";
+        this.filename = "./data/bzzt.json";
         this.blogUrl = "theelectricundead.tumblr.com";
         this.chapters = new int[]{
             1,  // Chapter 1

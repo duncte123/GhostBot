@@ -19,7 +19,6 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.apache.tools.ant.filters.ReplaceTokens
 import org.gradle.api.tasks.wrapper.Wrapper.DistributionType
-import java.io.ByteArrayOutputStream
 import com.fasterxml.jackson.databind.ObjectMapper
 
 plugins {
@@ -40,7 +39,7 @@ buildscript {
 }
 
 project.group = "me.duncte123"
-project.version = "2.1.0_${getGitHash()}"
+project.version = "2.2.0"
 
 
 application {
@@ -61,7 +60,7 @@ repositories {
     }
 }
 
-val jda = JDAVersionInfo("4.2.0_224")
+val jda = JDAVersionInfo("4.2.0_227")
 //val jda = JDAVersionInfo("75c9b39")
 
 dependencies {
@@ -71,7 +70,7 @@ dependencies {
     implementation(group = jda.group, name = "JDA", version = jda.version) {
         exclude(module = "opus-java")
     }
-    implementation(group = "com.sedmelluq", name = "lavaplayer", version = "1.3.65")
+    implementation(group = "com.sedmelluq", name = "lavaplayer", version = "1.3.66")
 //    implementation("lavalink:local")
     implementation(group = "com.github.FredBoat", name = "Lavalink-Client", version = "eb26770")
 //    implementation(group = "com.github.DuncteBot", name = "Lavalink-Client", version = "4f3924fb51")
@@ -131,7 +130,7 @@ compileJava.apply {
 
 tasks.withType<Wrapper> {
     distributionType = DistributionType.ALL
-    gradleVersion = "6.1.1"
+    gradleVersion = "6.7.1"
 }
 
 shadowJar.apply {
@@ -164,23 +163,7 @@ tasks.register("generateAudioJson") {
     println(output)
 
     ObjectMapper().writerWithDefaultPrettyPrinter()
-        .writeValue(File("audioList.json"), output)
-}
-
-fun getGitHash(): String {
-    return try {
-        val stdout = ByteArrayOutputStream()
-
-        exec {
-            commandLine("git", "rev-parse", "--short", "HEAD")
-            standardOutput = stdout
-        }
-
-        stdout.toString().trim()
-    } catch (ignored: Throwable) {
-        // Probably ramidzkh"s problem
-        "DEV"
-    }
+        .writeValue(File("./data/audioList.json"), output)
 }
 
 /**

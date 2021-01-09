@@ -35,7 +35,7 @@ public class DoppelgangerComicCommand extends TumblrComicBase {
     public DoppelgangerComicCommand(CommandManager.ReactionListenerRegistry registry, Container container) {
         super(registry);
         this.blogUrl = "doppelgangercomic.tumblr.com";
-        this.filename = "doppelganger.json";
+        this.filename = "./data/doppelganger.json";
         this.chapters = new int[]{
             2,   // Chapter 1
             29,  // Chapter 2

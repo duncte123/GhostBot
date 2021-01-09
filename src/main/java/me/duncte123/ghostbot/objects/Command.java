@@ -72,7 +72,7 @@ public abstract class Command {
         }
 
         try {
-            final JsonNode audioList = new ObjectMapper().readTree(new File("audioList.json"));
+            final JsonNode audioList = new ObjectMapper().readTree(new File("./data/audioList.json"));
 
             if (!audioList.has(getName())) {
                 return;

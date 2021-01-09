@@ -35,20 +35,24 @@ import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 public class UptimeCommand extends Command {
 
     private final long oldUptime;
-    private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+    private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor((r) -> {
+        final Thread t = new Thread(r, "Uptime-Write-Thread");
+        t.setDaemon(true);
+        return t;
+    });
 
     public UptimeCommand() {
         long time = -1;
 
         try {
-            time = Long.parseLong(Files.readString(new File("uptime.txt").toPath()).trim());
+            time = Long.parseLong(Files.readString(new File("./data/uptime.txt").toPath()).trim());
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         this.oldUptime = time;
 
-        service.scheduleAtFixedRate(this::writeUptimeToFile, 1L, 1L, TimeUnit.DAYS);
+        service.scheduleAtFixedRate(UptimeCommand::writeUptimeToFile, 1L, 1L, TimeUnit.DAYS);
     }
 
     @Override
@@ -113,13 +117,13 @@ public class UptimeCommand extends Command {
         return builder.toString();
     }
 
-    private void writeUptimeToFile() {
+    public static void writeUptimeToFile() {
         final long uptime = ManagementFactory.getRuntimeMXBean().getUptime();
         final String uptimeString = Long.toString(uptime);
 
         try {
             Files.write(
-                new File("uptime.txt").toPath(),
+                new File("./data/uptime.txt").toPath(),
                 uptimeString.getBytes(),
                 StandardOpenOption.TRUNCATE_EXISTING
             );

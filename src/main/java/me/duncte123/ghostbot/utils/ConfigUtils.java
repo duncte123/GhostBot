@@ -35,7 +35,7 @@ public class ConfigUtils {
         try {
             logger.info("Loading images.json");
 
-            final String file = new String(Files.readAllBytes(new File("images.json").toPath()));
+            final String file = new String(Files.readAllBytes(new File("./data/images.json").toPath()));
 
             this.images = new JSONObject(file);
 
