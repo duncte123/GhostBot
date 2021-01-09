@@ -42,7 +42,7 @@ jobs:
             push: true
             cache-from: type=registry,ref=duncte123/GhostBot/ghostbot:latest
             cache-to: type=inline
-            tags: duncte123/GhostBot/ghostbot:latest
+            tags: duncte123/ghostbot/ghostbot:latest
 
 #        - name: Trigger dev webhook
 #          uses: zzzze/webhook-trigger@v1.0.0
