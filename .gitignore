@@ -1,9 +1,11 @@
 .idea/
 .gradle/
 out/
+build/
 classes/
 *.json
 *.iml
 *.jar
 data/uptime.txt
 docker-compose.override.yml
+**/TestBot.java
