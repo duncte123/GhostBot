@@ -197,7 +197,7 @@ public class DPArtistsCommand extends ImageBase {
                 }
 
                 sendEmbed(event,
-                    EmbedUtils.defaultEmbed()
+                    EmbedUtils.getDefaultEmbed()
                         .setAuthor(usn, it.post_url, profilePicture)
                         .setTitle("Link to post", it.post_url)
                         .setDescription(QuotesCommand.parseText(it.caption))
@@ -210,7 +210,7 @@ public class DPArtistsCommand extends ImageBase {
         if (type.equalsIgnoreCase("deviantart")) {
             getDeviantartDataXmlOnly(usn, (it) ->
                 sendEmbed(event,
-                    EmbedUtils.defaultEmbed()
+                    EmbedUtils.getDefaultEmbed()
                         .setAuthor(usn, it.authorUrl, it.avatarUrl)
                         .setTitle(it.title, it.link)
                         .setThumbnail(it.avatarUrl)

@@ -18,6 +18,7 @@
 
 package me.duncte123.ghostbot.commands.main;
 
+import me.duncte123.botcommons.messaging.MessageConfig;
 import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.CommandCategory;
 import me.duncte123.ghostbot.objects.CommandEvent;
@@ -41,9 +42,16 @@ public class RestartCommand extends Command {
 
         final ShardManager manager = event.getJDA().getShardManager();
 
+        if (manager == null) {
+            sendMsg(event, "shard manager is null WTF");
+            return;
+        }
+
         if (args.isEmpty()) {
-            sendMsg(event, "Restarting all shards",
-                (it) -> manager.restart()
+            sendMsg(MessageConfig.Builder
+                .fromCtx(event)
+                .setMessage("Restarting all shards")
+                .setSuccessAction((it) -> manager.restart())
             );
 
             return;
@@ -57,8 +65,10 @@ public class RestartCommand extends Command {
             return;
         }
 
-        sendMsg(event, "Restarting shard " + toRestart,
-            (it) -> manager.restart(toRestart)
+        sendMsg(MessageConfig.Builder
+            .fromCtx(event)
+            .setMessage("Restarting shard " + toRestart)
+            .setSuccessAction((it) -> manager.restart(toRestart))
         );
     }
 

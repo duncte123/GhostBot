@@ -63,7 +63,7 @@ public class WikiUserCommand extends WikiBaseCommand {
 
                         user.setBasePath(userResultSet.getBasepath());
 
-                        final EmbedBuilder embed = EmbedUtils.defaultEmbed()
+                        final EmbedBuilder embed = EmbedUtils.getDefaultEmbed()
                             .setThumbnail(user.getAvatar())
                             .setTitle("Profile link", user.getAbsoluteUrl())
                             .setAuthor(user.getName(), user.getAbsoluteUrl(), user.getAvatar())
@@ -77,7 +77,7 @@ public class WikiUserCommand extends WikiBaseCommand {
                         return;
                     }
 
-                    final EmbedBuilder eb = EmbedUtils.defaultEmbed()
+                    final EmbedBuilder eb = EmbedUtils.getDefaultEmbed()
                         .setTitle("I found the following users:");
 
                     for (UserElement user : userResultSet.getItems()) {

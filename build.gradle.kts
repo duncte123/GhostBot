@@ -52,29 +52,30 @@ java {
 }
 
 repositories {
+    mavenCentral()
     jcenter()
 
-    maven {
-        name = "jitpack"
-        url = uri("https://jitpack.io")
-    }
+    maven("https://m2.dv8tion.net/releases")
+    maven("https://duncte123.jfrog.io/artifactory/maven")
+    maven("https://jitpack.io")
 }
 
-val jda = JDAVersionInfo("4.2.0_227")
+val jda = JDAVersionInfo("4.2.0_250")
 //val jda = JDAVersionInfo("75c9b39")
 
 dependencies {
-    implementation(group = "me.duncte123", name = "botCommons", version = "1.0.73")
+    implementation(group = "me.duncte123", name = "botCommons", version = "2.1.2")
     implementation(group = "org.apache.commons", name = "commons-text", version = "1.6")
     implementation(group = "org.codehaus.groovy", name = "groovy-jsr223", version = "2.5.13")
     implementation(group = jda.group, name = "JDA", version = jda.version) {
         exclude(module = "opus-java")
     }
-    implementation(group = "com.sedmelluq", name = "lavaplayer", version = "1.3.66")
+    implementation(group = "com.sedmelluq", name = "lavaplayer", version = "1.3.37")
 //    implementation("lavalink:local")
     implementation(group = "com.github.FredBoat", name = "Lavalink-Client", version = "eb26770")
 //    implementation(group = "com.github.DuncteBot", name = "Lavalink-Client", version = "4f3924fb51")
     implementation(group = "ch.qos.logback", name = "logback-classic", version = "1.2.3")
+    implementation("net.sf.trove4j:trove4j:3.0.3") // todo: make pretty
 }
 
 val compileJava: JavaCompile by tasks

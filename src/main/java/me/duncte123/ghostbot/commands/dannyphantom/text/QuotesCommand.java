@@ -225,7 +225,7 @@ public class QuotesCommand extends Command {
     }
 
     private void sendQuote(CommandEvent event, TumblrPost post) {
-        final EmbedBuilder eb = EmbedUtils.defaultEmbed()
+        final EmbedBuilder eb = EmbedUtils.getDefaultEmbed()
             .setTitle("Click to view original post", post.post_url)
             .setFooter("Quote id: " + post.id, Variables.FOOTER_ICON);
 

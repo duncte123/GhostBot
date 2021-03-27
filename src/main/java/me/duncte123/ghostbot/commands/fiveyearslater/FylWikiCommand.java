@@ -38,7 +38,7 @@ public class FylWikiCommand extends WikiBaseCommand {
             return;
         }
 
-        handleWikiSearch(FYL_WIKI_HOLDER, String.join(" ", event.getArgs()), event.getContainer().getJackson(), event.getEvent());
+        handleWikiSearch(FYL_WIKI_HOLDER, String.join(" ", event.getArgs()), event.getContainer().getJackson(), event);
     }
 
     @Override

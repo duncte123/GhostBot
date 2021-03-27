@@ -20,6 +20,7 @@ package me.duncte123.ghostbot.commands.dannyphantom.image;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import me.duncte123.botcommons.messaging.MessageConfig;
 import me.duncte123.ghostbot.CommandManager;
 import me.duncte123.ghostbot.commands.ReactionCommand;
 import me.duncte123.ghostbot.objects.CommandCategory;
@@ -98,14 +99,14 @@ abstract class TumblrComicBase extends ReactionCommand {
         }
 
         final AtomicInteger pa = new AtomicInteger(page);
-
-        sendMsg(event,
-            new MessageBuilder()
+        final MessageConfig messageConfig = new MessageConfig.Builder()
+            .setChannel(event.getChannel())
+            .setMessage(new MessageBuilder()
                 .append("Use the emotes at the bottom to navigate through pages, use the ❌ emote when you are done reading.\n")
                 .append("The controls have a timeout of 30 minutes")
                 .setEmbed(getEmbed(pa.get()))
-                .build(),
-            (it) -> this.addReactions(it, LEFT_RIGHT_CANCEL, newLongSet(author.getIdLong()), 30, TimeUnit.MINUTES,
+                .build())
+            .setSuccessAction((it) -> this.addReactions(it, LEFT_RIGHT_CANCEL, newLongSet(author.getIdLong()), 30, TimeUnit.MINUTES,
                 (index) -> {
                     if (index >= 2) { //cancel button or other error
                         stopReactions(it);
@@ -117,7 +118,10 @@ abstract class TumblrComicBase extends ReactionCommand {
 
                     it.editMessage(getEmbed(nextPage)).queue();
                 })
-        );
+            )
+            .build();
+
+        sendMsg(messageConfig);
     }
 
     private int getNumberFromArg(String input) {

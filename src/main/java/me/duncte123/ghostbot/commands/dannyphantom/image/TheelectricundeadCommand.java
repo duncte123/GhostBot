@@ -53,7 +53,7 @@ public class TheelectricundeadCommand extends TumblrComicBase {
     MessageEmbed getEmbed(int page) {
         final TumblrPost post = pages.get(page);
 
-        return EmbedUtils.defaultEmbed()
+        return EmbedUtils.getDefaultEmbed()
             .setAuthor("Bzzt", post.post_url, getProfilePicture())
             .setColor(0x29AD2D)
             .setTitle("Link to post", post.post_url)

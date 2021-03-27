@@ -110,7 +110,7 @@ public abstract class ImageBase extends Command {
 
         logger.debug("Image Link: '" + i.url + '\'');
 
-        sendEmbed(event, EmbedUtils.defaultEmbed()
+        sendEmbed(event, EmbedUtils.getDefaultEmbed()
             .setTitle(i.title, i.website)
             .setImage(i.url));
     }
@@ -142,7 +142,7 @@ public abstract class ImageBase extends Command {
 
         final SearchItem randomItem = arr.get(ThreadLocalRandom.current().nextInt(arr.size()));
 
-        sendEmbed(event, EmbedUtils.defaultEmbed()
+        sendEmbed(event, EmbedUtils.getDefaultEmbed()
             .setTitle(randomItem.title, randomItem.image.contextLink)
             .setImage(randomItem.link));
     }

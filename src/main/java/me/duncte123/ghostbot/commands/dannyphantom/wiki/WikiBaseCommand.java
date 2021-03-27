@@ -27,6 +27,7 @@ import me.duncte123.fandomapi.search.LocalWikiSearchResult;
 import me.duncte123.fandomapi.search.LocalWikiSearchResultSet;
 import me.duncte123.ghostbot.objects.Command;
 import me.duncte123.ghostbot.objects.CommandCategory;
+import me.duncte123.ghostbot.objects.CommandEvent;
 import me.duncte123.ghostbot.utils.SpoopyUtils;
 import me.duncte123.ghostbot.utils.WikiHolder;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -45,7 +46,7 @@ public abstract class WikiBaseCommand extends Command {
     //shortcut to the wiki
     final WikiHolder wiki = new WikiHolder("https://dannyphantom.fandom.com");
 
-    protected void handleWikiSearch(WikiHolder wiki, String searchQuery, ObjectMapper jackson, GuildMessageReceivedEvent event) {
+    protected void handleWikiSearch(WikiHolder wiki, String searchQuery, ObjectMapper jackson, CommandEvent event) {
         WebUtils.ins.getJSONObject(String.format(
             "%s?query=%s",
             wiki.getSearchListEndpoint(),
@@ -87,7 +88,7 @@ public abstract class WikiBaseCommand extends Command {
                     final String authorIcon = author.getEffectiveAvatarUrl();
 
 
-                    final EmbedBuilder eb = EmbedUtils.defaultEmbed()
+                    final EmbedBuilder eb = EmbedUtils.getDefaultEmbed()
                         .setTitle("Query: " + searchQuery,
                             wiki.getDomain() + "/wiki/Special:Search?query=" + searchQuery.replaceAll(" ", "%20"))
                         .setAuthor("Requester: " + authorName,

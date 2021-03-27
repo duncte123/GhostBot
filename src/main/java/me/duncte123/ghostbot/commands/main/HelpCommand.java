@@ -75,7 +75,7 @@ public class HelpCommand extends Command {
         final List<String> otherCommands = getCommandsForCategory(CommandCategory.NONE, manager);
         final List<String> characterCommands = getCommandsForCategory(CommandCategory.CHARACTERS, manager);
 
-        final EmbedBuilder helpEmbed = EmbedUtils.defaultEmbed()
+        final EmbedBuilder helpEmbed = EmbedUtils.getDefaultEmbed()
             .setDescription("Use `" + Variables.PREFIX + "help [command]` for more info about a command")
             .addField("Commands for all you space nerds", buildCommands(spaceCommands), false)
             .addField("Audio commands", buildCommands(audioCommands), false)

@@ -20,6 +20,7 @@ package me.duncte123.ghostbot.commands.fiveyearslater;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.duncte123.botcommons.messaging.EmbedUtils;
+import me.duncte123.botcommons.messaging.MessageConfig;
 import me.duncte123.ghostbot.CommandManager;
 import me.duncte123.ghostbot.commands.ReactionCommand;
 import me.duncte123.ghostbot.objects.CommandEvent;
@@ -104,14 +105,14 @@ public class FylCommicCommand extends ReactionCommand {
         final AtomicInteger pageIndex = new AtomicInteger(page);
         final AtomicInteger chapterIndex = new AtomicInteger(chapter);
         final AtomicReference<FylChapter> chapterRef = new AtomicReference<>(fylChapter);
-
-        sendMsg(event,
-            new MessageBuilder()
+        final MessageConfig messageConfig = new MessageConfig.Builder()
+            .setChannel(event.getChannel())
+            .setMessage(new MessageBuilder()
                 .append("Use the emotes at the bottom to navigate through pages, use the ❌ emote when you are done reading.\n")
                 .append("The controls have a timeout of 30 minutes")
                 .setEmbed(getEmbed(chapterIndex.get(), pageIndex.get()))
-                .build(),
-            (m) -> this.addReactions(m, LEFT_RIGHT_CANCEL,
+                .build())
+            .setSuccessAction((m) -> this.addReactions(m, LEFT_RIGHT_CANCEL,
                 newLongSet(author.getIdLong()), 30, TimeUnit.MINUTES, (index) -> {
 
                     if (index == 2) { //cancel button
@@ -147,9 +148,11 @@ public class FylCommicCommand extends ReactionCommand {
                     if (nextPage >= 0 && nextPage <= chap.getPages()) {
                         m.editMessage(getEmbed(chapterIndex.get(), nextPage)).queue();
                     }
-                }
+                })
             )
-        );
+            .build();
+
+        sendMsg(messageConfig);
     }
 
     private MessageEmbed getEmbed(int numChapter, int numPage) {
@@ -162,7 +165,7 @@ public class FylCommicCommand extends ReactionCommand {
             url = comic.getWixUrl() + page.substring(2);
         }
 
-        return EmbedUtils.defaultEmbed()
+        return EmbedUtils.getDefaultEmbed()
             .setImage(url)
             .setThumbnail(FYL_ICON)
             .setTitle("Chapter: " + chapter.getName(), chapter.getChapterUrl())

@@ -32,6 +32,7 @@ import gnu.trove.impl.sync.TSynchronizedLongObjectMap;
 import gnu.trove.map.TLongObjectMap;
 import gnu.trove.map.hash.TLongObjectHashMap;
 import me.duncte123.botcommons.messaging.EmbedUtils;
+import me.duncte123.botcommons.messaging.MessageConfig;
 import me.duncte123.ghostbot.audio.GuildMusicManager;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.entities.Guild;
@@ -42,7 +43,7 @@ import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed;
+import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
 public class AudioUtils {
 
@@ -79,16 +80,26 @@ public class AudioUtils {
 
             @Override
             public void noMatches() {
-                sendEmbed(channel, EmbedUtils.embedField(EMBED_TITLE, "Nothing found by _" + trackUrl + '_'));
+                sendMsg(
+                    new MessageConfig.Builder()
+                        .setChannel(channel)
+                        .setEmbed(EmbedUtils.embedField(EMBED_TITLE, "Nothing found by _" + trackUrl + '_'), true)
+                        .build()
+                );
             }
 
             @Override
             public void loadFailed(FriendlyException exception) {
-                sendEmbed(channel, EmbedUtils.embedField(EMBED_TITLE, String.format(
-                    "Could not play: %s\n" +
-                        "Please contact a developer [here](%s) to inform them of this issue",
-                    exception.getMessage(), Variables.GHOSTBOT_GUILD
-                )));
+                sendMsg(
+                    new MessageConfig.Builder()
+                        .setChannel(channel)
+                        .setEmbed(EmbedUtils.embedField(EMBED_TITLE, String.format(
+                            "Could not play: %s\n" +
+                                "Please contact a developer [here](%s) to inform them of this issue",
+                            exception.getMessage(), Variables.GHOSTBOT_GUILD
+                        )), true)
+                        .build()
+                );
             }
         };
 

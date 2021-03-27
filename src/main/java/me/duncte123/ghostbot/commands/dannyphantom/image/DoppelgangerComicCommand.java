@@ -69,7 +69,7 @@ public class DoppelgangerComicCommand extends TumblrComicBase {
     MessageEmbed getEmbed(int page) {
         final TumblrPost post = pages.get(page);
 
-        return EmbedUtils.defaultEmbed()
+        return EmbedUtils.getDefaultEmbed()
             .setAuthor("DOPPELGÄNGER", post.post_url, getProfilePicture())
             .setTitle("Link to post", post.post_url)
             .setDescription(QuotesCommand.parseText(post.caption))

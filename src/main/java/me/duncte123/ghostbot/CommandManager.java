@@ -45,7 +45,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Pattern;
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsgFormat;
+import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
 public class CommandManager {
 
@@ -173,7 +173,7 @@ public class CommandManager {
                 cmd.execute(commandEvent);
             } catch (Exception e) {
                 e.printStackTrace();
-                sendMsgFormat(event, "Something went wrong when processing your command");
+                sendMsg(event.getChannel(), "Something went wrong when processing your command");
             }
         });
     }

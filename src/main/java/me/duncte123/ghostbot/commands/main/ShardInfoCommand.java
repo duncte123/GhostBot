@@ -24,7 +24,6 @@ import me.duncte123.ghostbot.objects.CommandEvent;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import net.dv8tion.jda.api.utils.cache.ShardCacheView;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.internal.utils.tuple.Pair;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.WordUtils;
@@ -39,7 +38,7 @@ import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
 public class ShardInfoCommand extends Command {
     @Override
-    public void execute(CommandEvent ctx) {
+    public void execute(CommandEvent event) {
         final List<String> headers = new ArrayList<>();
         headers.add("ID");
         headers.add("Status");
@@ -47,10 +46,14 @@ public class ShardInfoCommand extends Command {
         headers.add("Guilds");
         headers.add("VCs");
 
-        final GuildMessageReceivedEvent event = ctx.getEvent();
-
         List<List<String>> table = new ArrayList<>();
-        final ShardManager shardManager = ctx.getJDA().getShardManager();
+        final ShardManager shardManager = event.getJDA().getShardManager();
+
+        if (shardManager == null) {
+            sendMsg(event, "shard manager is null WTF");
+            return;
+        }
+
         final List<JDA> shards = new ArrayList<>(shardManager.getShards());
         Collections.reverse(shards);
 
@@ -58,7 +61,7 @@ public class ShardInfoCommand extends Command {
             final List<String> row = new ArrayList<>();
 
             row.add(shard.getShardInfo().getShardId() +
-                (ctx.getJDA().getShardInfo().getShardId() == shard.getShardInfo().getShardId() ? " (current)" : ""));
+                (event.getJDA().getShardInfo().getShardId() == shard.getShardInfo().getShardId() ? " (current)" : ""));
 
             row.add(WordUtils.capitalizeFully(shard.getStatus().toString().replace("_", " ")));
             row.add(String.valueOf(shard.getGatewayPing()));
