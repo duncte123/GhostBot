@@ -19,7 +19,7 @@
 package me.duncte123.ghostbot.commands.fiveyearslater;
 
 import me.duncte123.ghostbot.commands.dannyphantom.wiki.WikiBaseCommand;
-import me.duncte123.ghostbot.objects.CommandEvent;
+import me.duncte123.ghostbot.objects.command.ICommandEvent;
 import me.duncte123.ghostbot.utils.WikiHolder;
 import me.duncte123.ghostbot.variables.Variables;
 
@@ -30,7 +30,7 @@ public class FylWikiCommand extends WikiBaseCommand {
     private static final WikiHolder FYL_WIKI_HOLDER = new WikiHolder("https://5yl.wiki");
 
     @Override
-    public void execute(CommandEvent event) {
+    public void execute(ICommandEvent event) {
 
         if (event.getArgs().isEmpty()) {
             sendMsg(event, "Insufficient arguments, Correct usage: `" + Variables.PREFIX + getName() + " <search term>`");

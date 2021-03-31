@@ -18,13 +18,13 @@
 
 package me.duncte123.ghostbot.commands.dannyphantom.audio;
 
-import me.duncte123.ghostbot.objects.CommandEvent;
+import me.duncte123.ghostbot.objects.command.ICommandEvent;
 
 import java.util.concurrent.ThreadLocalRandom;
 
 public class GoingGhostCommand extends AudioBaseCommand {
     @Override
-    public void execute(CommandEvent event) {
+    public void execute(ICommandEvent event) {
         final int p = ThreadLocalRandom.current().nextInt(100);
 
         if (p >= 50 && p <= 55) {

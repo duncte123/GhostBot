@@ -25,14 +25,13 @@ import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.fandomapi.FandomException;
 import me.duncte123.fandomapi.search.LocalWikiSearchResult;
 import me.duncte123.fandomapi.search.LocalWikiSearchResultSet;
-import me.duncte123.ghostbot.objects.Command;
-import me.duncte123.ghostbot.objects.CommandCategory;
-import me.duncte123.ghostbot.objects.CommandEvent;
+import me.duncte123.ghostbot.objects.command.Command;
+import me.duncte123.ghostbot.objects.command.CommandCategory;
+import me.duncte123.ghostbot.objects.command.ICommandEvent;
 import me.duncte123.ghostbot.utils.SpoopyUtils;
 import me.duncte123.ghostbot.utils.WikiHolder;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -46,7 +45,7 @@ public abstract class WikiBaseCommand extends Command {
     //shortcut to the wiki
     final WikiHolder wiki = new WikiHolder("https://dannyphantom.fandom.com");
 
-    protected void handleWikiSearch(WikiHolder wiki, String searchQuery, ObjectMapper jackson, CommandEvent event) {
+    protected void handleWikiSearch(WikiHolder wiki, String searchQuery, ObjectMapper jackson, ICommandEvent event) {
         WebUtils.ins.getJSONObject(String.format(
             "%s?query=%s",
             wiki.getSearchListEndpoint(),

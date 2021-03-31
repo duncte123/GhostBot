@@ -18,9 +18,9 @@
 
 package me.duncte123.ghostbot.commands.main;
 
-import me.duncte123.ghostbot.objects.Command;
-import me.duncte123.ghostbot.objects.CommandCategory;
-import me.duncte123.ghostbot.objects.CommandEvent;
+import me.duncte123.ghostbot.objects.command.Command;
+import me.duncte123.ghostbot.objects.command.CommandCategory;
+import me.duncte123.ghostbot.objects.command.ICommandEvent;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import net.dv8tion.jda.api.utils.cache.ShardCacheView;
 import net.dv8tion.jda.api.JDA;
@@ -38,7 +38,7 @@ import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
 public class ShardInfoCommand extends Command {
     @Override
-    public void execute(CommandEvent event) {
+    public void execute(ICommandEvent event) {
         final List<String> headers = new ArrayList<>();
         headers.add("ID");
         headers.add("Status");

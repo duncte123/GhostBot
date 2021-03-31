@@ -22,9 +22,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.natanbc.reliqua.request.RequestException;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.botcommons.web.WebUtils;
-import me.duncte123.ghostbot.objects.Command;
-import me.duncte123.ghostbot.objects.CommandCategory;
-import me.duncte123.ghostbot.objects.CommandEvent;
+import me.duncte123.ghostbot.objects.command.Command;
+import me.duncte123.ghostbot.objects.command.CommandCategory;
+import me.duncte123.ghostbot.objects.command.ICommandEvent;
 import me.duncte123.ghostbot.objects.googlesearch.GoogleSearchResults;
 import me.duncte123.ghostbot.objects.googlesearch.GoogleSearchResults.SearchItem;
 import me.duncte123.ghostbot.utils.ConfigUtils;
@@ -96,7 +96,7 @@ public abstract class ImageBase extends Command {
         }
     }
 
-    void sendMessageFromName(CommandEvent event, @Nullable ImageData i) {
+    void sendMessageFromName(ICommandEvent event, @Nullable ImageData i) {
         if (i == null) {
             sendMsg(event, "No images found");
             return;
@@ -115,7 +115,7 @@ public abstract class ImageBase extends Command {
             .setImage(i.url));
     }
 
-    void sendImage(CommandEvent event, byte[] data) {
+    void sendImage(ICommandEvent event, byte[] data) {
         final String fileName = String.format("%s_%s.png", getName(), System.currentTimeMillis());
         final TextChannel channel = event.getChannel();
 
@@ -131,7 +131,7 @@ public abstract class ImageBase extends Command {
         return CommandCategory.IMAGE;
     }
 
-    static void sendMessageFromData(CommandEvent event, GoogleSearchResults data, String key) {
+    static void sendMessageFromData(ICommandEvent event, GoogleSearchResults data, String key) {
         final List<SearchItem> arr = data.items;
 
         if (arr == null || arr.isEmpty()) {

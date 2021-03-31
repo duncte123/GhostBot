@@ -18,8 +18,8 @@
 
 package me.duncte123.ghostbot.commands.dannyphantom.text;
 
-import me.duncte123.ghostbot.objects.Command;
-import me.duncte123.ghostbot.objects.CommandEvent;
+import me.duncte123.ghostbot.objects.command.Command;
+import me.duncte123.ghostbot.objects.command.ICommandEvent;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,7 +30,7 @@ import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
 public class TheJCommand extends Command {
     @Override
-    public void execute(CommandEvent event) {
+    public void execute(ICommandEvent event) {
         final String message = String.format("The J in Daniel J Fenton stands for \"%s\"", this.getRandomJ());
 
         sendMsg(event, message);

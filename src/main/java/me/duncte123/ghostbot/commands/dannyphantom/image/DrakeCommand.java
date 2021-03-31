@@ -20,7 +20,7 @@ package me.duncte123.ghostbot.commands.dannyphantom.image;
 
 import me.duncte123.botcommons.web.WebParserUtils;
 import me.duncte123.botcommons.web.WebUtils;
-import me.duncte123.ghostbot.objects.CommandEvent;
+import me.duncte123.ghostbot.objects.command.ICommandEvent;
 import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.Permission;
@@ -37,7 +37,7 @@ import static me.duncte123.botcommons.web.ContentType.JSON;
 
 public class DrakeCommand extends ImageBase {
     @Override
-    public void execute(CommandEvent event) {
+    public void execute(ICommandEvent event) {
         final List<String> args = event.getArgs();
 
         if (!event.getSelfMember().hasPermission(event.getChannel(), Permission.MESSAGE_ATTACH_FILES)) {

@@ -23,8 +23,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import me.duncte123.botcommons.messaging.MessageConfig;
 import me.duncte123.ghostbot.CommandManager;
 import me.duncte123.ghostbot.commands.ReactionCommand;
-import me.duncte123.ghostbot.objects.CommandCategory;
-import me.duncte123.ghostbot.objects.CommandEvent;
+import me.duncte123.ghostbot.objects.command.CommandCategory;
+import me.duncte123.ghostbot.objects.command.ICommandEvent;
 import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.objects.tumblr.TumblrPost;
 import me.duncte123.ghostbot.utils.Container;
@@ -61,7 +61,7 @@ abstract class TumblrComicBase extends ReactionCommand {
     }
 
     @Override
-    public void execute(CommandEvent event) {
+    public void execute(ICommandEvent event) {
         final List<String> args = event.getArgs();
         final User author = event.getAuthor();
 

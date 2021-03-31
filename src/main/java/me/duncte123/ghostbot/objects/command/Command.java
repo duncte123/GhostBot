@@ -1,6 +1,6 @@
 /*
  *     GhostBot, a Discord bot made for all your Danny Phantom needs
- *     Copyright (C) 2018 - 2019  Duncan "duncte123" Sterken
+ *     Copyright (C) 2018 - 2021  Duncan "duncte123" Sterken
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostbot.objects;
+package me.duncte123.ghostbot.objects.command;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -48,7 +48,7 @@ public abstract class Command {
     protected final Function<String, String> httpPath = (item) -> "https://i.duncte123.me/ghostbotaudio/" + getName() + '/' + item;
     private List<String> audioFiles = new ArrayList<>();
 
-    public abstract void execute(CommandEvent event);
+    public abstract void execute(ICommandEvent event);
 
     public abstract String getName();
 
@@ -103,7 +103,7 @@ public abstract class Command {
         );
     }
 
-    protected boolean preAudioChecks(CommandEvent event) {
+    protected boolean preAudioChecks(ICommandEvent event) {
 
         final GuildVoiceState voiceState = event.getMember().getVoiceState();
 
@@ -150,11 +150,11 @@ public abstract class Command {
         return audio.getMusicManager(guild);
     }
 
-    protected void doAudioStuff(CommandEvent event) {
+    protected void doAudioStuff(ICommandEvent event) {
         doAudioStuff(event, null);
     }
 
-    protected void doAudioStuff(CommandEvent event, String track) {
+    protected void doAudioStuff(ICommandEvent event, String track) {
 
         if (getCategory() != CommandCategory.AUDIO) {
             return;

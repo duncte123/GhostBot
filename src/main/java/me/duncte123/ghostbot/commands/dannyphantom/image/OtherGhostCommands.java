@@ -19,8 +19,8 @@
 package me.duncte123.ghostbot.commands.dannyphantom.image;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import me.duncte123.ghostbot.objects.CommandCategory;
-import me.duncte123.ghostbot.objects.CommandEvent;
+import me.duncte123.ghostbot.objects.command.CommandCategory;
+import me.duncte123.ghostbot.objects.command.ICommandEvent;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -37,7 +37,7 @@ public class OtherGhostCommands extends ImageBase {
     }
 
     @Override
-    public void execute(CommandEvent event) {
+    public void execute(ICommandEvent event) {
         if (ImageCommand.isReloading) {
             sendMsg(event, "I'm looking for new images on the internet, please be wait.");
             return;
@@ -97,7 +97,7 @@ public class OtherGhostCommands extends ImageBase {
         return CommandCategory.CHARACTERS;
     }
 
-    private void sendFromKeywords(CommandEvent event, String[] words) {
+    private void sendFromKeywords(ICommandEvent event, String[] words) {
         sendMessageFromName(event, requestImage(words[ThreadLocalRandom.current().nextInt(words.length)], mapper));
     }
 }

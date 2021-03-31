@@ -1,6 +1,6 @@
 /*
  *     GhostBot, a Discord bot made for all your Danny Phantom needs
- *     Copyright (C) 2018 - 2019  Duncan "duncte123" Sterken
+ *     Copyright (C) 2018 - 2021  Duncan "duncte123" Sterken
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -16,29 +16,15 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostbot.commands.main;
+package me.duncte123.ghostbot.objects.command;
 
-import me.duncte123.ghostbot.objects.command.Command;
-import me.duncte123.ghostbot.objects.command.ICommandEvent;
-import net.dv8tion.jda.api.JDA;
+import me.duncte123.botcommons.commands.ICommandContext;
+import me.duncte123.ghostbot.utils.Container;
 
-public class PingCommand extends Command {
-    @Override
-    public void execute(ICommandEvent event) {
-        final JDA jda = event.getJDA();
+import java.util.List;
 
-        jda.getRestPing().queue((ping) ->
-            event.getChannel().sendMessageFormat("PONG!\n\u23F3 %d\n\uD83D\uDC93 %d", ping, jda.getGatewayPing()).queue()
-        );
-    }
-
-    @Override
-    public String getName() {
-        return "ping";
-    }
-
-    @Override
-    public String getHelp() {
-        return "PONG";
-    }
+public interface ICommandEvent extends ICommandContext {
+    Container getContainer();
+    String getInvoke();
+    List<String> getArgs();
 }

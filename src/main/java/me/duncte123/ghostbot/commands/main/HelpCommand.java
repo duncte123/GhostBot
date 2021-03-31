@@ -20,9 +20,9 @@ package me.duncte123.ghostbot.commands.main;
 
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.ghostbot.CommandManager;
-import me.duncte123.ghostbot.objects.Command;
-import me.duncte123.ghostbot.objects.CommandCategory;
-import me.duncte123.ghostbot.objects.CommandEvent;
+import me.duncte123.ghostbot.objects.command.Command;
+import me.duncte123.ghostbot.objects.command.CommandCategory;
+import me.duncte123.ghostbot.objects.command.ICommandEvent;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.EmbedBuilder;
 
@@ -35,7 +35,7 @@ import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
 public class HelpCommand extends Command {
     @Override
-    public void execute(CommandEvent event) {
+    public void execute(ICommandEvent event) {
         final List<String> args = event.getArgs();
         final CommandManager manager = event.getContainer().getCommandManager();
 

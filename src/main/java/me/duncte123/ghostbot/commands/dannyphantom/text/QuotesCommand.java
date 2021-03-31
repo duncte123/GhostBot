@@ -24,9 +24,9 @@ import gnu.trove.list.TLongList;
 import gnu.trove.list.array.TLongArrayList;
 import gnu.trove.map.TLongObjectMap;
 import me.duncte123.botcommons.messaging.EmbedUtils;
-import me.duncte123.ghostbot.objects.Command;
-import me.duncte123.ghostbot.objects.CommandCategory;
-import me.duncte123.ghostbot.objects.CommandEvent;
+import me.duncte123.ghostbot.objects.command.Command;
+import me.duncte123.ghostbot.objects.command.CommandCategory;
+import me.duncte123.ghostbot.objects.command.ICommandEvent;
 import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.objects.tumblr.TumblrDialogue;
 import me.duncte123.ghostbot.objects.tumblr.TumblrPost;
@@ -97,7 +97,7 @@ public class QuotesCommand extends Command {
     }
 
     @Override
-    public void execute(CommandEvent event) {
+    public void execute(ICommandEvent event) {
         final List<String> args = event.getArgs();
 
         if (args.size() > 0) {
@@ -224,7 +224,7 @@ public class QuotesCommand extends Command {
         }
     }
 
-    private void sendQuote(CommandEvent event, TumblrPost post) {
+    private void sendQuote(ICommandEvent event, TumblrPost post) {
         final EmbedBuilder eb = EmbedUtils.getDefaultEmbed()
             .setTitle("Click to view original post", post.post_url)
             .setFooter("Quote id: " + post.id, Variables.FOOTER_ICON);

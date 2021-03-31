@@ -19,8 +19,8 @@
 package me.duncte123.ghostbot.commands.main;
 
 import me.duncte123.botcommons.messaging.EmbedUtils;
-import me.duncte123.ghostbot.objects.Command;
-import me.duncte123.ghostbot.objects.CommandEvent;
+import me.duncte123.ghostbot.objects.command.Command;
+import me.duncte123.ghostbot.objects.command.ICommandEvent;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.JDAInfo;
 
@@ -31,7 +31,7 @@ import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed;
 
 public class AboutCommand extends Command {
     @Override
-    public void execute(CommandEvent event) {
+    public void execute(ICommandEvent event) {
         final String devName = "<@191231307290771456> (duncte123#1245)";
         final long guildCountDiscord = event.getShardManager().getGuildCache().size();
 

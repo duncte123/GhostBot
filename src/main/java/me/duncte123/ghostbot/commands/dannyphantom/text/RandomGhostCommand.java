@@ -19,9 +19,9 @@
 package me.duncte123.ghostbot.commands.dannyphantom.text;
 
 import me.duncte123.botcommons.web.WebUtils;
-import me.duncte123.ghostbot.objects.Command;
-import me.duncte123.ghostbot.objects.CommandCategory;
-import me.duncte123.ghostbot.objects.CommandEvent;
+import me.duncte123.ghostbot.objects.command.Command;
+import me.duncte123.ghostbot.objects.command.CommandCategory;
+import me.duncte123.ghostbot.objects.command.ICommandEvent;
 import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -61,7 +61,7 @@ public class RandomGhostCommand extends Command {
     }
 
     @Override
-    public void execute(CommandEvent event) {
+    public void execute(ICommandEvent event) {
 
         if (ghosts.isEmpty()) {
             sendMsg(event, "It looks like Danny defeated all the ghosts");

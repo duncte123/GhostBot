@@ -24,7 +24,7 @@ import me.duncte123.botcommons.BotCommons;
 import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.ghostbot.audio.GuildMusicManager;
 import me.duncte123.ghostbot.commands.main.UptimeCommand;
-import me.duncte123.ghostbot.objects.Command;
+import me.duncte123.ghostbot.objects.command.Command;
 import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.utils.AudioUtils;
 import me.duncte123.ghostbot.utils.Container;

@@ -23,7 +23,7 @@ import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.botcommons.messaging.MessageConfig;
 import me.duncte123.ghostbot.CommandManager;
 import me.duncte123.ghostbot.commands.ReactionCommand;
-import me.duncte123.ghostbot.objects.CommandEvent;
+import me.duncte123.ghostbot.objects.command.ICommandEvent;
 import me.duncte123.ghostbot.objects.fyl.FylChapter;
 import me.duncte123.ghostbot.objects.fyl.FylComic;
 import me.duncte123.ghostbot.variables.Variables;
@@ -65,7 +65,7 @@ public class FylCommicCommand extends ReactionCommand {
     }
 
     @Override
-    public void execute(CommandEvent event) {
+    public void execute(ICommandEvent event) {
         final List<String> args = event.getArgs();
         final User author = event.getAuthor();
 

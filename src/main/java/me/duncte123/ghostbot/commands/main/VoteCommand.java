@@ -19,14 +19,14 @@
 package me.duncte123.ghostbot.commands.main;
 
 import me.duncte123.botcommons.messaging.EmbedUtils;
-import me.duncte123.ghostbot.objects.Command;
-import me.duncte123.ghostbot.objects.CommandEvent;
+import me.duncte123.ghostbot.objects.command.Command;
+import me.duncte123.ghostbot.objects.command.ICommandEvent;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed;
 
 public class VoteCommand extends Command {
     @Override
-    public void execute(CommandEvent event) {
+    public void execute(ICommandEvent event) {
         final String message = "Help the bot grow bigger by upvoting it on one of these sites:\n" +
             "https://botsfordiscord.com/bots/397297702150602752/vote\n" +
             "https://discordbots.org/bot/397297702150602752/vote";

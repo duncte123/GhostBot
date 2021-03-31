@@ -18,16 +18,16 @@
 
 package me.duncte123.ghostbot.commands.main;
 
-import me.duncte123.ghostbot.objects.Command;
-import me.duncte123.ghostbot.objects.CommandCategory;
-import me.duncte123.ghostbot.objects.CommandEvent;
+import me.duncte123.ghostbot.objects.command.Command;
+import me.duncte123.ghostbot.objects.command.CommandCategory;
+import me.duncte123.ghostbot.objects.command.ICommandEvent;
 import me.duncte123.ghostbot.variables.Variables;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendSuccess;
 
 public class ReloadAudioCommand extends Command {
     @Override
-    public void execute(CommandEvent event) {
+    public void execute(ICommandEvent event) {
         if (event.getAuthor().getIdLong() != Variables.OWNER_ID) {
             return;
         }

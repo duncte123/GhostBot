@@ -22,7 +22,7 @@ import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.fandomapi.user.UserElement;
 import me.duncte123.fandomapi.user.UserResultSet;
-import me.duncte123.ghostbot.objects.CommandEvent;
+import me.duncte123.ghostbot.objects.command.ICommandEvent;
 import me.duncte123.ghostbot.utils.SpoopyUtils;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -35,7 +35,7 @@ import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
 public class WikiUserCommand extends WikiBaseCommand {
     @Override
-    public void execute(CommandEvent event) {
+    public void execute(ICommandEvent event) {
 
         if (event.getArgs().isEmpty()) {
             sendMsg(event, "Insufficient arguments, Correct usage: `" + Variables.PREFIX + getName() + " <search term>`");

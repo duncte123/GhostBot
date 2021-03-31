@@ -22,16 +22,16 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.botcommons.web.WebUtils;
-import me.duncte123.ghostbot.objects.Command;
-import me.duncte123.ghostbot.objects.CommandCategory;
-import me.duncte123.ghostbot.objects.CommandEvent;
+import me.duncte123.ghostbot.objects.command.Command;
+import me.duncte123.ghostbot.objects.command.CommandCategory;
+import me.duncte123.ghostbot.objects.command.ICommandEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed;
 
 public class ISSCommand extends Command {
     @Override
-    public void execute(CommandEvent event) {
+    public void execute(ICommandEvent event) {
         final ObjectNode data = WebUtils.ins.getJSONObject("http://api.open-notify.org/iss-now.json").execute();
 
         final JsonNode position = data.get("iss_position");

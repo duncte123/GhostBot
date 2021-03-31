@@ -1,6 +1,6 @@
 /*
  *     GhostBot, a Discord bot made for all your Danny Phantom needs
- *     Copyright (C) 2018 - 2019  Duncan "duncte123" Sterken
+ *     Copyright (C) 2018 - 2021  Duncan "duncte123" Sterken
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -16,16 +16,15 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostbot.objects;
+package me.duncte123.ghostbot.objects.command;
 
-import me.duncte123.botcommons.commands.ICommandContext;
+import me.duncte123.ghostbot.objects.command.ICommandEvent;
 import me.duncte123.ghostbot.utils.Container;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.List;
 
-public class CommandEvent implements ICommandContext {
+public class CommandEvent implements ICommandEvent {
 
     private final String invoke;
     private final List<String> args;
@@ -39,21 +38,19 @@ public class CommandEvent implements ICommandContext {
         this.container = container;
     }
 
+    @Override
     public Container getContainer() {
         return container;
     }
 
+    @Override
     public String getInvoke() {
         return this.invoke;
     }
 
+    @Override
     public List<String> getArgs() {
         return this.args;
-    }
-
-    @Override
-    public Guild getGuild() {
-        return getEvent().getGuild();
     }
 
     @Override

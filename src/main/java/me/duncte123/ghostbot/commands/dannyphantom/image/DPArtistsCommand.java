@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.ghostbot.commands.dannyphantom.text.QuotesCommand;
-import me.duncte123.ghostbot.objects.CommandEvent;
+import me.duncte123.ghostbot.objects.command.ICommandEvent;
 import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.objects.tumblr.TumblrPost;
 import org.jetbrains.annotations.NotNull;
@@ -69,7 +69,7 @@ public class DPArtistsCommand extends ImageBase {
     }
 
     @Override
-    public void execute(CommandEvent event) {
+    public void execute(ICommandEvent event) {
 
         final List<String> args = new ArrayList<>(event.getArgs());
 
@@ -171,7 +171,7 @@ public class DPArtistsCommand extends ImageBase {
         });
     }
 
-    private void doStuff(String url, CommandEvent event) {
+    private void doStuff(String url, ICommandEvent event) {
         final String[] info = extractInfo(url);
         final String usn = info[0];
         final String type = info[1];

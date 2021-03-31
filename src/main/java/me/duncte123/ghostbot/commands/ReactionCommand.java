@@ -22,7 +22,7 @@ import gnu.trove.map.TLongObjectMap;
 import gnu.trove.set.TLongSet;
 import me.duncte123.ghostbot.CommandManager;
 import me.duncte123.ghostbot.GhostBot;
-import me.duncte123.ghostbot.objects.Command;
+import me.duncte123.ghostbot.objects.command.Command;
 import me.duncte123.ghostbot.utils.SpoopyUtils;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;

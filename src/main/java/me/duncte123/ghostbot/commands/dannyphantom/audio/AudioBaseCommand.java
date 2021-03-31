@@ -18,9 +18,9 @@
 
 package me.duncte123.ghostbot.commands.dannyphantom.audio;
 
-import me.duncte123.ghostbot.objects.Command;
-import me.duncte123.ghostbot.objects.CommandCategory;
-import me.duncte123.ghostbot.objects.CommandEvent;
+import me.duncte123.ghostbot.objects.command.Command;
+import me.duncte123.ghostbot.objects.command.CommandCategory;
+import me.duncte123.ghostbot.objects.command.ICommandEvent;
 
 public abstract class AudioBaseCommand extends Command {
     private final String commandName;
@@ -31,7 +31,7 @@ public abstract class AudioBaseCommand extends Command {
     }
 
     @Override
-    public void execute(CommandEvent event) {
+    public void execute(ICommandEvent event) {
         doAudioStuff(event);
     }
 

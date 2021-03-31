@@ -18,7 +18,8 @@
 
 package me.duncte123.ghostbot.commands.dannyphantom.image;
 
-import me.duncte123.ghostbot.objects.CommandEvent;
+import me.duncte123.ghostbot.objects.command.CommandEvent;
+import me.duncte123.ghostbot.objects.command.ICommandEvent;
 import me.duncte123.ghostbot.utils.ConfigUtils;
 import me.duncte123.ghostbot.variables.Variables;
 
@@ -58,7 +59,7 @@ public class ImageCommand extends ImageBase {
     static boolean isReloading = false;
 
     @Override
-    public void execute(CommandEvent event) {
+    public void execute(ICommandEvent event) {
         final List<String> args = event.getArgs();
 
         if (!args.isEmpty() && args.get(0).equals("reload") && event.getAuthor().getIdLong() == Variables.OWNER_ID) {
@@ -91,7 +92,7 @@ public class ImageCommand extends ImageBase {
         return "Gives you a random Danny Phantom <:DPEmblemInvertStroke:402746292788264960> related image from google";
     }
 
-    private void reloadImages(CommandEvent event, boolean pretty) {
+    private void reloadImages(ICommandEvent event, boolean pretty) {
         isReloading = true;
 
         final File jarFile = new File("ghostBotImages.jar");

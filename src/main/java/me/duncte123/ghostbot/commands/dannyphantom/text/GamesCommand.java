@@ -18,9 +18,9 @@
 
 package me.duncte123.ghostbot.commands.dannyphantom.text;
 
-import me.duncte123.ghostbot.objects.Command;
-import me.duncte123.ghostbot.objects.CommandCategory;
-import me.duncte123.ghostbot.objects.CommandEvent;
+import me.duncte123.ghostbot.objects.command.Command;
+import me.duncte123.ghostbot.objects.command.CommandCategory;
+import me.duncte123.ghostbot.objects.command.ICommandEvent;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -44,7 +44,7 @@ public class GamesCommand extends Command {
     };
 
     @Override
-    public void execute(CommandEvent event) {
+    public void execute(ICommandEvent event) {
         final String game = games[ThreadLocalRandom.current().nextInt(games.length)];
 
         sendMsg(event, "Here is a DP game: " + game +
