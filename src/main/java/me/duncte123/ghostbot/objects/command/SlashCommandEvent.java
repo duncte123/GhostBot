@@ -19,18 +19,21 @@
 package me.duncte123.ghostbot.objects.command;
 
 import me.duncte123.ghostbot.utils.Container;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.List;
 
-public class CommandEvent implements ICommandEvent {
+public class SlashCommandEvent implements ICommandEvent {
 
     private final String invoke;
     private final List<String> args;
+    // TODO: swap with slash command event
     private final GuildMessageReceivedEvent event;
     private final Container container;
 
-    public CommandEvent(String invoke, List<String> args, GuildMessageReceivedEvent event, Container container) {
+    public SlashCommandEvent(String invoke, List<String> args, GuildMessageReceivedEvent event, Container container) {
         this.invoke = invoke;
         this.args = args;
         this.event = event;
@@ -39,7 +42,7 @@ public class CommandEvent implements ICommandEvent {
 
     @Override
     public Container getContainer() {
-        return container;
+        return this.container;
     }
 
     @Override
@@ -53,7 +56,37 @@ public class CommandEvent implements ICommandEvent {
     }
 
     @Override
+    public Guild getGuild() {
+        return this.event.getGuild();
+    }
+
+    @Override
     public GuildMessageReceivedEvent getEvent() {
         return this.event;
+    }
+
+    @Override
+    public TextChannel getChannel() {
+        return this.event.getChannel();
+    }
+
+    @Override
+    public Message getMessage() {
+        return this.event.getMessage();
+    }
+
+    @Override
+    public User getAuthor() {
+        return this.event.getAuthor();
+    }
+
+    @Override
+    public Member getMember() {
+        return this.event.getMember();
+    }
+
+    @Override
+    public JDA getJDA() {
+        return this.event.getJDA();
     }
 }
