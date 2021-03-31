@@ -1,6 +1,6 @@
 /*
  *     GhostBot, a Discord bot made for all your Danny Phantom needs
- *     Copyright (C) 2018 - 2019  Duncan "duncte123" Sterken
+ *     Copyright (C) 2018 - 2021  Duncan "duncte123" Sterken
  *
  *     This program is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
