@@ -29,6 +29,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.exceptions.PermissionException;
+import net.dv8tion.jda.api.requests.restaction.CommandUpdateAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,6 +54,38 @@ public abstract class Command {
     public abstract String getName();
 
     public abstract String getHelp();
+
+    public List<CommandUpdateAction.OptionData> getCommandOptions() {
+        return List.of();
+    }
+
+    public CommandUpdateAction.CommandData getCommandData() {
+        String parsedHelp = this.getHelp();
+
+        if (parsedHelp == null) {
+            throw new IllegalArgumentException(this.getClass() + " is null");
+        }
+
+        if (parsedHelp.isEmpty()) {
+            throw new IllegalArgumentException(this.getClass() + " is empty");
+        }
+
+        if (parsedHelp.contains("Usage")) {
+            parsedHelp = parsedHelp.substring(0, parsedHelp.indexOf("Usage"));
+        } else if (parsedHelp.contains("usage")) {
+            parsedHelp = parsedHelp.substring(0, parsedHelp.indexOf("usage"));
+        }
+
+        if (parsedHelp.length() > 100) {
+            throw new IllegalArgumentException(this.getClass() + " is over 100");
+        }
+
+        final CommandUpdateAction.CommandData commandData = new CommandUpdateAction.CommandData(this.getName(), parsedHelp.trim());
+
+        this.getCommandOptions().forEach(commandData::addOption);
+
+        return commandData;
+    }
 
     public CommandCategory getCategory() {
         return CommandCategory.NONE;
@@ -155,7 +188,6 @@ public abstract class Command {
     }
 
     protected void doAudioStuff(ICommandEvent event, String track) {
-
         if (getCategory() != CommandCategory.AUDIO) {
             return;
         }

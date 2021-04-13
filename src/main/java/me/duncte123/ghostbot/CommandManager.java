@@ -31,18 +31,24 @@ import me.duncte123.ghostbot.commands.main.*;
 import me.duncte123.ghostbot.commands.space.ISSCommand;
 import me.duncte123.ghostbot.objects.command.Command;
 import me.duncte123.ghostbot.objects.command.CommandEvent;
+import me.duncte123.ghostbot.objects.command.ICommandEvent;
+import me.duncte123.ghostbot.objects.command.JDASlashCommandEvent;
 import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.utils.Container;
 import me.duncte123.ghostbot.variables.Variables;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
@@ -140,11 +146,28 @@ public class CommandManager {
         return found;
     }
 
-    void handleCommand(GuildMessageReceivedEvent event, Container container) {
-        handleCommand(event.getMessage().getContentRaw(), event, container);
+    void handleSlashCommand(SlashCommandEvent event, Container container) {
+        if (!event.isFromGuild()) {
+            event.reply("Slash commands can only be used in servers").setEphemeral(false).queue();
+            return;
+        }
+
+        final String invoke = event.getName();
+        final Command cmd = getCommand(invoke);
+
+        if (cmd == null) {
+            event.reply("This command could not be handled right now").setEphemeral(true).queue();
+        }
+
+        final Guild guild = event.getGuild();
+
+        event.acknowledge(false).queue();
+
+        dispatchCommand(cmd, guild, invoke, "[]", () ->  new JDASlashCommandEvent(event, container));
     }
 
-    private void handleCommand(String rw, GuildMessageReceivedEvent event, Container container) {
+    void handleCommand(GuildMessageReceivedEvent event, Container container) {
+        final String rw = event.getMessage().getContentRaw();
         final String[] split = rw.replaceFirst("(?i)" +
             Pattern.quote(Variables.PREFIX) + "|" +
             Pattern.quote(Variables.OTHER_PREFIX), "")
@@ -154,8 +177,14 @@ public class CommandManager {
         final List<String> args = Arrays.asList(split).subList(1, split.length);
 
         final Command cmd = getCommand(invoke);
-        final String guild = event.getGuild().toString();
+        final Guild guild = event.getGuild();
 
+        dispatchCommand(cmd, guild, invoke, args.toString(),
+            () ->  new CommandEvent(invoke, args, event, container));
+    }
+
+    private void dispatchCommand(@Nullable Command cmd, Guild guild, String invoke, String args,
+                                 Supplier<ICommandEvent> eventSupplier) {
         if (cmd == null) {
             logger.info("Unknown command: \"{}\" in \"{}\" with {}", invoke, guild, args);
 
@@ -165,12 +194,11 @@ public class CommandManager {
         logger.info("Dispatching command \"{}\" in \"{}\" with {}", cmd.getClass().getSimpleName(), guild, args);
 
         commandService.submit(() -> {
+            final ICommandEvent event = eventSupplier.get();
             try {
                 event.getChannel().sendTyping().queue();
 
-                final CommandEvent commandEvent = new CommandEvent(invoke, args, event, container);
-
-                cmd.execute(commandEvent);
+                cmd.execute(event);
             } catch (Exception e) {
                 e.printStackTrace();
                 sendMsg(event.getChannel(), "Something went wrong when processing your command");

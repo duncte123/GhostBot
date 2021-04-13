@@ -86,7 +86,7 @@ public class TheelectricundeadCommand extends TumblrComicBase {
 
     @Override
     public String getHelp() {
-        return "Read the electric undead comic within discord (comic website: <http://theelectricundead.tumblr.com/>)\n" +
+        return "Read the electric undead comic within discord (website: <http://theelectricundead.tumblr.com/>)\n" +
             "Usage: `gb." + getName() + " [page:number/chapter:number]`";
     }
 }

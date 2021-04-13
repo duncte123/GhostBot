@@ -19,25 +19,26 @@
 package me.duncte123.ghostbot.objects.command;
 
 import me.duncte123.ghostbot.utils.Container;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.commands.CommandHook;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class SlashCommandEvent implements ICommandEvent {
+public class JDASlashCommandEvent implements ICommandEvent {
 
-    private final String invoke;
-    private final List<String> args;
-    // TODO: swap with slash command event
-    private final GuildMessageReceivedEvent event;
+    private final SlashCommandEvent event;
     private final Container container;
+    private final CommandHook hook;
 
-    public SlashCommandEvent(String invoke, List<String> args, GuildMessageReceivedEvent event, Container container) {
-        this.invoke = invoke;
-        this.args = args;
+    public JDASlashCommandEvent(SlashCommandEvent event, Container container) {
         this.event = event;
         this.container = container;
+        this.hook = event.getHook().setEphemeral(false);
     }
 
     @Override
@@ -47,12 +48,14 @@ public class SlashCommandEvent implements ICommandEvent {
 
     @Override
     public String getInvoke() {
-        return this.invoke;
+        return this.event.getName();
     }
 
     @Override
     public List<String> getArgs() {
-        return this.args;
+        return this.event.getOptions().stream()
+            .map(SlashCommandEvent.OptionData::getAsString)
+            .collect(Collectors.toList());
     }
 
     @Override
@@ -62,22 +65,22 @@ public class SlashCommandEvent implements ICommandEvent {
 
     @Override
     public GuildMessageReceivedEvent getEvent() {
-        return this.event;
+        return null;
     }
 
     @Override
     public TextChannel getChannel() {
-        return this.event.getChannel();
+        return this.event.getTextChannel();
     }
 
     @Override
     public Message getMessage() {
-        return this.event.getMessage();
+        return null;
     }
 
     @Override
     public User getAuthor() {
-        return this.event.getAuthor();
+        return this.event.getUser();
     }
 
     @Override
@@ -88,5 +91,20 @@ public class SlashCommandEvent implements ICommandEvent {
     @Override
     public JDA getJDA() {
         return this.event.getJDA();
+    }
+
+    @Override
+    public void reply(String content) {
+        this.hook.sendMessage(content).queue();
+    }
+
+    @Override
+    public void reply(Message message) {
+        this.hook.sendMessage(message).queue();
+    }
+
+    @Override
+    public void reply(EmbedBuilder embed) {
+        this.hook.sendMessage(embed.build()).queue();
     }
 }

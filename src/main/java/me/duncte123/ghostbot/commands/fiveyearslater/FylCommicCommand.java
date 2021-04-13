@@ -181,7 +181,7 @@ public class FylCommicCommand extends ReactionCommand {
 
     @Override
     public String getHelp() {
-        return "Read the Five years later comic within discord (comic website: <https://www.theinktank.co/5yearslater>)\n" +
+        return "Read the Five years later comic within discord (website: <https://www.theinktank.co/5yearslater>)\n" +
             "Usage: `gb." + getName() + " [page:number/chapter:number]`";
     }
 

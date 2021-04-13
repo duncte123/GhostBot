@@ -38,27 +38,12 @@ import org.slf4j.LoggerFactory;
 
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.function.IntFunction;
 
 import static net.dv8tion.jda.api.utils.cache.CacheFlag.*;
 
 public class GhostBot {
 
     private static GhostBot instance;
-    private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
-    private final IntFunction<? extends Activity> activityProvider = (it) -> {
-        final Activity[] activities = {
-            Activity.playing("Doomed"),
-            Activity.watching(String.format("%shelp | #GoGhostAgain (shard %s)", Variables.PREFIX, it + 1)),
-            Activity.playing(String.format("GhostBot 3.0 | Now with popup blocker (shard %s)", it + 1)),
-        };
-
-
-        return activities[(int) Math.floor(Math.random() * activities.length)];
-    };
     private final ShardManager shardManager;
 
     private GhostBot() throws LoginException, IOException {
@@ -85,7 +70,9 @@ public class GhostBot {
         final BotListener botListener = new BotListener(container);
         final DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(token)
             .setShardsTotal(totalShards)
-            .setActivityProvider(this.activityProvider)
+            .setActivityProvider(
+                (id) -> Activity.watching(String.format("%shelp | shard %d", Variables.PREFIX, id + 1))
+            )
             .setChunkingFilter(ChunkingFilter.NONE) // Lazy loading :)
             .enableCache(VOICE_STATE, MEMBER_OVERRIDES)
             .disableCache(ACTIVITY, EMOTE, CLIENT_STATUS)
@@ -104,7 +91,6 @@ public class GhostBot {
         }
 
         shardManager = builder.build();
-        initGameLoop();
     }
 
     public ShardManager getShardManager() {
@@ -113,12 +99,6 @@ public class GhostBot {
 
     public JDA getShard(int shardId) {
         return this.shardManager.getShardById(shardId);
-    }
-
-    private void initGameLoop() {
-        service.scheduleAtFixedRate(
-            () -> this.shardManager.setActivityProvider(this.activityProvider)
-            , 1, 1, TimeUnit.DAYS);
     }
 
     public static void main(String[] args) throws LoginException, IOException {

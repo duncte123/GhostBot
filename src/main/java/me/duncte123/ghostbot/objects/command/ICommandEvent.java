@@ -20,6 +20,8 @@ package me.duncte123.ghostbot.objects.command;
 
 import me.duncte123.botcommons.commands.ICommandContext;
 import me.duncte123.ghostbot.utils.Container;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Message;
 
 import java.util.List;
 
@@ -27,4 +29,8 @@ public interface ICommandEvent extends ICommandContext {
     Container getContainer();
     String getInvoke();
     List<String> getArgs();
+
+    void reply(String content);
+    void reply(Message message);
+    void reply(EmbedBuilder embed);
 }

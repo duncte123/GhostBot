@@ -25,6 +25,7 @@ import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.ghostbot.audio.GuildMusicManager;
 import me.duncte123.ghostbot.commands.main.UptimeCommand;
 import me.duncte123.ghostbot.objects.command.Command;
+import me.duncte123.ghostbot.objects.command.CommandCategory;
 import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.utils.AudioUtils;
 import me.duncte123.ghostbot.utils.Container;
@@ -38,6 +39,7 @@ import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.EventListener;
@@ -52,6 +54,7 @@ import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static me.duncte123.botcommons.web.ContentType.JSON;
 
@@ -100,6 +103,8 @@ public class BotListener implements EventListener {
             this.onGuildVoiceMove((GuildVoiceMoveEvent) event);
         } else if (event instanceof MessageReactionAddEvent) {
             this.onMessageReactionAdd((MessageReactionAddEvent) event);
+        } else if (event instanceof SlashCommandEvent) {
+            this.onSlashCommand((SlashCommandEvent) event);
         }
     }
 
@@ -108,6 +113,16 @@ public class BotListener implements EventListener {
 
         logger.info("Logged in as {} ({})", jda.getSelfUser(), jda.getShardInfo());
         postServerCount();
+
+        final var commands = this.commandManager.getCommands()
+            .stream()
+            .filter((it) -> it.getCategory() != CommandCategory.HIDDEN)
+            .map(Command::getCommandData)
+            .collect(Collectors.toList());
+
+        jda.updateCommands()
+            .addCommands(commands)
+            .queue((__) -> logger.info("Slash commands updated"));
     }
 
     private void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
@@ -214,6 +229,10 @@ public class BotListener implements EventListener {
 
     private void onMessageReactionAdd(@Nonnull MessageReactionAddEvent event) {
         this.commandManager.reactListReg.handle(event);
+    }
+
+    private void onSlashCommand(@Nonnull SlashCommandEvent event) {
+        this.commandManager.handleSlashCommand(event, this.container);
     }
 
     private void postServerCount() {

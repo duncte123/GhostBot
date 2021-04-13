@@ -26,15 +26,14 @@ import me.duncte123.ghostbot.commands.dannyphantom.text.QuotesCommand;
 import me.duncte123.ghostbot.objects.command.ICommandEvent;
 import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.objects.tumblr.TumblrPost;
+import net.dv8tion.jda.api.entities.Command;
+import net.dv8tion.jda.api.requests.restaction.CommandUpdateAction.OptionData;
 import org.jetbrains.annotations.NotNull;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Consumer;
-
-import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed;
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
 public class DPArtistsCommand extends ImageBase {
     /*
@@ -70,7 +69,6 @@ public class DPArtistsCommand extends ImageBase {
 
     @Override
     public void execute(ICommandEvent event) {
-
         final List<String> args = new ArrayList<>(event.getArgs());
 
         if (!getName().equalsIgnoreCase(event.getInvoke())) {
@@ -79,14 +77,14 @@ public class DPArtistsCommand extends ImageBase {
         }
 
         if (args.size() < 1) {
-            sendMsg(event, "Correct usage is `gb." + getName() + " <artist name>`");
+            event.reply("Correct usage is `gb." + getName() + " <artist name>`");
             return;
         }
 
         final String arg = args.get(0);
 
         if ("list".equals(arg)) {
-            sendMsg(event, "The current list of artists is: `" + String.join("`, `", this.artistMap.keySet()) + '`');
+            event.reply("The current list of artists is: `" + String.join("`, `", this.artistMap.keySet()) + '`');
             return;
         }
 
@@ -95,7 +93,7 @@ public class DPArtistsCommand extends ImageBase {
             return;
         }
 
-        sendMsg(event, "This artist is not in the list of artists that have approved their art to be in this bot.\n" +
+        event.reply("This artist is not in the list of artists that have approved their art to be in this bot.\n" +
             "Use `gb." + getName() + " list` for a list of artists.");
 
     }
@@ -129,6 +127,20 @@ public class DPArtistsCommand extends ImageBase {
         final Set<String> strings = this.artistMap.keySet();
 
         return new ArrayList<>(strings);
+    }
+
+    @Override
+    public List<OptionData> getCommandOptions() {
+        final OptionData data = new OptionData(Command.OptionType.STRING,
+            "artist", "The artist to get the data from")
+            .setRequired(true);
+        final Set<String> strings = this.artistMap.keySet();
+
+        for (String string : strings) {
+            data.addChoice(string, string);
+        }
+
+        return List.of(data);
     }
 
     private void extractPictureFromTumblr(String username, GhostBotConfig config,
@@ -184,20 +196,19 @@ public class DPArtistsCommand extends ImageBase {
             extractPictureFromTumblr(usn, config, jackson, (it) -> {
 
                 if (it == null) {
-                    sendMsg(event, "No posts found");
+                    event.reply("No posts found");
                     return;
                 }
 
                 if (!it.type.equalsIgnoreCase("photo")) {
-                    sendMsg(event, "Got a post of type `" + it.type + "` for the type `photo`\n" +
+                    event.reply("Got a post of type `" + it.type + "` for the type `photo`\n" +
                         "WTF tumblr?\n" +
                         "Here's the link anyway: <" + it.post_url + '>');
 
                     return;
                 }
 
-                sendEmbed(event,
-                    EmbedUtils.getDefaultEmbed()
+                event.reply(EmbedUtils.getDefaultEmbed()
                         .setAuthor(usn, it.post_url, profilePicture)
                         .setTitle("Link to post", it.post_url)
                         .setDescription(QuotesCommand.parseText(it.caption))
@@ -209,8 +220,7 @@ public class DPArtistsCommand extends ImageBase {
 
         if (type.equalsIgnoreCase("deviantart")) {
             getDeviantartDataXmlOnly(usn, (it) ->
-                sendEmbed(event,
-                    EmbedUtils.getDefaultEmbed()
+                event.reply(EmbedUtils.getDefaultEmbed()
                         .setAuthor(usn, it.authorUrl, it.avatarUrl)
                         .setTitle(it.title, it.link)
                         .setThumbnail(it.avatarUrl)

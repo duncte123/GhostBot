@@ -81,7 +81,7 @@ public class OtherGhostCommands extends ImageBase {
 
     @Override
     public String getHelp() {
-        return "";
+        return "Gets a random image for this ghost";
     }
 
     @Override

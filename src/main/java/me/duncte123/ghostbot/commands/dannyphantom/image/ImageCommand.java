@@ -18,7 +18,6 @@
 
 package me.duncte123.ghostbot.commands.dannyphantom.image;
 
-import me.duncte123.ghostbot.objects.command.CommandEvent;
 import me.duncte123.ghostbot.objects.command.ICommandEvent;
 import me.duncte123.ghostbot.utils.ConfigUtils;
 import me.duncte123.ghostbot.variables.Variables;
@@ -89,7 +88,7 @@ public class ImageCommand extends ImageBase {
 
     @Override
     public String getHelp() {
-        return "Gives you a random Danny Phantom <:DPEmblemInvertStroke:402746292788264960> related image from google";
+        return "Gives you a random Danny Phantom related image from google";
     }
 
     private void reloadImages(ICommandEvent event, boolean pretty) {
