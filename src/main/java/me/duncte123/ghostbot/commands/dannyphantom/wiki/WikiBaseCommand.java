@@ -38,9 +38,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed;
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
-
 public abstract class WikiBaseCommand extends Command {
     //shortcut to the wiki
     final WikiHolder wiki = new WikiHolder("https://dannyphantom.fandom.com");
@@ -58,12 +55,12 @@ public abstract class WikiBaseCommand extends Command {
                     final FandomException ex = toEx(json);
 
                     if (ex.getType().equalsIgnoreCase("NotFoundApiException")) {
-                        sendMsg(event, "Your search returned no results.");
+                        event.reply("Your search returned no results.");
 
                         return;
                     }
 
-                    sendMsg(event, "An error occurred: " + ex);
+                    event.reply("An error occurred: " + ex);
                     return;
                 }
 
@@ -107,12 +104,12 @@ public abstract class WikiBaseCommand extends Command {
 
                     }
 
-                    sendEmbed(event, eb);
+                    event.reply(eb);
                 } catch (IOException e) {
-                    sendMsg(event, "Something went wrong, please report the following to my developer: " + e.getMessage());
+                    event.reply("Something went wrong, please report the following to my developer: " + e.getMessage());
                 }
             },
-            (it) -> sendMsg(event, "Something went wrong: " + it.getMessage())
+            (it) -> event.reply("Something went wrong: " + it.getMessage())
         );
     }
 

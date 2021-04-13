@@ -148,7 +148,7 @@ public class CommandManager {
 
     void handleSlashCommand(SlashCommandEvent event, Container container) {
         if (!event.isFromGuild()) {
-            event.reply("Slash commands can only be used in servers").setEphemeral(false).queue();
+            // ignore dms
             return;
         }
 
@@ -156,12 +156,15 @@ public class CommandManager {
         final Command cmd = getCommand(invoke);
 
         if (cmd == null) {
-            event.reply("This command could not be handled right now").setEphemeral(true).queue();
+            event.reply("This command cannot be handled right now").setEphemeral(true).queue();
+            return;
         }
 
         final Guild guild = event.getGuild();
 
-        event.acknowledge(false).queue();
+        if (cmd.shouldAck()) {
+            event.acknowledge().setEphemeral(false).queue();
+        }
 
         dispatchCommand(cmd, guild, invoke, "[]", () ->  new JDASlashCommandEvent(event, container));
     }
@@ -201,7 +204,7 @@ public class CommandManager {
                 cmd.execute(event);
             } catch (Exception e) {
                 e.printStackTrace();
-                sendMsg(event.getChannel(), "Something went wrong when processing your command");
+                event.reply("Something went wrong when processing your command");
             }
         });
     }

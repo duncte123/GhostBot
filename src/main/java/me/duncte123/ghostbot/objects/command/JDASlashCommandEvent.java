@@ -59,6 +59,11 @@ public class JDASlashCommandEvent implements ICommandEvent {
     }
 
     @Override
+    public SlashCommandEvent.OptionData getOption(String name) {
+        return this.event.getOption(name);
+    }
+
+    @Override
     public Guild getGuild() {
         return this.event.getGuild();
     }
@@ -95,16 +100,21 @@ public class JDASlashCommandEvent implements ICommandEvent {
 
     @Override
     public void reply(String content) {
-        this.hook.sendMessage(content).queue();
-    }
+        if (this.event.isAcknowledged()) {
+            this.hook.sendMessage(content).queue();
+            return;
+        }
 
-    @Override
-    public void reply(Message message) {
-        this.hook.sendMessage(message).queue();
+        this.event.reply(content).setEphemeral(false).queue();
     }
 
     @Override
     public void reply(EmbedBuilder embed) {
-        this.hook.sendMessage(embed.build()).queue();
+        if (this.event.isAcknowledged()) {
+            this.hook.sendMessage(embed.build()).queue();
+            return;
+        }
+
+        this.event.reply(embed.build()).setEphemeral(false).queue();
     }
 }

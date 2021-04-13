@@ -22,6 +22,7 @@ import me.duncte123.botcommons.commands.ICommandContext;
 import me.duncte123.ghostbot.utils.Container;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
 import java.util.List;
 
@@ -30,7 +31,14 @@ public interface ICommandEvent extends ICommandContext {
     String getInvoke();
     List<String> getArgs();
 
+    default SlashCommandEvent.OptionData getOption(String name) {
+        throw new IllegalArgumentException("Cannot get options for this type of command");
+    }
+
+    default boolean isSlash() {
+        return this.getClass().equals(JDASlashCommandEvent.class);
+    }
+
     void reply(String content);
-    void reply(Message message);
     void reply(EmbedBuilder embed);
 }

@@ -23,17 +23,15 @@ import me.duncte123.ghostbot.objects.command.ICommandEvent;
 import me.duncte123.ghostbot.utils.WikiHolder;
 import me.duncte123.ghostbot.variables.Variables;
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
-
 public class FylWikiCommand extends WikiBaseCommand {
-//    private static final WikiHolder FYL_WIKI_HOLDER = new WikiHolder("https://5yl.fandom.com");
-    private static final WikiHolder FYL_WIKI_HOLDER = new WikiHolder("https://5yl.wiki");
+    private static final WikiHolder FYL_WIKI_HOLDER = new WikiHolder("https://5yl.fandom.com");
+//    private static final WikiHolder FYL_WIKI_HOLDER = new WikiHolder("https://5yl.wiki");
 
     @Override
     public void execute(ICommandEvent event) {
 
         if (event.getArgs().isEmpty()) {
-            sendMsg(event, "Insufficient arguments, Correct usage: `" + Variables.PREFIX + getName() + " <search term>`");
+            event.reply("Insufficient arguments, Correct usage: `" + Variables.PREFIX + getName() + " <search term>`");
 
             return;
         }

@@ -27,35 +27,35 @@ import net.dv8tion.jda.api.JDAInfo;
 import java.util.Collections;
 import java.util.List;
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed;
-
 public class AboutCommand extends Command {
     @Override
     public void execute(ICommandEvent event) {
         final String devName = "<@191231307290771456> (duncte123#1245)";
         final long guildCountDiscord = event.getShardManager().getGuildCache().size();
 
-        sendEmbed(event, EmbedUtils.embedMessage(String.format(
-            "Hey there, my name is GhostBot, I am the must have bot for your spooky server.\n" +
-                "I am mainly themed around Danny Phantom but other spooky stuff that you have for me can be suggested to %2$s.\n" +
-                "If you want to stay in contact with my developer you can join [this server](%1$s).\n\n" +
-                "**Extra information:**\n" +
-                "My twitter: [Click here](https://twitter.com/GhostBotDiscord)\n" +
-                "My invite link: [Click here](%3$s)\n" +
-                "My prefixes: `%4$s` and `%5$s`\n" +
-                "My lair: [%1$s](%1$s)\n" +
-                "My version: `%6$s`\n" +
-                "JDA version: `%7$s`\n" +
-                "The amount of Discord servers that I am in: %8$s",
-            Variables.GHOSTBOT_GUILD,
-            devName,
-            Variables.GHOSTBOT_INVITE,
-            Variables.PREFIX,
-            Variables.OTHER_PREFIX,
-            Variables.VERSION,
-            JDAInfo.VERSION,
-            guildCountDiscord
-        )));
+        event.reply(
+            EmbedUtils.embedMessage(String.format(
+                "Hey there, my name is GhostBot, I am the must have bot for your spooky server.\n" +
+                    "I am mainly themed around Danny Phantom but other spooky stuff that you have for me can be suggested to %2$s.\n" +
+                    "If you want to stay in contact with my developer you can join [this server](%1$s).\n\n" +
+                    "**Extra information:**\n" +
+                    "My twitter: [Click here](https://twitter.com/GhostBotDiscord)\n" +
+                    "My invite link: [Click here](%3$s)\n" +
+                    "My prefixes: `%4$s` and `%5$s`\n" +
+                    "My lair: [%1$s](%1$s)\n" +
+                    "My version: `%6$s`\n" +
+                    "JDA version: `%7$s`\n" +
+                    "The amount of Discord servers that I am in: %8$s",
+                Variables.GHOSTBOT_GUILD,
+                devName,
+                Variables.GHOSTBOT_INVITE,
+                Variables.PREFIX,
+                Variables.OTHER_PREFIX,
+                Variables.VERSION,
+                JDAInfo.VERSION,
+                guildCountDiscord
+            ))
+        );
     }
 
     @Override

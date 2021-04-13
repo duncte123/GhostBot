@@ -28,7 +28,9 @@ public class PingCommand extends Command {
         final JDA jda = event.getJDA();
 
         jda.getRestPing().queue((ping) ->
-            event.getChannel().sendMessageFormat("PONG!\n\u23F3 %d\n\uD83D\uDC93 %d", ping, jda.getGatewayPing()).queue()
+            event.reply(
+                String.format("PONG!\n\u23F3 %d\n\uD83D\uDC93 %d", ping, jda.getGatewayPing())
+            )
         );
     }
 

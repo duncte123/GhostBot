@@ -95,6 +95,10 @@ public abstract class Command {
         return List.of();
     }
 
+    public boolean shouldAck() {
+        return false;
+    }
+
     public void shutdown() {
         // May be implemented
     }

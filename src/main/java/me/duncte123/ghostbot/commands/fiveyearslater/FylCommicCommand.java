@@ -28,8 +28,12 @@ import me.duncte123.ghostbot.objects.fyl.FylChapter;
 import me.duncte123.ghostbot.objects.fyl.FylComic;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.MessageBuilder;
+import net.dv8tion.jda.api.entities.Command;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.requests.restaction.CommandUpdateAction.OptionData;
+import net.dv8tion.jda.internal.utils.tuple.Pair;
 
 import java.io.File;
 import java.io.IOException;
@@ -66,22 +70,11 @@ public class FylCommicCommand extends ReactionCommand {
 
     @Override
     public void execute(ICommandEvent event) {
-        final List<String> args = event.getArgs();
         final User author = event.getAuthor();
+        final Pair<Integer, Integer> pageAndChapter = getPageAndChapter(event);
 
-        int page = 0;
-        int chapter = 0;
-
-        if (args.size() > 0) {
-            for (String arg : args) {
-                if (arg.startsWith(PAGE_SELECTOR)) {
-                    page = getNumberFromArg(arg.substring(PAGE_SELECTOR.length()));
-                } else if (arg.startsWith(CHAPTER_SELECTOR)) {
-                    chapter = getNumberFromArg(arg.substring(CHAPTER_SELECTOR.length())) - 1;
-                }
-            }
-
-        }
+        int page = pageAndChapter.getLeft();
+        int chapter = pageAndChapter.getRight();
 
         if (page > 0) {
             page--;
@@ -90,7 +83,7 @@ public class FylCommicCommand extends ReactionCommand {
         final List<FylChapter> chapterList = comic.getChapters();
 
         if (chapter >= chapterList.size()) {
-            sendMsg(event, "Chapter " + (chapter + 1) + " is not known");
+            event.reply("Chapter " + (chapter + 1) + " is not known");
 
             return;
         }
@@ -98,7 +91,7 @@ public class FylCommicCommand extends ReactionCommand {
         final FylChapter fylChapter = chapterList.get(chapter);
 
         if (page > fylChapter.getPages()) {
-            sendMsg(event, "Page " + page + " is not known in that chapter");
+            event.reply("Page " + page + " is not known in that chapter");
             return;
         }
 
@@ -183,6 +176,47 @@ public class FylCommicCommand extends ReactionCommand {
     public String getHelp() {
         return "Read the Five years later comic within discord (website: <https://www.theinktank.co/5yearslater>)\n" +
             "Usage: `gb." + getName() + " [page:number/chapter:number]`";
+    }
+
+    private Pair<Integer, Integer> getPageAndChapter(ICommandEvent event) {
+        int page = 0;
+        int chapter = 0;
+
+        if (event.isSlash()) {
+            final SlashCommandEvent.OptionData pageOpt = event.getOption("page");
+
+            if (pageOpt != null) {
+                page = (int) pageOpt.getAsLong();
+            }
+
+            final SlashCommandEvent.OptionData chapterOpt = event.getOption("chapter");
+
+            if (chapterOpt != null) {
+                chapter = (int) chapterOpt.getAsLong();
+            }
+        } else {
+            final List<String> args = event.getArgs();
+
+            if (args.size() > 0) {
+                for (String arg : args) {
+                    if (arg.startsWith(PAGE_SELECTOR)) {
+                        page = getNumberFromArg(arg.substring(PAGE_SELECTOR.length()));
+                    } else if (arg.startsWith(CHAPTER_SELECTOR)) {
+                        chapter = getNumberFromArg(arg.substring(CHAPTER_SELECTOR.length())) - 1;
+                    }
+                }
+            }
+        }
+
+        return Pair.of(page, chapter);
+    }
+
+    @Override
+    public List<OptionData> getCommandOptions() {
+        return List.of(
+            new OptionData(Command.OptionType.INTEGER, "page", "select the page to start at"),
+            new OptionData(Command.OptionType.INTEGER, "chapter", "select the chapter to start at")
+        );
     }
 
     @Override
