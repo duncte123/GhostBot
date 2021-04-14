@@ -34,6 +34,8 @@ import me.duncte123.ghostbot.utils.Container;
 import me.duncte123.ghostbot.utils.TumblrUtils;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.requests.restaction.CommandUpdateAction.OptionData;
 import net.dv8tion.jda.api.utils.MiscUtil;
 import org.apache.commons.text.StringEscapeUtils;
 
@@ -50,7 +52,7 @@ import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
+import static net.dv8tion.jda.api.entities.Command.OptionType.INTEGER;
 
 public class QuotesCommand extends Command {
     private static final String DOMAIN = "totallycorrectdannyphantomquotes.tumblr.com";
@@ -100,22 +102,31 @@ public class QuotesCommand extends Command {
         final List<String> args = event.getArgs();
 
         if (args.size() > 0) {
-            final String joined = String.join("", args);
+            if (event.isSlash()) {
+                final SlashCommandEvent.OptionData idOpt = event.getOption("id");
 
-            if (joined.startsWith("id:")) {
-                final String id = joined.substring("id:".length());
-
-                if (!id.isEmpty()) {
-                    final long idLong = Long.parseLong(id);
-
-                    getPostFromId(idLong, event.getContainer(), (it) -> sendQuote(event, it), (it) -> sendMsg(event, it));
+                if (idOpt != null) {
+                    getPostFromId(idOpt.getAsLong(), event.getContainer(), (it) -> sendQuote(event, it), event::reply);
+                    return;
                 }
+            } else {
+                final String joined = String.join("", args);
 
-                return;
-            } else if ("total".equalsIgnoreCase(args.get(0))) { // this is a sub command
-                event.reply("There are a total of " + allQuotes.size() + " quotes in the system at the moment");
+                if (joined.startsWith("id:")) {
+                    final String id = joined.substring("id:".length());
 
-                return;
+                    if (!id.isEmpty()) {
+                        final long idLong = Long.parseLong(id);
+
+                        getPostFromId(idLong, event.getContainer(), (it) -> sendQuote(event, it), event::reply);
+                    }
+
+                    return;
+                } else if ("total".equalsIgnoreCase(args.get(0))) { // this is a sub command, find out how to do it
+                    event.reply("There are a total of " + allQuotes.size() + " quotes in the system at the moment");
+
+                    return;
+                }
             }
         }
 
@@ -150,6 +161,13 @@ public class QuotesCommand extends Command {
     @Override
     public CommandCategory getCategory() {
         return CommandCategory.TEXT;
+    }
+
+    @Override
+    public List<OptionData> getCommandOptions() {
+        return List.of(
+            new OptionData(INTEGER, "id", "Select a quote by the id")
+        );
     }
 
     private void getPostFromId(long id, Container container, Consumer<TumblrPost> cb, Consumer<String> fail) {

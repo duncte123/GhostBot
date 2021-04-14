@@ -41,7 +41,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed;
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
 public abstract class Command {
 
