@@ -21,6 +21,7 @@ package me.duncte123.ghostbot.commands.main;
 import me.duncte123.ghostbot.objects.command.Command;
 import me.duncte123.ghostbot.objects.command.CommandCategory;
 import me.duncte123.ghostbot.objects.command.ICommandEvent;
+import me.duncte123.ghostbot.variables.Variables;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,6 +29,10 @@ import java.util.stream.Collectors;
 public class UpdateSlashCommand extends Command {
     @Override
     public void execute(ICommandEvent event) {
+        if (event.getAuthor().getIdLong() != Variables.OWNER_ID) {
+            return;
+        }
+
         if (event.isSlash()) {
             event.reply("Cannot be used with slash commands");
             return;
