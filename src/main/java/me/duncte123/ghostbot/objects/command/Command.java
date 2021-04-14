@@ -40,8 +40,6 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed;
-
 public abstract class Command {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
@@ -144,7 +142,7 @@ public abstract class Command {
         final GuildVoiceState voiceState = event.getMember().getVoiceState();
 
         if (voiceState == null || !voiceState.inVoiceChannel()) {
-            sendEmbed(event, EmbedUtils.embedMessage("Please join a voice channel first"));
+            event.reply(EmbedUtils.embedMessage("Please join a voice channel first"));
 
             return false;
         }
@@ -153,9 +151,7 @@ public abstract class Command {
         assert channel != null;
 
         if (!event.getSelfMember().hasPermission(channel, Permission.VOICE_CONNECT)) {
-            sendEmbed(event,
-                EmbedUtils.embedMessage("I don't have permission to join " + channel.getName())
-            );
+            event.reply(EmbedUtils.embedMessage("I don't have permission to join " + channel.getName()));
         }
 
         try {
@@ -163,11 +159,9 @@ public abstract class Command {
         } catch (PermissionException e) {
 
             if (e.getPermission() == Permission.VOICE_CONNECT) {
-                sendEmbed(event,
-                    EmbedUtils.embedMessage("Somehow got passed the permission check, this should never happen")
-                );
+                event.reply(EmbedUtils.embedMessage("Somehow got passed the permission check, this should never happen"));
             } else {
-                sendEmbed(event, EmbedUtils.embedMessage(String.format(
+                event.reply(EmbedUtils.embedMessage(String.format(
                     "Error while joining channel `%s`: %s",
                     channel.getName(),
                     e.getMessage()
