@@ -22,6 +22,7 @@ import me.duncte123.ghostbot.objects.command.Command;
 import me.duncte123.ghostbot.objects.command.CommandCategory;
 import me.duncte123.ghostbot.objects.command.ICommandEvent;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class UpdateSlashCommand extends Command {
@@ -29,6 +30,13 @@ public class UpdateSlashCommand extends Command {
     public void execute(ICommandEvent event) {
         if (event.isSlash()) {
             event.reply("Cannot be used with slash commands");
+            return;
+        }
+
+        final List<String> args = event.getArgs();
+
+        if (args.isEmpty()) {
+            event.reply("choose global, guild, clear-guild or clear-global");
             return;
         }
 
@@ -40,9 +48,29 @@ public class UpdateSlashCommand extends Command {
             .map(Command::getCommandData)
             .collect(Collectors.toList());
 
-        event.getGuild().updateCommands()
-            .addCommands(commands)
-            .queue((__) -> event.reply("Commands updated"));
+        switch (args.get(0)) {
+            case "guild":
+                event.getGuild().updateCommands()
+                    .addCommands(commands)
+                    .queue((__) -> event.reply("Commands updated"));
+                break;
+            case "global":
+                event.getJDA().updateCommands()
+                    .addCommands(commands)
+                    .queue((__) -> event.reply("Commands updated"));
+                break;
+            case "clear-guild":
+                event.getGuild().updateCommands()
+                    .queue((__) -> event.reply("Cleared guild commands"));
+                break;
+            case "clear-global":
+                event.getJDA().updateCommands()
+                    .queue((__) -> event.reply("Cleared global commands"));
+                break;
+            default:
+                event.reply("choose global, guild, clear-guild or clear-global");
+                break;
+        }
     }
 
     @Override

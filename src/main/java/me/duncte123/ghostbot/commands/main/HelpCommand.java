@@ -25,13 +25,13 @@ import me.duncte123.ghostbot.objects.command.CommandCategory;
 import me.duncte123.ghostbot.objects.command.ICommandEvent;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.requests.restaction.CommandUpdateAction.OptionData;
 
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed;
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
+import static net.dv8tion.jda.api.entities.Command.OptionType.STRING;
 
 public class HelpCommand extends Command {
     @Override
@@ -53,7 +53,7 @@ public class HelpCommand extends Command {
             final Command cmd = manager.getCommand(toSearch);
 
             if (cmd != null) {
-                sendMsg(event, String.format(
+                event.reply(String.format(
                     "Command help for `%s`:%n%s%s",
                     cmd.getName(),
                     cmd.getHelp(),
@@ -62,7 +62,7 @@ public class HelpCommand extends Command {
 
                 return;
             }
-            sendMsg(event, "That command could not be found, try " + Variables.PREFIX + "help for a list of commands");
+            event.reply('`' + toSearch + "` could not be found, try `" + Variables.PREFIX + "help` for a list of commands");
 
             return;
         }
@@ -85,12 +85,12 @@ public class HelpCommand extends Command {
             .addField("Other commands", buildCommands(otherCommands), false)
             .addField("Character commands", buildCommands(characterCommands), false);
 
-        event.getAuthor().openPrivateChannel().queue((it) ->
-            it.sendMessage(helpEmbed.build()).queue(
-                (m) -> sendMsg(event, event.getAuthor().getAsMention() + ", check your dms"),
-                (e) -> sendEmbed(event, helpEmbed)
-            ), (e) -> sendEmbed(event, helpEmbed)
-        );
+        event.getAuthor().openPrivateChannel()
+            .flatMap((it) -> it.sendMessage(helpEmbed.build()))
+            .queue(
+                (m) -> event.reply("Check your dms"),
+                (e) -> event.reply(helpEmbed)
+            );
 
     }
 
@@ -102,6 +102,13 @@ public class HelpCommand extends Command {
 
     @Override
     public List<String> getAliases() { return List.of("commands"); }
+
+    @Override
+    public List<OptionData> getCommandOptions() {
+        return List.of(
+            new OptionData(STRING, "search", "Look up a command by name")
+        );
+    }
 
     private static String buildCommands(List<String> commands) {
         return String.format("`%s%s`", Variables.PREFIX, String.join("`, `" + Variables.PREFIX, commands));
