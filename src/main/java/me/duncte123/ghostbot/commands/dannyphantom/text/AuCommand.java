@@ -122,7 +122,7 @@ public class AuCommand extends Command {
     private void loadCachedAus(GhostBotConfig config, ObjectMapper jackson) {
         allAus.clear();
 
-        final File ausFile = new File("aus.json");
+        final File ausFile = new File("./data/aus.json");
 
         if (!ausFile.exists()) {
             this.loadAus(config, jackson, ausFile);
