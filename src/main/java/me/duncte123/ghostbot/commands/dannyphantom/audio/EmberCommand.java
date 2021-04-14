@@ -24,8 +24,6 @@ import me.duncte123.ghostbot.objects.command.ICommandEvent;
 import me.duncte123.ghostbot.utils.AudioUtils;
 import me.duncte123.ghostbot.utils.StoredTracks;
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
-
 public class EmberCommand extends Command {
     @Override
     public void execute(ICommandEvent event) {
@@ -33,7 +31,7 @@ public class EmberCommand extends Command {
             return;
         }
 
-        sendMsg(event, "Selected track: _Ember McLain - Remember_");
+        event.reply("Selected track: _Ember McLain - Remember_");
 
         final AudioUtils audio = event.getContainer().getAudio();
 

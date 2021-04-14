@@ -24,8 +24,6 @@ import me.duncte123.ghostbot.objects.command.ICommandEvent;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
-
 public class GamesCommand extends Command {
     private final String[] games = {
         "https://paurachan.deviantart.com/art/Danny-Phantom-Dress-up-game-v0-1-435498005",
@@ -47,7 +45,7 @@ public class GamesCommand extends Command {
     public void execute(ICommandEvent event) {
         final String game = games[ThreadLocalRandom.current().nextInt(games.length)];
 
-        sendMsg(event, "Here is a DP game: " + game +
+        event.reply("Here is a DP game: " + game +
             "\nThe game will work best on an old browser like internet explorer because it has flash enabled");
     }
 

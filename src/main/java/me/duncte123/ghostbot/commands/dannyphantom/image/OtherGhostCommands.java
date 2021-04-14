@@ -39,7 +39,7 @@ public class OtherGhostCommands extends ImageBase {
     @Override
     public void execute(ICommandEvent event) {
         if (ImageCommand.isReloading) {
-            sendMsg(event, "I'm looking for new images on the internet, please be wait.");
+            event.reply("I'm looking for new images on the internet, please wait.");
             return;
         }
 
@@ -48,8 +48,8 @@ public class OtherGhostCommands extends ImageBase {
         if (this.keywordsMapped.containsKey(invoke)) {
             this.sendFromKeywords(event, this.keywordsMapped.get(invoke));
         } else {
-            sendMsg(event, "Whut? How did this part of the code even execute?");
-            sendMsg(event, "But for real, if this code runs something is 100% broken");
+            event.reply("Whut? How did this part of the code even execute?");
+            event.reply("But for real, if this code runs something is 200% broken");
         }
     }
 

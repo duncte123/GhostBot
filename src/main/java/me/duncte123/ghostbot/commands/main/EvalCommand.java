@@ -58,6 +58,11 @@ public class EvalCommand extends Command {
             return;
         }
 
+        if (event.isSlash()) {
+            event.reply("Does not support slash");
+            return;
+        }
+
         final Message message = event.getMessage();
 
         if (event.getArgs().isEmpty()) {

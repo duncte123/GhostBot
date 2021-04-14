@@ -50,7 +50,6 @@ import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed;
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
 public class QuotesCommand extends Command {
@@ -113,8 +112,8 @@ public class QuotesCommand extends Command {
                 }
 
                 return;
-            } else if ("total".equalsIgnoreCase(args.get(0))) {
-                sendMsg(event, "There are a total of " + allQuotes.size() + " quotes in the system at the moment");
+            } else if ("total".equalsIgnoreCase(args.get(0))) { // this is a sub command
+                event.reply("There are a total of " + allQuotes.size() + " quotes in the system at the moment");
 
                 return;
             }
@@ -251,7 +250,7 @@ public class QuotesCommand extends Command {
                 break;
         }
 
-        sendEmbed(event, eb);
+        event.reply(eb);
     }
 
     public static String parseText(String rawInput) {

@@ -20,8 +20,6 @@ package me.duncte123.ghostbot.commands.dannyphantom.image;
 
 import me.duncte123.ghostbot.objects.command.ICommandEvent;
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
-
 public class GifCommand extends ImageBase {
     private final String keyword = "Danny Phantom gif";
 
@@ -29,7 +27,7 @@ public class GifCommand extends ImageBase {
     public void execute(ICommandEvent event) {
         requestSearch(keyword, event.getContainer().getJackson(), event.getContainer().getConfig().api.google,
             (data) -> sendMessageFromData(event, data, keyword),
-            (error) -> sendMsg(event, "Error while looking up image: " + error)
+            (error) -> event.reply("Error while looking up image: " + error)
         );
     }
 

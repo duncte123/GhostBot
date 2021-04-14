@@ -19,6 +19,7 @@
 package me.duncte123.ghostbot.objects.command;
 
 import me.duncte123.botcommons.commands.ICommandContext;
+import me.duncte123.botcommons.messaging.MessageConfig;
 import me.duncte123.ghostbot.utils.Container;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
@@ -40,5 +41,6 @@ public interface ICommandEvent extends ICommandContext {
     }
 
     void reply(String content);
+    void reply(MessageConfig config);
     void reply(EmbedBuilder embed);
 }

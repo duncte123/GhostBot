@@ -44,7 +44,6 @@ import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed;
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
 public abstract class ImageBase extends Command {
@@ -98,19 +97,19 @@ public abstract class ImageBase extends Command {
 
     void sendMessageFromName(ICommandEvent event, @Nullable ImageData i) {
         if (i == null) {
-            sendMsg(event, "No images found");
+            event.reply("No images found");
             return;
         }
 
         if (i.title == null || i.title.isEmpty()) {
-            sendMsg(event, "Nothing was found for the search query: `" + i.title + '`');
+            event.reply("Nothing was found for the search query: `" + i.title + '`');
 
             return;
         }
 
         logger.debug("Image Link: '" + i.url + '\'');
 
-        sendEmbed(event, EmbedUtils.getDefaultEmbed()
+        event.reply(EmbedUtils.getDefaultEmbed()
             .setTitle(i.title, i.website)
             .setImage(i.url));
     }
@@ -135,14 +134,14 @@ public abstract class ImageBase extends Command {
         final List<SearchItem> arr = data.items;
 
         if (arr == null || arr.isEmpty()) {
-            sendMsg(event, "Nothing was found for the search query: `" + key + '`');
+            event.reply("Nothing was found for the search query: `" + key + '`');
 
             return;
         }
 
         final SearchItem randomItem = arr.get(ThreadLocalRandom.current().nextInt(arr.size()));
 
-        sendEmbed(event, EmbedUtils.getDefaultEmbed()
+        event.reply(EmbedUtils.getDefaultEmbed()
             .setTitle(randomItem.title, randomItem.image.contextLink)
             .setImage(randomItem.link));
     }

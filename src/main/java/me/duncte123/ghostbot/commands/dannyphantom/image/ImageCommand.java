@@ -71,7 +71,7 @@ public class ImageCommand extends ImageBase {
         }
 
         if (isReloading) {
-            sendMsg(event, "I'm looking for new images on the internet, please be wait.");
+            event.reply("I'm looking for new images on the internet, please wait.");
             return;
         }
 

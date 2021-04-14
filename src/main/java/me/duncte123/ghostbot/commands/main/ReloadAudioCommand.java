@@ -50,4 +50,9 @@ public class ReloadAudioCommand extends Command {
     public CommandCategory getCategory() {
         return CommandCategory.HIDDEN;
     }
+
+    @Override
+    public boolean shouldAck() {
+        return true;
+    }
 }

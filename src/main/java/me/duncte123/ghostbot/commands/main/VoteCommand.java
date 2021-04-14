@@ -22,8 +22,6 @@ import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.ghostbot.objects.command.Command;
 import me.duncte123.ghostbot.objects.command.ICommandEvent;
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed;
-
 public class VoteCommand extends Command {
     @Override
     public void execute(ICommandEvent event) {
@@ -31,7 +29,7 @@ public class VoteCommand extends Command {
             "https://botsfordiscord.com/bots/397297702150602752/vote\n" +
             "https://discordbots.org/bot/397297702150602752/vote";
 
-        sendEmbed(event, EmbedUtils.embedMessage(message));
+        event.reply(EmbedUtils.embedMessage(message));
     }
 
     @Override

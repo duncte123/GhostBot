@@ -43,8 +43,6 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed;
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 import static me.duncte123.ghostbot.commands.dannyphantom.text.QuotesCommand.parseText;
 
 public class AuCommand extends Command {
@@ -63,13 +61,13 @@ public class AuCommand extends Command {
         if (args.size() == 1 && "reload".equalsIgnoreCase(args.get(0)) && event.getAuthor().getIdLong() == Variables.OWNER_ID) {
             // make sure to delete the file
             loadCachedAus(event.getContainer().getConfig(), event.getContainer().getJackson());
-            sendMsg(event, "Reloading");
+            event.reply("Reloading");
 
             return;
         }
 
         if (allAus.isEmpty()) {
-            sendMsg(event, "No AU's found, they are probably being reloaded");
+            event.reply("No AU's found, they are probably being reloaded");
 
             return;
         }
@@ -93,7 +91,7 @@ public class AuCommand extends Command {
             .setFooter("#" + tags, Variables.FOOTER_ICON)
             .setTimestamp(null);
 
-        sendEmbed(event, eb);
+        event.reply(eb);
     }
 
     @Override

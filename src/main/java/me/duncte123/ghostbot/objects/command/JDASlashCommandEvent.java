@@ -18,15 +18,18 @@
 
 package me.duncte123.ghostbot.objects.command;
 
+import me.duncte123.botcommons.messaging.MessageConfig;
 import me.duncte123.ghostbot.utils.Container;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.commands.CommandHook;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class JDASlashCommandEvent implements ICommandEvent {
@@ -98,6 +101,10 @@ public class JDASlashCommandEvent implements ICommandEvent {
         return this.event.getJDA();
     }
 
+    public SlashCommandEvent getSlashEvent() {
+        return this.event;
+    }
+
     @Override
     public void reply(String content) {
         if (this.event.isAcknowledged()) {
@@ -106,6 +113,28 @@ public class JDASlashCommandEvent implements ICommandEvent {
         }
 
         this.event.reply(content).setEphemeral(false).queue();
+    }
+
+    @Override
+    public void reply(MessageConfig config) {
+        if (!this.event.isAcknowledged()) {
+            // be lazy, we can complete this cuz command thread
+            event.acknowledge().setEphemeral(false).complete();
+        }
+
+        final MessageBuilder messageBuilder = config.getMessageBuilder();
+        final EmbedBuilder embed = config.getEmbed();
+
+        if (embed != null) {
+            messageBuilder.setEmbed(embed.build());
+        }
+
+        final Message message = messageBuilder.build();
+
+        final Consumer<? super Message> successAction = config.getSuccessAction();
+        final Consumer<? super Throwable> failureAction = config.getFailureAction();
+
+        this.hook.sendMessage(message).queue(successAction, failureAction);
     }
 
     @Override

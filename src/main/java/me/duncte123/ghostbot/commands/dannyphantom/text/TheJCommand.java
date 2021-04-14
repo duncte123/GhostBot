@@ -26,14 +26,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
-
 public class TheJCommand extends Command {
     @Override
     public void execute(ICommandEvent event) {
         final String message = String.format("The J in Daniel J Fenton stands for \"%s\"", this.getRandomJ());
 
-        sendMsg(event, message);
+        event.reply(message);
     }
 
     @Override

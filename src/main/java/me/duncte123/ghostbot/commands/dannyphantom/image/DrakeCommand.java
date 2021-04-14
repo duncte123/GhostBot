@@ -21,9 +21,12 @@ package me.duncte123.ghostbot.commands.dannyphantom.image;
 import me.duncte123.botcommons.web.WebParserUtils;
 import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.ghostbot.objects.command.ICommandEvent;
+import me.duncte123.ghostbot.objects.command.JDASlashCommandEvent;
 import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.requests.restaction.CommandUpdateAction.OptionData;
 import net.dv8tion.jda.internal.utils.IOUtil;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -32,8 +35,9 @@ import org.json.JSONObject;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 import static me.duncte123.botcommons.web.ContentType.JSON;
+import static net.dv8tion.jda.api.entities.Command.OptionType.BOOLEAN;
+import static net.dv8tion.jda.api.entities.Command.OptionType.STRING;
 
 public class DrakeCommand extends ImageBase {
     @Override
@@ -41,28 +45,51 @@ public class DrakeCommand extends ImageBase {
         final List<String> args = event.getArgs();
 
         if (!event.getSelfMember().hasPermission(event.getChannel(), Permission.MESSAGE_ATTACH_FILES)) {
-            sendMsg(event, "I need permission to upload files to this channel");
+            event.reply("I need permission to upload files to this channel");
 
             return;
         }
 
         if (args.isEmpty()) {
-            sendMsg(event, "Missing arguments, usage: `" + Variables.PREFIX + getName() + " <top text>|<bottom text>`");
+            event.reply("Missing arguments, usage: `" + Variables.PREFIX + getName() + " <top text>|<bottom text>`");
 
             return;
         }
 
-        final String[] split = String.join(" ", args).split("\\|");
+        final String[] split;
+        final boolean shouldDab;
 
-        if (split.length < 2 || split[0].isEmpty() || split[1].isEmpty()) {
-            sendMsg(event, "Missing arguments, usage: `" + Variables.PREFIX + getName() + " <top text>|<bottom text>`");
+        if (event.isSlash()) {
+            final SlashCommandEvent.OptionData dab = event.getOption("dab");
 
-            return;
+            shouldDab = dab != null && dab.getAsBoolean();
+
+            split = new String[] {
+                event.getOption("top-panel").getAsString(),
+                event.getOption("bottom-panel").getAsString()
+            };
+        } else {
+            shouldDab = event.getInvoke().equalsIgnoreCase("ddrake");
+            split = String.join(" ", args).split("\\|");
+
+            if (split.length < 2 || split[0].isEmpty() || split[1].isEmpty()) {
+                event.reply("Missing arguments, usage: `" + Variables.PREFIX + getName() + " <top text>|<bottom text>`");
+
+                return;
+            }
         }
 
-        final boolean shouldDab = event.getInvoke().equalsIgnoreCase("ddrake");
+        genDanny(split[0], split[1], shouldDab, event.getContainer().getConfig(), (it) -> {
+            if (event.isSlash()) {
+                ((JDASlashCommandEvent) event).getSlashEvent()
+                    .acknowledge()
+                    .setEphemeral(false)
+                    .setContent("Generated")
+                    .queue();
+            }
 
-        genDanny(split[0], split[1], shouldDab, event.getContainer().getConfig(), (it) -> sendImage(event, it));
+            sendImage(event, it);
+        });
     }
 
     @Override
@@ -71,6 +98,15 @@ public class DrakeCommand extends ImageBase {
     @Override
     public List<String> getAliases() {
         return List.of("ddrake");
+    }
+
+    @Override
+    public List<OptionData> getCommandOptions() {
+        return List.of(
+            new OptionData(STRING, "top-panel", "The message for the top panel").setRequired(true),
+            new OptionData(STRING, "bottom-panel", "The message for the bottom panel").setRequired(true),
+            new OptionData(BOOLEAN, "dab", "Should Danny dab in the bottom panel?")
+        );
     }
 
     @Override

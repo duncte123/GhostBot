@@ -21,9 +21,9 @@ package me.duncte123.ghostbot.commands.main;
 import me.duncte123.ghostbot.objects.command.Command;
 import me.duncte123.ghostbot.objects.command.CommandCategory;
 import me.duncte123.ghostbot.objects.command.ICommandEvent;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import net.dv8tion.jda.api.utils.cache.ShardCacheView;
-import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.internal.utils.tuple.Pair;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.WordUtils;
@@ -33,8 +33,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
-
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
 public class ShardInfoCommand extends Command {
     @Override
@@ -50,7 +48,7 @@ public class ShardInfoCommand extends Command {
         final ShardManager shardManager = event.getJDA().getShardManager();
 
         if (shardManager == null) {
-            sendMsg(event, "shard manager is null WTF");
+            event.reply("shard manager is null WTF");
             return;
         }
 
@@ -73,13 +71,13 @@ public class ShardInfoCommand extends Command {
             table.add(row);
 
             if (table.size() == 20) {
-                sendMsg(event, makeAsciiTable(headers, table, shardManager));
+                event.reply(makeAsciiTable(headers, table, shardManager));
                 table = new ArrayList<>();
             }
         }
 
         if (!table.isEmpty()) {
-            sendMsg(event, makeAsciiTable(headers, table, shardManager));
+            event.reply(makeAsciiTable(headers, table, shardManager));
         }
     }
 

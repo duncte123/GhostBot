@@ -51,8 +51,6 @@ import java.util.concurrent.Executors;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
-
 public class CommandManager {
 
     private static final Logger logger = LoggerFactory.getLogger(CommandManager.class);
@@ -104,6 +102,8 @@ public class CommandManager {
 
         this.addCommand(new DrakeCommand());
         this.addCommand(new ISSCommand());
+
+        this.addCommand(new UpdateSlashCommand());
     }
 
     private void addCommand(Command command) {

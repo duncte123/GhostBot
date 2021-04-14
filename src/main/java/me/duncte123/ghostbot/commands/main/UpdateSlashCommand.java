@@ -16,46 +16,47 @@
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.duncte123.ghostbot.commands.space;
+package me.duncte123.ghostbot.commands.main;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import me.duncte123.botcommons.messaging.EmbedUtils;
-import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.ghostbot.objects.command.Command;
 import me.duncte123.ghostbot.objects.command.CommandCategory;
 import me.duncte123.ghostbot.objects.command.ICommandEvent;
-import net.dv8tion.jda.api.EmbedBuilder;
 
-public class ISSCommand extends Command {
+import java.util.stream.Collectors;
+
+public class UpdateSlashCommand extends Command {
     @Override
     public void execute(ICommandEvent event) {
-        final ObjectNode data = WebUtils.ins.getJSONObject("http://api.open-notify.org/iss-now.json").execute();
+        if (event.isSlash()) {
+            event.reply("Cannot be used with slash commands");
+            return;
+        }
 
-        final JsonNode position = data.get("iss_position");
+        final var commands = event.getContainer()
+            .getCommandManager()
+            .getCommands()
+            .stream()
+            .filter((it) -> it.getCategory() != CommandCategory.HIDDEN)
+            .map(Command::getCommandData)
+            .collect(Collectors.toList());
 
-        final String latitude = position.get("latitude").asText();
-        final String longitude = position.get("longitude").asText();
-        final String mapsUrl = "https://google.com/maps/search/" + latitude + ',' + longitude;
-
-        EmbedBuilder embed = EmbedUtils.embedField("International Space Station",
-            String.format("The position of the ISS is [`%s`, `%s`](%s)", latitude, longitude, mapsUrl));
-
-        event.reply(embed);
+        event.getGuild().updateCommands()
+            .addCommands(commands)
+            .queue((__) -> event.reply("Commands updated"));
     }
 
     @Override
     public String getName() {
-        return "iss";
+        return "updateslash";
     }
 
     @Override
     public String getHelp() {
-        return "Shows the current location of the iss.";
+        return null;
     }
 
     @Override
     public CommandCategory getCategory() {
-        return CommandCategory.SPACE;
+        return CommandCategory.HIDDEN;
     }
 }

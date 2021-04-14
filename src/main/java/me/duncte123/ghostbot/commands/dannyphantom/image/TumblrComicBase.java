@@ -32,6 +32,8 @@ import me.duncte123.ghostbot.utils.TumblrUtils;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.requests.restaction.CommandUpdateAction.OptionData;
 
 import javax.annotation.Nonnull;
 import java.io.File;
@@ -47,6 +49,7 @@ import java.util.stream.Stream;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 import static me.duncte123.ghostbot.utils.SpoopyUtils.newLongSet;
+import static net.dv8tion.jda.api.entities.Command.OptionType.INTEGER;
 
 abstract class TumblrComicBase extends ReactionCommand {
     private static final String PAGE_SELECTOR = "page:";
@@ -66,24 +69,36 @@ abstract class TumblrComicBase extends ReactionCommand {
         final User author = event.getAuthor();
 
         if (pages.isEmpty()) {
-            sendMsg(event, "Something went wrong with loading the pages, please notify duncte123#1245");
+            event.reply("Something went wrong with loading the pages, please notify duncte123#1245");
             return;
         }
 
         int page = 0;
 
         if (args.size() > 0) {
-            final String arg = String.join("", args).toLowerCase();
 
-            if (arg.startsWith(PAGE_SELECTOR)) {
-                page = getNumberFromArg(arg.substring(PAGE_SELECTOR.length()));
-            } else if (arg.startsWith(CHAPTER_SELECTOR)) {
-                try {
-                    page = chapters[getNumberFromArg(arg.substring(CHAPTER_SELECTOR.length())) - 1];
-                } catch (IndexOutOfBoundsException ignored) {
-                    sendMsg(event, "That chapter is not known");
+            if (event.isSlash()) {
+                final SlashCommandEvent.OptionData pageOpt = event.getOption("page");
+                final SlashCommandEvent.OptionData chapterOpt = event.getOption("chapter");
 
-                    return;
+                if (pageOpt != null) {
+                    page = (int) pageOpt.getAsLong();
+                } else if (chapterOpt != null) {
+                    page = chapters[(int) chapterOpt.getAsLong() - 1];
+                }
+            } else {
+                final String arg = String.join("", args).toLowerCase();
+
+                if (arg.startsWith(PAGE_SELECTOR)) {
+                    page = getNumberFromArg(arg.substring(PAGE_SELECTOR.length()));
+                } else if (arg.startsWith(CHAPTER_SELECTOR)) {
+                    try {
+                        page = chapters[getNumberFromArg(arg.substring(CHAPTER_SELECTOR.length())) - 1];
+                    } catch (IndexOutOfBoundsException ignored) {
+                        sendMsg(event, "That chapter is not known");
+
+                        return;
+                    }
                 }
             }
         }
@@ -93,8 +108,7 @@ abstract class TumblrComicBase extends ReactionCommand {
         }
 
         if (page > pages.size()) {
-            sendMsg(event, "I could not find a page with number " + (page + 1));
-
+            event.reply("I could not find a page with number " + (page + 1));
             return;
         }
 
@@ -121,7 +135,7 @@ abstract class TumblrComicBase extends ReactionCommand {
             )
             .build();
 
-        sendMsg(messageConfig);
+        event.reply(messageConfig);
     }
 
     private int getNumberFromArg(String input) {
@@ -140,6 +154,14 @@ abstract class TumblrComicBase extends ReactionCommand {
     abstract MessageEmbed getEmbed(int page);
 
     abstract Predicate<TumblrPost> getFilter();
+
+    @Override
+    public List<OptionData> getCommandOptions() {
+        return List.of(
+            new OptionData(INTEGER, "page", "Select the current page to view"),
+            new OptionData(INTEGER, "chapter", "Go to a specific chapter, WILL BE IGNORED IF PAGE IS USED")
+        );
+    }
 
     @Override
     public CommandCategory getCategory() {

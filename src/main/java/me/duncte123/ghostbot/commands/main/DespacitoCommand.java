@@ -33,7 +33,7 @@ public class DespacitoCommand extends Command {
             return;
         }
 
-        sendMsg(event, "Now playing: _Despacito_");
+        event.reply("Now playing: _Despacito_");
 
         final AudioUtils audio = event.getContainer().getAudio();
 

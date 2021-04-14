@@ -34,7 +34,7 @@ public class RestartCommand extends Command {
     public void execute(ICommandEvent event) {
         final List<String> args = event.getArgs();
 
-        if (event.getAuthor().getIdLong() != Variables.OWNER_ID) {
+        if (event.getAuthor().getIdLong() != Variables.OWNER_ID || event.isSlash()) {
             sendMsg(event, "No permission");
 
             return;

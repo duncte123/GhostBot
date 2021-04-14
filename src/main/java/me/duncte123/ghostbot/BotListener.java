@@ -25,7 +25,6 @@ import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.ghostbot.audio.GuildMusicManager;
 import me.duncte123.ghostbot.commands.main.UptimeCommand;
 import me.duncte123.ghostbot.objects.command.Command;
-import me.duncte123.ghostbot.objects.command.CommandCategory;
 import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.utils.AudioUtils;
 import me.duncte123.ghostbot.utils.Container;
@@ -54,7 +53,6 @@ import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import static me.duncte123.botcommons.web.ContentType.JSON;
 
@@ -114,15 +112,10 @@ public class BotListener implements EventListener {
         logger.info("Logged in as {} ({})", jda.getSelfUser(), jda.getShardInfo());
         postServerCount();
 
-        final var commands = this.commandManager.getCommands()
-            .stream()
-            .filter((it) -> it.getCategory() != CommandCategory.HIDDEN)
-            .map(Command::getCommandData)
-            .collect(Collectors.toList());
-
-        jda.updateCommands()
-            .addCommands(commands)
-            .queue((__) -> logger.info("Slash commands updated"));
+        // TODO: update when final
+        /*jda.updateCommands()
+            //.addCommands(commands)
+            .queue((__) -> logger.info("Slash commands updated"));*/
     }
 
     private void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {

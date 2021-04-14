@@ -60,6 +60,9 @@ public class GhostBot {
 
         WebUtils.setUserAgent("Mozilla/5.0 (compatible; GhostBot/v" + Variables.VERSION + "; +https://github.com/duncte123/GhostBot)");
         EmbedUtils.setDefaultColor(Variables.EMBED_COLOR);
+        EmbedUtils.setEmbedBuilder(
+            () -> new EmbedBuilder().setColor(Variables.EMBED_COLOR)
+        );
 
         final LavalinkManager llm = LavalinkManager.ins;
 

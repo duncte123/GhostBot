@@ -28,13 +28,14 @@ import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 public class WikiCommand extends WikiBaseCommand {
     @Override
     public void execute(ICommandEvent event) {
+        final List<String> args = event.getArgs();
 
-        if (event.getArgs().isEmpty()) {
-            sendMsg(event, "Insufficient arguments, Correct usage: `" + Variables.PREFIX + getName() + " <search term>`");
+        if (args.isEmpty()) {
+            event.reply("Insufficient arguments, Correct usage: `" + Variables.PREFIX + getName() + " <search term>`");
             return;
         }
 
-        handleWikiSearch(wiki, String.join(" ", event.getArgs()), event.getContainer().getJackson(), event);
+        handleWikiSearch(this.wiki, String.join(" ", args), event.getContainer().getJackson(), event);
     }
 
     @Override

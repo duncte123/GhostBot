@@ -43,7 +43,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 import static me.duncte123.ghostbot.utils.SpoopyUtils.newLongSet;
 
 public class FylCommicCommand extends ReactionCommand {
@@ -145,7 +144,7 @@ public class FylCommicCommand extends ReactionCommand {
             )
             .build();
 
-        sendMsg(messageConfig);
+        event.reply(messageConfig);
     }
 
     private MessageEmbed getEmbed(int numChapter, int numPage) {

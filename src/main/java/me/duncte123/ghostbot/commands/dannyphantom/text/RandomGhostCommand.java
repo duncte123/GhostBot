@@ -64,14 +64,13 @@ public class RandomGhostCommand extends Command {
     public void execute(ICommandEvent event) {
 
         if (ghosts.isEmpty()) {
-            sendMsg(event, "It looks like Danny defeated all the ghosts");
-
+            event.reply("It looks like Danny defeated all the ghosts");
             return;
         }
 
         final String ghost = ghosts.get(ThreadLocalRandom.current().nextInt(ghosts.size()));
 
-        sendMsg(event, wikiUrl + ghost);
+        event.reply(wikiUrl + ghost);
     }
 
     @Override

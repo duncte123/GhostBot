@@ -23,20 +23,23 @@ import me.duncte123.ghostbot.objects.command.ICommandEvent;
 import me.duncte123.ghostbot.utils.WikiHolder;
 import me.duncte123.ghostbot.variables.Variables;
 
+import java.util.List;
+
 public class FylWikiCommand extends WikiBaseCommand {
     private static final WikiHolder FYL_WIKI_HOLDER = new WikiHolder("https://5yl.fandom.com");
 //    private static final WikiHolder FYL_WIKI_HOLDER = new WikiHolder("https://5yl.wiki");
 
     @Override
     public void execute(ICommandEvent event) {
+        final List<String> args = event.getArgs();
 
-        if (event.getArgs().isEmpty()) {
+        if (args.isEmpty()) {
             event.reply("Insufficient arguments, Correct usage: `" + Variables.PREFIX + getName() + " <search term>`");
 
             return;
         }
 
-        handleWikiSearch(FYL_WIKI_HOLDER, String.join(" ", event.getArgs()), event.getContainer().getJackson(), event);
+        handleWikiSearch(FYL_WIKI_HOLDER, String.join(" ", args), event.getContainer().getJackson(), event);
     }
 
     @Override

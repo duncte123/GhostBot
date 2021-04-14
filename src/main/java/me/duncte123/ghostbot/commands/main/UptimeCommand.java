@@ -30,8 +30,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
-
 public class UptimeCommand extends Command {
 
     private final long oldUptime;
@@ -57,7 +55,7 @@ public class UptimeCommand extends Command {
 
     @Override
     public void execute(ICommandEvent event) {
-        sendMsg(event, "My current uptime: " + getUptime(ManagementFactory.getRuntimeMXBean().getUptime()) +
+        event.reply("My current uptime: " + getUptime(ManagementFactory.getRuntimeMXBean().getUptime()) +
             "\nPrevious uptime was: " + getUptime(this.oldUptime));
     }
 

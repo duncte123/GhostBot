@@ -30,19 +30,17 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import java.io.IOException;
 import java.util.List;
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendEmbed;
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
-
 public class WikiUserCommand extends WikiBaseCommand {
     @Override
     public void execute(ICommandEvent event) {
+        final List<String> args = event.getArgs();
 
-        if (event.getArgs().isEmpty()) {
-            sendMsg(event, "Insufficient arguments, Correct usage: `" + Variables.PREFIX + getName() + " <search term>`");
+        if (args.isEmpty()) {
+            event.reply("Insufficient arguments, Correct usage: `" + Variables.PREFIX + getName() + " <search term>`");
             return;
         }
 
-        final String searchQuery = String.join(" ", event.getArgs());
+        final String searchQuery = String.join(" ", args);
 
         WebUtils.ins.getJSONObject(String.format(
             "%s?ids=%s",
@@ -50,7 +48,7 @@ public class WikiUserCommand extends WikiBaseCommand {
             SpoopyUtils.encodeUrl(searchQuery)
         )).async((json) -> {
                 if (json.has("exception")) {
-                    sendMsg(event, "An error occurred: " + toEx(json));
+                    event.reply("An error occurred: " + toEx(json));
                     return;
                 }
 
@@ -72,7 +70,7 @@ public class WikiUserCommand extends WikiBaseCommand {
                                 "\n**Title:** " + user.getTitle() +
                                 "**Number of edits:** " + user.getNumberofedits(), false);
 
-                        sendEmbed(event, embed);
+                        event.reply(embed);
 
                         return;
                     }
@@ -89,13 +87,13 @@ public class WikiUserCommand extends WikiBaseCommand {
 
                     }
 
-                    sendEmbed(event, eb);
+                    event.reply(eb);
                 } catch (IOException e) {
-                    sendMsg(event, "Something went wrong: " + e.getMessage());
+                    event.reply("Something went wrong: " + e.getMessage());
                 }
 
             },
-            (it) -> sendMsg(event, "Something went wrong: " + it.getMessage())
+            (it) -> event.reply("Something went wrong: " + it.getMessage())
         );
     }
 

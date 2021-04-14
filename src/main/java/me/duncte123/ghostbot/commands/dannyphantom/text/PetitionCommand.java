@@ -24,8 +24,6 @@ import me.duncte123.ghostbot.objects.command.ICommandEvent;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
-
 public class PetitionCommand extends Command {
     private final String[] messages = {
         // %1$s = "http://bit.ly/dp-petition"
@@ -47,7 +45,7 @@ public class PetitionCommand extends Command {
         final String message = messages[ThreadLocalRandom.current().nextInt(messages.length)];
         final String formatted = String.format(message, "http://bit.ly/dp-petition", "#GoGhostAgain");
 
-        sendMsg(event, formatted);
+        event.reply(formatted);
     }
 
     @Override
