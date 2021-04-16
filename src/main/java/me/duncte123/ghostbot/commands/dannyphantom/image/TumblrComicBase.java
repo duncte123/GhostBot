@@ -29,8 +29,8 @@ import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.objects.tumblr.TumblrPost;
 import me.duncte123.ghostbot.utils.Container;
 import me.duncte123.ghostbot.utils.TumblrUtils;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.requests.restaction.CommandUpdateAction.OptionData;
@@ -118,8 +118,8 @@ abstract class TumblrComicBase extends ReactionCommand {
             .setMessage(new MessageBuilder()
                 .append("Use the emotes at the bottom to navigate through pages, use the ❌ emote when you are done reading.\n")
                 .append("The controls have a timeout of 30 minutes")
-                .setEmbed(getEmbed(pa.get()))
                 .build())
+            .setEmbed(getEmbed(pa.get()))
             .setSuccessAction((it) -> this.addReactions(it, LEFT_RIGHT_CANCEL, newLongSet(author.getIdLong()), 30, TimeUnit.MINUTES,
                 (index) -> {
                     if (index >= 2) { //cancel button or other error
@@ -130,7 +130,7 @@ abstract class TumblrComicBase extends ReactionCommand {
 
                     final int nextPage = pa.updateAndGet((current) -> index == 1 ? Math.min(current + 1, pages.size() - 1) : Math.max(current - 1, 0));
 
-                    it.editMessage(getEmbed(nextPage)).queue();
+                    it.editMessage(getEmbed(nextPage).build()).queue();
                 })
             )
             .build();
@@ -151,7 +151,7 @@ abstract class TumblrComicBase extends ReactionCommand {
     }
 
     @Nonnull
-    abstract MessageEmbed getEmbed(int page);
+    abstract EmbedBuilder getEmbed(int page);
 
     abstract Predicate<TumblrPost> getFilter();
 

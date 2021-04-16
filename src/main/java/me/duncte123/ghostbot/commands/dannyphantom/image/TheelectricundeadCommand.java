@@ -26,7 +26,7 @@ import me.duncte123.ghostbot.commands.dannyphantom.text.QuotesCommand;
 import me.duncte123.ghostbot.objects.tumblr.TumblrPost;
 import me.duncte123.ghostbot.utils.Container;
 import me.duncte123.ghostbot.variables.Variables;
-import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.EmbedBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -50,7 +50,7 @@ public class TheelectricundeadCommand extends TumblrComicBase {
 
     @NotNull
     @Override
-    MessageEmbed getEmbed(int page) {
+    EmbedBuilder getEmbed(int page) {
         final TumblrPost post = pages.get(page);
 
         return EmbedUtils.getDefaultEmbed()
@@ -61,8 +61,7 @@ public class TheelectricundeadCommand extends TumblrComicBase {
             .setThumbnail(getProfilePicture())
             .setImage(post.photos.get(0).getOriginalSize().getUrl())
             .setTimestamp(null)
-            .setFooter(String.format("Page: %s/%s", page + 1, pages.size()), Variables.FOOTER_ICON)
-            .build();
+            .setFooter(String.format("Page: %s/%s", page + 1, pages.size()), Variables.FOOTER_ICON);
     }
 
     @Override

@@ -27,9 +27,9 @@ import me.duncte123.ghostbot.objects.command.ICommandEvent;
 import me.duncte123.ghostbot.objects.fyl.FylChapter;
 import me.duncte123.ghostbot.objects.fyl.FylComic;
 import me.duncte123.ghostbot.variables.Variables;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Command;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.requests.restaction.CommandUpdateAction.OptionData;
@@ -102,8 +102,8 @@ public class FylCommicCommand extends ReactionCommand {
             .setMessage(new MessageBuilder()
                 .append("Use the emotes at the bottom to navigate through pages, use the ❌ emote when you are done reading.\n")
                 .append("The controls have a timeout of 30 minutes")
-                .setEmbed(getEmbed(chapterIndex.get(), pageIndex.get()))
                 .build())
+            .setEmbed(getEmbed(chapterIndex.get(), pageIndex.get()))
             .setSuccessAction((m) -> this.addReactions(m, LEFT_RIGHT_CANCEL,
                 newLongSet(author.getIdLong()), 30, TimeUnit.MINUTES, (index) -> {
 
@@ -138,7 +138,7 @@ public class FylCommicCommand extends ReactionCommand {
                     }
 
                     if (nextPage >= 0 && nextPage <= chap.getPages()) {
-                        m.editMessage(getEmbed(chapterIndex.get(), nextPage)).queue();
+                        m.editMessage(getEmbed(chapterIndex.get(), nextPage).build()).queue();
                     }
                 })
             )
@@ -147,7 +147,7 @@ public class FylCommicCommand extends ReactionCommand {
         event.reply(messageConfig);
     }
 
-    private MessageEmbed getEmbed(int numChapter, int numPage) {
+    private EmbedBuilder getEmbed(int numChapter, int numPage) {
         final FylChapter chapter = comic.getChapters().get(numChapter);
         final String page = chapter.getPagesUrl().get(numPage);
 
@@ -162,8 +162,7 @@ public class FylCommicCommand extends ReactionCommand {
             .setThumbnail(FYL_ICON)
             .setTitle("Chapter: " + chapter.getName(), chapter.getChapterUrl())
             .setTimestamp(null)
-            .setFooter(String.format("Chapter: %s, Page: %s/%s", numChapter + 1, numPage + 1, chapter.getPages()), Variables.FOOTER_ICON)
-            .build();
+            .setFooter(String.format("Chapter: %s, Page: %s/%s", numChapter + 1, numPage + 1, chapter.getPages()), Variables.FOOTER_ICON);
     }
 
     @Override
