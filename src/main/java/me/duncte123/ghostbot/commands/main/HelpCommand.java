@@ -25,13 +25,13 @@ import me.duncte123.ghostbot.objects.command.CommandCategory;
 import me.duncte123.ghostbot.objects.command.ICommandEvent;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.requests.restaction.CommandUpdateAction.OptionData;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static net.dv8tion.jda.api.entities.Command.OptionType.STRING;
+import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
 public class HelpCommand extends Command {
     @Override

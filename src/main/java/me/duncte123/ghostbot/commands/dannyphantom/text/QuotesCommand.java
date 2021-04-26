@@ -35,7 +35,7 @@ import me.duncte123.ghostbot.utils.TumblrUtils;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
-import net.dv8tion.jda.api.requests.restaction.CommandUpdateAction.OptionData;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.utils.MiscUtil;
 import org.apache.commons.text.StringEscapeUtils;
 
@@ -52,7 +52,7 @@ import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static net.dv8tion.jda.api.entities.Command.OptionType.INTEGER;
+import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
 
 public class QuotesCommand extends Command {
     private static final String DOMAIN = "totallycorrectdannyphantomquotes.tumblr.com";

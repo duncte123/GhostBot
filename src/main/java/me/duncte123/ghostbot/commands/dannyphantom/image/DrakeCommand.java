@@ -26,7 +26,7 @@ import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
-import net.dv8tion.jda.api.requests.restaction.CommandUpdateAction.OptionData;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.internal.utils.IOUtil;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -36,8 +36,8 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import static me.duncte123.botcommons.web.ContentType.JSON;
-import static net.dv8tion.jda.api.entities.Command.OptionType.BOOLEAN;
-import static net.dv8tion.jda.api.entities.Command.OptionType.STRING;
+import static net.dv8tion.jda.api.interactions.commands.OptionType.BOOLEAN;
+import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
 public class DrakeCommand extends ImageBase {
     @Override

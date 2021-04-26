@@ -26,14 +26,15 @@ import me.duncte123.ghostbot.commands.dannyphantom.text.QuotesCommand;
 import me.duncte123.ghostbot.objects.command.ICommandEvent;
 import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.objects.tumblr.TumblrPost;
-import net.dv8tion.jda.api.entities.Command;
-import net.dv8tion.jda.api.requests.restaction.CommandUpdateAction.OptionData;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import org.jetbrains.annotations.NotNull;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Consumer;
+
+import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
 public class DPArtistsCommand extends ImageBase {
     /*
@@ -131,7 +132,7 @@ public class DPArtistsCommand extends ImageBase {
 
     @Override
     public List<OptionData> getCommandOptions() {
-        final OptionData data = new OptionData(Command.OptionType.STRING,
+        final OptionData data = new OptionData(STRING,
             "artist", "The artist to get the data from")
             .setRequired(true);
         final Set<String> strings = this.artistMap.keySet();

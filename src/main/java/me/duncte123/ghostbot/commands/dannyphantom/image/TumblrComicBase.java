@@ -33,7 +33,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
-import net.dv8tion.jda.api.requests.restaction.CommandUpdateAction.OptionData;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import javax.annotation.Nonnull;
 import java.io.File;
@@ -49,7 +49,7 @@ import java.util.stream.Stream;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 import static me.duncte123.ghostbot.utils.SpoopyUtils.newLongSet;
-import static net.dv8tion.jda.api.entities.Command.OptionType.INTEGER;
+import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
 
 abstract class TumblrComicBase extends ReactionCommand {
     private static final String PAGE_SELECTOR = "page:";

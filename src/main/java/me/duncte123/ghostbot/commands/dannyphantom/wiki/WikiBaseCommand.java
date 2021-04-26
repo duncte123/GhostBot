@@ -32,15 +32,14 @@ import me.duncte123.ghostbot.utils.SpoopyUtils;
 import me.duncte123.ghostbot.utils.WikiHolder;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.requests.restaction.CommandUpdateAction;
-import net.dv8tion.jda.api.requests.restaction.CommandUpdateAction.OptionData;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static net.dv8tion.jda.api.entities.Command.OptionType.STRING;
+import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
 public abstract class WikiBaseCommand extends Command {
     //shortcut to the wiki

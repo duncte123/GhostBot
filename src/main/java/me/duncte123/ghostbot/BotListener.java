@@ -21,6 +21,7 @@ package me.duncte123.ghostbot;
 import fredboat.audio.player.LavalinkManager;
 import lavalink.client.player.IPlayer;
 import me.duncte123.botcommons.BotCommons;
+import me.duncte123.botcommons.messaging.MessageConfig;
 import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.ghostbot.audio.GuildMusicManager;
 import me.duncte123.ghostbot.commands.main.UptimeCommand;
@@ -30,8 +31,7 @@ import me.duncte123.ghostbot.utils.AudioUtils;
 import me.duncte123.ghostbot.utils.Container;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
@@ -53,7 +53,9 @@ import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
+import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 import static me.duncte123.botcommons.web.ContentType.JSON;
 
 public class BotListener implements EventListener {
@@ -111,19 +113,29 @@ public class BotListener implements EventListener {
 
         logger.info("Logged in as {} ({})", jda.getSelfUser(), jda.getShardInfo());
         postServerCount();
-
-        // TODO: update when final
-        /*jda.updateCommands()
-            //.addCommands(commands)
-            .queue((__) -> logger.info("Slash commands updated"));*/
     }
 
     private void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
-        if (event.getAuthor().isBot() || event.getMessage().isWebhookMessage()) {
+        final Message message = event.getMessage();
+
+        if (event.getAuthor().isBot() || message.isWebhookMessage()) {
             return;
         }
 
-        final String content = event.getMessage().getContentRaw().toLowerCase().trim();
+        final String content = message.getContentRaw().toLowerCase().trim();
+        final long selfUser = event.getJDA().getSelfUser().getIdLong();
+        final Pattern self = Pattern.compile("^<@!?" + selfUser + ">$");
+
+        if (self.matcher(content).matches()) {
+            sendMsg(
+                new MessageConfig.Builder()
+                    .setChannel(event.getChannel())
+                    .replyTo(message)
+                    .setMessageFormat("You can use `%shelp` to see a list of my commands", Variables.PREFIX)
+                    .build()
+            );
+            return;
+        }
 
         if (!content.startsWith(Variables.PREFIX.toLowerCase())
             && !content.startsWith(Variables.OTHER_PREFIX.toLowerCase())) {

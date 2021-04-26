@@ -29,10 +29,9 @@ import me.duncte123.ghostbot.objects.fyl.FylComic;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
-import net.dv8tion.jda.api.entities.Command;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
-import net.dv8tion.jda.api.requests.restaction.CommandUpdateAction.OptionData;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.internal.utils.tuple.Pair;
 
 import java.io.File;
@@ -44,6 +43,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static me.duncte123.ghostbot.utils.SpoopyUtils.newLongSet;
+import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
 
 public class FylCommicCommand extends ReactionCommand {
     private static final String PAGE_SELECTOR = "page:";
@@ -212,8 +212,8 @@ public class FylCommicCommand extends ReactionCommand {
     @Override
     public List<OptionData> getCommandOptions() {
         return List.of(
-            new OptionData(Command.OptionType.INTEGER, "page", "select the page to start at"),
-            new OptionData(Command.OptionType.INTEGER, "chapter", "select the chapter to start at")
+            new OptionData(INTEGER, "page", "select the page to start at"),
+            new OptionData(INTEGER, "chapter", "select the chapter to start at")
         );
     }
 

@@ -29,7 +29,8 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.exceptions.PermissionException;
-import net.dv8tion.jda.api.requests.restaction.CommandUpdateAction;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,11 +53,11 @@ public abstract class Command {
 
     public abstract String getHelp();
 
-    public List<CommandUpdateAction.OptionData> getCommandOptions() {
+    public List<OptionData> getCommandOptions() {
         return List.of();
     }
 
-    public CommandUpdateAction.CommandData getCommandData() {
+    public CommandData getCommandData() {
         String parsedHelp = this.getHelp();
 
         if (parsedHelp == null) {
@@ -77,7 +78,7 @@ public abstract class Command {
             throw new IllegalArgumentException(this.getClass() + " is over 100");
         }
 
-        final CommandUpdateAction.CommandData commandData = new CommandUpdateAction.CommandData(this.getName(), parsedHelp.trim());
+        final CommandData commandData = new CommandData(this.getName(), parsedHelp.trim());
 
         this.getCommandOptions().forEach(commandData::addOption);
 
