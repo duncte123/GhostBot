@@ -27,6 +27,7 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.commands.CommandHook;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -57,6 +58,7 @@ public class JDASlashCommandEvent implements ICommandEvent {
     @Override
     public List<String> getArgs() {
         return this.event.getOptions().stream()
+            .filter((it) -> it.getType() == OptionType.STRING)
             .map(SlashCommandEvent.OptionData::getAsString)
             .collect(Collectors.toList());
     }
