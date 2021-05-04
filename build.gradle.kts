@@ -39,7 +39,7 @@ buildscript {
 }
 
 project.group = "me.duncte123"
-project.version = "2.3.0"
+project.version = "2.3.1"
 
 
 application {

@@ -62,7 +62,7 @@ public class DrakeCommand extends ImageBase {
         if (event.isSlash()) {
             final SlashCommandEvent.OptionData dab = event.getOption("dab");
 
-            shouldDab = dab != null && dab.getAsBoolean();
+            shouldDab = dab != null && Boolean.parseBoolean(dab.getAsString());
 
             split = new String[] {
                 event.getOption("top-panel").getAsString(),
