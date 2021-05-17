@@ -26,12 +26,12 @@ plugins {
     application
     idea
 
-    id("com.github.johnrengelman.shadow") version "5.0.0"
+    id("com.github.johnrengelman.shadow") version "7.0.0"
 }
 
 buildscript {
     repositories {
-        jcenter()
+        mavenCentral()
     }
     dependencies {
         "classpath"(group = "com.fasterxml.jackson.core", name = "jackson-databind", version = "2.10.1")
@@ -43,7 +43,7 @@ project.version = "2.3.1"
 
 
 application {
-    mainClassName = "${project.group}.ghostbot.GhostBot"
+    mainClass.set("${project.group}.ghostbot.GhostBot")
 }
 
 java {
@@ -53,7 +53,6 @@ java {
 
 repositories {
     mavenCentral()
-    jcenter()
 
     maven("https://m2.dv8tion.net/releases")
     maven("https://duncte123.jfrog.io/artifactory/maven")
@@ -61,16 +60,16 @@ repositories {
 }
 
 //val jda = JDAVersionInfo("4.2.0_250")
-val jda = JDAVersionInfo("5951675")
+val jda = JDAVersionInfo("db92d7d")
 
 dependencies {
-    implementation(group = "me.duncte123", name = "botCommons", version = "2.1.2")
+    implementation(group = "me.duncte123", name = "botCommons", version = "2.1.3")
     implementation(group = "org.apache.commons", name = "commons-text", version = "1.6")
     implementation(group = "org.codehaus.groovy", name = "groovy-jsr223", version = "2.5.13")
     implementation(group = jda.group, name = "JDA", version = jda.version) {
         exclude(module = "opus-java")
     }
-    implementation(group = "com.sedmelluq", name = "lavaplayer", version = "1.3.37")
+    implementation(group = "com.sedmelluq", name = "lavaplayer", version = "1.3.76")
 //    implementation("lavalink:local")
     implementation(group = "com.github.FredBoat", name = "Lavalink-Client", version = "eb26770")
 //    implementation(group = "com.github.DuncteBot", name = "Lavalink-Client", version = "4f3924fb51")
@@ -131,7 +130,7 @@ compileJava.apply {
 
 tasks.withType<Wrapper> {
     distributionType = DistributionType.ALL
-    gradleVersion = "6.7.1"
+    gradleVersion = "7.0.1"
 }
 
 shadowJar.apply {

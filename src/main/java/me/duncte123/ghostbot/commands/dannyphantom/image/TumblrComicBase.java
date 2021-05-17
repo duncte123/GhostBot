@@ -32,7 +32,7 @@ import me.duncte123.ghostbot.utils.TumblrUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import javax.annotation.Nonnull;
@@ -78,8 +78,8 @@ abstract class TumblrComicBase extends ReactionCommand {
         if (args.size() > 0) {
 
             if (event.isSlash()) {
-                final SlashCommandEvent.OptionData pageOpt = event.getOption("page");
-                final SlashCommandEvent.OptionData chapterOpt = event.getOption("chapter");
+                final OptionMapping pageOpt = event.getOption("page");
+                final OptionMapping chapterOpt = event.getOption("chapter");
 
                 if (pageOpt != null) {
                     page = (int) pageOpt.getAsLong();

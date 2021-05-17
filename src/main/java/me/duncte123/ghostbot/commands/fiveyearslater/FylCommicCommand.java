@@ -30,7 +30,7 @@ import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.internal.utils.tuple.Pair;
 
@@ -181,13 +181,13 @@ public class FylCommicCommand extends ReactionCommand {
         int chapter = 0;
 
         if (event.isSlash()) {
-            final SlashCommandEvent.OptionData pageOpt = event.getOption("page");
+            final OptionMapping pageOpt = event.getOption("page");
 
             if (pageOpt != null) {
                 page = (int) pageOpt.getAsLong();
             }
 
-            final SlashCommandEvent.OptionData chapterOpt = event.getOption("chapter");
+            final OptionMapping chapterOpt = event.getOption("chapter");
 
             if (chapterOpt != null) {
                 chapter = (int) chapterOpt.getAsLong();

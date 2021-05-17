@@ -163,7 +163,7 @@ public class CommandManager {
         final Guild guild = event.getGuild();
 
         if (cmd.shouldAck()) {
-            event.acknowledge().setEphemeral(false).queue();
+            event.deferReply().setEphemeral(false).queue();
         }
 
         dispatchCommand(cmd, guild, invoke, "[]", () ->  new JDASlashCommandEvent(event, container));

@@ -34,7 +34,7 @@ import me.duncte123.ghostbot.utils.Container;
 import me.duncte123.ghostbot.utils.TumblrUtils;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.utils.MiscUtil;
 import org.apache.commons.text.StringEscapeUtils;
@@ -103,7 +103,7 @@ public class QuotesCommand extends Command {
 
         if (args.size() > 0) {
             if (event.isSlash()) {
-                final SlashCommandEvent.OptionData idOpt = event.getOption("id");
+                final OptionMapping idOpt = event.getOption("id");
 
                 if (idOpt != null) {
                     getPostFromId(idOpt.getAsLong(), event.getContainer(), (it) -> sendQuote(event, it), event::reply);

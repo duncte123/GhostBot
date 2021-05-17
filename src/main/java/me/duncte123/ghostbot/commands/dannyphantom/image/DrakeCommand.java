@@ -25,7 +25,7 @@ import me.duncte123.ghostbot.objects.command.JDASlashCommandEvent;
 import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.internal.utils.IOUtil;
 import okhttp3.Request;
@@ -60,7 +60,7 @@ public class DrakeCommand extends ImageBase {
         final boolean shouldDab;
 
         if (event.isSlash()) {
-            final SlashCommandEvent.OptionData dab = event.getOption("dab");
+            final OptionMapping dab = event.getOption("dab");
 
             shouldDab = dab != null && dab.getAsBoolean();
 
@@ -82,7 +82,7 @@ public class DrakeCommand extends ImageBase {
         genDanny(split[0], split[1], shouldDab, event.getContainer().getConfig(), (it) -> {
             if (event.isSlash()) {
                 ((JDASlashCommandEvent) event).getSlashEvent()
-                    .acknowledge()
+                    .deferReply()
                     .setEphemeral(false)
                     .setContent("Generated")
                     .queue();

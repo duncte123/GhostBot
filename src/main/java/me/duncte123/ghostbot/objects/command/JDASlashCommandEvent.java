@@ -26,7 +26,8 @@ import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.interactions.commands.CommandHook;
+import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 
 import java.util.List;
@@ -37,7 +38,7 @@ public class JDASlashCommandEvent implements ICommandEvent {
 
     private final SlashCommandEvent event;
     private final Container container;
-    private final CommandHook hook;
+    private final InteractionHook hook;
 
     public JDASlashCommandEvent(SlashCommandEvent event, Container container) {
         this.event = event;
@@ -59,12 +60,12 @@ public class JDASlashCommandEvent implements ICommandEvent {
     public List<String> getArgs() {
         return this.event.getOptions().stream()
             .filter((it) -> it.getType() == OptionType.STRING)
-            .map(SlashCommandEvent.OptionData::getAsString)
+            .map(OptionMapping::getAsString)
             .collect(Collectors.toList());
     }
 
     @Override
-    public SlashCommandEvent.OptionData getOption(String name) {
+    public OptionMapping getOption(String name) {
         return this.event.getOption(name);
     }
 
@@ -121,7 +122,7 @@ public class JDASlashCommandEvent implements ICommandEvent {
     public void reply(MessageConfig config) {
         if (!this.event.isAcknowledged()) {
             // be lazy, we can complete this cuz command thread
-            event.acknowledge().setEphemeral(false).complete();
+            event.deferReply().setEphemeral(false).complete();
         }
 
         final MessageBuilder messageBuilder = config.getMessageBuilder();
@@ -142,10 +143,10 @@ public class JDASlashCommandEvent implements ICommandEvent {
     @Override
     public void reply(EmbedBuilder embed) {
         if (this.event.isAcknowledged()) {
-            this.hook.sendMessage(embed.build()).queue();
+            this.hook.sendMessageEmbeds(embed.build()).queue();
             return;
         }
 
-        this.event.reply(embed.build()).setEphemeral(false).queue();
+        this.event.replyEmbeds(embed.build()).setEphemeral(false).queue();
     }
 }
