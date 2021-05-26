@@ -28,8 +28,8 @@ import me.duncte123.ghostbot.objects.fyl.FylChapter;
 import me.duncte123.ghostbot.objects.fyl.FylComic;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.interactions.ActionRow;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.internal.utils.tuple.Pair;
@@ -42,7 +42,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static me.duncte123.ghostbot.utils.SpoopyUtils.newLongSet;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
 
 public class FylCommicCommand extends ReactionCommand {
@@ -97,28 +96,25 @@ public class FylCommicCommand extends ReactionCommand {
         final AtomicInteger pageIndex = new AtomicInteger(page);
         final AtomicInteger chapterIndex = new AtomicInteger(chapter);
         final AtomicReference<FylChapter> chapterRef = new AtomicReference<>(fylChapter);
-        final MessageConfig messageConfig = new MessageConfig.Builder()
+        final MessageConfig.Builder messageConfig = new MessageConfig.Builder()
             .setChannel(event.getChannel())
-            .setMessage(new MessageBuilder()
-                .append("Use the emotes at the bottom to navigate through pages, use the ❌ emote when you are done reading.\n")
-                .append("The controls have a timeout of 30 minutes")
-                .build())
+            .setMessage("Use the emotes at the bottom to navigate through pages, use the ❌ emote when you are done reading.\n" +
+                "The controls have a timeout of 30 minutes")
             .setEmbed(getEmbed(chapterIndex.get(), pageIndex.get()))
-            .setSuccessAction((m) -> this.addReactions(m, LEFT_RIGHT_CANCEL,
-                newLongSet(author.getIdLong()), 30, TimeUnit.MINUTES, (index) -> {
+            .setSuccessAction(
+                (m) -> this.addButtons(m,30, TimeUnit.MINUTES, (button) -> {
+                    final String buttonId = button.getId();
 
-                    if (index == 2) { //cancel button
-                        stopReactions(m, true);
-                        return;
-                    } else if (index > 2) { // other error
-                        stopReactions(m, false);
+                    //  something that can never happen or cancel button
+                    if (buttonId == null || buttonId.startsWith("cancel")) {
+                        disableButtons(m, false);
                         return;
                     }
 
                     FylChapter chap = chapterRef.get();
                     final int totalPagesChap = chap.getPages();
                     int nextPage = pageIndex.updateAndGet(
-                        (current) -> index == 1 ? Math.min(current + 1, totalPagesChap) : Math.max(current - 1, -1)
+                        (current) -> buttonId.startsWith("next") ? Math.min(current + 1, totalPagesChap) : Math.max(current - 1, -1)
                     );
 
                     if ((nextPage + 1) > chap.getPages()) {
@@ -138,13 +134,19 @@ public class FylCommicCommand extends ReactionCommand {
                     }
 
                     if (nextPage >= 0 && nextPage <= chap.getPages()) {
-                        m.editMessage(getEmbed(chapterIndex.get(), nextPage).build()).queue();
+                        m.editMessage(getEmbed(chapterIndex.get(), nextPage).build())
+                            .setActionRows(m.getActionRows())
+                            .queue();
                     }
                 })
-            )
-            .build();
+            );
 
-        event.reply(messageConfig);
+        messageConfig.getMessageBuilder()
+            .setActionRows(ActionRow.of(
+                LEFT_RIGHT_CANCEL.apply(author.getIdLong())
+            ));
+
+        event.reply(messageConfig.build());
     }
 
     private EmbedBuilder getEmbed(int numChapter, int numPage) {
@@ -220,6 +222,7 @@ public class FylCommicCommand extends ReactionCommand {
     @Override
     public List<String> getAliases() {
         return List.of(
+            "fyl",
             "5ylcomic",
             "fiveyearslater",
             "fiveyearslatercomic"

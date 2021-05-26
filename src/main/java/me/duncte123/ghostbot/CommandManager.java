@@ -37,9 +37,9 @@ import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.utils.Container;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -104,6 +104,7 @@ public class CommandManager {
         this.addCommand(new ISSCommand());
 
         this.addCommand(new UpdateSlashCommand());
+        this.addCommand(new TestButtonCommand());
     }
 
     private void addCommand(Command command) {
@@ -236,7 +237,7 @@ public class CommandManager {
             }
         }
 
-        void handle(final MessageReactionAddEvent event) {
+        void handle(final ButtonClickEvent event) {
             synchronized (this.listeners) {
                 for (final ReactionCommand.ReactionListener listener : this.listeners) {
                     listener.handle(event);

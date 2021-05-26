@@ -30,8 +30,8 @@ import me.duncte123.ghostbot.objects.tumblr.TumblrPost;
 import me.duncte123.ghostbot.utils.Container;
 import me.duncte123.ghostbot.utils.TumblrUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.interactions.ActionRow;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
@@ -48,7 +48,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
-import static me.duncte123.ghostbot.utils.SpoopyUtils.newLongSet;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
 
 abstract class TumblrComicBase extends ReactionCommand {
@@ -113,29 +112,37 @@ abstract class TumblrComicBase extends ReactionCommand {
         }
 
         final AtomicInteger pa = new AtomicInteger(page);
-        final MessageConfig messageConfig = new MessageConfig.Builder()
+        final MessageConfig.Builder messageConfig = new MessageConfig.Builder()
             .setChannel(event.getChannel())
-            .setMessage(new MessageBuilder()
-                .append("Use the emotes at the bottom to navigate through pages, use the ❌ emote when you are done reading.\n")
-                .append("The controls have a timeout of 30 minutes")
-                .build())
+            .setMessage("Use the emotes at the bottom to navigate through pages, use the ❌ emote when you are done reading.\n" +
+                "The controls have a timeout of 30 minutes")
             .setEmbed(getEmbed(pa.get()))
-            .setSuccessAction((it) -> this.addReactions(it, LEFT_RIGHT_CANCEL, newLongSet(author.getIdLong()), 30, TimeUnit.MINUTES,
-                (index) -> {
-                    if (index >= 2) { //cancel button or other error
-                        stopReactions(it);
+            .setSuccessAction((it) -> this.addButtons(it, 30, TimeUnit.MINUTES,
+                (button) -> {
+                    final String buttonId = button.getId();
+
+                    if (buttonId == null || buttonId.startsWith("cancel")) {
+                        disableButtons(it);
 
                         return;
                     }
 
-                    final int nextPage = pa.updateAndGet((current) -> index == 1 ? Math.min(current + 1, pages.size() - 1) : Math.max(current - 1, 0));
+                    final int nextPage = pa.updateAndGet(
+                        (current) -> buttonId.startsWith("next") ? Math.min(current + 1, pages.size() - 1) : Math.max(current - 1, 0)
+                    );
 
-                    it.editMessage(getEmbed(nextPage).build()).queue();
+                    it.editMessage(getEmbed(nextPage).build())
+                        .setActionRows(it.getActionRows())
+                        .queue();
                 })
-            )
-            .build();
+            );
 
-        event.reply(messageConfig);
+        messageConfig.getMessageBuilder()
+            .setActionRows(ActionRow.of(
+                LEFT_RIGHT_CANCEL.apply(author.getIdLong())
+            ));
+
+        event.reply(messageConfig.build());
     }
 
     private int getNumberFromArg(String input) {

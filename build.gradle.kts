@@ -47,8 +47,8 @@ application {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_16
+    targetCompatibility = JavaVersion.VERSION_16
 }
 
 repositories {
@@ -60,7 +60,7 @@ repositories {
 }
 
 //val jda = JDAVersionInfo("4.2.0_250")
-val jda = JDAVersionInfo("db92d7d")
+val jda = JDAVersionInfo("f957801")
 
 dependencies {
     implementation(group = "me.duncte123", name = "botCommons", version = "2.1.3")

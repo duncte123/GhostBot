@@ -38,9 +38,9 @@ import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
+import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.EventListener;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import okhttp3.RequestBody;
@@ -88,23 +88,23 @@ public class BotListener implements EventListener {
     }
 
     @Override
-    public void onEvent(@Nonnull GenericEvent event) {
-        if (event instanceof ReadyEvent) {
-            this.onReady((ReadyEvent) event);
-        } else if (event instanceof GuildMessageReceivedEvent) {
-            this.onGuildMessageReceived((GuildMessageReceivedEvent) event);
-        } else if (event instanceof GuildJoinEvent) {
-            this.onGuildJoin((GuildJoinEvent) event);
-        } else if (event instanceof GuildLeaveEvent) {
-            this.onGuildLeave((GuildLeaveEvent) event);
-        } else if (event instanceof GuildVoiceLeaveEvent) {
-            this.onGuildVoiceLeave((GuildVoiceLeaveEvent) event);
-        } else if (event instanceof GuildVoiceMoveEvent) {
-            this.onGuildVoiceMove((GuildVoiceMoveEvent) event);
-        } else if (event instanceof MessageReactionAddEvent) {
-            this.onMessageReactionAdd((MessageReactionAddEvent) event);
-        } else if (event instanceof SlashCommandEvent) {
-            this.onSlashCommand((SlashCommandEvent) event);
+    public void onEvent(@Nonnull GenericEvent e) {
+        if (e instanceof ReadyEvent event) {
+            this.onReady(event);
+        } else if (e instanceof GuildMessageReceivedEvent event) {
+            this.onGuildMessageReceived(event);
+        } else if (e instanceof GuildJoinEvent event) {
+            this.onGuildJoin(event);
+        } else if (e instanceof GuildLeaveEvent event) {
+            this.onGuildLeave(event);
+        } else if (e instanceof GuildVoiceLeaveEvent event) {
+            this.onGuildVoiceLeave(event);
+        } else if (e instanceof GuildVoiceMoveEvent event) {
+            this.onGuildVoiceMove(event);
+        } else if (e instanceof SlashCommandEvent event) {
+            this.onSlashCommand(event);
+        } else if (e instanceof ButtonClickEvent event) {
+            this.onButtonClick(event);
         }
     }
 
@@ -232,8 +232,31 @@ public class BotListener implements EventListener {
         }
     }
 
-    private void onMessageReactionAdd(@Nonnull MessageReactionAddEvent event) {
+    private void onButtonClick(@Nonnull ButtonClickEvent event) {
         this.commandManager.reactListReg.handle(event);
+        // getComponentId == command-name:action:userid
+        // ignore buttons that are not for this user
+        // delegate to handler?
+        /*if (!event.isFromGuild() || !event.getComponentId().endsWith(event.getUser().getId())) {
+            event.deferReply(true).setContent("This button is not for you :P").queue();
+            return;
+        }
+
+        final List<ActionRow> rows = event.getMessage().getActionRows().stream()
+            .map(ActionRow::getButtons)
+            .map((btns) -> btns.stream().map(Button::asDisabled).collect(Collectors.toList()))
+            .map(ActionRow::of)
+            .collect(Collectors.toList());*/
+
+        // deferReply adds a new reply
+        // deferEdit for paginating
+        // getInteraction#updateButton
+        // Button#asDisabled
+        // ack for now
+        /*event.deferEdit()
+            .setContent("You clicked " + event.getComponentId())
+            .setActionRows(rows)
+            .queue();*/
     }
 
     private void onSlashCommand(@Nonnull SlashCommandEvent event) {
