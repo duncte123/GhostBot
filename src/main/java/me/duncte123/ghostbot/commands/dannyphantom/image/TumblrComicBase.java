@@ -118,6 +118,11 @@ abstract class TumblrComicBase extends ReactionCommand {
             .setMessage("Use the emotes at the bottom to navigate through pages, use the ❌ emote when you are done reading.\n" +
                 "The controls have a timeout of 30 minutes")
             .setEmbed(getEmbed(pa.get()))
+            .configureMessageBuilder(
+                (builder) -> builder.setActionRows(
+                    ActionRow.of(LEFT_RIGHT_CANCEL.apply(author.getIdLong()))
+                )
+            )
             .setSuccessAction((msg) -> this.enableButtons(msg, 30, TimeUnit.MINUTES,
                 (btnEvent) -> {
                     final Button button = btnEvent.getButton();
@@ -145,11 +150,6 @@ abstract class TumblrComicBase extends ReactionCommand {
                 })
             )
             .build();
-
-        messageConfig.getMessageBuilder()
-            .setActionRows(ActionRow.of(
-                LEFT_RIGHT_CANCEL.apply(author.getIdLong())
-            ));
 
         event.reply(messageConfig);
     }

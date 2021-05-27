@@ -105,6 +105,11 @@ public class FylCommicCommand extends ReactionCommand {
             .setMessage("Use the emotes at the bottom to navigate through pages, use the ❌ emote when you are done reading.\n" +
                 "The controls have a timeout of 30 minutes")
             .setEmbed(getEmbed(chapterIndex.get(), pageIndex.get()))
+            .configureMessageBuilder(
+                (builder) -> builder.setActionRows(
+                    ActionRow.of(LEFT_RIGHT_CANCEL.apply(author.getIdLong()))
+                )
+            )
             .setSuccessAction(
                 (msg) -> this.enableButtons(msg, 30, TimeUnit.MINUTES, (btnEvent) -> {
                     final Button button = btnEvent.getButton();
@@ -159,11 +164,6 @@ public class FylCommicCommand extends ReactionCommand {
                 })
             )
             .build();
-
-        messageConfig.getMessageBuilder()
-            .setActionRows(ActionRow.of(
-                LEFT_RIGHT_CANCEL.apply(author.getIdLong())
-            ));
 
         event.reply(messageConfig);
     }
