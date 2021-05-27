@@ -30,6 +30,7 @@ import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.interactions.ActionRow;
+import net.dv8tion.jda.api.interactions.button.Button;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.internal.utils.tuple.Pair;
@@ -78,6 +79,10 @@ public class FylCommicCommand extends ReactionCommand {
             page--;
         }
 
+        if (chapter > 0) {
+            chapter--;
+        }
+
         final List<FylChapter> chapterList = comic.getChapters();
 
         if (chapter >= chapterList.size()) {
@@ -96,18 +101,25 @@ public class FylCommicCommand extends ReactionCommand {
         final AtomicInteger pageIndex = new AtomicInteger(page);
         final AtomicInteger chapterIndex = new AtomicInteger(chapter);
         final AtomicReference<FylChapter> chapterRef = new AtomicReference<>(fylChapter);
-        final MessageConfig.Builder messageConfig = new MessageConfig.Builder()
+        final MessageConfig messageConfig = new MessageConfig.Builder()
             .setChannel(event.getChannel())
             .setMessage("Use the emotes at the bottom to navigate through pages, use the ❌ emote when you are done reading.\n" +
                 "The controls have a timeout of 30 minutes")
             .setEmbed(getEmbed(chapterIndex.get(), pageIndex.get()))
             .setSuccessAction(
-                (m) -> this.addButtons(m,30, TimeUnit.MINUTES, (button) -> {
+                (msg) -> this.addButtons(msg, 30, TimeUnit.MINUTES, (btnEvent) -> {
+                    final Button button = btnEvent.getButton();
+
+                    if (button == null) {
+                        btnEvent.deferReply(true).setContent("Button was missing????").queue();
+                        return;
+                    }
+
                     final String buttonId = button.getId();
 
                     //  something that can never happen or cancel button
                     if (buttonId == null || buttonId.startsWith("cancel")) {
-                        disableButtons(m, false);
+                        disableButtons(btnEvent);
                         return;
                     }
 
@@ -134,19 +146,27 @@ public class FylCommicCommand extends ReactionCommand {
                     }
 
                     if (nextPage >= 0 && nextPage <= chap.getPages()) {
-                        m.editMessage(getEmbed(chapterIndex.get(), nextPage).build())
-                            .setActionRows(m.getActionRows())
+                        btnEvent.deferEdit()
+                            .setEmbeds(getEmbed(chapterIndex.get(), nextPage).build())
+                            .setActionRows(msg.getActionRows())
+                            .queue();
+                    } else {
+                        // reset the page index
+                        pageIndex.set(0);
+                        btnEvent.deferReply(true)
+                            .setContent("Invalid page")
                             .queue();
                     }
                 })
-            );
+            )
+            .build();
 
         messageConfig.getMessageBuilder()
             .setActionRows(ActionRow.of(
                 LEFT_RIGHT_CANCEL.apply(author.getIdLong())
             ));
 
-        event.reply(messageConfig.build());
+        event.reply(messageConfig);
     }
 
     private EmbedBuilder getEmbed(int numChapter, int numPage) {

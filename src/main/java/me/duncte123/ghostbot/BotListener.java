@@ -42,6 +42,8 @@ import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.EventListener;
+import net.dv8tion.jda.api.interactions.ActionRow;
+import net.dv8tion.jda.api.interactions.button.Button;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import okhttp3.RequestBody;
 import org.json.JSONObject;
@@ -49,11 +51,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 import static me.duncte123.botcommons.web.ContentType.JSON;
@@ -233,7 +237,27 @@ public class BotListener implements EventListener {
     }
 
     private void onButtonClick(@Nonnull ButtonClickEvent event) {
-        this.commandManager.reactListReg.handle(event);
+        final boolean handled = this.commandManager.reactListReg.handle(event);
+
+        if (handled) {
+            return;
+        }
+
+        if (event.getMessage() == null) {
+            return;
+        }
+
+        // disable all buttons if the event is unknown
+        final List<Button> buttons = event.getMessage()
+            .getButtons()
+            .stream()
+            .map(Button::asDisabled)
+            .collect(Collectors.toList());
+
+        event.deferEdit()
+            .setActionRows(ActionRow.of(buttons))
+            .queue();
+
         // getComponentId == command-name:action:userid
         // ignore buttons that are not for this user
         // delegate to handler?

@@ -237,12 +237,17 @@ public class CommandManager {
             }
         }
 
-        void handle(final ButtonClickEvent event) {
+        boolean handle(final ButtonClickEvent event) {
             synchronized (this.listeners) {
                 for (final ReactionCommand.ReactionListener listener : this.listeners) {
-                    listener.handle(event);
+                    // there's only one handler per message
+                    if (listener.handle(event)) {
+                        return true;
+                    }
                 }
             }
+
+            return false;
         }
     }
 

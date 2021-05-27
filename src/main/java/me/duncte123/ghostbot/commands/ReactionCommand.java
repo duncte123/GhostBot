@@ -20,11 +20,9 @@ package me.duncte123.ghostbot.commands;
 
 import gnu.trove.map.TLongObjectMap;
 import me.duncte123.ghostbot.CommandManager;
-import me.duncte123.ghostbot.GhostBot;
 import me.duncte123.ghostbot.objects.command.Command;
 import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.interactions.ActionRow;
 import net.dv8tion.jda.api.interactions.button.Button;
@@ -68,21 +66,17 @@ public abstract class ReactionCommand extends Command {
         this.listenerRegistry = registry;
     }
 
-    protected final void addButtons(Message message, int timeout, TimeUnit timeUnit, Consumer<Button> callback) {
+    protected final void addButtons(Message message, int timeout, TimeUnit timeUnit, Consumer<ButtonClickEvent> callback) {
         if (!ReactionListener.instances.containsKey(message.getIdLong())) {
             new ReactionListener(message, listenerRegistry, timeout, timeUnit, callback);
         }
     }
-
-    protected final void disableButtons(Message message) {
-        disableButtons(message, true);
-    }
-
-    protected final void disableButtons(Message message, boolean removeButtons) {
-        ReactionListener reactionListener = ReactionListener.instances.get(message.getIdLong());
+    protected final void disableButtons(ButtonClickEvent event) {
+        ReactionListener reactionListener = ReactionListener.instances.get(event.getMessageIdLong());
 
         if (reactionListener != null) {
-            reactionListener.stop(removeButtons);
+            reactionListener.cleanUpEvent = event;
+            reactionListener.stop();
         }
     }
 
@@ -90,20 +84,18 @@ public abstract class ReactionCommand extends Command {
     public static final class ReactionListener {
         private static final TLongObjectMap<ReactionListener> instances = MiscUtil.newLongMap();
         private final long messageId;
-        private final long channelId;
         private final CommandManager.ReactionListenerRegistry registry;
-        private final Consumer<Button> callback;
+        private final Consumer<ButtonClickEvent> callback;
         private final ScheduledFuture<?> timeoutFuture;
 
-        private boolean shouldRemoveButtons = true;
+        protected ButtonClickEvent cleanUpEvent = null;
 
         ReactionListener(Message message, CommandManager.ReactionListenerRegistry registry, int timeout, TimeUnit timeUnit,
-                                Consumer<Button> callback) {
+                                Consumer<ButtonClickEvent> callback) {
 
             instances.put(message.getIdLong(), this);
 
             this.messageId = message.getIdLong();
-            this.channelId = message.getTextChannel().getIdLong();
             this.registry = registry;
             this.callback = callback;
             this.timeoutFuture = scheduler.schedule(this::cleanup, timeout, timeUnit);
@@ -111,24 +103,23 @@ public abstract class ReactionCommand extends Command {
             registry.register(this);
         }
 
-        public void handle(ButtonClickEvent event) {
+        public boolean handle(ButtonClickEvent event) {
             // we don't need to check the button id as we know what buttons are on this message
             if (event.getMessageIdLong() != messageId) {
-                return;
+                return false;
             }
 
             if (!event.isFromGuild() || !event.getComponentId().endsWith(event.getUser().getId())) {
                 event.deferReply(true).setContent("This button is not for you :P").queue();
-                return;
+                return true;
             }
 
-            event.deferEdit().queue();
+            callback.accept(event);
 
-            callback.accept(event.getButton());
+            return true;
         }
 
-        private void stop(boolean removeButtons) {
-            this.shouldRemoveButtons = removeButtons;
+        private void stop() {
             this.timeoutFuture.cancel(true);
             this.cleanup();
         }
@@ -137,25 +128,19 @@ public abstract class ReactionCommand extends Command {
         private void cleanup() {
             registry.remove(this);
 
-            final TextChannel channel = GhostBot.getInstance().getShardManager().getTextChannelById(channelId);
-
-            if (channel != null) {
-                channel.retrieveMessageById(messageId).queue((message) -> {
-                    if (shouldRemoveButtons) {
-                        message.editMessage(message)
-                            .setActionRows(ActionRow.of())
-                            .queue();
-                    } else {
-                        final List<Button> disabledButtons = message.getButtons()
-                            .stream()
-                            .map(Button::asDisabled)
-                            .collect(Collectors.toList());
-
-                        message.editMessage(message)
-                            .setActionRows(ActionRow.of(disabledButtons))
-                            .queue();
-                    }
-                });
+            if (this.cleanUpEvent != null) {
+                this.cleanUpEvent.deferEdit()
+                    .setActionRows(
+                        ActionRow.of(
+                            // message is only null on ephemeral messages
+                            this.cleanUpEvent.getMessage()
+                                .getButtons()
+                                .stream()
+                                .map(Button::asDisabled)
+                                .collect(Collectors.toList())
+                        )
+                    )
+                    .queue();
             }
 
             instances.remove(messageId);

@@ -39,7 +39,7 @@ buildscript {
 }
 
 project.group = "me.duncte123"
-project.version = "2.3.1"
+project.version = "2.3.2"
 
 
 application {
@@ -63,7 +63,7 @@ repositories {
 val jda = JDAVersionInfo("f957801")
 
 dependencies {
-    implementation(group = "me.duncte123", name = "botCommons", version = "2.1.3")
+    implementation(group = "me.duncte123", name = "botCommons", version = "2.2.5")
     implementation(group = "org.apache.commons", name = "commons-text", version = "1.6")
     implementation(group = "org.codehaus.groovy", name = "groovy-jsr223", version = "2.5.13")
     implementation(group = jda.group, name = "JDA", version = jda.version) {
