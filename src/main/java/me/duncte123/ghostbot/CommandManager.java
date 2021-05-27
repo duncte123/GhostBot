@@ -104,7 +104,6 @@ public class CommandManager {
         this.addCommand(new ISSCommand());
 
         this.addCommand(new UpdateSlashCommand());
-        this.addCommand(new TestButtonCommand());
     }
 
     private void addCommand(Command command) {

@@ -41,13 +41,7 @@ public abstract class ReactionCommand extends Command {
     private static final String LEFT_ARROW = "\u2B05";
     private static final String RIGHT_ARROW = "\u27A1";
     private static final String CANCEL = "\u274C";
-    // Other way of doing it?
 //    private static final String CANCEL = "\uD83C\uDDFD";
-    public static final LongFunction<List<Button>> LEFT_RIGHT_CANCEL_EMOTE_ONLY = (userId) -> List.of(
-        Button.primary("previous:" + userId, Emoji.ofUnicode(LEFT_ARROW)),
-        Button.primary("next:" + userId, Emoji.ofUnicode(RIGHT_ARROW)),
-        Button.secondary("cancel:" + userId, Emoji.ofUnicode(CANCEL))
-    );
     protected static final LongFunction<List<Button>> LEFT_RIGHT_CANCEL = (userId) -> List.of(
         Button.primary("previous:" + userId, "Previous").withEmoji(Emoji.ofUnicode(LEFT_ARROW)),
         Button.primary("next:" + userId, "Next").withEmoji(Emoji.ofUnicode(RIGHT_ARROW)),
