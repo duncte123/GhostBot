@@ -85,15 +85,14 @@ public class FylCommicCommand extends ReactionCommand {
 
         final List<FylChapter> chapterList = comic.getChapters();
 
-        if (chapter >= chapterList.size()) {
+        if (chapter < 0 || chapter >= chapterList.size()) {
             event.reply("Chapter " + (chapter + 1) + " is not known");
-
             return;
         }
 
         final FylChapter fylChapter = chapterList.get(chapter);
 
-        if (page > fylChapter.getPages()) {
+        if (page < 0 || page > fylChapter.getPages()) {
             event.reply("Page " + page + " is not known in that chapter");
             return;
         }
@@ -107,7 +106,7 @@ public class FylCommicCommand extends ReactionCommand {
                 "The controls have a timeout of 30 minutes")
             .setEmbed(getEmbed(chapterIndex.get(), pageIndex.get()))
             .setSuccessAction(
-                (msg) -> this.addButtons(msg, 30, TimeUnit.MINUTES, (btnEvent) -> {
+                (msg) -> this.enableButtons(msg, 30, TimeUnit.MINUTES, (btnEvent) -> {
                     final Button button = btnEvent.getButton();
 
                     if (button == null) {
@@ -222,7 +221,7 @@ public class FylCommicCommand extends ReactionCommand {
                     if (arg.startsWith(PAGE_SELECTOR)) {
                         page = getNumberFromArg(arg.substring(PAGE_SELECTOR.length()));
                     } else if (arg.startsWith(CHAPTER_SELECTOR)) {
-                        chapter = getNumberFromArg(arg.substring(CHAPTER_SELECTOR.length())) - 1;
+                        chapter = getNumberFromArg(arg.substring(CHAPTER_SELECTOR.length()));
                     }
                 }
             }

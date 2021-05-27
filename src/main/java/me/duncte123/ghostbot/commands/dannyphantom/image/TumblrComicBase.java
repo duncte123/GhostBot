@@ -118,7 +118,7 @@ abstract class TumblrComicBase extends ReactionCommand {
             .setMessage("Use the emotes at the bottom to navigate through pages, use the ❌ emote when you are done reading.\n" +
                 "The controls have a timeout of 30 minutes")
             .setEmbed(getEmbed(pa.get()))
-            .setSuccessAction((msg) -> this.addButtons(msg, 30, TimeUnit.MINUTES,
+            .setSuccessAction((msg) -> this.enableButtons(msg, 30, TimeUnit.MINUTES,
                 (btnEvent) -> {
                     final Button button = btnEvent.getButton();
 

@@ -60,7 +60,7 @@ public abstract class ReactionCommand extends Command {
         this.listenerRegistry = registry;
     }
 
-    protected final void addButtons(Message message, int timeout, TimeUnit timeUnit, Consumer<ButtonClickEvent> callback) {
+    protected final void enableButtons(Message message, int timeout, TimeUnit timeUnit, Consumer<ButtonClickEvent> callback) {
         if (!ReactionListener.instances.containsKey(message.getIdLong())) {
             new ReactionListener(message, listenerRegistry, timeout, timeUnit, callback);
         }
