@@ -24,8 +24,8 @@ import me.duncte123.ghostbot.objects.command.Command;
 import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
-import net.dv8tion.jda.api.interactions.ActionRow;
-import net.dv8tion.jda.api.interactions.button.Button;
+import net.dv8tion.jda.api.interactions.components.ActionRow;
+import net.dv8tion.jda.api.interactions.components.Button;
 import net.dv8tion.jda.api.utils.MiscUtil;
 
 import java.util.List;

@@ -78,11 +78,7 @@ public abstract class Command {
             throw new IllegalArgumentException(this.getClass() + " is over 100");
         }
 
-        final CommandData commandData = new CommandData(this.getName(), parsedHelp.trim());
-
-        this.getCommandOptions().forEach(commandData::addOption);
-
-        return commandData;
+        return new CommandData(this.getName(), parsedHelp.trim()).addOptions(this.getCommandOptions());
     }
 
     public CommandCategory getCategory() {

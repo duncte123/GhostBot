@@ -31,10 +31,9 @@ import me.duncte123.ghostbot.utils.Container;
 import me.duncte123.ghostbot.utils.TumblrUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.interactions.ActionRow;
-import net.dv8tion.jda.api.interactions.button.Button;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.api.interactions.components.ActionRow;
 
 import javax.annotation.Nonnull;
 import java.io.File;
@@ -125,16 +124,9 @@ abstract class TumblrComicBase extends ReactionCommand {
             )
             .setSuccessAction((msg) -> this.enableButtons(msg, 30, TimeUnit.MINUTES,
                 (btnEvent) -> {
-                    final Button button = btnEvent.getButton();
+                    final String buttonId = btnEvent.getComponentId();
 
-                    if (button == null) {
-                        btnEvent.deferReply(true).setContent("Button was missing????").queue();
-                        return;
-                    }
-
-                    final String buttonId = button.getId();
-
-                    if (buttonId == null || buttonId.startsWith("cancel")) {
+                    if (buttonId.startsWith("cancel")) {
                         disableButtons(btnEvent);
                         return;
                     }

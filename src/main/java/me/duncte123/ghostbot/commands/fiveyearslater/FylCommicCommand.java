@@ -29,10 +29,9 @@ import me.duncte123.ghostbot.objects.fyl.FylComic;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.interactions.ActionRow;
-import net.dv8tion.jda.api.interactions.button.Button;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.internal.utils.tuple.Pair;
 
 import java.io.File;
@@ -112,17 +111,10 @@ public class FylCommicCommand extends ReactionCommand {
             )
             .setSuccessAction(
                 (msg) -> this.enableButtons(msg, 30, TimeUnit.MINUTES, (btnEvent) -> {
-                    final Button button = btnEvent.getButton();
-
-                    if (button == null) {
-                        btnEvent.deferReply(true).setContent("Button was missing????").queue();
-                        return;
-                    }
-
-                    final String buttonId = button.getId();
+                    final String buttonId = btnEvent.getComponentId();
 
                     //  something that can never happen or cancel button
-                    if (buttonId == null || buttonId.startsWith("cancel")) {
+                    if (buttonId.startsWith("cancel")) {
                         disableButtons(btnEvent);
                         return;
                     }
