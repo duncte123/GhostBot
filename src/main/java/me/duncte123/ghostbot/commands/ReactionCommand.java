@@ -43,9 +43,9 @@ public abstract class ReactionCommand extends Command {
     private static final String CANCEL = "\u274C";
 //    private static final String CANCEL = "\uD83C\uDDFD";
     protected static final LongFunction<List<Button>> LEFT_RIGHT_CANCEL = (userId) -> List.of(
-        Button.primary("previous:" + userId, "Previous").withEmoji(Emoji.ofUnicode(LEFT_ARROW)),
-        Button.primary("next:" + userId, "Next").withEmoji(Emoji.ofUnicode(RIGHT_ARROW)),
-        Button.secondary("cancel:" + userId, "Exit").withEmoji(Emoji.ofUnicode(CANCEL))
+        Button.primary("previous:" + userId, "Previous").withEmoji(Emoji.fromUnicode(LEFT_ARROW)),
+        Button.primary("next:" + userId, "Next").withEmoji(Emoji.fromUnicode(RIGHT_ARROW)),
+        Button.secondary("cancel:" + userId, "Exit").withEmoji(Emoji.fromUnicode(CANCEL))
     );
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(10, (r) -> {
         final Thread t = new Thread(r, "Menu Thread");

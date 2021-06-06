@@ -59,8 +59,8 @@ repositories {
     maven("https://jitpack.io")
 }
 
-//val jda = JDAVersionInfo("4.2.0_250")
-val jda = JDAVersionInfo("bacd237")
+val jda = JDAVersionInfo("4.2.1_269")
+//val jda = JDAVersionInfo("bacd237")
 
 dependencies {
     implementation(group = "me.duncte123", name = "botCommons", version = "2.2.5")
