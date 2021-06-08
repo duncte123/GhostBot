@@ -31,7 +31,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
-import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.internal.utils.tuple.Pair;
 
 import java.io.File;
@@ -96,6 +95,7 @@ public class FylCommicCommand extends ReactionCommand {
             return;
         }
 
+        final long userId = author.getIdLong();
         final AtomicInteger pageIndex = new AtomicInteger(page);
         final AtomicInteger chapterIndex = new AtomicInteger(chapter);
         final AtomicReference<FylChapter> chapterRef = new AtomicReference<>(fylChapter);
@@ -105,9 +105,18 @@ public class FylCommicCommand extends ReactionCommand {
                 "The controls have a timeout of 30 minutes")
             .setEmbed(getEmbed(chapterIndex.get(), pageIndex.get()))
             .configureMessageBuilder(
-                (builder) -> builder.setActionRows(
-                    ActionRow.of(LEFT_RIGHT_CANCEL.apply(author.getIdLong()))
-                )
+                (builder) -> {
+                    final int chapI = chapterIndex.get();
+                    final int pageI = pageIndex.get();
+
+                    builder.setActionRows(
+                        LEFT_RIGHT_CANCEL.toActionRow(
+                            userId,
+                            chapI == 0 && pageI == 0,
+                            chapI == chapterList.size() - 1 && pageI == fylChapter.getPages() - 1
+                        )
+                    );
+                }
             )
             .setSuccessAction(
                 (msg) -> this.enableButtons(msg, 30, TimeUnit.MINUTES, (btnEvent) -> {
@@ -121,30 +130,37 @@ public class FylCommicCommand extends ReactionCommand {
 
                     FylChapter chap = chapterRef.get();
                     final int totalPagesChap = chap.getPages();
-                    int nextPage = pageIndex.updateAndGet(
+                    int displayPage = pageIndex.updateAndGet(
                         (current) -> buttonId.startsWith("next") ? Math.min(current + 1, totalPagesChap) : Math.max(current - 1, -1)
                     );
 
-                    if ((nextPage + 1) > chap.getPages()) {
-                        nextPage = pageIndex.updateAndGet((__) -> 0);
+                    if ((displayPage + 1) > chap.getPages()) {
+                        displayPage = pageIndex.updateAndGet((__) -> 0);
                         int i = chapterIndex.incrementAndGet();
                         chap = chapterRef.updateAndGet((__) -> chapterList.get(i));
-                    } else if (nextPage == -1) {
+                    } else if (displayPage == -1) {
                         int i = chapterIndex.decrementAndGet();
 
                         if (i > -1) {
                             chap = chapterRef.updateAndGet((__) -> chapterList.get(i));
                             final int chapPages = chap.getPages();
-                            nextPage = pageIndex.updateAndGet((__) -> chapPages - 1);
+                            displayPage = pageIndex.updateAndGet((__) -> chapPages - 1);
                         } else {
-                            chapterIndex.updateAndGet((__) -> 0);
+                            chapterIndex.set(0);
                         }
                     }
 
-                    if (nextPage >= 0 && nextPage <= chap.getPages()) {
+                    if (displayPage >= 0 && displayPage <= chap.getPages()) {
+                        final int displayChapter = chapterIndex.get();
                         btnEvent.deferEdit()
-                            .setEmbeds(getEmbed(chapterIndex.get(), nextPage).build())
-                            .setActionRows(msg.getActionRows())
+                            .setEmbeds(getEmbed(displayChapter, displayPage).build())
+                            .setActionRows(
+                                LEFT_RIGHT_CANCEL.toActionRow(
+                                    userId,
+                                    displayChapter == 0 && displayPage == 0,
+                                    displayChapter == chapterList.size() - 1 && displayPage == totalPagesChap - 1
+                                )
+                            )
                             .queue();
                     } else {
                         // reset the page index

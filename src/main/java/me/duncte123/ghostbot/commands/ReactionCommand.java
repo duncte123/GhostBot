@@ -34,7 +34,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
-import java.util.function.LongFunction;
 import java.util.stream.Collectors;
 
 public abstract class ReactionCommand extends Command {
@@ -42,9 +41,9 @@ public abstract class ReactionCommand extends Command {
     private static final String RIGHT_ARROW = "\u27A1";
     private static final String CANCEL = "\u274C";
 //    private static final String CANCEL = "\uD83C\uDDFD";
-    protected static final LongFunction<List<Button>> LEFT_RIGHT_CANCEL = (userId) -> List.of(
-        Button.primary("previous:" + userId, "Previous").withEmoji(Emoji.fromUnicode(LEFT_ARROW)),
-        Button.primary("next:" + userId, "Next").withEmoji(Emoji.fromUnicode(RIGHT_ARROW)),
+    protected static final ButtonFunction LEFT_RIGHT_CANCEL = (userId, leftDisabled, rightDisabled) -> List.of(
+        Button.primary("previous:" + userId, "Previous").withEmoji(Emoji.fromUnicode(LEFT_ARROW)).withDisabled(leftDisabled),
+        Button.primary("next:" + userId, "Next").withEmoji(Emoji.fromUnicode(RIGHT_ARROW)).withDisabled(rightDisabled),
         Button.secondary("cancel:" + userId, "Exit").withEmoji(Emoji.fromUnicode(CANCEL))
     );
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(10, (r) -> {
@@ -138,6 +137,19 @@ public abstract class ReactionCommand extends Command {
             }
 
             instances.remove(messageId);
+        }
+    }
+
+    public interface ButtonFunction {
+        List<Button> getButtons(long userId, boolean leftDisabled, boolean rightDisabled);
+
+        @Deprecated
+        default List<Button> apply(long userId) {
+            return getButtons(userId, false, false);
+        }
+
+        default ActionRow toActionRow(long userId, boolean leftDisabled, boolean rightDisabled) {
+            return ActionRow.of(getButtons(userId, leftDisabled, rightDisabled));
         }
     }
 }

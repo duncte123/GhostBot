@@ -33,7 +33,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
-import net.dv8tion.jda.api.interactions.components.ActionRow;
 
 import javax.annotation.Nonnull;
 import java.io.File;
@@ -111,15 +110,21 @@ abstract class TumblrComicBase extends ReactionCommand {
             return;
         }
 
+        final long userId = author.getIdLong();
         final AtomicInteger pa = new AtomicInteger(page);
+        final int startPage = pa.get();
         final MessageConfig messageConfig = new MessageConfig.Builder()
             .setChannel(event.getChannel())
             .setMessage("Use the emotes at the bottom to navigate through pages, use the ❌ emote when you are done reading.\n" +
                 "The controls have a timeout of 30 minutes")
-            .setEmbed(getEmbed(pa.get()))
+            .setEmbed(getEmbed(startPage))
             .configureMessageBuilder(
                 (builder) -> builder.setActionRows(
-                    ActionRow.of(LEFT_RIGHT_CANCEL.apply(author.getIdLong()))
+                    LEFT_RIGHT_CANCEL.toActionRow(
+                        userId,
+                        startPage == 0,
+                        startPage == pages.size() - 1
+                    )
                 )
             )
             .setSuccessAction((msg) -> this.enableButtons(msg, 30, TimeUnit.MINUTES,
@@ -131,13 +136,19 @@ abstract class TumblrComicBase extends ReactionCommand {
                         return;
                     }
 
-                    final int nextPage = pa.updateAndGet(
+                    final int pageToDisplay = pa.updateAndGet(
                         (current) -> buttonId.startsWith("next") ? Math.min(current + 1, pages.size() - 1) : Math.max(current - 1, 0)
                     );
 
                     btnEvent.deferEdit()
-                        .setEmbeds(getEmbed(nextPage).build())
-                        .setActionRows(msg.getActionRows())
+                        .setEmbeds(getEmbed(pageToDisplay).build())
+                        .setActionRows(
+                            LEFT_RIGHT_CANCEL.toActionRow(
+                                userId,
+                                pageToDisplay == 0,
+                                pageToDisplay == pages.size() - 1
+                            )
+                        )
                         .queue();
                 })
             )
@@ -188,7 +199,7 @@ abstract class TumblrComicBase extends ReactionCommand {
         if (comicFile.exists()) {
             List<TumblrPost> posts = null;
             try {
-                posts = mapper.readValue(comicFile, new TypeReference<List<TumblrPost>>() {});
+                posts = mapper.readValue(comicFile, new TypeReference<>() {});
             } catch (IOException e) {
                 logger.error("Failed to load " + clsName + " comic", e);
             }
