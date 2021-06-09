@@ -59,7 +59,7 @@ repositories {
     maven("https://jitpack.io")
 }
 
-val jda = JDAVersionInfo("4.2.1_269")
+val jda = JDAVersionInfo("4.2.1_276")
 //val jda = JDAVersionInfo("bacd237")
 
 dependencies {

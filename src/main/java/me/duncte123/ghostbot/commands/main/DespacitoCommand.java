@@ -24,8 +24,6 @@ import me.duncte123.ghostbot.objects.command.ICommandEvent;
 import me.duncte123.ghostbot.utils.AudioUtils;
 import me.duncte123.ghostbot.utils.StoredTracks;
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
-
 public class DespacitoCommand extends Command {
     @Override
     public void execute(ICommandEvent event) {
