@@ -59,11 +59,11 @@ repositories {
     maven("https://jitpack.io")
 }
 
-val jda = JDAVersionInfo("4.2.1_276")
+val jda = JDAVersionInfo("4.3.0_303")
 //val jda = JDAVersionInfo("bacd237")
 
 dependencies {
-    implementation(group = "me.duncte123", name = "botCommons", version = "2.2.5")
+    implementation(group = "me.duncte123", name = "botCommons", version = "2.3.8")
     implementation(group = "org.apache.commons", name = "commons-text", version = "1.6")
     implementation(group = "org.codehaus.groovy", name = "groovy-jsr223", version = "2.5.13")
     implementation(group = jda.group, name = "JDA", version = jda.version) {

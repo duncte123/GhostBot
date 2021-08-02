@@ -83,7 +83,7 @@ public class AudioUtils {
                 sendMsg(
                     new MessageConfig.Builder()
                         .setChannel(channel)
-                        .setEmbed(EmbedUtils.embedField(EMBED_TITLE, "Nothing found by _" + trackUrl + '_'), true)
+                        .setEmbeds(true, EmbedUtils.embedField(EMBED_TITLE, "Nothing found by _" + trackUrl + '_'))
                         .build()
                 );
             }
@@ -93,11 +93,11 @@ public class AudioUtils {
                 sendMsg(
                     new MessageConfig.Builder()
                         .setChannel(channel)
-                        .setEmbed(EmbedUtils.embedField(EMBED_TITLE, String.format(
+                        .setEmbeds(true, EmbedUtils.embedField(EMBED_TITLE, String.format(
                             "Could not play: %s\n" +
                                 "Please contact a developer [here](%s) to inform them of this issue",
                             exception.getMessage(), Variables.GHOSTBOT_GUILD
-                        )), true)
+                        )))
                         .build()
                 );
             }

@@ -117,7 +117,7 @@ abstract class TumblrComicBase extends ReactionCommand {
             .setChannel(event.getChannel())
             .setMessage("Use the emotes at the bottom to navigate through pages, use the ❌ emote when you are done reading.\n" +
                 "The controls have a timeout of 30 minutes")
-            .setEmbed(getEmbed(startPage))
+            .setEmbeds(getEmbed(startPage))
             .configureMessageBuilder(
                 (builder) -> builder.setActionRows(
                     LEFT_RIGHT_CANCEL.toActionRow(

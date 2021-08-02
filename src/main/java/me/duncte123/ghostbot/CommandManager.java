@@ -182,6 +182,12 @@ public class CommandManager {
         final Command cmd = getCommand(invoke);
         final Guild guild = event.getGuild();
 
+        event.getChannel()
+            .sendMessage("Normal commands will be deprecated soon in favor of slash commands.\nRead as to why here: <https://support-dev.discord.com/hc/en-us/articles/4404772028055>")
+            .reference(event.getMessage())
+            .mentionRepliedUser(false)
+            .queue();
+
         dispatchCommand(cmd, guild, invoke, args.toString(),
             () ->  new CommandEvent(invoke, args, event, container));
     }

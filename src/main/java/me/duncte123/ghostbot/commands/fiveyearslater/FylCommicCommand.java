@@ -103,7 +103,7 @@ public class FylCommicCommand extends ReactionCommand {
             .setChannel(event.getChannel())
             .setMessage("Use the emotes at the bottom to navigate through pages, use the ❌ emote when you are done reading.\n" +
                 "The controls have a timeout of 30 minutes")
-            .setEmbed(getEmbed(chapterIndex.get(), pageIndex.get()))
+            .setEmbeds(getEmbed(chapterIndex.get(), pageIndex.get()))
             .configureMessageBuilder(
                 (builder) -> {
                     final int chapI = chapterIndex.get();

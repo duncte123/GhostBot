@@ -86,7 +86,7 @@ public class HelpCommand extends Command {
             .addField("Character commands", buildCommands(characterCommands), false);
 
         event.getAuthor().openPrivateChannel()
-            .flatMap((it) -> it.sendMessage(helpEmbed.build()))
+            .flatMap((it) -> it.sendMessageEmbeds(helpEmbed.build()))
             .queue(
                 (m) -> event.reply("Check your dms"),
                 (e) -> event.reply(helpEmbed)

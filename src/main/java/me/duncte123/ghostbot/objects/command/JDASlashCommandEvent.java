@@ -126,11 +126,10 @@ public class JDASlashCommandEvent implements ICommandEvent {
         }
 
         final MessageBuilder messageBuilder = config.getMessageBuilder();
-        final EmbedBuilder embed = config.getEmbed();
 
-        if (embed != null) {
-            messageBuilder.setEmbed(embed.build());
-        }
+        messageBuilder.setEmbeds(
+            config.getEmbeds().stream().map(EmbedBuilder::build).collect(Collectors.toList())
+        );
 
         final Message message = messageBuilder.build();
 
