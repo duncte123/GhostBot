@@ -59,7 +59,7 @@ repositories {
     maven("https://jitpack.io")
 }
 
-val jda = JDAVersionInfo("4.3.0_303")
+val jda = JDAVersionInfo("4.3.0_339")
 //val jda = JDAVersionInfo("bacd237")
 
 dependencies {
@@ -69,7 +69,7 @@ dependencies {
     implementation(group = jda.group, name = "JDA", version = jda.version) {
         exclude(module = "opus-java")
     }
-    implementation(group = "com.sedmelluq", name = "lavaplayer", version = "1.3.76")
+    implementation(group = "com.sedmelluq", name = "lavaplayer", version = "1.3.78")
 //    implementation("lavalink:local")
     implementation(group = "com.github.FredBoat", name = "Lavalink-Client", version = "eb26770")
 //    implementation(group = "com.github.DuncteBot", name = "Lavalink-Client", version = "4f3924fb51")

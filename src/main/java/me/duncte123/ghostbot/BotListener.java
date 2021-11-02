@@ -189,7 +189,7 @@ public class BotListener implements EventListener {
             return;
         }
 
-        this.commandManager.handleCommand(event, container);
+        this.commandManager.handleCommand(event);
     }
 
     private void onGuildJoin(@Nonnull GuildJoinEvent event) {

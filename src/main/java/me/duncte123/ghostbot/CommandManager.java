@@ -30,7 +30,6 @@ import me.duncte123.ghostbot.commands.fiveyearslater.FylWikiCommand;
 import me.duncte123.ghostbot.commands.main.*;
 import me.duncte123.ghostbot.commands.space.ISSCommand;
 import me.duncte123.ghostbot.objects.command.Command;
-import me.duncte123.ghostbot.objects.command.CommandEvent;
 import me.duncte123.ghostbot.objects.command.ICommandEvent;
 import me.duncte123.ghostbot.objects.command.JDASlashCommandEvent;
 import me.duncte123.ghostbot.objects.config.GhostBotConfig;
@@ -166,10 +165,10 @@ public class CommandManager {
             event.deferReply().setEphemeral(false).queue();
         }
 
-        dispatchCommand(cmd, guild, invoke, "[]", () ->  new JDASlashCommandEvent(event, container));
+        dispatchCommand(cmd, guild, invoke, () ->  new JDASlashCommandEvent(event, container));
     }
 
-    void handleCommand(GuildMessageReceivedEvent event, Container container) {
+    void handleCommand(GuildMessageReceivedEvent event) {
         final String rw = event.getMessage().getContentRaw();
         final String[] split = rw.replaceFirst("(?i)" +
             Pattern.quote(Variables.PREFIX) + "|" +
@@ -177,33 +176,36 @@ public class CommandManager {
             .split("\\s+");
 
         final String invoke = split[0].toLowerCase();
-        final List<String> args = Arrays.asList(split).subList(1, split.length);
 
         final Command cmd = getCommand(invoke);
-        final Guild guild = event.getGuild();
 
-        event.getChannel()
-            .sendMessage("Normal commands will be deprecated soon in favor of slash commands.\nRead as to why here: <https://support-dev.discord.com/hc/en-us/articles/4404772028055>")
-            .reference(event.getMessage())
-            .mentionRepliedUser(false)
-            .queue();
-
-        dispatchCommand(cmd, guild, invoke, args.toString(),
-            () ->  new CommandEvent(invoke, args, event, container));
+        if (cmd != null) {
+            event.getChannel()
+                .sendMessage("Normal have been deprecated in favor of slash commands.\nRead as to why here: <https://support-dev.discord.com/hc/en-us/articles/4404772028055>")
+                .reference(event.getMessage())
+                .mentionRepliedUser(false)
+                .queue();
+        }
     }
 
-    private void dispatchCommand(@Nullable Command cmd, Guild guild, String invoke, String args,
-                                 Supplier<ICommandEvent> eventSupplier) {
+    private void dispatchCommand(@Nullable Command cmd, Guild guild, String invoke, Supplier<ICommandEvent> eventSupplier) {
         if (cmd == null) {
-            logger.info("Unknown command: \"{}\" in \"{}\" with {}", invoke, guild, args);
+            logger.info("Unknown command: \"{}\" in \"{}\"", invoke, guild);
 
             return;
         }
 
-        logger.info("Dispatching command \"{}\" in \"{}\" with {}", cmd.getClass().getSimpleName(), guild, args);
 
         commandService.submit(() -> {
             final ICommandEvent event = eventSupplier.get();
+
+            logger.info(
+                "Dispatching command \"{}\" in \"{}\" with {}",
+                cmd.getClass().getSimpleName(),
+                guild,
+                event.getArgs()
+            );
+
             try {
                 event.getChannel().sendTyping().queue();
 
