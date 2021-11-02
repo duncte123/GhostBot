@@ -29,6 +29,7 @@ import java.util.List;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
+// TODO: convert to slash
 public class RestartCommand extends Command {
     @Override
     public void execute(ICommandEvent event) {

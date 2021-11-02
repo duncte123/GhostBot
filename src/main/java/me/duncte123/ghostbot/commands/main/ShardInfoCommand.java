@@ -19,7 +19,6 @@
 package me.duncte123.ghostbot.commands.main;
 
 import me.duncte123.ghostbot.objects.command.Command;
-import me.duncte123.ghostbot.objects.command.CommandCategory;
 import me.duncte123.ghostbot.objects.command.ICommandEvent;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.sharding.ShardManager;
@@ -87,18 +86,8 @@ public class ShardInfoCommand extends Command {
     }
 
     @Override
-    public CommandCategory getCategory() {
-        return CommandCategory.HIDDEN;
-    }
-
-    @Override
     public String getName() {
-        return "shardinfo";
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return List.of("shards");
+        return "shards";
     }
 
     /*
@@ -109,14 +98,13 @@ public class ShardInfoCommand extends Command {
         final StringBuilder sb = new StringBuilder();
         final int padding = 1;
         final int[] widths = new int[headers.size()];
-        for (int i = 0; i < widths.length; i++) {
-            widths[i] = 0;
-        }
+
         for (int i = 0; i < headers.size(); i++) {
             if (headers.get(i).length() > widths[i]) {
                 widths[i] = headers.get(i).length();
             }
         }
+
         for (final List<String> row : table) {
             for (int i = 0; i < row.size(); i++) {
                 final String cell = row.get(i);

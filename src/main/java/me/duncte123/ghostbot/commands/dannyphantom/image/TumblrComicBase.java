@@ -46,7 +46,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
 
 abstract class TumblrComicBase extends ReactionCommand {
@@ -75,29 +74,13 @@ abstract class TumblrComicBase extends ReactionCommand {
 
         if (args.size() > 0) {
 
-            if (event.isSlash()) {
-                final OptionMapping pageOpt = event.getOption("page");
-                final OptionMapping chapterOpt = event.getOption("chapter");
+            final OptionMapping pageOpt = event.getOption("page");
+            final OptionMapping chapterOpt = event.getOption("chapter");
 
-                if (pageOpt != null) {
-                    page = (int) pageOpt.getAsLong();
-                } else if (chapterOpt != null) {
-                    page = chapters[(int) chapterOpt.getAsLong() - 1];
-                }
-            } else {
-                final String arg = String.join("", args).toLowerCase();
-
-                if (arg.startsWith(PAGE_SELECTOR)) {
-                    page = getNumberFromArg(arg.substring(PAGE_SELECTOR.length()));
-                } else if (arg.startsWith(CHAPTER_SELECTOR)) {
-                    try {
-                        page = chapters[getNumberFromArg(arg.substring(CHAPTER_SELECTOR.length())) - 1];
-                    } catch (IndexOutOfBoundsException ignored) {
-                        sendMsg(event, "That chapter is not known");
-
-                        return;
-                    }
-                }
+            if (pageOpt != null) {
+                page = (int) pageOpt.getAsLong();
+            } else if (chapterOpt != null) {
+                page = chapters[(int) chapterOpt.getAsLong() - 1];
             }
         }
 
@@ -155,14 +138,6 @@ abstract class TumblrComicBase extends ReactionCommand {
             .build();
 
         event.reply(messageConfig);
-    }
-
-    private int getNumberFromArg(String input) {
-        try {
-            return Integer.parseInt(input);
-        } catch (NumberFormatException ignored) {
-            return pages.size();
-        }
     }
 
     String getProfilePicture() {

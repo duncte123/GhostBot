@@ -59,7 +59,7 @@ public class JDASlashCommandEvent implements ICommandEvent {
     @Override
     public List<String> getArgs() {
         return this.event.getOptions().stream()
-            .filter((it) -> it.getType() == OptionType.STRING)
+            //.filter((it) -> it.getType() == OptionType.STRING)
             .map(OptionMapping::getAsString)
             .collect(Collectors.toList());
     }

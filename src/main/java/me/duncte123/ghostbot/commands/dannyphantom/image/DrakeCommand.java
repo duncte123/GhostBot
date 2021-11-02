@@ -56,32 +56,18 @@ public class DrakeCommand extends ImageBase {
             return;
         }
 
-        final String[] split;
-        final boolean shouldDab;
+        final OptionMapping dab = event.getOption("dab");
+        final boolean shouldDab = dab != null && dab.getAsBoolean();
 
-        if (event.isSlash()) {
-            final OptionMapping dab = event.getOption("dab");
-
-            shouldDab = dab != null && dab.getAsBoolean();
-
-            split = new String[] {
-                event.getOption("top-panel").getAsString(),
-                event.getOption("bottom-panel").getAsString()
-            };
-        } else {
-            shouldDab = event.getInvoke().equalsIgnoreCase("ddrake");
-            split = String.join(" ", args).split("\\|");
-
-            if (split.length < 2 || split[0].isEmpty() || split[1].isEmpty()) {
-                event.reply("Missing arguments, usage: `" + Variables.PREFIX + getName() + " <top text>|<bottom text>`");
-
-                return;
-            }
-        }
+        final String[] split = new String[] {
+            event.getOption("top-panel").getAsString(),
+            event.getOption("bottom-panel").getAsString()
+        };
 
         genDanny(split[0], split[1], shouldDab, event.getContainer().getConfig(), (it) -> {
             if (event.isSlash()) {
-                ((JDASlashCommandEvent) event).getSlashEvent()
+                ((JDASlashCommandEvent) event)
+                    .getSlashEvent()
                     .deferReply()
                     .setEphemeral(false)
                     .setContent("Generated")

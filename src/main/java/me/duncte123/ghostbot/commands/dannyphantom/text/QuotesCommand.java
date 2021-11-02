@@ -102,31 +102,11 @@ public class QuotesCommand extends Command {
         final List<String> args = event.getArgs();
 
         if (args.size() > 0) {
-            if (event.isSlash()) {
-                final OptionMapping idOpt = event.getOption("id");
+            final OptionMapping idOpt = event.getOption("id");
 
-                if (idOpt != null) {
-                    getPostFromId(idOpt.getAsLong(), event.getContainer(), (it) -> sendQuote(event, it), event::reply);
-                    return;
-                }
-            } else {
-                final String joined = String.join("", args);
-
-                if (joined.startsWith("id:")) {
-                    final String id = joined.substring("id:".length());
-
-                    if (!id.isEmpty()) {
-                        final long idLong = Long.parseLong(id);
-
-                        getPostFromId(idLong, event.getContainer(), (it) -> sendQuote(event, it), event::reply);
-                    }
-
-                    return;
-                } else if ("total".equalsIgnoreCase(args.get(0))) { // this is a sub command, find out how to do it
-                    event.reply("There are a total of " + allQuotes.size() + " quotes in the system at the moment");
-
-                    return;
-                }
+            if (idOpt != null) {
+                getPostFromId(idOpt.getAsLong(), event.getContainer(), (it) -> sendQuote(event, it), event::reply);
+                return;
             }
         }
 

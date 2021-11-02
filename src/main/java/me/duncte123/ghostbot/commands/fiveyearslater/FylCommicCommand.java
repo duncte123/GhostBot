@@ -209,30 +209,16 @@ public class FylCommicCommand extends ReactionCommand {
         int page = 0;
         int chapter = 0;
 
-        if (event.isSlash()) {
-            final OptionMapping pageOpt = event.getOption("page");
+        final OptionMapping pageOpt = event.getOption("page");
 
-            if (pageOpt != null) {
-                page = (int) pageOpt.getAsLong();
-            }
+        if (pageOpt != null) {
+            page = (int) pageOpt.getAsLong();
+        }
 
-            final OptionMapping chapterOpt = event.getOption("chapter");
+        final OptionMapping chapterOpt = event.getOption("chapter");
 
-            if (chapterOpt != null) {
-                chapter = (int) chapterOpt.getAsLong();
-            }
-        } else {
-            final List<String> args = event.getArgs();
-
-            if (args.size() > 0) {
-                for (String arg : args) {
-                    if (arg.startsWith(PAGE_SELECTOR)) {
-                        page = getNumberFromArg(arg.substring(PAGE_SELECTOR.length()));
-                    } else if (arg.startsWith(CHAPTER_SELECTOR)) {
-                        chapter = getNumberFromArg(arg.substring(CHAPTER_SELECTOR.length()));
-                    }
-                }
-            }
+        if (chapterOpt != null) {
+            chapter = (int) chapterOpt.getAsLong();
         }
 
         return Pair.of(page, chapter);
@@ -254,13 +240,5 @@ public class FylCommicCommand extends ReactionCommand {
             "fiveyearslater",
             "fiveyearslatercomic"
         );
-    }
-
-    private static int getNumberFromArg(String input) {
-        try {
-            return Integer.parseInt(input);
-        } catch (NumberFormatException ignored) {
-            return 0;
-        }
     }
 }

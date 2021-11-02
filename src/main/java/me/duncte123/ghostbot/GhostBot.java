@@ -22,6 +22,8 @@ import fredboat.audio.player.LavalinkManager;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.ghostbot.objects.config.GhostBotConfig;
+import me.duncte123.ghostbot.slashmanagement.GlobalSlashManagement;
+import me.duncte123.ghostbot.slashmanagement.GuildSlashManagement;
 import me.duncte123.ghostbot.utils.Container;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -103,6 +105,16 @@ public class GhostBot {
     }
 
     public static void main(String[] args) throws LoginException, IOException {
+        if (args.length > 0) {
+            switch (args[0]) {
+                case "add-guild-slash" -> new GuildSlashManagement(false);
+                case "clear-guild-slash" -> new GuildSlashManagement(true);
+                case "update-global-slash" -> new GlobalSlashManagement(false);
+            }
+
+            return;
+        }
+
         instance = new GhostBot();
     }
 

@@ -101,8 +101,6 @@ public class CommandManager {
 
         this.addCommand(new DrakeCommand());
         this.addCommand(new ISSCommand());
-
-        this.addCommand(new UpdateSlashCommand());
     }
 
     private void addCommand(Command command) {

@@ -58,6 +58,7 @@ public class EvalCommand extends Command {
             return;
         }
 
+        // TODO: MULTILINE WHEN
         if (event.isSlash()) {
             event.reply("Does not support slash");
             return;
@@ -93,17 +94,15 @@ public class EvalCommand extends Command {
 
                 sendSuccess(message);
             }).get(1, TimeUnit.MINUTES);
-
-
         } catch (Exception e) {
             try {
                 sendErrorWithMessage(message, e.getCause().toString());
             } catch (NullPointerException ignored) {
                 sendErrorWithMessage(message, e.toString());
             }
-
+        } finally {
+            engine.getContext().getVariables().clear();
         }
-
     }
 
     @Override
