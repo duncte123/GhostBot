@@ -163,7 +163,8 @@ abstract class TumblrComicBase extends ReactionCommand {
     }
 
     void loadPages(Container container) {
-        final String clsName = getClass().getSimpleName();
+        // Disabled: probably not needed anymore
+        /*final String clsName = getClass().getSimpleName();
         final GhostBotConfig config = container.getConfig();
         final ObjectMapper mapper = container.getJackson();
 
@@ -213,6 +214,6 @@ abstract class TumblrComicBase extends ReactionCommand {
             } catch (Exception e) {
                 logger.error("Failed to write " + clsName, e);
             }
-        });
+        });*/
     }
 }

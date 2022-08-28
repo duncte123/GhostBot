@@ -20,14 +20,13 @@ package me.duncte123.ghostbot.commands.dannyphantom.text;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import gnu.trove.map.TLongObjectMap;
-import gnu.trove.map.hash.TLongObjectHashMap;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.ghostbot.objects.command.Command;
 import me.duncte123.ghostbot.objects.command.CommandCategory;
 import me.duncte123.ghostbot.objects.command.ICommandEvent;
 import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.objects.tumblr.TumblrPost;
+import me.duncte123.ghostbot.utils.Container;
 import me.duncte123.ghostbot.utils.TumblrUtils;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -37,26 +36,20 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
 
 import static me.duncte123.ghostbot.commands.dannyphantom.text.QuotesCommand.parseText;
 
 public class AuCommand extends Command {
     //https://reallydumbdannyphantomaus.tumblr.com
-    private final List<TumblrPost> allAus = new ArrayList<>();
-    private final TLongObjectMap<List<TumblrPost>> guildAus = new TLongObjectHashMap<>();
-
-    public AuCommand(GhostBotConfig config, ObjectMapper mapper) {
-        loadCachedAus(config, mapper);
-    }
+//    private final List<TumblrPost> allAus = new ArrayList<>();
+//    private final TLongObjectMap<List<TumblrPost>> guildAus = new TLongObjectHashMap<>();
 
     @Override
     public void execute(ICommandEvent event) {
-        final List<String> args = event.getArgs();
+        /*final List<String> args = event.getArgs();
 
         if (args.size() == 1 && "reload".equalsIgnoreCase(args.get(0)) && event.getAuthor().getIdLong() == Variables.OWNER_ID) {
             // make sure to delete the file
@@ -64,24 +57,26 @@ public class AuCommand extends Command {
             event.reply("Reloading");
 
             return;
-        }
+        }*/
 
-        if (allAus.isEmpty()) {
+        final List<TumblrPost> aus = this.getAUs(event.getContainer());
+
+        if (aus.isEmpty()) {
             event.reply("No AU's found, they are probably being reloaded");
 
             return;
         }
 
-        final long gid = event.getGuild().getIdLong();
+        /*final long gid = event.getGuild().getIdLong();
 
         if (!guildAus.containsKey(gid) || guildAus.get(gid).isEmpty()) {
             guildAus.put(gid, new ArrayList<>(allAus));
-        }
+        }*/
 
-        final List<TumblrPost> posts = guildAus.get(gid);
-        final TumblrPost post = posts.get(ThreadLocalRandom.current().nextInt(posts.size()));
+//        final List<TumblrPost> posts = guildAus.get(gid);
+        final TumblrPost post = aus.get(ThreadLocalRandom.current().nextInt(aus.size()));
 
-        posts.remove(post);
+//        posts.remove(post);
 
         final String tags = String.join(" #", post.tags);
 
@@ -119,33 +114,22 @@ public class AuCommand extends Command {
         return CommandCategory.TEXT;
     }
 
-    private void loadCachedAus(GhostBotConfig config, ObjectMapper jackson) {
-        allAus.clear();
-
+    public List<TumblrPost> getAUs(Container container) {
         final File ausFile = new File("./data/aus.json");
 
         if (!ausFile.exists()) {
-            this.loadAus(config, jackson, ausFile);
-            return;
+            this.loadAus(container.getConfig(), container.getJackson(), ausFile);
+            return List.of();
         }
 
         try {
-            final List<TumblrPost> quotes = jackson.readValue(ausFile, new TypeReference<>() {});
-
-            allAus.addAll(quotes);
-            logger.info("Loaded {} aus from file", allAus.size());
+            return container.getJackson().readValue(ausFile, new TypeReference<>() {});
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
     private void loadAus(GhostBotConfig config, ObjectMapper jackson, File ausFile) {
-        if (config.running_local) {
-            return;
-        }
-
-        allAus.clear();
-
         final String tagToFind1 = "dpau";
         final String tagToFind2 = "reallybaddpau";
         final String domain = "reallydumbdannyphantomaus.tumblr.com";
@@ -153,18 +137,13 @@ public class AuCommand extends Command {
         logger.info("Loading the best aus ever");
 
         TumblrUtils.getInstance().fetchAllFromAccount(domain, "text", config, jackson, (it) -> {
-
             final List<TumblrPost> filtered = it.stream().filter(
                 (p) -> {
                     final List<String> tags = Arrays.asList(p.tags);
 
                     return tags.contains(tagToFind1) && tags.contains(tagToFind2);
                 }
-            ).collect(Collectors.toList());
-
-            allAus.addAll(filtered);
-
-            logger.info("Loaded {} aus", allAus.size());
+            ).toList();
 
             try {
                 if (!ausFile.createNewFile()) {
@@ -174,8 +153,7 @@ public class AuCommand extends Command {
                 }
 
                 try (final BufferedWriter writer = new BufferedWriter(new FileWriter(ausFile, StandardCharsets.UTF_8))) {
-
-                    writer.write(jackson.writeValueAsString(allAus));
+                    writer.write(jackson.writeValueAsString(filtered));
                 }
 
                 logger.info("Wrote aus to file");

@@ -60,7 +60,6 @@ public class CommandManager {
 
     public CommandManager(Container container) {
         final ObjectMapper jackson = container.getJackson();
-        final GhostBotConfig config = container.getConfig();
 
         this.addCommand(new GoingGhostCommand());
         this.addCommand(new WailCommand());
@@ -82,9 +81,9 @@ public class CommandManager {
         this.addCommand(new FylWikiCommand());
         this.addCommand(new PetitionCommand());
 
-        this.addCommand(new QuotesCommand(container));
-        this.addCommand(new AuCommand(config, jackson));
-        this.addCommand(new RandomGhostCommand(config));
+        this.addCommand(new QuotesCommand());
+        this.addCommand(new AuCommand());
+        this.addCommand(new RandomGhostCommand());
         this.addCommand(new GamesCommand());
         this.addCommand(new TheJCommand());
 

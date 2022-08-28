@@ -22,7 +22,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gnu.trove.list.TLongList;
 import gnu.trove.list.array.TLongArrayList;
-import gnu.trove.map.TLongObjectMap;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.ghostbot.objects.command.Command;
 import me.duncte123.ghostbot.objects.command.CommandCategory;
@@ -36,7 +35,6 @@ import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
-import net.dv8tion.jda.api.utils.MiscUtil;
 import org.apache.commons.text.StringEscapeUtils;
 
 import java.io.BufferedWriter;
@@ -44,58 +42,18 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
 
 public class QuotesCommand extends Command {
     private static final String DOMAIN = "totallycorrectdannyphantomquotes.tumblr.com";
     private final String[] types = {"chat", "text", "quote"};
-    private final List<TumblrPost> allQuotes = new ArrayList<>();
-    private final TLongObjectMap<List<TumblrPost>> guildQuotes = MiscUtil.newLongMap();
-    private final TLongList badPostIds = new TLongArrayList(new long[]{
-        156199508936L,
-        141701068521L,
-        139748205676L,
-        145485004576L,
-        131957587201L,
-        145767003281L,
-        122464866251L,
-        149288809271L,
-        131048227566L,
-        160064523456L,
-        146961714036L,
-        157865830301L,
-        136789766336L,
-        148512885491L,
-        137376851771L,
-        147819522951L,
-        147825378346L,
-        156199957996L,
-        143194957186L,
-        121801283241L,
-        121891439031L,
-        144734161886L,
-        130808913006L,
-        130834334051L,
-        131278048551L,
-        163028433406L,
-        150823532681L,
-        173944925826L,
-        127476921111L,
-        174190854511L,
-        189467049076L
-    });
-
-    public QuotesCommand(Container container) {
-        reloadQuotes(container.getConfig(), container.getJackson());
-    }
 
     @Override
     public void execute(ICommandEvent event) {
@@ -110,16 +68,9 @@ public class QuotesCommand extends Command {
             }
         }
 
-        final long gid = event.getGuild().getIdLong();
-
-        if (!guildQuotes.containsKey(gid) || guildQuotes.get(gid).size() == 0) {
-            guildQuotes.put(gid, new ArrayList<>(allQuotes));
-        }
-
-        final List<TumblrPost> posts = guildQuotes.get(gid);
+        final List<TumblrPost> posts = this.getQuotes(event.getContainer());
         final TumblrPost post = posts.get(ThreadLocalRandom.current().nextInt(posts.size()));
 
-        posts.remove(post);
         sendQuote(event, post);
     }
 
@@ -151,47 +102,70 @@ public class QuotesCommand extends Command {
     }
 
     private void getPostFromId(long id, Container container, Consumer<TumblrPost> cb, Consumer<String> fail) {
-        final Optional<TumblrPost> opt = allQuotes.stream().filter((it) -> it.id == id).findFirst();
-
-        if (opt.isPresent()) {
-            cb.accept(opt.get());
-
-            return;
-        }
-
         TumblrUtils.getInstance().fetchSinglePost(DOMAIN, id, container.getConfig(), container.getJackson(),
-            (it) -> {
-                allQuotes.add(it);
-                cb.accept(it);
-            },
+            cb,
             (it) -> fail.accept("Something went wrong: " + it.getMessage())
         );
 
     }
 
-    private void reloadQuotes(GhostBotConfig config, ObjectMapper jackson) {
+    private List<TumblrPost> getQuotes(Container container) {
         final File quotesFile = new File("./data/quotes.json");
 
-        if (quotesFile.exists()) {
-            try {
-                final List<TumblrPost> quotes = jackson.readValue(quotesFile, new TypeReference<>() {});
-
-                allQuotes.addAll(quotes);
-                logger.info("Loaded {} quotes from file", allQuotes.size());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return;
+        if (!quotesFile.exists()) {
+            this.reloadQuotes(container.getConfig(), container.getJackson(), quotesFile);
+            return List.of();
         }
 
-        allQuotes.clear();
-        guildQuotes.clear();
+        try {
+            return container.getJackson().readValue(quotesFile, new TypeReference<>() {});
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
+    private void reloadQuotes(GhostBotConfig config, ObjectMapper jackson, File quotesFile) {
+        final List<TumblrPost> allQuotes = new ArrayList<>();
         final AtomicInteger counter = new AtomicInteger();
+        /// <editor-fold>
+        final TLongList badPostIds = new TLongArrayList(
+            new long[]{
+                156199508936L,
+                141701068521L,
+                139748205676L,
+                145485004576L,
+                131957587201L,
+                145767003281L,
+                122464866251L,
+                149288809271L,
+                131048227566L,
+                160064523456L,
+                146961714036L,
+                157865830301L,
+                136789766336L,
+                148512885491L,
+                137376851771L,
+                147819522951L,
+                147825378346L,
+                156199957996L,
+                143194957186L,
+                121801283241L,
+                121891439031L,
+                144734161886L,
+                130808913006L,
+                130834334051L,
+                131278048551L,
+                163028433406L,
+                150823532681L,
+                173944925826L,
+                127476921111L,
+                174190854511L,
+                189467049076L
+            }
+        );
+        /// </editor-fold>
 
         for (String type : types) {
-
             logger.info("Getting quotes from type {}", type);
 
             TumblrUtils.getInstance().fetchAllFromAccount(DOMAIN, type, config, jackson,
@@ -199,12 +173,23 @@ public class QuotesCommand extends Command {
                     try {
                         counter.incrementAndGet();
 
-                        final List<TumblrPost> filteredPosts = posts.stream().filter((it) -> !badPostIds.contains(it.id)).collect(Collectors.toList());
+                        final List<TumblrPost> filteredPosts = posts.stream()
+                            .filter((it) -> !badPostIds.contains(it.id))
+                            .filter((it) -> {
+                                final var tagsList = Arrays.asList(it.tags);
+
+                                return !tagsList.contains("mod talk");
+                            })
+                            .toList();
 
                         allQuotes.addAll(filteredPosts);
                         logger.info("Fetched {} quotes from type {}", filteredPosts.size(), type);
 
                         if (counter.get() == types.length) {
+                            if (quotesFile.exists()) {
+                                quotesFile.delete();
+                            }
+
                             quotesFile.createNewFile();
 
                             final BufferedWriter writer = new BufferedWriter(new FileWriter(quotesFile));
@@ -227,25 +212,16 @@ public class QuotesCommand extends Command {
             .setFooter("Quote id: " + post.id, Variables.FOOTER_ICON);
 
         switch (post.type) {
-            case "chat":
+            case "chat" -> {
                 final List<TumblrDialogue> dialogue = post.dialogue;
-
                 dialogue.forEach(
                     (it) -> eb.appendDescription(String.format("**%s** %s\n", it.getLabel(), parseText(it.getPhrase())))
                 );
-
-                break;
-            case "text":
-                eb.setDescription(parseText(post.body));
-                break;
-
-            case "quote":
+            }
+            case "text" -> eb.setDescription(parseText(post.body));
+            case "quote" ->
                 eb.setDescription(String.format("\"%s\"\n\n - _%s_", parseText(post.text), parseText(post.source)));
-                break;
-
-            default:
-                eb.setDescription(String.format("Invalid post type`%s` found", post.type));
-                break;
+            default -> eb.setDescription(String.format("Invalid post type`%s` found", post.type));
         }
 
         event.reply(eb);

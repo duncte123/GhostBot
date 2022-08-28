@@ -129,8 +129,8 @@ compileJava.apply {
 }
 
 tasks.withType<Wrapper> {
-    distributionType = DistributionType.ALL
-    gradleVersion = "7.0.1"
+    distributionType = DistributionType.BIN
+    gradleVersion = "7.5.1"
 }
 
 shadowJar.apply {
