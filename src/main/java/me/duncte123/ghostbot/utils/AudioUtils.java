@@ -36,7 +36,7 @@ import me.duncte123.botcommons.messaging.MessageConfig;
 import me.duncte123.ghostbot.audio.GuildMusicManager;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
 import org.slf4j.LoggerFactory;
 
 import java.util.function.Function;
@@ -45,6 +45,7 @@ import java.util.logging.Logger;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
+// TODO: remove lavaplayer
 public class AudioUtils {
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(AudioUtils.class);
@@ -60,17 +61,17 @@ public class AudioUtils {
 
         playerManager = new DefaultAudioPlayerManager();
 
-        playerManager.registerSourceManager(new YoutubeAudioSourceManager(false));
+//        playerManager.registerSourceManager(new YoutubeAudioSourceManager(false));
         playerManager.registerSourceManager(new HttpAudioSourceManager());
 
         musicManagers = new TSynchronizedLongObjectMap<>(new TLongObjectHashMap<>(), new Object());
     }
 
-    public void loadAndPlay(GuildMusicManager mng, final TextChannel channel, final Object trackUrl) {
+    public void loadAndPlay(GuildMusicManager mng, final MessageChannelUnion channel, final Object trackUrl) {
         final AudioLoadResultHandler handler = new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
-                mng.getPlayer().playTrack(track);
+//                mng.getPlayer().playTrack(track);
             }
 
             @Override
@@ -126,12 +127,8 @@ public class AudioUtils {
 
         if (mng == null) {
             mng = new GuildMusicManager(guild);
-            mng.getPlayer().setVolume(DEFAULT_VOLUME);
+//            mng.getPlayer().setVolume(DEFAULT_VOLUME);
             musicManagers.put(guildId, mng);
-        }
-
-        if (!LavalinkManager.ins.isEnabled()) {
-            guild.getAudioManager().setSendingHandler(mng.getSendHandler());
         }
 
         return mng;

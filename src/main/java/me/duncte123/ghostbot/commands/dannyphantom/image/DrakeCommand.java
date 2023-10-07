@@ -27,6 +27,7 @@ import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.api.utils.data.DataObject;
 import net.dv8tion.jda.internal.utils.IOUtil;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -44,7 +45,7 @@ public class DrakeCommand extends ImageBase {
     public void execute(ICommandEvent event) {
         final List<String> args = event.getArgs();
 
-        if (!event.getSelfMember().hasPermission(event.getChannel(), Permission.MESSAGE_ATTACH_FILES)) {
+        if (!event.getSelfMember().hasPermission(event.getChannel().asGuildMessageChannel(), Permission.MESSAGE_ATTACH_FILES)) {
             event.reply("I need permission to upload files to this channel");
 
             return;
@@ -102,8 +103,11 @@ public class DrakeCommand extends ImageBase {
     }
 
     private static void genDanny(String top, String bottom, boolean dabbing, GhostBotConfig config, Consumer<byte[]> callback) {
-        final JSONObject json = new JSONObject().put("top", top).put("bottom", bottom).put("dabbing", dabbing);
-        final RequestBody body = RequestBody.create(null, json.toString().getBytes());
+        final DataObject json = DataObject.empty()
+            .put("top", top)
+            .put("bottom", bottom)
+            .put("dabbing", dabbing);
+        final RequestBody body = RequestBody.create(json.toString().getBytes());
 
         final Request.Builder request = WebUtils.defaultRequest()
             .url("https://apis.duncte123.me/memes/dannyphantomdrake")

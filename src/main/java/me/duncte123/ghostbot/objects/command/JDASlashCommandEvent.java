@@ -22,13 +22,17 @@ import me.duncte123.botcommons.messaging.MessageConfig;
 import me.duncte123.ghostbot.utils.Container;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.MessageBuilder;
-import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
-import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
+import net.dv8tion.jda.api.utils.messages.MessageCreateData;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -36,11 +40,11 @@ import java.util.stream.Collectors;
 
 public class JDASlashCommandEvent implements ICommandEvent {
 
-    private final SlashCommandEvent event;
+    private final SlashCommandInteractionEvent event;
     private final Container container;
     private final InteractionHook hook;
 
-    public JDASlashCommandEvent(SlashCommandEvent event, Container container) {
+    public JDASlashCommandEvent(SlashCommandInteractionEvent event, Container container) {
         this.event = event;
         this.container = container;
         this.hook = event.getHook().setEphemeral(false);
@@ -75,13 +79,13 @@ public class JDASlashCommandEvent implements ICommandEvent {
     }
 
     @Override
-    public GuildMessageReceivedEvent getEvent() {
+    public MessageReceivedEvent getEvent() {
         return null;
     }
 
     @Override
-    public TextChannel getChannel() {
-        return this.event.getTextChannel();
+    public MessageChannelUnion getChannel() {
+        return this.event.getChannel();
     }
 
     @Override
@@ -104,7 +108,7 @@ public class JDASlashCommandEvent implements ICommandEvent {
         return this.event.getJDA();
     }
 
-    public SlashCommandEvent getSlashEvent() {
+    public SlashCommandInteractionEvent getSlashEvent() {
         return this.event;
     }
 
@@ -125,13 +129,13 @@ public class JDASlashCommandEvent implements ICommandEvent {
             event.deferReply().setEphemeral(false).complete();
         }
 
-        final MessageBuilder messageBuilder = config.getMessageBuilder();
+        final MessageCreateBuilder messageBuilder = config.getMessageBuilder();
 
         messageBuilder.setEmbeds(
             config.getEmbeds().stream().map(EmbedBuilder::build).collect(Collectors.toList())
         );
 
-        final Message message = messageBuilder.build();
+        final MessageCreateData message = messageBuilder.build();
 
         final Consumer<? super Message> successAction = config.getSuccessAction();
         final Consumer<? super Throwable> failureAction = config.getFailureAction();

@@ -18,6 +18,7 @@
 
 package me.duncte123.ghostbot;
 
+import dev.arbjerg.lavalink.libraries.jda.JDAVoiceUpdateListener;
 import fredboat.audio.player.LavalinkManager;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.botcommons.web.WebUtils;
@@ -78,7 +79,7 @@ public class GhostBot {
             )
             .setChunkingFilter(ChunkingFilter.NONE) // Lazy loading :)
             .enableCache(VOICE_STATE, MEMBER_OVERRIDES)
-            .disableCache(ACTIVITY, EMOTE, CLIENT_STATUS)
+            .disableCache(ACTIVITY, EMOJI, CLIENT_STATUS)
             .setMemberCachePolicy(MemberCachePolicy.VOICE)
             .setGatewayEncoding(GatewayEncoding.ETF)
             .setEnabledIntents(
@@ -89,8 +90,7 @@ public class GhostBot {
             .addEventListeners(botListener);
 
         if (llm.isEnabled()) {
-            builder.addEventListeners(llm.getLavalink());
-            builder.setVoiceDispatchInterceptor(llm.getLavalink().getVoiceInterceptor());
+            builder.setVoiceDispatchInterceptor(new JDAVoiceUpdateListener(llm.getLavalink()));
         }
 
         shardManager = builder.build();

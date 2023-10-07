@@ -18,24 +18,21 @@
 
 package fredboat.audio.player;
 
-import lavalink.client.io.Link;
-import lavalink.client.io.jda.JdaLavalink;
-import lavalink.client.player.IPlayer;
-import lavalink.client.player.LavaplayerPlayerWrapper;
-import me.duncte123.ghostbot.GhostBot;
+import dev.arbjerg.lavalink.client.Helpers;
+import dev.arbjerg.lavalink.client.LavalinkClient;
 import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.utils.AudioUtils;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
+import reactor.util.annotation.NonNull;
 
-import javax.annotation.Nonnull;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Base64;
 
 public class LavalinkManager {
     public static final LavalinkManager ins = new LavalinkManager();
-    private JdaLavalink lavalink = null;
+    private LavalinkClient lavalink = null;
     private GhostBotConfig config;
     private AudioUtils audio;
 
@@ -46,18 +43,13 @@ public class LavalinkManager {
         this.audio = audio;
 
         if (isEnabled()) {
-
-            final String userId = getIdFromToken(this.config.discord.token);
-
-            lavalink = new JdaLavalink(
-                userId,
-                this.config.discord.totalShards,
-                (it) -> GhostBot.getInstance().getShard(it)
-            );
+            lavalink = new LavalinkClient(Helpers.getUserIdFromToken(this.config.discord.token));
 
             for (final GhostBotConfig.Lavalink.Node it : this.config.lavalink.nodes) {
                 try {
-                    lavalink.addNode(new URI(it.wsUrl), it.pass);
+                    final URI uri = new URI(it.wsUrl);
+
+                    lavalink.addNode(uri.getHost(), uri, it.pass);
                 } catch (URISyntaxException e) {
                     e.printStackTrace();
                 }
@@ -70,11 +62,15 @@ public class LavalinkManager {
     }
 
     public IPlayer createPlayer(String guildId) {
+        if (!isEnabled()) {
+            throw new RuntimeException("Lavalink is not enabled");
+        }
+
         return isEnabled() ? lavalink.getLink(guildId).getPlayer()
             : new LavaplayerPlayerWrapper(this.audio.getPlayerManager().createPlayer());
     }
 
-    public void openConnection(VoiceChannel channel) {
+    public void openConnection(AudioChannel channel) {
         if (isEnabled()) {
             lavalink.getLink(channel.getGuild()).connect(channel);
         } else {
@@ -96,7 +92,7 @@ public class LavalinkManager {
         }
     }
 
-    public VoiceChannel getConnectedChannel(@Nonnull Guild guild) {
+    public AudioChannel getConnectedChannel(@NonNull Guild guild) {
         // NOTE: never use the local audio manager, since the audio connection may be remote
         // there is also no reason to look the channel up remotely from lavalink, if we have access to a real guild
         // object here, since we can use the voice state of ourselves (and lavalink 1.x is buggy in keeping up with the
@@ -105,7 +101,7 @@ public class LavalinkManager {
         return guild.getSelfMember().getVoiceState().getChannel();
     }
 
-    public JdaLavalink getLavalink() {
+    public LavalinkClient getLavalink() {
         return lavalink;
     }
 

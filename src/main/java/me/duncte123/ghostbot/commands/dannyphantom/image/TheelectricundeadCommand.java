@@ -37,6 +37,7 @@ public class TheelectricundeadCommand extends TumblrComicBase {
         183827754213L,
     });
 
+    // RIP to this comic, hopefully I can revive the data.
     public TheelectricundeadCommand(CommandManager.ReactionListenerRegistry registry, Container container) {
         super(registry);
         this.filename = "./data/bzzt.json";
@@ -85,7 +86,7 @@ public class TheelectricundeadCommand extends TumblrComicBase {
 
     @Override
     public String getHelp() {
-        return "Read the electric undead comic within discord (website: <http://theelectricundead.tumblr.com/>)\n" +
+        return "Read the electric undead comic within discord (website: <https://theelectricundead.tumblr.com/>)\n" +
             "Usage: `gb." + getName() + " [page:number/chapter:number]`";
     }
 }

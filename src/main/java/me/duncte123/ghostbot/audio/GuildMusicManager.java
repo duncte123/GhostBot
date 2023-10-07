@@ -18,32 +18,18 @@
 
 package me.duncte123.ghostbot.audio;
 
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import fredboat.audio.player.LavalinkManager;
-import lavalink.client.player.IPlayer;
-import lavalink.client.player.event.AudioEventAdapterWrapped;
 import net.dv8tion.jda.api.entities.Guild;
 
-public class GuildMusicManager extends AudioEventAdapterWrapped {
+public class GuildMusicManager {
 
     private final IPlayer player;
 
     public GuildMusicManager(Guild g) {
         player = LavalinkManager.ins.createPlayer(g.getId());
-        player.addListener(this);
     }
 
     public IPlayer getPlayer() {
         return player;
-    }
-
-    public AudioPlayerSenderHandler getSendHandler() {
-        return new AudioPlayerSenderHandler(player);
-    }
-
-    @Override
-    public void onTrackStart(AudioPlayer player, AudioTrack track) {
-        System.out.println("Started track " + track.getIdentifier());
     }
 }

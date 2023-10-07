@@ -18,7 +18,7 @@
 
 package me.duncte123.ghostbot.utils;
 
-import org.json.JSONObject;
+import net.dv8tion.jda.api.utils.data.DataObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +29,7 @@ public class ConfigUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(ConfigUtils.class);
 
-    private JSONObject images;
+    private DataObject images;
 
     public ConfigUtils() {
         try {
@@ -37,7 +37,7 @@ public class ConfigUtils {
 
             final String file = new String(Files.readAllBytes(new File("./data/images.json").toPath()));
 
-            this.images = new JSONObject(file);
+            this.images = DataObject.fromJson(file);
 
             logger.info("Loaded images.json");
         } catch (Exception e) {
@@ -46,7 +46,7 @@ public class ConfigUtils {
         }
     }
 
-    public JSONObject getImages() {
+    public DataObject getImages() {
         return images;
     }
 }

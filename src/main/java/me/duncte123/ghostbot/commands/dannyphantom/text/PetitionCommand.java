@@ -43,7 +43,7 @@ public class PetitionCommand extends Command {
     @Override
     public void execute(ICommandEvent event) {
         final String message = messages[ThreadLocalRandom.current().nextInt(messages.length)];
-        final String formatted = String.format(message, "http://bit.ly/dp-petition", "#GoGhostAgain");
+        final String formatted = String.format(message, "https://bit.ly/dp-petition", "#GoGhostAgain");
 
         event.reply(formatted);
     }

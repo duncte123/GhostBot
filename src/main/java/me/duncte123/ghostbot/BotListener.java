@@ -32,6 +32,7 @@ import me.duncte123.ghostbot.utils.Container;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
@@ -40,7 +41,11 @@ import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.session.ReadyEvent;
 import net.dv8tion.jda.api.hooks.EventListener;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.Button;
@@ -49,6 +54,7 @@ import okhttp3.RequestBody;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import reactor.util.annotation.NonNull;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -92,10 +98,14 @@ public class BotListener implements EventListener {
     }
 
     @Override
-    public void onEvent(@Nonnull GenericEvent e) {
+    public void onEvent(@NonNull GenericEvent e) {
         if (e instanceof ReadyEvent event) {
             this.onReady(event);
-        } else if (e instanceof GuildMessageReceivedEvent event) {
+        } else if (e instanceof MessageReceivedEvent event) {
+            if (!event.isFromGuild()) {
+                return;
+            }
+
             this.onGuildMessageReceived(event);
         } else if (e instanceof GuildJoinEvent event) {
             this.onGuildJoin(event);
@@ -105,21 +115,21 @@ public class BotListener implements EventListener {
             this.onGuildVoiceLeave(event);
         } else if (e instanceof GuildVoiceMoveEvent event) {
             this.onGuildVoiceMove(event);
-        } else if (e instanceof SlashCommandEvent event) {
+        } else if (e instanceof SlashCommandInteractionEvent event) {
             this.onSlashCommand(event);
-        } else if (e instanceof ButtonClickEvent event) {
+        } else if (e instanceof ButtonInteractionEvent event) {
             this.onButtonClick(event);
         }
     }
 
-    private void onReady(@Nonnull ReadyEvent event) {
+    private void onReady(@NonNull ReadyEvent event) {
         final JDA jda = event.getJDA();
 
         logger.info("Logged in as {} ({})", jda.getSelfUser(), jda.getShardInfo());
         postServerCount();
     }
 
-    private void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
+    private void onGuildMessageReceived(@NonNull MessageReceivedEvent event) {
         final Message message = event.getMessage();
 
         if (event.getAuthor().isBot() || message.isWebhookMessage()) {
@@ -192,18 +202,18 @@ public class BotListener implements EventListener {
         this.commandManager.handleCommand(event);
     }
 
-    private void onGuildJoin(@Nonnull GuildJoinEvent event) {
+    private void onGuildJoin(@NonNull GuildJoinEvent event) {
         logger.info("Joining guild: {}", event.getGuild());
     }
 
-    private void onGuildLeave(@Nonnull GuildLeaveEvent event) {
+    private void onGuildLeave(@NonNull GuildLeaveEvent event) {
         logger.info("Leaving guild: {}", event.getGuild());
     }
 
-    private void onGuildVoiceLeave(@Nonnull GuildVoiceLeaveEvent event) {
+    private void onGuildVoiceLeave(@NonNull GuildVoiceLeaveEvent event) {
         if (LavalinkManager.ins.isConnected(event.getGuild()) &&
             !event.getMember().equals(event.getGuild().getSelfMember())) {
-            final VoiceChannel vc = LavalinkManager.ins.getConnectedChannel(event.getGuild());
+            final AudioChannel vc = LavalinkManager.ins.getConnectedChannel(event.getGuild());
 
             if (vc != null) {
                 if (!event.getChannelLeft().equals(vc)) {
@@ -221,7 +231,7 @@ public class BotListener implements EventListener {
                 return;
             }
 
-            final VoiceChannel connected = LavalinkManager.ins.getConnectedChannel(event.getGuild());
+            final AudioChannel connected = LavalinkManager.ins.getConnectedChannel(event.getGuild());
 
             if (event.getChannelJoined().equals(connected) &&
                 !event.getMember().equals(event.getGuild().getSelfMember())) {
@@ -236,7 +246,7 @@ public class BotListener implements EventListener {
         }
     }
 
-    private void onButtonClick(@Nonnull ButtonClickEvent event) {
+    private void onButtonClick(@NonNull ButtonInteractionEvent event) {
         final boolean handled = this.commandManager.reactListReg.handle(event);
 
         if (handled) {
@@ -283,7 +293,7 @@ public class BotListener implements EventListener {
             .queue();*/
     }
 
-    private void onSlashCommand(@Nonnull SlashCommandEvent event) {
+    private void onSlashCommand(@NonNull SlashCommandInteractionEvent event) {
         this.commandManager.handleSlashCommand(event, this.container);
     }
 

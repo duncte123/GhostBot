@@ -21,6 +21,7 @@ package me.duncte123.ghostbot.commands.dannyphantom.image;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.natanbc.reliqua.request.RequestException;
 import me.duncte123.botcommons.messaging.EmbedUtils;
+import me.duncte123.botcommons.messaging.MessageConfig;
 import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.ghostbot.objects.command.Command;
 import me.duncte123.ghostbot.objects.command.CommandCategory;
@@ -30,13 +31,14 @@ import me.duncte123.ghostbot.objects.googlesearch.GoogleSearchResults.SearchItem
 import me.duncte123.ghostbot.utils.ConfigUtils;
 import me.duncte123.ghostbot.utils.SpoopyUtils;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.TextChannel;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
+import net.dv8tion.jda.api.utils.FileUpload;
+import net.dv8tion.jda.api.utils.data.DataArray;
+import net.dv8tion.jda.api.utils.data.DataObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import reactor.util.annotation.Nullable;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -49,7 +51,7 @@ import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 public abstract class ImageBase extends Command {
 
     private static final Logger logger = LoggerFactory.getLogger(ImageBase.class);
-    protected static JSONObject IMAGES = new ConfigUtils().getImages();
+    protected static DataObject IMAGES = new ConfigUtils().getImages();
     private final Map<String, GoogleSearchResults> searchCache = new HashMap<>();
 
     void requestSearch(String query, ObjectMapper jackson, String googleKey, Consumer<GoogleSearchResults> success, Consumer<RequestException> error) {
@@ -79,13 +81,13 @@ public abstract class ImageBase extends Command {
     ImageData requestImage(String query, ObjectMapper jackson) {
         logger.debug("Getting image for '" + query + '\'');
 
-        final JSONArray items = IMAGES.getJSONArray(query);
+        final DataArray items = IMAGES.getArray(query);
 
-        if (items.length() == 0) {
+        if (items.isEmpty()) {
             return null;
         }
 
-        final JSONObject item = items.getJSONObject(ThreadLocalRandom.current().nextInt(items.length()));
+        final DataObject item = items.getObject(ThreadLocalRandom.current().nextInt(items.length()));
 
         try {
             return jackson.readValue(item.toString(), ImageData.class);
@@ -116,12 +118,16 @@ public abstract class ImageBase extends Command {
 
     void sendImage(ICommandEvent event, byte[] data) {
         final String fileName = String.format("%s_%s.png", getName(), System.currentTimeMillis());
-        final TextChannel channel = event.getChannel();
+        final MessageChannelUnion channel = event.getChannel();
 
-        if (event.getSelfMember().hasPermission(channel, Permission.MESSAGE_ATTACH_FILES)) {
-            channel.sendFile(data, fileName).queue();
+        if (event.getSelfMember().hasPermission(channel.asGuildMessageChannel(), Permission.MESSAGE_ATTACH_FILES)) {
+            channel.sendFiles(FileUpload.fromData(data, fileName)).queue();
         } else {
-            sendMsg(channel, "I need permission to upload files in order for this command to work.");
+            sendMsg(
+                new MessageConfig.Builder()
+                    .setChannel(channel)
+                    .setMessage("I need permission to upload files in order for this command to work.")
+            );
         }
     }
 

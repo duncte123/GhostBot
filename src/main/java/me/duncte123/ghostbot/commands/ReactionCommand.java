@@ -21,11 +21,11 @@ package me.duncte123.ghostbot.commands;
 import gnu.trove.map.TLongObjectMap;
 import me.duncte123.ghostbot.CommandManager;
 import me.duncte123.ghostbot.objects.command.Command;
-import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
-import net.dv8tion.jda.api.interactions.components.Button;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.utils.MiscUtil;
 
 import java.util.List;
@@ -37,9 +37,9 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public abstract class ReactionCommand extends Command {
-    private static final String LEFT_ARROW = "\u2B05";
-    private static final String RIGHT_ARROW = "\u27A1";
-//    private static final String CANCEL = "\u274C";
+    private static final String LEFT_ARROW = "⬅";
+    private static final String RIGHT_ARROW = "➡";
+//    private static final String CANCEL = "❌";
     private static final String CANCEL = "\uD83D\uDEAE";
 //    private static final String CANCEL = "\uD83C\uDDFD";
     protected static final ButtonFunction LEFT_RIGHT_CANCEL = (userId, leftDisabled, rightDisabled) -> List.of(
@@ -60,12 +60,12 @@ public abstract class ReactionCommand extends Command {
         this.listenerRegistry = registry;
     }
 
-    protected final void enableButtons(Message message, int timeout, TimeUnit timeUnit, Consumer<ButtonClickEvent> callback) {
+    protected final void enableButtons(Message message, int timeout, TimeUnit timeUnit, Consumer<ButtonInteractionEvent> callback) {
         if (!ReactionListener.instances.containsKey(message.getIdLong())) {
             new ReactionListener(message, listenerRegistry, timeout, timeUnit, callback);
         }
     }
-    protected final void disableButtons(ButtonClickEvent event) {
+    protected final void disableButtons(ButtonInteractionEvent event) {
         ReactionListener reactionListener = ReactionListener.instances.get(event.getMessageIdLong());
 
         if (reactionListener != null) {
@@ -79,13 +79,13 @@ public abstract class ReactionCommand extends Command {
         private static final TLongObjectMap<ReactionListener> instances = MiscUtil.newLongMap();
         private final long messageId;
         private final CommandManager.ReactionListenerRegistry registry;
-        private final Consumer<ButtonClickEvent> callback;
+        private final Consumer<ButtonInteractionEvent> callback;
         private final ScheduledFuture<?> timeoutFuture;
 
-        protected ButtonClickEvent cleanUpEvent = null;
+        protected ButtonInteractionEvent cleanUpEvent = null;
 
         ReactionListener(Message message, CommandManager.ReactionListenerRegistry registry, int timeout, TimeUnit timeUnit,
-                                Consumer<ButtonClickEvent> callback) {
+                                Consumer<ButtonInteractionEvent> callback) {
 
             instances.put(message.getIdLong(), this);
 
@@ -97,7 +97,7 @@ public abstract class ReactionCommand extends Command {
             registry.register(this);
         }
 
-        public boolean handle(ButtonClickEvent event) {
+        public boolean handle(ButtonInteractionEvent event) {
             // we don't need to check the button id as we know what buttons are on this message
             if (event.getMessageIdLong() != messageId) {
                 return false;
@@ -124,7 +124,7 @@ public abstract class ReactionCommand extends Command {
 
             if (this.cleanUpEvent != null) {
                 this.cleanUpEvent.deferEdit()
-                    .setActionRows(
+                    .setComponents(
                         ActionRow.of(
                             // message is only null on ephemeral messages
                             this.cleanUpEvent.getMessage()

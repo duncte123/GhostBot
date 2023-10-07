@@ -59,7 +59,7 @@ public class QuotesCommand extends Command {
     public void execute(ICommandEvent event) {
         final List<String> args = event.getArgs();
 
-        if (args.size() > 0) {
+        if (!args.isEmpty()) {
             final OptionMapping idOpt = event.getOption("id");
 
             if (idOpt != null) {
@@ -81,7 +81,7 @@ public class QuotesCommand extends Command {
 
     @Override
     public String getHelp() {
-        return "Get a random quote from http://totallycorrectdannyphantomquotes.tumblr.com/";
+        return "Get a random quote from https://totallycorrectdannyphantomquotes.tumblr.com/";
     }
 
     @Override
