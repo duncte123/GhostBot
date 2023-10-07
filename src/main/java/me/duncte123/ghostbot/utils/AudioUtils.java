@@ -127,7 +127,7 @@ public class AudioUtils {
 
         if (mng == null) {
             mng = new GuildMusicManager(guild);
-//            mng.getPlayer().setVolume(DEFAULT_VOLUME);
+            mng.getPlayer().setVolume(DEFAULT_VOLUME).asMono().subscribe();
             musicManagers.put(guildId, mng);
         }
 

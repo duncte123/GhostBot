@@ -153,7 +153,7 @@ public abstract class Command {
         }
 
         try {
-            LavalinkManager.ins.openConnection(channel);
+            event.getJDA().getDirectAudioController().connect(channel);
         } catch (PermissionException e) {
 
             if (e.getPermission() == Permission.VOICE_CONNECT) {

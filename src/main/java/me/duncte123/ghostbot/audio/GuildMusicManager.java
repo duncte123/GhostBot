@@ -18,18 +18,19 @@
 
 package me.duncte123.ghostbot.audio;
 
+import dev.arbjerg.lavalink.client.LavalinkPlayer;
 import fredboat.audio.player.LavalinkManager;
 import net.dv8tion.jda.api.entities.Guild;
 
 public class GuildMusicManager {
 
-    private final IPlayer player;
+    private final LavalinkPlayer player;
 
     public GuildMusicManager(Guild g) {
-        player = LavalinkManager.ins.createPlayer(g.getId());
+        player = LavalinkManager.ins.createPlayer(g.getIdLong()).block();
     }
 
-    public IPlayer getPlayer() {
+    public LavalinkPlayer getPlayer() {
         return player;
     }
 }

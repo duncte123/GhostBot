@@ -20,10 +20,12 @@ package fredboat.audio.player;
 
 import dev.arbjerg.lavalink.client.Helpers;
 import dev.arbjerg.lavalink.client.LavalinkClient;
+import dev.arbjerg.lavalink.client.LavalinkPlayer;
 import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.utils.AudioUtils;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
+import reactor.core.publisher.Mono;
 import reactor.util.annotation.NonNull;
 
 import java.net.URI;
@@ -61,21 +63,20 @@ public class LavalinkManager {
         return this.config.lavalink.enable;
     }
 
-    public IPlayer createPlayer(String guildId) {
+    public Mono<LavalinkPlayer> createPlayer(long guildId) {
         if (!isEnabled()) {
             throw new RuntimeException("Lavalink is not enabled");
         }
 
-        return isEnabled() ? lavalink.getLink(guildId).getPlayer()
-            : new LavaplayerPlayerWrapper(this.audio.getPlayerManager().createPlayer());
+        return lavalink.getLink(guildId).getPlayer();
     }
 
-    public void openConnection(AudioChannel channel) {
-        if (isEnabled()) {
-            lavalink.getLink(channel.getGuild()).connect(channel);
-        } else {
-            channel.getGuild().getAudioManager().openAudioConnection(channel);
+    public boolean isConnected(long guildId) {
+        if (!isEnabled()) {
+            throw new RuntimeException("Lavalink is not enabled");
         }
+
+        return lavalink.getLink(guildId).getState() == Link.State.CONNECTED;
     }
 
     public boolean isConnected(Guild g) {
@@ -85,11 +86,7 @@ public class LavalinkManager {
     }
 
     public void closeConnection(Guild guild) {
-        if (isEnabled()) {
-            lavalink.getLink(guild).destroy();
-        } else {
-            guild.getAudioManager().closeAudioConnection();
-        }
+        guild.getJDA().getDirectAudioController().disconnect(guild);
     }
 
     public AudioChannel getConnectedChannel(@NonNull Guild guild) {

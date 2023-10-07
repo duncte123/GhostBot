@@ -18,8 +18,8 @@
 
 package me.duncte123.ghostbot;
 
+import dev.arbjerg.lavalink.client.LavalinkPlayer;
 import fredboat.audio.player.LavalinkManager;
-import lavalink.client.player.IPlayer;
 import me.duncte123.botcommons.BotCommons;
 import me.duncte123.botcommons.messaging.MessageConfig;
 import me.duncte123.botcommons.web.WebUtils;
@@ -31,27 +31,28 @@ import me.duncte123.ghostbot.utils.AudioUtils;
 import me.duncte123.ghostbot.utils.Container;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
 import net.dv8tion.jda.api.events.GenericEvent;
-import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
-import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.session.ReadyEvent;
 import net.dv8tion.jda.api.hooks.EventListener;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
-import net.dv8tion.jda.api.interactions.components.Button;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.sharding.ShardManager;
+import net.dv8tion.jda.api.utils.data.DataObject;
 import okhttp3.RequestBody;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.util.annotation.NonNull;
@@ -111,9 +112,7 @@ public class BotListener implements EventListener {
             this.onGuildJoin(event);
         } else if (e instanceof GuildLeaveEvent event) {
             this.onGuildLeave(event);
-        } else if (e instanceof GuildVoiceLeaveEvent event) {
-            this.onGuildVoiceLeave(event);
-        } else if (e instanceof GuildVoiceMoveEvent event) {
+        }  else if (e instanceof GuildVoiceUpdateEvent event) {
             this.onGuildVoiceMove(event);
         } else if (e instanceof SlashCommandInteractionEvent event) {
             this.onSlashCommand(event);
@@ -169,8 +168,8 @@ public class BotListener implements EventListener {
 
             this.audio.getMusicManagers().forEachEntry((gid, mngr) -> {
                 try {
-                    if (mngr.getPlayer().getPlayingTrack() != null) {
-                        mngr.getPlayer().stopTrack();
+                    if (mngr.getPlayer().getTrack() != null) {
+                        mngr.getPlayer().clearEncodedTrack().asMono().block();
                     }
 
                     final Guild guild = shardManager.getGuildById(gid);
@@ -210,39 +209,39 @@ public class BotListener implements EventListener {
         logger.info("Leaving guild: {}", event.getGuild());
     }
 
-    private void onGuildVoiceLeave(@NonNull GuildVoiceLeaveEvent event) {
-        if (LavalinkManager.ins.isConnected(event.getGuild()) &&
-            !event.getMember().equals(event.getGuild().getSelfMember())) {
-            final AudioChannel vc = LavalinkManager.ins.getConnectedChannel(event.getGuild());
+    private void onGuildVoiceMove(GuildVoiceUpdateEvent event) {
+        final Guild guild = event.getGuild();
+        final AudioChannel channelLeft = event.getChannelLeft();
+        final AudioChannel channelJoined = event.getChannelJoined();
+        final Member member = event.getMember();
 
-            if (vc != null) {
-                if (!event.getChannelLeft().equals(vc)) {
+        final LavalinkManager manager = LavalinkManager.ins;
+
+        if (!manager.isConnected(guild)) {
+            return;
+        }
+
+        final AudioChannel connected = manager.getConnectedChannel(guild);
+        final Member self = guild.getSelfMember();
+
+        if (member.equals(self)) {
+            if (channelJoined != null) {
+                if (channelJoined.getType() == ChannelType.STAGE) {
+                    if (self.hasPermission(channelJoined, Permission.REQUEST_TO_SPEAK) ||
+                        self.hasPermission(channelJoined, Permission.VOICE_MUTE_OTHERS)) {
+                        guild.requestToSpeak();
+                    }
                     return;
                 }
 
-                channelCheckThing(event.getGuild(), event.getChannelLeft(), this.audio);
+                channelCheckThing(guild, connected, this.audio);
             }
+
+            return;
         }
-    }
 
-    private void onGuildVoiceMove(@Nonnull GuildVoiceMoveEvent event) {
-        try {
-            if (!LavalinkManager.ins.isConnected(event.getGuild())) {
-                return;
-            }
-
-            final AudioChannel connected = LavalinkManager.ins.getConnectedChannel(event.getGuild());
-
-            if (event.getChannelJoined().equals(connected) &&
-                !event.getMember().equals(event.getGuild().getSelfMember())) {
-                return;
-            } else {
-                channelCheckThing(event.getGuild(), connected, this.audio);
-            }
-
-            channelCheckThing(event.getGuild(), event.getChannelLeft(), this.audio);
-
-        } catch (NullPointerException ignored) {
+        if (connected != null && connected.equals(channelLeft)) {
+            channelCheckThing(guild, channelLeft, this.audio);
         }
     }
 
@@ -265,7 +264,7 @@ public class BotListener implements EventListener {
             .collect(Collectors.toList());
 
         event.deferEdit()
-            .setActionRows(ActionRow.of(buttons))
+            .setComponents(ActionRow.of(buttons))
             .queue();
 
         // getComponentId == command-name:action:userid
@@ -303,19 +302,19 @@ public class BotListener implements EventListener {
                 final ShardManager manager = GhostBot.getInstance().getShardManager();
                 final String ghostBot = "397297702150602752";
 
-                final JSONObject theJson = new JSONObject(this.config.botLists)
+                final DataObject theJson = DataObject.fromJson(this.config.botLists)
                     .put("server_count", manager.getGuildCache().size())
                     .put("shard_count", manager.getShardsTotal())
                     .put("bot_id", ghostBot);
 
-                final String dblKey = (String) theJson.remove("discordbots.org");
+                final String dblKey = theJson.remove("discordbots.org").getString("discordbots.org");
 
                 final String jsonString = theJson.toString();
 
                 WebUtils.ins.prepareRaw(
                     WebUtils.defaultRequest()
                         .url("https://botblock.org/api/count")
-                        .post(RequestBody.create(null, jsonString.getBytes()))
+                        .post(RequestBody.create(jsonString.getBytes()))
                         .addHeader("Content-Type", JSON.getType())
                         .build(),
                     (it) -> Objects.requireNonNull(it.body()).string())
@@ -331,7 +330,7 @@ public class BotListener implements EventListener {
                 WebUtils.ins.prepareRaw(
                     WebUtils.defaultRequest()
                         .url("https://top.gg/api/bots/" + ghostBot + "/stats")
-                        .post(RequestBody.create(null, new JSONObject()
+                        .post(RequestBody.create(DataObject.empty()
                             .put("server_count", manager.getGuildCache().size())
                             .put("shard_count", manager.getShardsTotal())
                             .toString()
@@ -354,13 +353,13 @@ public class BotListener implements EventListener {
 
     }
 
-    private static void channelCheckThing(Guild g, VoiceChannel vc, AudioUtils audio) {
-        if (vc.getMembers().stream().filter((it) -> !it.getUser().isBot()).count() < 1) {
+    private static void channelCheckThing(Guild g, AudioChannel vc, AudioUtils audio) {
+        if (vc.getMembers().stream().allMatch((it) -> it.getUser().isBot())) {
             final GuildMusicManager manager = audio.getMusicManager(g);
-            final IPlayer player = manager.getPlayer();
+            final LavalinkPlayer player = manager.getPlayer();
 
-            if (player.getPlayingTrack() != null) {
-                player.stopTrack();
+            if (player.getTrack() != null) {
+                player.clearEncodedTrack().asMono().block();
             }
 
             if (LavalinkManager.ins.isConnected(g)) {
