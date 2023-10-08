@@ -18,12 +18,11 @@
 
 package me.duncte123.ghostbot;
 
-import dev.arbjerg.lavalink.client.LavalinkPlayer;
-import fredboat.audio.player.LavalinkManager;
+import dev.arbjerg.lavalink.client.LavalinkClient;
+import dev.arbjerg.lavalink.client.Link;
 import me.duncte123.botcommons.BotCommons;
 import me.duncte123.botcommons.messaging.MessageConfig;
 import me.duncte123.botcommons.web.WebUtils;
-import me.duncte123.ghostbot.audio.GuildMusicManager;
 import me.duncte123.ghostbot.commands.main.UptimeCommand;
 import me.duncte123.ghostbot.objects.command.Command;
 import me.duncte123.ghostbot.objects.config.GhostBotConfig;
@@ -40,8 +39,6 @@ import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
-import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
-import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -57,7 +54,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.util.annotation.NonNull;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Executors;
@@ -166,28 +162,6 @@ public class BotListener implements EventListener {
 
             final ShardManager shardManager = Objects.requireNonNull(event.getJDA().getShardManager());
 
-            this.audio.getMusicManagers().forEachEntry((gid, mngr) -> {
-                try {
-                    if (mngr.getPlayer().getTrack() != null) {
-                        mngr.getPlayer().clearEncodedTrack().asMono().block();
-                    }
-
-                    final Guild guild = shardManager.getGuildById(gid);
-
-                    if (guild == null) {
-                        return true;
-                    }
-
-                    if (LavalinkManager.ins.isConnected(guild)) {
-                        LavalinkManager.ins.closeConnection(guild);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                return true;
-            });
-
             new Thread(() -> {
                 BotCommons.shutdown(shardManager);
 
@@ -215,13 +189,11 @@ public class BotListener implements EventListener {
         final AudioChannel channelJoined = event.getChannelJoined();
         final Member member = event.getMember();
 
-        final LavalinkManager manager = LavalinkManager.ins;
-
-        if (!manager.isConnected(guild)) {
+        if (!this.audio.isConnected(guild)) {
             return;
         }
 
-        final AudioChannel connected = manager.getConnectedChannel(guild);
+        final AudioChannel connected = this.audio.getConnectedChannel(guild);
         final Member self = guild.getSelfMember();
 
         if (member.equals(self)) {
@@ -353,18 +325,20 @@ public class BotListener implements EventListener {
 
     }
 
-    private static void channelCheckThing(Guild g, AudioChannel vc, AudioUtils audio) {
+    // TODO: make lavalink part of audio
+    private static void channelCheckThing(Guild guild, AudioChannel vc, AudioUtils audio) {
         if (vc.getMembers().stream().allMatch((it) -> it.getUser().isBot())) {
-            final GuildMusicManager manager = audio.getMusicManager(g);
-            final LavalinkPlayer player = manager.getPlayer();
+            final LavalinkClient lavalink = audio.getLavalink();
+            final Link link = lavalink.getLinkIfCached(guild.getIdLong());
 
-            if (player.getTrack() != null) {
-                player.clearEncodedTrack().asMono().block();
+            if (link == null) {
+                return;
             }
 
-            if (LavalinkManager.ins.isConnected(g)) {
-                LavalinkManager.ins.closeConnection(g);
-                g.getAudioManager().setSendingHandler(null);
+            link.destroyPlayer().subscribe();
+
+            if (audio.isConnected(guild)) {
+                guild.getJDA().getDirectAudioController().disconnect(guild);
             }
         }
     }

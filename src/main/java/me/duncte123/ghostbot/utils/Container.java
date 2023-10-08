@@ -35,7 +35,7 @@ public class Container {
     public Container() throws IOException {
         this.config = GhostBotConfig.fromEnv();
         this.jackson = JSONHelper.createObjectMapper();
-        this.audio = new AudioUtils();
+        this.audio = new AudioUtils(this.config);
         this.commandManager = new CommandManager(this);
     }
 

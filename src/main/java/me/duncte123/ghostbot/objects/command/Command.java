@@ -20,12 +20,9 @@ package me.duncte123.ghostbot.objects.command;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fredboat.audio.player.LavalinkManager;
 import me.duncte123.botcommons.messaging.EmbedUtils;
-import me.duncte123.ghostbot.audio.GuildMusicManager;
 import me.duncte123.ghostbot.utils.AudioUtils;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
 import net.dv8tion.jda.api.exceptions.PermissionException;
@@ -174,10 +171,6 @@ public abstract class Command {
         return true;
     }
 
-    protected GuildMusicManager getMusicManager(AudioUtils audio, Guild guild) {
-        return audio.getMusicManager(guild);
-    }
-
     protected void doAudioStuff(ICommandEvent event) {
         doAudioStuff(event, null);
     }
@@ -193,8 +186,7 @@ public abstract class Command {
 
             event.reply("Selected track: _" + selectedTrack.replace("_", "\\_") + '_');
 
-            audioUtils.loadAndPlay(getMusicManager(audioUtils, event.getGuild()), event.getChannel(),
-                this.httpPath.apply(selectedTrack));
+            audioUtils.loadAndPlay(event.getGuild(), event.getChannel(), this.httpPath.apply(selectedTrack));
         }
     }
 }

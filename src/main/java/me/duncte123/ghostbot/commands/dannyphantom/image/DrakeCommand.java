@@ -31,7 +31,6 @@ import net.dv8tion.jda.api.utils.data.DataObject;
 import net.dv8tion.jda.internal.utils.IOUtil;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import org.json.JSONObject;
 
 import java.util.List;
 import java.util.function.Consumer;

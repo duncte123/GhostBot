@@ -19,12 +19,12 @@
 package me.duncte123.ghostbot;
 
 import dev.arbjerg.lavalink.libraries.jda.JDAVoiceUpdateListener;
-import fredboat.audio.player.LavalinkManager;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.botcommons.web.WebUtils;
 import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.slashmanagement.GlobalSlashManagement;
 import me.duncte123.ghostbot.slashmanagement.GuildSlashManagement;
+import me.duncte123.ghostbot.utils.AudioUtils;
 import me.duncte123.ghostbot.utils.Container;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -49,12 +49,13 @@ public class GhostBot {
     private static GhostBot instance;
     private final ShardManager shardManager;
 
-    private GhostBot() throws LoginException, IOException {
+    private GhostBot() throws IOException {
         final Logger logger = LoggerFactory.getLogger(GhostBot.class);
 
         logger.info("Booting GhostBot");
 
         final Container container = new Container();
+        final AudioUtils audio = container.getAudio();
         final GhostBotConfig config = container.getConfig();
         final String token = config.discord.token;
         final int totalShards = config.discord.totalShards;
@@ -66,10 +67,6 @@ public class GhostBot {
         EmbedUtils.setEmbedBuilder(
             () -> new EmbedBuilder().setColor(Variables.EMBED_COLOR)
         );
-
-        final LavalinkManager llm = LavalinkManager.ins;
-
-        llm.start(config, container.getAudio());
 
         final BotListener botListener = new BotListener(container);
         final DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(token)
@@ -89,8 +86,8 @@ public class GhostBot {
             )
             .addEventListeners(botListener);
 
-        if (llm.isEnabled()) {
-            builder.setVoiceDispatchInterceptor(new JDAVoiceUpdateListener(llm.getLavalink()));
+        if (audio.isEnabled()) {
+            builder.setVoiceDispatchInterceptor(new JDAVoiceUpdateListener(audio.getLavalink()));
         }
 
         shardManager = builder.build();
