@@ -55,7 +55,7 @@ public class DoppelgangerComicCommand extends TumblrComicBase {
 
     @Override
     public String getHelp() {
-        return "Read the doppelganger comic within discord (comic website: <http://doppelgangercomic.tumblr.com/>)\n" +
+        return "Read the doppelganger comic within discord (comic website: <https://doppelgangercomic.tumblr.com/>)\n" +
             "Usage: `gb." + getName() + " [page:number/chapter:number]`";
     }
 

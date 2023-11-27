@@ -25,8 +25,6 @@ import me.duncte123.ghostbot.objects.command.ICommandEvent;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
-
 public class OtherGhostCommands extends ImageBase {
     private final ObjectMapper mapper;
     private final Map<String, String[]> keywordsMapped = new LinkedHashMap<>();

@@ -18,59 +18,129 @@
 
 package me.duncte123.ghostbot.utils;
 
-import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
-import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
-import com.sedmelluq.discord.lavaplayer.source.http.HttpAudioSourceManager;
-import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
-import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioTrack;
-import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
-import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import fredboat.audio.player.LavalinkManager;
-import gnu.trove.impl.sync.TSynchronizedLongObjectMap;
-import gnu.trove.map.TLongObjectMap;
-import gnu.trove.map.hash.TLongObjectHashMap;
+import dev.arbjerg.lavalink.client.Helpers;
+import dev.arbjerg.lavalink.client.LavalinkClient;
+import dev.arbjerg.lavalink.client.Link;
+import dev.arbjerg.lavalink.client.LinkState;
+import dev.arbjerg.lavalink.protocol.v4.Exception;
+import dev.arbjerg.lavalink.protocol.v4.LoadResult;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.botcommons.messaging.MessageConfig;
-import me.duncte123.ghostbot.audio.GuildMusicManager;
+import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
+import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import reactor.util.annotation.NonNull;
 
-import java.util.function.Function;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
+// TODO: remove lavaplayer
 public class AudioUtils {
 
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(AudioUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(AudioUtils.class);
 
     private static final int DEFAULT_VOLUME = 35; //(0-150, where 100 is the default max volume)
     private static final String EMBED_TITLE = "Spoopy-Luma-Player";
+    private final GhostBotConfig config;
+    private LavalinkClient lavalink = null;
 
-    private final TLongObjectMap<GuildMusicManager> musicManagers;
-    private final AudioPlayerManager playerManager;
+    AudioUtils(final GhostBotConfig config) {
+        this.config = config;if (isEnabled()) {
+            lavalink = new LavalinkClient(Helpers.getUserIdFromToken(this.config.discord.token));
 
-    AudioUtils() {
-        Logger.getLogger("org.apache.http.client.protocol.ResponseProcessCookies").setLevel(Level.OFF);
+            for (final GhostBotConfig.Lavalink.Node it : this.config.lavalink.nodes) {
+                try {
+                    final URI uri = new URI(it.wsUrl);
 
-        playerManager = new DefaultAudioPlayerManager();
-
-        playerManager.registerSourceManager(new YoutubeAudioSourceManager(false));
-        playerManager.registerSourceManager(new HttpAudioSourceManager());
-
-        musicManagers = new TSynchronizedLongObjectMap<>(new TLongObjectHashMap<>(), new Object());
+                    lavalink.addNode(uri.getHost(), uri, it.pass);
+                } catch (URISyntaxException e) {
+                    logger.error("Adding lavalink node failed", e);
+                }
+            }
+        }
     }
 
-    public void loadAndPlay(GuildMusicManager mng, final TextChannel channel, final Object trackUrl) {
+    public boolean isEnabled() {
+        return this.config.lavalink.enable;
+    }
+
+    public boolean isConnected(long guildId) {
+        if (!isEnabled()) {
+            throw new RuntimeException("Lavalink is not enabled");
+        }
+
+        return lavalink.getLink(guildId).getState() == LinkState.CONNECTED;
+    }
+
+    public boolean isConnected(Guild g) {
+        return isConnected(g.getIdLong());
+    }
+
+    public AudioChannel getConnectedChannel(@NonNull Guild guild) {
+        // NOTE: never use the local audio manager, since the audio connection may be remote
+        // there is also no reason to look the channel up remotely from lavalink, if we have access to a real guild
+        // object here, since we can use the voice state of ourselves (and lavalink 1.x is buggy in keeping up with the
+        // current voice channel if the bot is moved around in the client)
+        // noinspection ConstantConditions
+        return guild.getSelfMember().getVoiceState().getChannel();
+    }
+
+    public LavalinkClient getLavalink() {
+        return lavalink;
+    }
+
+    public void loadAndPlay(final Guild guild, final MessageChannelUnion channel, final String trackUrl) {
+        if (!isEnabled()) {
+            throw new RuntimeException("Lavalink is not enabled");
+        }
+
+        final long guildId = guild.getIdLong();
+        final Link link = this.lavalink.getLink(guildId);
+
+        link.loadItem(trackUrl).subscribe((result) -> {
+            if (result instanceof LoadResult.TrackLoaded trackLoaded) {
+                link.updatePlayer(
+                    (builder) -> builder.setVolume(DEFAULT_VOLUME).setEncodedTrack(trackLoaded.getData().getEncoded())
+                ).subscribe((__) -> {
+                    // TODO: send message?
+                });
+            } else if (result instanceof LoadResult.PlaylistLoaded) {
+                logger.error("Playlist loaded somehow");
+            } else if (result instanceof LoadResult.NoMatches) {
+                sendMsg(
+                    new MessageConfig.Builder()
+                        .setChannel(channel)
+                        .setEmbeds(true, EmbedUtils.embedField(EMBED_TITLE, "Nothing found by _" + trackUrl + '_'))
+                        .build()
+                );
+            } else if (result instanceof LoadResult.LoadFailed loadFailed) {
+                final Exception exception = loadFailed.getData();
+
+                sendMsg(
+                    new MessageConfig.Builder()
+                        .setChannel(channel)
+                        .setEmbeds(true, EmbedUtils.embedField(EMBED_TITLE, String.format(
+                            "Could not play: %s\n" +
+                                "Please contact a developer [here](%s) to inform them of this issue",
+                            exception.getMessage(), Variables.GHOSTBOT_GUILD
+                        )))
+                        .build()
+                );
+            }
+        });
+    }
+
+    /*public void loadAndPlay(GuildMusicManager  Object mng, final MessageChannelUnion channel, final Object trackUrl) {
         final AudioLoadResultHandler handler = new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
-                mng.getPlayer().playTrack(track);
+//                mng.getPlayer().playTrack(track);
             }
 
             @Override
@@ -118,30 +188,5 @@ public class AudioUtils {
         handler.trackLoaded(
             fn.apply(playerManager.source(YoutubeAudioSourceManager.class))
         );
-    }
-
-    public GuildMusicManager getMusicManager(Guild guild) {
-        final long guildId = guild.getIdLong();
-        GuildMusicManager mng = musicManagers.get(guildId);
-
-        if (mng == null) {
-            mng = new GuildMusicManager(guild);
-            mng.getPlayer().setVolume(DEFAULT_VOLUME);
-            musicManagers.put(guildId, mng);
-        }
-
-        if (!LavalinkManager.ins.isEnabled()) {
-            guild.getAudioManager().setSendingHandler(mng.getSendHandler());
-        }
-
-        return mng;
-    }
-
-    public AudioPlayerManager getPlayerManager() {
-        return playerManager;
-    }
-
-    public TLongObjectMap<GuildMusicManager> getMusicManagers() {
-        return musicManagers;
-    }
+    }*/
 }

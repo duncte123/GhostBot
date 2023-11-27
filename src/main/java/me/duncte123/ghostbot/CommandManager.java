@@ -32,18 +32,20 @@ import me.duncte123.ghostbot.commands.space.ISSCommand;
 import me.duncte123.ghostbot.objects.command.Command;
 import me.duncte123.ghostbot.objects.command.ICommandEvent;
 import me.duncte123.ghostbot.objects.command.JDASlashCommandEvent;
-import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.utils.Container;
 import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import reactor.util.annotation.Nullable;
 
-import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -142,7 +144,7 @@ public class CommandManager {
         return found;
     }
 
-    void handleSlashCommand(SlashCommandEvent event, Container container) {
+    void handleSlashCommand(SlashCommandInteractionEvent event, Container container) {
         if (!event.isFromGuild()) {
             // ignore dms
             return;
@@ -165,7 +167,7 @@ public class CommandManager {
         dispatchCommand(cmd, guild, invoke, () ->  new JDASlashCommandEvent(event, container));
     }
 
-    void handleCommand(GuildMessageReceivedEvent event) {
+    void handleCommand(MessageReceivedEvent event) {
         final String rw = event.getMessage().getContentRaw();
         final String[] split = rw.replaceFirst("(?i)" +
             Pattern.quote(Variables.PREFIX) + "|" +
@@ -179,7 +181,7 @@ public class CommandManager {
         if (cmd != null) {
             event.getChannel()
                 .sendMessage("Normal have been deprecated in favor of slash commands.\nRead as to why here: <https://support-dev.discord.com/hc/en-us/articles/4404772028055>")
-                .reference(event.getMessage())
+                .setMessageReference(event.getMessage())
                 .mentionRepliedUser(false)
                 .queue();
         }
@@ -241,7 +243,7 @@ public class CommandManager {
             }
         }
 
-        boolean handle(final ButtonClickEvent event) {
+        boolean handle(final ButtonInteractionEvent event) {
             synchronized (this.listeners) {
                 for (final ReactionCommand.ReactionListener listener : this.listeners) {
                     // there's only one handler per message

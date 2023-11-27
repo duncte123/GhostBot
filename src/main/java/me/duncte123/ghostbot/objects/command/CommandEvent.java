@@ -21,7 +21,7 @@ package me.duncte123.ghostbot.objects.command;
 import me.duncte123.botcommons.messaging.MessageConfig;
 import me.duncte123.ghostbot.utils.Container;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.List;
 
@@ -32,10 +32,10 @@ public class CommandEvent implements ICommandEvent {
 
     private final String invoke;
     private final List<String> args;
-    private final GuildMessageReceivedEvent event;
+    private final MessageReceivedEvent event;
     private final Container container;
 
-    public CommandEvent(String invoke, List<String> args, GuildMessageReceivedEvent event, Container container) {
+    public CommandEvent(String invoke, List<String> args, MessageReceivedEvent event, Container container) {
         this.invoke = invoke;
         this.args = args;
         this.event = event;
@@ -58,7 +58,7 @@ public class CommandEvent implements ICommandEvent {
     }
 
     @Override
-    public GuildMessageReceivedEvent getEvent() {
+    public MessageReceivedEvent getEvent() {
         return this.event;
     }
 

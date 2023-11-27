@@ -20,16 +20,14 @@ package me.duncte123.ghostbot.objects.command;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fredboat.audio.player.LavalinkManager;
 import me.duncte123.botcommons.messaging.EmbedUtils;
-import me.duncte123.ghostbot.audio.GuildMusicManager;
 import me.duncte123.ghostbot.utils.AudioUtils;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
-import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,7 +76,7 @@ public abstract class Command {
             throw new IllegalArgumentException(this.getClass() + " is over 100");
         }
 
-        return new CommandData(this.getName(), parsedHelp.trim()).addOptions(this.getCommandOptions());
+        return Commands.slash(this.getName(), parsedHelp.trim()).addOptions(this.getCommandOptions());
     }
 
     public CommandCategory getCategory() {
@@ -138,13 +136,13 @@ public abstract class Command {
 
         final GuildVoiceState voiceState = event.getMember().getVoiceState();
 
-        if (voiceState == null || !voiceState.inVoiceChannel()) {
+        if (voiceState == null || !voiceState.inAudioChannel()) {
             event.reply(EmbedUtils.embedMessage("Please join a voice channel first"));
 
             return false;
         }
 
-        final VoiceChannel channel = voiceState.getChannel();
+        final AudioChannel channel = voiceState.getChannel();
         assert channel != null;
 
         if (!event.getSelfMember().hasPermission(channel, Permission.VOICE_CONNECT)) {
@@ -152,7 +150,7 @@ public abstract class Command {
         }
 
         try {
-            LavalinkManager.ins.openConnection(channel);
+            event.getJDA().getDirectAudioController().connect(channel);
         } catch (PermissionException e) {
 
             if (e.getPermission() == Permission.VOICE_CONNECT) {
@@ -173,10 +171,6 @@ public abstract class Command {
         return true;
     }
 
-    protected GuildMusicManager getMusicManager(AudioUtils audio, Guild guild) {
-        return audio.getMusicManager(guild);
-    }
-
     protected void doAudioStuff(ICommandEvent event) {
         doAudioStuff(event, null);
     }
@@ -192,8 +186,7 @@ public abstract class Command {
 
             event.reply("Selected track: _" + selectedTrack.replace("_", "\\_") + '_');
 
-            audioUtils.loadAndPlay(getMusicManager(audioUtils, event.getGuild()), event.getChannel(),
-                this.httpPath.apply(selectedTrack));
+            audioUtils.loadAndPlay(event.getGuild(), event.getChannel(), this.httpPath.apply(selectedTrack));
         }
     }
 }

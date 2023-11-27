@@ -26,7 +26,7 @@ plugins {
     application
     idea
 
-    id("com.github.johnrengelman.shadow") version "7.0.0"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 buildscript {
@@ -47,34 +47,38 @@ application {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_16
-    targetCompatibility = JavaVersion.VERSION_16
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 repositories {
     mavenCentral()
 
+    maven("https://maven.arbjerg.dev/releases")
+    maven("https://maven.arbjerg.dev/snapshots")
     maven("https://m2.dv8tion.net/releases")
+    maven("https://m2.duncte123.dev/releases")
     maven("https://duncte123.jfrog.io/artifactory/maven")
     maven("https://jitpack.io")
 }
 
-val jda = JDAVersionInfo("4.3.0_339")
+val jda = JDAVersionInfo("5.0.0-beta.15")
 //val jda = JDAVersionInfo("bacd237")
 
 dependencies {
-    implementation(group = "me.duncte123", name = "botCommons", version = "2.3.8")
-    implementation(group = "org.apache.commons", name = "commons-text", version = "1.6")
+    implementation(group = "me.duncte123", name = "botCommons", version = "3.0.16")
+    implementation(group = "org.apache.commons", name = "commons-text", version = "1.10.0")
     implementation(group = "org.codehaus.groovy", name = "groovy-jsr223", version = "2.5.13")
     implementation(group = jda.group, name = "JDA", version = jda.version) {
         exclude(module = "opus-java")
     }
-    implementation(group = "com.sedmelluq", name = "lavaplayer", version = "1.3.78")
+//    implementation(group = "dev.arbjerg", name = "lavaplayer", version = "2.0.2")
 //    implementation("lavalink:local")
-    implementation(group = "com.github.FredBoat", name = "Lavalink-Client", version = "eb26770")
+//    implementation(group = "com.github.FredBoat", name = "Lavalink-Client", version = "eb26770")
+    implementation(group = "dev.arbjerg", name = "lavalink-client", version = "a404d235294e8bfdf575ae1e34bfbc6fc84642b9-SNAPSHOT")
 //    implementation(group = "com.github.DuncteBot", name = "Lavalink-Client", version = "4f3924fb51")
-    implementation(group = "ch.qos.logback", name = "logback-classic", version = "1.2.3")
-    implementation("net.sf.trove4j:trove4j:3.0.3") // todo: make pretty
+    implementation(group = "ch.qos.logback", name = "logback-classic", version = "1.2.10")
+    implementation(group = "net.sf.trove4j", name = "trove4j", version = "3.0.3")
 }
 
 val compileJava: JavaCompile by tasks
@@ -130,7 +134,7 @@ compileJava.apply {
 
 tasks.withType<Wrapper> {
     distributionType = DistributionType.BIN
-    gradleVersion = "7.5.1"
+    gradleVersion = "8.1.1"
 }
 
 shadowJar.apply {

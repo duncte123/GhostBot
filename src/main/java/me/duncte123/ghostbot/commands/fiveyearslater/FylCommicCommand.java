@@ -109,7 +109,7 @@ public class FylCommicCommand extends ReactionCommand {
                     final int chapI = chapterIndex.get();
                     final int pageI = pageIndex.get();
 
-                    builder.setActionRows(
+                    builder.setComponents(
                         LEFT_RIGHT_CANCEL.toActionRow(
                             userId,
                             chapI == 0 && pageI == 0,
@@ -154,7 +154,7 @@ public class FylCommicCommand extends ReactionCommand {
                         final int displayChapter = chapterIndex.get();
                         btnEvent.deferEdit()
                             .setEmbeds(getEmbed(displayChapter, displayPage).build())
-                            .setActionRows(
+                            .setComponents(
                                 LEFT_RIGHT_CANCEL.toActionRow(
                                     userId,
                                     displayChapter == 0 && displayPage == 0,

@@ -29,7 +29,7 @@ public class PingCommand extends Command {
 
         jda.getRestPing().queue((ping) ->
             event.reply(
-                String.format("PONG!\n\u23F3 %d\n\uD83D\uDC93 %d", ping, jda.getGatewayPing())
+                String.format("PONG!\n⏳ %d\n\uD83D\uDC93 %d", ping, jda.getGatewayPing())
             )
         );
     }

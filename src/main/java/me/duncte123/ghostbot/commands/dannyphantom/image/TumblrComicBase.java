@@ -18,33 +18,24 @@
 
 package me.duncte123.ghostbot.commands.dannyphantom.image;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import me.duncte123.botcommons.messaging.MessageConfig;
 import me.duncte123.ghostbot.CommandManager;
 import me.duncte123.ghostbot.commands.ReactionCommand;
 import me.duncte123.ghostbot.objects.command.CommandCategory;
 import me.duncte123.ghostbot.objects.command.ICommandEvent;
-import me.duncte123.ghostbot.objects.config.GhostBotConfig;
 import me.duncte123.ghostbot.objects.tumblr.TumblrPost;
 import me.duncte123.ghostbot.utils.Container;
-import me.duncte123.ghostbot.utils.TumblrUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import reactor.util.annotation.NonNull;
 
-import javax.annotation.Nonnull;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
 
@@ -102,7 +93,7 @@ abstract class TumblrComicBase extends ReactionCommand {
                 "The controls have a timeout of 30 minutes")
             .setEmbeds(getEmbed(startPage))
             .configureMessageBuilder(
-                (builder) -> builder.setActionRows(
+                (builder) -> builder.setComponents(
                     LEFT_RIGHT_CANCEL.toActionRow(
                         userId,
                         startPage == 0,
@@ -125,7 +116,7 @@ abstract class TumblrComicBase extends ReactionCommand {
 
                     btnEvent.deferEdit()
                         .setEmbeds(getEmbed(pageToDisplay).build())
-                        .setActionRows(
+                        .setComponents(
                             LEFT_RIGHT_CANCEL.toActionRow(
                                 userId,
                                 pageToDisplay == 0,
@@ -144,7 +135,7 @@ abstract class TumblrComicBase extends ReactionCommand {
         return "https://api.tumblr.com/v2/blog/" + blogUrl + "/avatar/48";
     }
 
-    @Nonnull
+    @NonNull
     abstract EmbedBuilder getEmbed(int page);
 
     abstract Predicate<TumblrPost> getFilter();
