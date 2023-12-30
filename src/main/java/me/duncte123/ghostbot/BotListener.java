@@ -99,6 +99,10 @@ public class BotListener implements EventListener {
         if (e instanceof ReadyEvent event) {
             this.onReady(event);
         } else if (e instanceof MessageReceivedEvent event) {
+            if (!config.running_local) {
+                return;
+            }
+
             if (!event.isFromGuild()) {
                 return;
             }

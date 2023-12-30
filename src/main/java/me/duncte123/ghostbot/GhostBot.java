@@ -41,6 +41,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Locale;
 
 import static net.dv8tion.jda.api.utils.cache.CacheFlag.*;
 
@@ -76,15 +78,20 @@ public class GhostBot {
             )
             .setChunkingFilter(ChunkingFilter.NONE) // Lazy loading :)
             .enableCache(VOICE_STATE, MEMBER_OVERRIDES)
-            .disableCache(ACTIVITY, EMOJI, CLIENT_STATUS)
+            .disableCache(ACTIVITY, EMOJI, CLIENT_STATUS, SCHEDULED_EVENTS)
             .setMemberCachePolicy(MemberCachePolicy.VOICE)
             .setGatewayEncoding(GatewayEncoding.ETF)
             .setEnabledIntents(
                 GatewayIntent.GUILD_MESSAGES,
                 GatewayIntent.GUILD_MESSAGE_REACTIONS,
-                GatewayIntent.GUILD_VOICE_STATES
+                GatewayIntent.GUILD_VOICE_STATES,
+                GatewayIntent.GUILD_EMOJIS_AND_STICKERS
             )
             .addEventListeners(botListener);
+
+        if (config.running_local) {
+            builder.enableIntents(GatewayIntent.MESSAGE_CONTENT);
+        }
 
         if (audio.isEnabled()) {
             builder.setVoiceDispatchInterceptor(new JDAVoiceUpdateListener(audio.getLavalink()));
@@ -103,10 +110,11 @@ public class GhostBot {
 
     public static void main(String[] args) throws LoginException, IOException {
         if (args.length > 0) {
-            switch (args[0]) {
+            switch (args[0].toLowerCase(Locale.ROOT)) {
                 case "add-guild-slash" -> new GuildSlashManagement(false);
                 case "clear-guild-slash" -> new GuildSlashManagement(true);
                 case "update-global-slash" -> new GlobalSlashManagement(false);
+                default -> throw new RuntimeException("Unknown argument: " + args[0]);
             }
 
             return;

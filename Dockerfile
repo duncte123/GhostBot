@@ -1,4 +1,4 @@
-FROM adoptopenjdk:16-jdk-hotspot AS builder
+FROM azul/zulu-openjdk-alpine:17 AS builder
 
 WORKDIR /ghostbot
 COPY gradle ./gradle
@@ -7,7 +7,7 @@ RUN ./gradlew --no-daemon dependencies
 COPY . .
 RUN ./gradlew --no-daemon build
 
-FROM adoptopenjdk:16-jre-hotspot
+FROM azul/zulu-openjdk-alpine:17-jre
 
 WORKDIR /ghostbot
 COPY --from=builder /ghostbot/build/libs/GhostBot.jar ./ghostbot.jar

@@ -38,7 +38,8 @@ public class GlobalSlashManagement implements EventListener {
     private final Container container;
     private final ShardManager shardManager;
 
-    public GlobalSlashManagement(boolean clear) throws IOException, LoginException {
+    public GlobalSlashManagement(boolean clear) throws IOException {
+        System.out.println("Updating global slash commands");
         this.clear = clear;
         this.container = new Container();
         final GhostBotConfig config = this.container.getConfig();

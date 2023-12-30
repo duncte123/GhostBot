@@ -39,6 +39,7 @@ public class GhostBotConfig {
         public boolean enable;
 
         public static class Node {
+            public String name;
             public String wsUrl;
             public String pass;
         }
@@ -68,6 +69,7 @@ public class GhostBotConfig {
 
         for (int i = 0; i < count; i++) {
             lavalink.nodes[i] = new Lavalink.Node();
+            lavalink.nodes[i].name = System.getenv("LAVALINK_NODE_"+i+"_NAME");
             lavalink.nodes[i].wsUrl = System.getenv("LAVALINK_NODE_"+i+"_HOST");
             lavalink.nodes[i].pass = System.getenv("LAVALINK_NODE_"+i+"_PASS");
         }

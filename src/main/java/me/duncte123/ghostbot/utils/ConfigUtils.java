@@ -41,8 +41,8 @@ public class ConfigUtils {
 
             logger.info("Loaded images.json");
         } catch (Exception e) {
-            logger.error("Could not load config, aborting", e);
-            System.exit(-1);
+            logger.error("Could not load config, image command will not work", e);
+            this.images = DataObject.empty();
         }
     }
 

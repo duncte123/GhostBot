@@ -18,12 +18,8 @@
 
 package me.duncte123.ghostbot.utils;
 
-import dev.arbjerg.lavalink.client.Helpers;
-import dev.arbjerg.lavalink.client.LavalinkClient;
-import dev.arbjerg.lavalink.client.Link;
-import dev.arbjerg.lavalink.client.LinkState;
-import dev.arbjerg.lavalink.protocol.v4.Exception;
-import dev.arbjerg.lavalink.protocol.v4.LoadResult;
+import dev.arbjerg.lavalink.client.*;
+import dev.arbjerg.lavalink.client.protocol.*;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.botcommons.messaging.MessageConfig;
 import me.duncte123.ghostbot.objects.config.GhostBotConfig;
@@ -31,18 +27,18 @@ import me.duncte123.ghostbot.variables.Variables;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
 import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.util.annotation.NonNull;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Objects;
 
 import static me.duncte123.botcommons.messaging.MessageUtils.sendMsg;
 
-// TODO: remove lavaplayer
 public class AudioUtils {
-
     private static final Logger logger = LoggerFactory.getLogger(AudioUtils.class);
 
     private static final int DEFAULT_VOLUME = 35; //(0-150, where 100 is the default max volume)
@@ -51,14 +47,20 @@ public class AudioUtils {
     private LavalinkClient lavalink = null;
 
     AudioUtils(final GhostBotConfig config) {
-        this.config = config;if (isEnabled()) {
+        this.config = config;
+
+        if (isEnabled()) {
             lavalink = new LavalinkClient(Helpers.getUserIdFromToken(this.config.discord.token));
 
             for (final GhostBotConfig.Lavalink.Node it : this.config.lavalink.nodes) {
                 try {
                     final URI uri = new URI(it.wsUrl);
 
-                    lavalink.addNode(uri.getHost(), uri, it.pass);
+                    lavalink.addNode(
+                        Objects.requireNonNullElseGet(it.name, uri::getHost),
+                        uri,
+                        it.pass
+                    );
                 } catch (URISyntaxException e) {
                     logger.error("Adding lavalink node failed", e);
                 }
@@ -103,24 +105,39 @@ public class AudioUtils {
         final long guildId = guild.getIdLong();
         final Link link = this.lavalink.getLink(guildId);
 
-        link.loadItem(trackUrl).subscribe((result) -> {
-            if (result instanceof LoadResult.TrackLoaded trackLoaded) {
+        link.loadItem(trackUrl).subscribe(new AbstractAudioLoadResultHandler() {
+            @Override
+            public void ontrackLoaded(@NotNull TrackLoaded trackLoaded) {
                 link.updatePlayer(
-                    (builder) -> builder.setVolume(DEFAULT_VOLUME).setEncodedTrack(trackLoaded.getData().getEncoded())
+                    (builder) -> builder.setVolume(DEFAULT_VOLUME).setEncodedTrack(trackLoaded.getTrack().getEncoded())
                 ).subscribe((__) -> {
                     // TODO: send message?
                 });
-            } else if (result instanceof LoadResult.PlaylistLoaded) {
+            }
+
+            @Override
+            public void onPlaylistLoaded(@NotNull PlaylistLoaded playlistLoaded) {
                 logger.error("Playlist loaded somehow");
-            } else if (result instanceof LoadResult.NoMatches) {
+            }
+
+            @Override
+            public void onSearchResultLoaded(@NotNull SearchResult searchResult) {
+
+            }
+
+            @Override
+            public void noMatches() {
                 sendMsg(
                     new MessageConfig.Builder()
                         .setChannel(channel)
                         .setEmbeds(true, EmbedUtils.embedField(EMBED_TITLE, "Nothing found by _" + trackUrl + '_'))
                         .build()
                 );
-            } else if (result instanceof LoadResult.LoadFailed loadFailed) {
-                final Exception exception = loadFailed.getData();
+            }
+
+            @Override
+            public void loadFailed(@NotNull LoadFailed loadFailed) {
+                final TrackException exception = loadFailed.getException();
 
                 sendMsg(
                     new MessageConfig.Builder()
