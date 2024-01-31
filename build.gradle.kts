@@ -72,7 +72,7 @@ dependencies {
     implementation(group = jda.group, name = "JDA", version = jda.version) {
         exclude(module = "opus-java")
     }
-    implementation(group = "dev.arbjerg", name = "lavalink-client", version = "2.1.0")
+    implementation(group = "dev.arbjerg", name = "lavalink-client", version = "2.2.0")
     implementation(group = "ch.qos.logback", name = "logback-classic", version = "1.4.14")
     implementation(group = "net.sf.trove4j", name = "trove4j", version = "3.0.3")
 }
