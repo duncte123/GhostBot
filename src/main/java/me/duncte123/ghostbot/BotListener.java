@@ -339,7 +339,7 @@ public class BotListener implements EventListener {
                 return;
             }
 
-            link.destroyPlayer().subscribe();
+            link.destroy().subscribe();
 
             if (audio.isConnected(guild)) {
                 guild.getJDA().getDirectAudioController().disconnect(guild);

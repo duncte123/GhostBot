@@ -19,7 +19,7 @@
 package me.duncte123.ghostbot.utils;
 
 import dev.arbjerg.lavalink.client.*;
-import dev.arbjerg.lavalink.client.protocol.*;
+import dev.arbjerg.lavalink.client.player.*;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.botcommons.messaging.MessageConfig;
 import me.duncte123.ghostbot.objects.config.GhostBotConfig;
@@ -56,11 +56,11 @@ public class AudioUtils {
                 try {
                     final URI uri = new URI(it.wsUrl);
 
-                    lavalink.addNode(
-                        Objects.requireNonNullElseGet(it.name, uri::getHost),
-                        uri,
-                        it.pass
-                    );
+                    lavalink.addNode(new NodeOptions.Builder()
+                            .setName(Objects.requireNonNullElseGet(it.name, uri::getHost))
+                            .setServerUri(uri)
+                            .setPassword(it.pass)
+                        .build());
                 } catch (URISyntaxException e) {
                     logger.error("Adding lavalink node failed", e);
                 }
@@ -77,7 +77,7 @@ public class AudioUtils {
             throw new RuntimeException("Lavalink is not enabled");
         }
 
-        return lavalink.getLink(guildId).getState() == LinkState.CONNECTED;
+        return lavalink.getLinkIfCached(guildId).getState() == LinkState.CONNECTED;
     }
 
     public boolean isConnected(Guild g) {
@@ -103,13 +103,13 @@ public class AudioUtils {
         }
 
         final long guildId = guild.getIdLong();
-        final Link link = this.lavalink.getLink(guildId);
+        final Link link = this.lavalink.getLinkIfCached(guildId);
 
         link.loadItem(trackUrl).subscribe(new AbstractAudioLoadResultHandler() {
             @Override
             public void ontrackLoaded(@NotNull TrackLoaded trackLoaded) {
                 link.updatePlayer(
-                    (builder) -> builder.setVolume(DEFAULT_VOLUME).setEncodedTrack(trackLoaded.getTrack().getEncoded())
+                    (builder) -> builder.setVolume(DEFAULT_VOLUME).setTrack(trackLoaded.getTrack())
                 ).subscribe((__) -> {
                     // TODO: send message?
                 });

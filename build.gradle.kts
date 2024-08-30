@@ -39,7 +39,7 @@ buildscript {
 }
 
 project.group = "me.duncte123"
-project.version = "2.3.3"
+project.version = "2.3.4"
 
 
 application {
@@ -62,7 +62,7 @@ repositories {
     maven("https://jitpack.io")
 }
 
-val jda = JDAVersionInfo("5.0.0-beta.21")
+val jda = JDAVersionInfo("5.1.0")
 //val jda = JDAVersionInfo("bacd237")
 
 dependencies {
@@ -72,7 +72,7 @@ dependencies {
     implementation(group = jda.group, name = "JDA", version = jda.version) {
         exclude(module = "opus-java")
     }
-    implementation(group = "dev.arbjerg", name = "lavalink-client", version = "2.4.0")
+    implementation(group = "dev.arbjerg", name = "lavalink-client", version = "3.0.0")
     implementation(group = "ch.qos.logback", name = "logback-classic", version = "1.4.14")
     implementation(group = "net.sf.trove4j", name = "trove4j", version = "3.0.3")
 }
